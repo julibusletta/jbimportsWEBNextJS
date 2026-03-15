@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import { initializeGlobalIntersectionObserver } from '@/app/hooks/useIntersectionObserver';
 
 /**
@@ -9,6 +10,8 @@ import { initializeGlobalIntersectionObserver } from '@/app/hooks/useIntersectio
  * before the IntersectionObserver starts observing them.
  */
 export function AnimationInitializer() {
+  const pathname = usePathname();
+
   useEffect(() => {
     // Initialize AOS library if available
     const initAOS = async () => {
@@ -30,35 +33,57 @@ export function AnimationInitializer() {
     };
 
     initAOS();
-    initializeGlobalIntersectionObserver();
+  }, []); // Run once on mount
 
-    const observerOptions = {
-      threshold: 0.1,
-      rootMargin: '0px 0px -100px 0px',
-    };
+  useEffect(() => {
+    // Re-initialize observers and refresh AOS on route change
+    const refreshAnimations = async () => {
+      try {
+        // @ts-expect-error AOS types not available
+        const AOS = (await import('aos')).default;
+        AOS.refresh();
+      } catch (e) {}
+      
+      initializeGlobalIntersectionObserver();
 
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible', 'in-view');
-        } else {
-          entry.target.classList.remove('visible');
-        }
-      });
-    }, observerOptions);
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -100px 0px',
+      };
 
-    // Delay to ensure all page children are rendered before observing
-    const timer = setTimeout(() => {
-      document.querySelectorAll('section, .carrusel, footer').forEach((el) => {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible', 'in-view');
+          } else {
+            // We keep the visible class if we want them to stay visible once revealed,
+            // but the user's current logic removes it. 
+            // entry.target.classList.remove('visible');
+          }
+        });
+      }, observerOptions);
+
+      // Observe all relevant elements
+      const elementsToObserve = document.querySelectorAll('section, .carrusel, footer, [data-aos]');
+      elementsToObserve.forEach((el) => {
         observer.observe(el);
       });
-    }, 100);
+
+      return observer;
+    };
+
+    let observerInstance: IntersectionObserver | undefined;
+    
+    // Small delay to ensure DOM is ready after navigation
+    const timer = setTimeout(async () => {
+      observerInstance = await refreshAnimations();
+    }, 200);
 
     return () => {
       clearTimeout(timer);
-      observer.disconnect();
+      if (observerInstance) observerInstance.disconnect();
     };
-  }, []);
+  }, [pathname]);
 
   return null;
 }
