@@ -1,4 +1,4 @@
-﻿// Datos mock para productos por categoría
+// Datos mock para productos por categoría
 export interface Product {
   id: string;
   name: string;
@@ -102,4 +102,17 @@ export const mockCategoryProducts: { [key: string]: Product[] } = {
  */
 export function getProductsByCategory(slug: string): Product[] {
   return mockCategoryProducts[slug] || [];
+}
+
+/**
+ * Obtiene un producto individual mediante su ID buscándolo en todas las categorías.
+ * @param id - El identificador único del producto.
+ * @returns El producto encontrado o undefined.
+ */
+export function getProductById(id: string): Product | undefined {
+  for (const category in mockCategoryProducts) {
+    const product = mockCategoryProducts[category].find(p => p.id === id);
+    if (product) return product;
+  }
+  return undefined;
 }

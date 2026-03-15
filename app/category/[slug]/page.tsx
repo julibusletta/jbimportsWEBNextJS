@@ -238,8 +238,8 @@ export default function CategoryPage() {
         {/* Card Body */}
         <div style={{ padding: '10px 12px', flex: 1, display: 'flex', flexDirection: 'column', gap: '4px' }}>
           {/* Product name as link (blue) */}
-          <a
-            href="#"
+          <Link
+            href={`/product/${product.id}`}
             style={{
               color: '#0066cc',
               fontSize: '13px',
@@ -255,7 +255,7 @@ export default function CategoryPage() {
             onMouseLeave={e => ((e.target as HTMLElement).style.textDecoration = 'none')}
           >
             {product.name}
-          </a>
+          </Link>
 
           {/* Article and category line */}
           <div style={{ fontSize: '11px', color: '#888', display: 'flex', gap: '6px', alignItems: 'center' }}>
@@ -268,7 +268,8 @@ export default function CategoryPage() {
 
           {/* Buttons */}
           <div style={{ marginTop: '8px', display: 'flex', flexDirection: 'column', gap: '5px' }}>
-            <button
+            <Link
+              href={`/product/${product.id}`}
               style={{
                 background: 'transparent',
                 border: '1px solid #999',
@@ -283,13 +284,14 @@ export default function CategoryPage() {
                 justifyContent: 'center',
                 gap: '6px',
                 transition: 'background 0.15s',
+                textDecoration: 'none',
               }}
               onMouseEnter={e => ((e.currentTarget as HTMLElement).style.background = '#f0f0f0')}
               onMouseLeave={e => ((e.currentTarget as HTMLElement).style.background = 'transparent')}
             >
               <FaEye size={12} />
               VER PRODUCTO
-            </button>
+            </Link>
 
             <button
               onClick={onAddToCart}
