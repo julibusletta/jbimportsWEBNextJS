@@ -8,10 +8,7 @@ import { useCart } from '@/app/context/CartContext';
 import type { Category } from '@/lib/api/categoriesService';
 import type { Product } from '@/lib/api/mockCategoryProducts';
 import Link from 'next/link';
-import { FaChevronDown, FaChevronUp, FaShoppingCart, FaEye } from 'react-icons/fa';
-import Footer from '@/app/components/Footer/Footer';
-
-export default function CategoryPage() {
+import { FaChevronDown, FaChevronUp, FaShoppingCart, FaEye } from 'react-icons/fa';export default function CategoryPage() {
   const params = useParams();
   const slug = params.slug as string;
   const { addToCart } = useCart();
@@ -343,9 +340,9 @@ export default function CategoryPage() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: '#fff', display: 'flex', flexDirection: 'column' }}>
+    <div className="bg-white flex flex-col">
       {/* Main content — below the global Navbar */}
-      <div style={{ flex: 1, maxWidth: '1200px', margin: '0 auto', width: '100%', padding: '160px 16px 32px' }}>
+      <div className="max-w-[1200px] mx-auto w-full px-4 pt-20 sm:pt-28 md:pt-40 pb-8">
 
         {/* Breadcrumb */}
         <div style={{ fontSize: '12px', color: '#666', marginBottom: '10px', display: 'flex', gap: '4px', alignItems: 'center' }}>
@@ -390,7 +387,7 @@ export default function CategoryPage() {
           </span>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '200px 1fr', gap: '20px' }}>
+        <div className="flex flex-col md:grid gap-4 md:gap-5" style={{ gridTemplateColumns: '200px 1fr' }}>
           {/* Sidebar */}
           <div>
             {/* Brands filter */}
@@ -494,11 +491,7 @@ export default function CategoryPage() {
             ) : (
               <>
                 <div
-                  style={{
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(3, 1fr)',
-                    gap: '14px',
-                  }}
+                  className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4"
                 >
                   {filteredProducts.map(product => (
                     <ProductCard
@@ -550,8 +543,6 @@ export default function CategoryPage() {
           </div>
         </div>
       </div>
-
-      <Footer />
     </div>
   );
 }

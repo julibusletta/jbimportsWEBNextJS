@@ -11,10 +11,27 @@ const logos = [
   { id: 6, src: '/images/66964.webp', alt: 'ASUS' },
 ];
 
+import { useEffect, useState } from 'react';
+
 export default function LogosMarquee() {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return (
+      <section id="logos" className="logos-marquee w-full py-16 md:py-20 bg-white border-t border-b border-gray-200 overflow-hidden" data-aos="fadeInUp" suppressHydrationWarning>
+        <div className="logos-container w-full overflow-hidden" suppressHydrationWarning>
+          <div className="logos-track flex" style={{ width: 'calc(200px * 12)' }}></div>
+        </div>
+      </section>
+    );
+  }
   return (
-    <section id="logos" className="logos-marquee w-full py-16 md:py-20 bg-white border-t border-b border-gray-200 overflow-hidden" data-aos="fadeInUp">
-      <div className="logos-container w-full overflow-hidden">
+    <section id="logos" className="logos-marquee w-full py-16 md:py-20 bg-white border-t border-b border-gray-200 overflow-hidden" data-aos="fadeInUp" suppressHydrationWarning>
+      <div className="logos-container w-full overflow-hidden" suppressHydrationWarning>
         <div className="logos-track flex animate-scroll" style={{ 
           width: 'calc(200px * 12)',
           animation: 'scrollLogos 30s linear infinite'

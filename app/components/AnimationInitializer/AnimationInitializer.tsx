@@ -4,7 +4,9 @@ import { useEffect } from 'react';
 import { initializeGlobalIntersectionObserver } from '@/app/hooks/useIntersectionObserver';
 
 /**
- * Initialize animation libraries (AOS) and scroll observers
+ * Initialize animation libraries (AOS) and scroll observers.
+ * Uses a small delay to ensure all child elements are in the DOM
+ * before the IntersectionObserver starts observing them.
  */
 export function AnimationInitializer() {
   useEffect(() => {
@@ -28,11 +30,8 @@ export function AnimationInitializer() {
     };
 
     initAOS();
-
-    // Initialize global intersection observer for animations
     initializeGlobalIntersectionObserver();
 
-    // Add visible class to sections when they enter viewport
     const observerOptions = {
       threshold: 0.1,
       rootMargin: '0px 0px -100px 0px',
@@ -48,12 +47,15 @@ export function AnimationInitializer() {
       });
     }, observerOptions);
 
-    // Observe all sections, carousels, and footers
-    document.querySelectorAll('section, .carrusel, footer').forEach((el) => {
-      observer.observe(el);
-    });
+    // Delay to ensure all page children are rendered before observing
+    const timer = setTimeout(() => {
+      document.querySelectorAll('section, .carrusel, footer').forEach((el) => {
+        observer.observe(el);
+      });
+    }, 100);
 
     return () => {
+      clearTimeout(timer);
       observer.disconnect();
     };
   }, []);

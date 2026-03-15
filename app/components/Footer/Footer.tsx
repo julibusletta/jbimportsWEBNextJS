@@ -1,12 +1,13 @@
 'use client';
 
 import { FaYoutube, FaTiktok, FaEnvelope, FaComments } from 'react-icons/fa';
+import Link from 'next/link';
 import '../../styles/Footer.css';
 
 export default function Footer() {
   return (
     <>
-      <footer id="footer" className="w-full bg-black text-white py-16 md:py-20 px-4 md:px-16" data-aos="fadeInUp">
+      <footer id="footer" className="w-full bg-black text-white py-16 md:py-20 px-4 md:px-16">
         <div className="max-w-7xl mx-auto">
           <div className="content mb-8">
             <div className="flex flex-wrap gap-6 md:gap-8 mb-5">
@@ -122,12 +123,14 @@ export default function Footer() {
               </div>
             </div>
           </div>
+        </div>
 
-          <hr className="opacity-30 my-8 border-gray-700" />
-
-          <div className="copyright text-center opacity-80 text-sm md:text-base">
+        {/* Separator and text taking full footer width minus padding */}
+        <div className="w-full flex flex-col items-center mt-12 md:mt-16">
+          <div className="w-[95%] h-px bg-gray-700 opacity-50 mb-8 md:mb-10"></div>
+          <p className="text-center opacity-80 text-sm md:text-base w-full m-0 pb-2">
             Todos los derechos reservados © 2026 JBimports
-          </div>
+          </p>
         </div>
       </footer>
 
@@ -137,22 +140,24 @@ export default function Footer() {
           <img
             src="/images/nave.jfif"
             alt="Nave Logo"
-            className="badge-img w-24 h-24 md:w-20 md:h-20 flex-shrink-0 object-contain"
+            className="badge-img w-12 h-12 md:w-20 md:h-20 flex-shrink-0 object-contain"
           />
           <img
             src="/images/compra_segura_footer.png"
             alt="Compra Segura"
-            className="badge-img w-24 h-24 md:w-20 md:h-20 flex-shrink-0 object-contain"
+            className="badge-img w-12 h-12 md:w-20 md:h-20 flex-shrink-0 object-contain"
           />
-          <img
-            src="/images/logojbimports.webp"
-            alt="JB Imports Logo"
-            className="badge-img w-24 h-24 md:w-20 md:h-20 flex-shrink-0 object-contain"
-          />
+          <Link href="/">
+            <img
+              src="/images/logojbimports.webp"
+              alt="JB Imports Logo"
+              className="badge-img w-12 h-12 md:w-20 md:h-20 flex-shrink-0 object-contain cursor-pointer hover:scale-110 transition-transform"
+            />
+          </Link>
           <img
             src="/images/png-transparent-cyber-monday-logo-cace-ecommerce-trade-chamber-of-commerce-argentina-blue-text.png"
             alt="Cyber Monday CACE"
-            className="badge-img w-24 h-24 md:w-20 md:h-20 flex-shrink-0 object-contain"
+            className="badge-img w-12 h-12 md:w-20 md:h-20 flex-shrink-0 object-contain"
           />
         </div>
         <p className="badge-label text-gray-600 text-xs font-normal m-0"></p>

@@ -113,13 +113,13 @@ export default function Header() {
         </button>
 
         {/* Logo */}
-        <div className="logo flex-shrink-0 h-24 md:h-28 flex items-center">
+        <Link href="/" className="logo flex-shrink-0 h-11 sm:h-14 md:h-28 flex items-center">
           <img
             src="/images/logotest9.png"
             alt="JBimports Logo"
-            className="h-full w-auto max-w-xs object-contain"
+            className="h-full w-auto max-w-xs object-contain cursor-pointer transition-transform hover:scale-105"
           />
-        </div>
+        </Link>
 
         {/* Search Bar - Desktop */}
         <div className="hidden md:flex search-bar items-center rounded-lg border border-gray-300 bg-white shadow-sm">

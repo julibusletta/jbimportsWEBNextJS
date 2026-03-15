@@ -5,7 +5,6 @@ import { useState, useEffect } from 'react';
 import { getProductById, getProductsByCategory, Product } from '@/lib/api/mockCategoryProducts';
 import { useCart } from '@/app/context/CartContext';
 import Link from 'next/link';
-import Footer from '@/app/components/Footer/Footer';
 import { FaRegCommentDots, FaTruck, FaShieldAlt, FaCreditCard, FaRegHeart, FaInfoCircle } from 'react-icons/fa';
 
 export default function ProductDetailsPage() {
@@ -43,8 +42,6 @@ export default function ProductDetailsPage() {
       image: product.image,
       quantity,
     });
-    
-    alert('¡Producto agregado al carrito!');
   };
 
   const handleComprarAhora = () => {
@@ -88,10 +85,10 @@ export default function ProductDetailsPage() {
   const sinImpuestos = Math.round(product.price * 0.79);
 
   return (
-    <div style={{ minHeight: '100vh', background: '#fff', display: 'flex', flexDirection: 'column' }}>
+    <div style={{ background: '#fff', display: 'flex', flexDirection: 'column' }}>
       
       {/* Breadcrumb Navigation */}
-      <div style={{ flex: 1, maxWidth: '1200px', margin: '0 auto', width: '100%', padding: '160px 16px 32px' }}>
+      <div style={{ maxWidth: '1200px', margin: '0 auto', width: '100%', padding: '160px 16px 16px' }}>
         <div className="flex items-center gap-2 text-[13px] text-[#0066cc]" style={{ marginBottom: '16px' }}>
           <Link href="/" className="hover:underline">Inicio</Link>
           <span className="text-[#666]">›</span>
@@ -199,7 +196,7 @@ export default function ProductDetailsPage() {
                 {/* Call to Actions */}
                 <button 
                   onClick={handleComprarAhora}
-                  className="flex-1 bg-[#0066cc] text-white font-bold text-[13px] uppercase rounded-md tracking-wide hover:bg-[#0052a3] shadow-sm transition-colors"
+                  className="flex-1 bg-[#0066cc] text-white font-bold text-[13px] uppercase rounded-md tracking-wide hover:bg-[#0052a3] shadow-sm transition-colors cursor-pointer"
                 >
                   COMPRAR AHORA
                 </button>
@@ -208,7 +205,7 @@ export default function ProductDetailsPage() {
               {/* HERE ARE THE RECUADROS CELESTES! */}
               <button 
                 onClick={handleAddToCart}
-                className="w-full h-[46px] bg-[#e6f0ff] border border-[#b3d4ff] text-[#0066cc] font-bold text-[13px] uppercase rounded-md tracking-wide hover:bg-[#d6e8ff] transition-colors"
+                className="w-full h-[46px] bg-[#e6f0ff] border border-[#b3d4ff] text-[#0066cc] font-bold text-[13px] uppercase rounded-md tracking-wide hover:bg-[#d6e8ff] transition-colors cursor-pointer"
               >
                 AGREGAR AL CARRITO
               </button>
@@ -310,8 +307,6 @@ export default function ProductDetailsPage() {
         )}
 
       </main>
-      
-      <Footer />
     </div>
   );
 }

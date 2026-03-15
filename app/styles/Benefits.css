@@ -124,3 +124,45 @@
     display: none;
   }
 }
+
+/* === SMALL MOBILE / iPhone Pro Max (480px and below) === */
+@media (max-width: 480px) {
+  .benefits-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 16px;
+    align-items: center;
+  }
+
+  .benefit-item-wrapper {
+    min-height: auto;
+    padding: 0;
+    width: 100%;
+  }
+
+  .benefit-item {
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+    text-align: center;
+  }
+
+  .benefit-text h2 {
+    font-size: 15px;
+  }
+
+  .benefit-text p {
+    font-size: 13px;
+  }
+
+  .divider-wrapper {
+    display: none;
+  }
+
+  .benefits-section {
+    margin: 20px 0;
+  }
+}
+
+

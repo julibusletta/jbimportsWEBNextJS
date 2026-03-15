@@ -15,6 +15,9 @@ export default function Categories() {
   const [mainCategory, setMainCategory] = useState<Category | null>(null);
   const [secondaryCategories, setSecondaryCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
+
+  const [currentChunkIndex, setCurrentChunkIndex] = useState(0);
 
   useEffect(() => {
     const loadCategories = async () => {
@@ -36,10 +39,29 @@ export default function Categories() {
     };
 
     loadCategories();
+
+    // Check if mobile
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
+  // Auto-slide on mobile using chunks
+  useEffect(() => {
+    if (!isMobile || secondaryCategories.length <= 4) return;
+
+    const maxChunks = Math.ceil(secondaryCategories.length / 4);
+
+    const interval = setInterval(() => {
+      setCurrentChunkIndex((prevIndex) => (prevIndex + 1) % maxChunks);
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, [isMobile, secondaryCategories.length]);
+
   const scrollCarousel = (direction: 'left' | 'right') => {
-    if (carouselRef.current) {
+    if (carouselRef.current && !isMobile) {
       const scrollAmount = 220;
       carouselRef.current.scrollBy({
         left: direction === 'left' ? -scrollAmount : scrollAmount,
@@ -47,6 +69,13 @@ export default function Categories() {
       });
     }
   };
+
+  // Get current categories to display
+  let displayedCategories = secondaryCategories;
+  if (isMobile) {
+    const chunkStart = currentChunkIndex * 4;
+    displayedCategories = secondaryCategories.slice(chunkStart, chunkStart + 4);
+  }
 
   return (
     <section className="categories-section" id="categories">
@@ -58,7 +87,7 @@ export default function Categories() {
               Explorá nuestras <b>categorías</b>
             </h2>
           </div>
-          <div className="categories-arrows">
+          <div className="categories-arrows hidden md:flex">
             <button
               onClick={() => scrollCarousel('left')}
               className="arrow-btn"
@@ -96,13 +125,14 @@ export default function Categories() {
               </Link>
             )}
 
-            {/* Secondary Categories Carousel */}
+            {/* Secondary Categories Carousel/Grid */}
             <div className="categories-secondary">
               <div
                 ref={carouselRef}
-                className="categories-carousel"
+                className={isMobile ? "categories-mobile-grid fade-in-out" : "categories-carousel snap-x snap-mandatory"}
+                key={isMobile ? currentChunkIndex : 'desktop'}
               >
-                {secondaryCategories.map((category) => (
+                {displayedCategories.map((category) => (
                   <Link
                     key={category.id}
                     href={`/category/${category.slug}`}
