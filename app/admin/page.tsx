@@ -90,7 +90,7 @@ export default function AdminPage() {
   );
 
   return (
-    <div className="p-10 font-sans bg-gray-50 min-h-screen text-gray-800">
+    <div className="p-10 font-sans bg-gray-50 min-h-screen text-gray-800" style={{ paddingTop: '180px' }}>
       <h1 className="text-3xl font-bold mb-6 text-blue-800">Panel de Control JBimports</h1>
       
       <div className="bg-white p-6 rounded-xl shadow-sm mb-8 border border-gray-100">

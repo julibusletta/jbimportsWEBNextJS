@@ -14,7 +14,7 @@ export interface Product {
 }
 
 // Ensure the data is typed correctly
-const mockCategoryProducts: { [key: string]: Product[] } = productsData as any;
+const mockCategoryProducts: { [key: string]: Product[] } = productsData as unknown as { [key: string]: Product[] };
 
 /**
  * Obtiene los productos de una categoría específica por su slug

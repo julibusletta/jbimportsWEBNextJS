@@ -18,34 +18,34 @@ export default function Footer() {
                 </h5>
                 <ul className="list-none m-0 p-0">
                   <li className="mb-2.5">
-                    <a href="#" className="text-gray-400 text-sm md:text-base no-underline transition-colors hover:text-white">
+                    <Link href="/preguntas" className="text-gray-400 text-sm md:text-base no-underline transition-colors hover:text-white">
                       Preguntas frecuentes
-                    </a>
+                    </Link>
                   </li>
                   <li className="mb-2.5">
-                    <a href="#" className="text-gray-400 text-sm md:text-base no-underline transition-colors hover:text-white">
+                    <Link href="/pago" className="text-gray-400 text-sm md:text-base no-underline transition-colors hover:text-white">
                       Formas de pago
-                    </a>
+                    </Link>
                   </li>
                   <li className="mb-2.5">
-                    <a href="#" className="text-gray-400 text-sm md:text-base no-underline transition-colors hover:text-white">
+                    <Link href="/envios" className="text-gray-400 text-sm md:text-base no-underline transition-colors hover:text-white">
                       Envíos
-                    </a>
+                    </Link>
                   </li>
                   <li className="mb-2.5">
-                    <a href="#" className="text-gray-400 text-sm md:text-base no-underline transition-colors hover:text-white">
+                    <Link href="/terminos" className="text-gray-400 text-sm md:text-base no-underline transition-colors hover:text-white">
                       Términos y Condiciones
-                    </a>
+                    </Link>
                   </li>
                   <li className="mb-2.5">
-                    <a href="#" className="text-gray-400 text-sm md:text-base no-underline transition-colors hover:text-white">
+                    <Link href="/privacidad" className="text-gray-400 text-sm md:text-base no-underline transition-colors hover:text-white">
                       Política de privacidad
-                    </a>
+                    </Link>
                   </li>
                   <li className="mb-2.5">
-                    <a href="#" className="text-gray-400 text-sm md:text-base no-underline transition-colors hover:text-white">
+                    <Link href="/defensa-consumidor" className="text-gray-400 text-sm md:text-base no-underline transition-colors hover:text-white">
                       Defensa al Consumidor
-                    </a>
+                    </Link>
                   </li>
                 </ul>
               </div>
@@ -57,14 +57,14 @@ export default function Footer() {
                 </h5>
                 <ul className="list-none m-0 p-0">
                   <li className="mb-2.5">
-                    <a href="#" className="text-gray-400 text-sm md:text-base no-underline transition-colors hover:text-white">
+                    <Link href="/quienes-somos" className="text-gray-400 text-sm md:text-base no-underline transition-colors hover:text-white">
                       Quiénes somos
-                    </a>
+                    </Link>
                   </li>
                   <li className="mb-2.5">
-                    <a href="#" className="text-gray-400 text-sm md:text-base no-underline transition-colors hover:text-white">
+                    <Link href="/contacto" className="text-gray-400 text-sm md:text-base no-underline transition-colors hover:text-white">
                       Contacto
-                    </a>
+                    </Link>
                   </li>
                 </ul>
               </div>
@@ -75,10 +75,10 @@ export default function Footer() {
                   CONTÁCTENOS
                 </h5>
                 <p className="text-sm md:text-base opacity-90 m-0 leading-loose">
-                  <a href="#" className="text-gray-400 no-underline transition-colors hover:text-white inline-flex items-center gap-2">
+                  <Link href="/contacto" className="text-gray-400 no-underline transition-colors hover:text-white inline-flex items-center gap-2">
                     <FaComments size={15} />
                     Quiero preguntar
-                  </a>
+                  </Link>
                   <br />
                   <a
                     href="mailto:info@jbimports.com"

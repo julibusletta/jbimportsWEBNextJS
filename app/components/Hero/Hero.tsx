@@ -32,7 +32,9 @@ export default function Hero() {
   const [displayText, setDisplayText] = useState('');
   const [isTyping, setIsTyping] = useState(true);
 
-  const fullText = 'Tecnología en tus manos';
+  const fullText = 'JB imports  Tecnologia a un solo clic';
+  const bluePart = 'JB imports';
+  const blackPart = 'Tecnologia a un solo clic';
 
   // Typewriter effect
   useEffect(() => {
@@ -43,23 +45,29 @@ export default function Hero() {
         if (prev.length < fullText.length) {
           return fullText.slice(0, prev.length + 1);
         } else {
-          setIsTyping(false);
+          clearInterval(interval);
+          // Pause for 2 seconds after finishing typing before hiding text and showing slider
+          setTimeout(() => {
+            setIsTyping(false);
+          }, 2000);
           return fullText;
         }
       });
-    }, 100);
+    }, 80);
 
     return () => clearInterval(interval);
   }, [isTyping]);
 
-  // Auto-rotate slides
+  // Auto-rotate slides - Only start when typing is finished
   useEffect(() => {
+    if (isTyping) return;
+
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
     }, 5000);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [isTyping]);
 
   const goToSlide = (index: number) => {
     setCurrentSlide(index);
@@ -69,9 +77,15 @@ export default function Hero() {
     <section id="home" className="hero flex items-center justify-center py-5 min-h-[530px] bg-gradient-to-br from-gray-50 to-gray-200 relative overflow-hidden visible">
       {/* Hero Content */}
       <div className={`hero-content max-w-4xl w-full mb-16 opacity-100 transition-opacity duration-700 text-center z-10 ${!isTyping ? 'fade-out' : ''}`}>
-        <h1 className="typewriter text-5xl md:text-7xl font-bold leading-tight mb-8 letter-spacing-tight min-h-32 text-gray-900">
-          {displayText}
-          {isTyping && <span className="animate-pulse">|</span>}
+        <h1 className="typewriter text-5xl md:text-7xl font-bold leading-tight mb-8 letter-spacing-tight min-h-48 md:min-h-64 text-gray-900 transition-all duration-300">
+          <span className="text-[#0066cc]">
+            {displayText.slice(0, bluePart.length)}
+          </span>
+          {displayText.length > bluePart.length && <br />}
+          <span className="text-black">
+            {displayText.slice(bluePart.length).trim()}
+          </span>
+          {isTyping && <span className="animate-pulse ml-1 text-gray-400">|</span>}
         </h1>
         <p className="hero-hidden text-2xl text-gray-600 mb-12 font-medium leading-relaxed opacity-0 animate-fadeInUp delay-500">
           Los mejores precios del mercado
@@ -106,11 +120,10 @@ export default function Hero() {
               <button
                 key={index}
                 onClick={() => goToSlide(index)}
-                className={`w-3 h-3 rounded-full transition-all transform cursor-pointer ${
-                  index === currentSlide
+                className={`w-3 h-3 rounded-full transition-all transform cursor-pointer ${index === currentSlide
                     ? 'bg-orange-500 scale-125'
                     : 'bg-white bg-opacity-50 hover:bg-opacity-80'
-                }`}
+                  }`}
                 aria-label={`Go to slide ${index + 1}`}
               />
             ))}

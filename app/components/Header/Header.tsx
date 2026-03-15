@@ -24,52 +24,21 @@ export default function Header() {
   const [activeLink, setActiveLink] = useState('home');
 
   const navLinks: NavLink[] = [
-    { label: 'CELULARES', href: '#home', id: 'home' },
-    { label: 'AURICULARES', href: '#home', id: 'home' },
-    { label: 'PARLANTES', href: '#home', id: 'home' },
+    { label: 'CELULARES', href: '/category/celulares', id: 'celulares' },
+    { label: 'AURICULARES', href: '/category/auriculares', id: 'auriculares' },
+    { label: 'PARLANTES', href: '/category/parlantes', id: 'parlantes' },
     {
-      label: 'PRODUCTOS',
-      href: '#',
+      label: 'APPLE',
+      href: '/#products',
       id: 'products',
       submenu: [
-        {
-          label: 'Apple',
-          href: '#',
-          submenu: [
-            { label: 'Iphone', href: '#' },
-            { label: 'Macbook', href: '#' },
-            { label: 'Watch', href: '#' },
-          ],
-        },
-        {
-          label: 'Celulares',
-          href: '#',
-          submenu: [
-            { label: 'Samsung', href: '#' },
-            { label: 'Motorola', href: '#' },
-            { label: 'Xiaomi', href: '#' },
-            { label: 'Realme', href: '#' },
-          ],
-        },
-        { label: 'Smart Home', href: '#' },
-        { label: 'Parlantes', href: '#' },
-        { label: 'Auriculares', href: '#' },
-        { label: 'Consolas y videojuegos', href: '#' },
+        { label: 'IPHONE', href: '/category/iphone' },
+        { label: 'MACBOOK', href: '/category/macbook' },
+        { label: 'WATCH', href: '/category/watch' },
       ],
     },
-    { label: 'NOTEBOOKS', href: '#services', id: 'services' },
+    { label: 'NOTEBOOKS', href: '/category/notebooks', id: 'notebooks' },
   ];
-
-  // Scroll effect - Add shadow when scrolled
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 100);
-      updateActiveLink();
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   // Update active link based on scroll position
   const updateActiveLink = () => {
@@ -86,6 +55,17 @@ export default function Header() {
     setActiveLink(currentSection);
   };
 
+  // Scroll effect - Add shadow when scrolled
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+      updateActiveLink();
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
     if (!isMenuOpen) {
@@ -100,9 +80,8 @@ export default function Header() {
   };
 
   return (
-    <header className={`sticky top-0 z-100 bg-white transition-shadow duration-300 ${
-      isScrolled ? 'shadow-lg' : 'shadow-sm'
-    }`}>
+    <header className={`sticky top-0 z-100 bg-white transition-shadow duration-300 ${isScrolled ? 'shadow-lg' : 'shadow-sm'
+      }`}>
       <div className="header-top flex items-center gap-6 px-6 md:px-10 py-3 md:py-4 justify-center">
         {/* Hamburger Menu */}
         <button
@@ -140,10 +119,10 @@ export default function Header() {
         <div className="header-actions flex items-center gap-6 ml-auto">
           {/* User Icon & Dropdown */}
           <div className="relative user-menu-container">
-            <button 
+            <button
               onMouseEnter={() => !isMenuOpen && setIsUserMenuOpen(true)}
               onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-              className="text-gray-700 hover:text-orange-600 transition-colors bg-transparent border-0 p-0 flex items-center gap-2 cursor-pointer" 
+              className="text-gray-700 hover:text-orange-600 transition-colors bg-transparent border-0 p-0 flex items-center gap-2 cursor-pointer"
               aria-label="Usuario"
             >
               {session?.user?.image ? (
@@ -159,7 +138,7 @@ export default function Header() {
 
             {/* Dropdown Menu */}
             {isUserMenuOpen && (
-              <div 
+              <div
                 className="absolute right-0 top-full mt-2 w-56 bg-white shadow-[0_10px_30px_rgba(0,0,0,0.15)] rounded-lg py-2 z-[200] border border-gray-100 animate-dropdown"
                 onMouseLeave={() => setIsUserMenuOpen(false)}
               >
@@ -168,7 +147,7 @@ export default function Header() {
                     <div className="px-5 py-3 border-b border-gray-50 mb-1">
                       <p className="text-gray-400 text-sm font-normal m-0 italic">Conectado como {session.user?.email}</p>
                     </div>
-                    
+
                     {[
                       { label: 'Mi cuenta', href: '/mi-cuenta' },
                       { label: 'Mis Compras', href: '/mi-cuenta/compras' },
@@ -186,9 +165,9 @@ export default function Header() {
                         {item.label}
                       </Link>
                     ))}
-                    
+
                     <div className="border-t border-gray-50 mt-1 pt-1">
-                      <button 
+                      <button
                         onClick={() => { signOut(); setIsUserMenuOpen(false); }}
                         className="w-full text-left px-5 py-2.5 text-gray-700 hover:text-red-500 hover:bg-gray-50 text-sm font-medium transition-all bg-transparent border-0 cursor-pointer"
                       >
@@ -199,7 +178,7 @@ export default function Header() {
                 ) : (
                   <div className="p-4">
                     <p className="text-gray-500 text-sm mb-4 text-center">Iniciá sesión para ver tus compras y más.</p>
-                    <Link 
+                    <Link
                       href="/api/auth/signin"
                       className="block w-full text-center bg-blue-600 text-white py-2.5 rounded-lg font-bold text-sm hover:bg-blue-700 transition-colors no-underline"
                       onClick={() => setIsUserMenuOpen(false)}
@@ -243,16 +222,15 @@ export default function Header() {
         <div className="nav-primary flex gap-8 list-none m-0 p-0 w-auto h-14 items-center">
           {navLinks.map((link) => (
             <div key={link.label} className="dropdown relative inline-block group">
-              <a
+              <Link
                 href={link.href}
-                className={`text-white font-medium text-base py-1.5 px-4 rounded transition-all ${
-                  activeLink === link.id 
-                    ? 'font-bold' 
+                className={`text-white font-medium text-base py-1.5 px-4 rounded transition-all ${activeLink === link.id
+                    ? 'font-bold'
                     : 'hover:bg-gray-800'
-                }`}
+                  }`}
               >
                 {link.label}
-              </a>
+              </Link>
 
               {/* Dropdown Content */}
               {link.submenu && (
@@ -267,23 +245,23 @@ export default function Header() {
                           </button>
                           <div className="submenu-content hidden group-hover:block absolute left-full top-0 min-w-52 bg-white shadow-lg rounded-lg p-2 z-50">
                             {sublink.submenu.map((item) => (
-                              <a
+                              <Link
                                 key={item.label}
                                 href={item.href}
                                 className="block text-gray-900 px-6 py-2 text-base font-medium hover:bg-gray-100 rounded transition-all"
                               >
                                 {item.label}
-                              </a>
+                              </Link>
                             ))}
                           </div>
                         </>
                       ) : (
-                        <a
+                        <Link
                           href={sublink.href}
                           className="block text-gray-900 px-6 py-2.5 text-base font-medium hover:bg-gray-100 rounded transition-all"
                         >
                           {sublink.label}
-                        </a>
+                        </Link>
                       )}
                     </div>
                   ))}
@@ -311,9 +289,8 @@ export default function Header() {
                   {link.submenu && (
                     <FaChevronDown
                       size={12}
-                      className={`transition-transform ${
-                        openDropdown === link.label ? 'rotate-180' : ''
-                      }`}
+                      className={`transition-transform ${openDropdown === link.label ? 'rotate-180' : ''
+                        }`}
                     />
                   )}
                 </button>
@@ -323,12 +300,12 @@ export default function Header() {
                   <div className="dropdown-content bg-gray-50 border-b border-gray-200">
                     {link.submenu.map((sublink) => (
                       <div key={sublink.label} className="pl-5">
-                        <a
+                        <Link
                           href={sublink.href}
                           className="block text-gray-800 px-5 py-3 text-sm font-medium border-b border-gray-200 hover:bg-gray-100"
                         >
                           {sublink.label}
-                        </a>
+                        </Link>
                       </div>
                     ))}
                   </div>

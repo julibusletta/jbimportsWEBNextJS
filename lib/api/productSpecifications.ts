@@ -5,7 +5,7 @@ export interface Spec {
   value: string;
 }
 
-const productSpecifications: Record<string, Spec[]> = specsData as any;
+const productSpecifications: Record<string, Spec[]> = specsData as unknown as Record<string, Spec[]>;
 
 /**
  * Retorna las especificaciones de un producto por ID.
