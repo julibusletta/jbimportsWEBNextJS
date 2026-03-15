@@ -3,6 +3,7 @@
 import { useParams, useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { getProductById, getProductsByCategory, Product } from '@/lib/api/mockCategoryProducts';
+import { getSpecsByProductId, Spec } from '@/lib/api/productSpecifications';
 import { useCart } from '@/app/context/CartContext';
 import Link from 'next/link';
 import { FaRegCommentDots, FaTruck, FaShieldAlt, FaCreditCard, FaRegHeart, FaInfoCircle } from 'react-icons/fa';
@@ -10,12 +11,13 @@ import { FaRegCommentDots, FaTruck, FaShieldAlt, FaCreditCard, FaRegHeart, FaInf
 export default function ProductDetailsPage() {
   const params = useParams();
   const router = useRouter();
-  const id = params.id as string;
+  const id = params?.id as string;
   const { addToCart } = useCart();
 
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
+  const [specs, setSpecs] = useState<Spec[]>([]);
   const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
 
   useEffect(() => {
@@ -24,6 +26,10 @@ export default function ProductDetailsPage() {
     setProduct(foundProduct || null);
     
     if (foundProduct) {
+      // Get specs
+      const foundSpecs = getSpecsByProductId(id);
+      setSpecs(foundSpecs);
+
       // Get related products from the same category
       const related = getProductsByCategory(foundProduct.category).filter(p => p.id !== id).slice(0, 4);
       setRelatedProducts(related);
@@ -79,9 +85,9 @@ export default function ProductDetailsPage() {
       </div>
     );
   }
-
-  // Calculated values mimicking Mexx
-  const cuotasPrice = Math.round(product.price * 1.4); // Just mocking a 12 installments price
+  
+  // Calculated values mimicking Mexx - Moved here after null check
+  const cuotasPrice = Math.round(product.price * 1.4); 
   const sinImpuestos = Math.round(product.price * 0.79);
 
   return (
@@ -258,15 +264,23 @@ export default function ProductDetailsPage() {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-y-3 gap-x-12 text-[14px] text-[#444]">
-            <div className="flex font-sans"><strong className="w-[160px] text-[#333]">Marca :</strong> <span>{product.name.split(' ')[0]}</span></div>
-            <div className="flex font-sans"><strong className="w-[160px] text-[#333]">Modelo :</strong> <span>{product.name.split(' ').slice(1, 3).join(' ')}</span></div>
-            <div className="flex font-sans"><strong className="w-[160px] text-[#333]">P/N :</strong> <span>PN-{product.id.toUpperCase()}</span></div>
-            <div className="flex font-sans"><strong className="w-[160px] text-[#333]">EAN :</strong> <span>4710937138696</span></div>
-            <div className="flex font-sans"><strong className="w-[160px] text-[#333]">Color :</strong> <span>Negro</span></div>
-            <div className="flex font-sans"><strong className="w-[160px] text-[#333]">Garantía :</strong> <span>12 Meses</span></div>
-            <div className="flex font-sans"><strong className="w-[160px] text-[#333]">Condición :</strong> <span>Nuevo en Caja</span></div>
+            {specs.length > 0 ? (
+              specs.map((s, idx) => (
+                <div key={idx} className="flex font-sans">
+                  <strong className="w-[160px] text-[#333]">{s.label} :</strong> 
+                  <span>{s.value}</span>
+                </div>
+              ))
+            ) : (
+              <>
+                <div className="flex font-sans"><strong className="w-[160px] text-[#333]">Marca :</strong> <span>{product.name.split(' ')[0]}</span></div>
+                <div className="flex font-sans"><strong className="w-[160px] text-[#333]">Modelo :</strong> <span>{product.name.split(' ').slice(1, 3).join(' ')}</span></div>
+                <div className="flex font-sans"><strong className="w-[160px] text-[#333]">Condición :</strong> <span>Nuevo en Caja</span></div>
+                <div className="flex font-sans"><strong className="w-[160px] text-[#333]">Stock :</strong> <span>{product.stock} disponibles</span></div>
+              </>
+            )}
+            <div className="flex font-sans"><strong className="w-[160px] text-[#333]">ID :</strong> <span>{product.id}</span></div>
             <div className="flex font-sans"><strong className="w-[160px] text-[#333]">Categoría :</strong> <span className="capitalize">{product.category.replace('-', ' ')}</span></div>
-            <div className="flex font-sans"><strong className="w-[160px] text-[#333]">Stock :</strong> <span>{product.stock} disponibles</span></div>
           </div>
           <div className="mt-8 text-[14px] text-[#444] leading-relaxed max-w-[900px]">
             <strong className="text-[#333] block mb-2">Descripción General:</strong>

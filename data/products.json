@@ -1,0 +1,28 @@
+{
+  "pc-escritorio": [
+    { "id": "pc-1", "name": "PC Gamer AMD Ryzen 7 9800X3D RTX 5080 V70", "price": 4985, "originalPrice": 5520, "discount": 10, "image": "https://dummyimage.com/400x400/2c3e50/16a085.jpg?text=PC+Gamer+RTX5080", "category": "pc-escritorio", "description": "PC de alto rendimiento", "stock": 5, "badge": "PC ARMADA" },
+    { "id": "pc-2", "name": "PC Workstation AMD Ryzen 9 5950X", "price": 3200, "originalPrice": 3800, "discount": 15, "image": "https://dummyimage.com/400x400/34495e/16a085.jpg?text=Workstation", "category": "pc-escritorio", "description": "Workstation profesional", "stock": 3, "badge": "WORKSTATION" },
+    { "id": "pc-3", "name": "PC Gaming Intel i5 RTX 3060", "price": 1200, "originalPrice": 1500, "discount": 20, "image": "https://dummyimage.com/400x400/2c3e50/e74c3c.jpg?text=Gaming", "category": "pc-escritorio", "description": "PC gaming accesible", "stock": 8, "badge": "OFERTA" },
+    { "id": "pc-4", "name": "PC Pro Design RTX 4090", "price": 4999, "originalPrice": 6200, "discount": 19, "image": "https://dummyimage.com/400x400/2c3e50/3498db.jpg?text=Design+RTX4090", "category": "pc-escritorio", "description": "Máquina de diseño profesional", "stock": 2, "badge": "PROFESIONAL" },
+    { "id": "pc-5", "name": "PC Streaming i9 32GB", "price": 2999, "originalPrice": 3499, "discount": 14, "image": "https://dummyimage.com/400x400/34495e/f39c12.jpg?text=Streaming", "category": "pc-escritorio", "description": "PC especializado para streaming", "stock": 4, "badge": "STREAMING" },
+    { "id": "pc-6", "name": "PC Servidor Xeon Quadro", "price": 5500, "image": "https://dummyimage.com/400x400/2c3e50/9b59b6.jpg?text=Servidor", "category": "pc-escritorio", "description": "Servidor empresarial", "stock": 1, "badge": "SERVIDOR" },
+    { "id": "pc-7", "name": "PC Retro 80s Gaming", "price": 1999, "originalPrice": 2200, "discount": 9, "image": "https://dummyimage.com/400x400/c0392b/ecf0f1.jpg?text=Retro", "category": "pc-escritorio", "description": "PC gaming con diseño retro", "stock": 6, "badge": "CUSTOM" },
+    { "id": "pc-8", "name": "PC Entrada Budget i3", "price": 599, "originalPrice": 799, "discount": 25, "image": "https://dummyimage.com/400x400/1abc9c/2c3e50.jpg?text=Budget", "category": "pc-escritorio", "description": "PC económica", "stock": 12, "badge": "OFERTA" }
+  ],
+  "placas-video": [
+    { "id": "gpu-1", "name": "RTX 4090 Founders Edition", "price": 1799, "originalPrice": 1999, "discount": 10, "image": "https://dummyimage.com/400x400/2c3e50/f0ad4e.jpg?text=RTX+4090", "category": "placas-video", "description": "Tarjeta gráfica de alta performance", "stock": 3, "badge": "FLAGSHIP" },
+    { "id": "gpu-2", "name": "RTX 4070 Ti Gaming", "price": 1349, "originalPrice": 1549, "discount": 15, "image": "https://dummyimage.com/400x400/34495e/5cb85c.jpg?text=RTX+4070Ti", "category": "placas-video", "description": "Excelente relación precio-rendimiento", "stock": 5, "badge": "GAMING" },
+    { "id": "gpu-3", "name": "RTX 4070 Super", "price": 849, "originalPrice": 999, "discount": 17, "image": "https://dummyimage.com/400x400/2c3e50/46b8da.jpg?text=RTX+4070S", "category": "placas-video", "description": "Rendimiento 4K más asequible", "stock": 7, "badge": "STOCK" },
+    { "id": "gpu-4", "name": "RTX 4060 Ti Entry", "price": 449, "originalPrice": 549, "discount": 18, "image": "https://dummyimage.com/400x400/16a085/ecf0f1.jpg?text=RTX+4060Ti", "category": "placas-video", "description": "Para gaming 1440p accesible", "stock": 10, "badge": "OFERTA" },
+    { "id": "gpu-5", "name": "RTX 4060 1080p", "price": 279, "originalPrice": 349, "discount": 20, "image": "https://dummyimage.com/400x400/c0392b/f8f9fa.jpg?text=RTX+4060", "category": "placas-video", "description": "GPU entry level para 1080p", "stock": 15, "badge": "PRESUPUESTO" },
+    { "id": "gpu-6", "name": "RTX 3090 Ti", "price": 999, "originalPrice": 1299, "discount": 23, "image": "https://dummyimage.com/400x400/8e44ad/ecf0f1.jpg?text=RTX+3090Ti", "category": "placas-video", "description": "Generación anterior", "stock": 2, "badge": "OFERTA" },
+    { "id": "gpu-7", "name": "RX 7900 XTX", "price": 1199, "originalPrice": 1399, "discount": 14, "image": "https://dummyimage.com/400x400/d35400/ecf0f1.jpg?text=RX+7900XTX", "category": "placas-video", "description": "Alternativa AMD competitiva", "stock": 4, "badge": "AMD" },
+    { "id": "gpu-8", "name": "RX 7700 XT", "price": 679, "originalPrice": 799, "discount": 15, "image": "https://dummyimage.com/400x400/e67e22/ecf0f1.jpg?text=RX+7700XT", "category": "placas-video", "description": "Buena opción AMD para 1440p", "stock": 8, "badge": "AMD" }
+  ],
+  "monitores": [
+    { "id": "mon-1", "name": "Monitor 4K 144Hz 27\"", "price": 599, "image": "https://dummyimage.com/400x400/34495e/16a085.jpg?text=Monitor+4K", "category": "monitores", "description": "Monitor 4K con 144Hz", "stock": 4 },
+    { "id": "mon-2", "name": "Monitor 1440p 240Hz Gaming", "price": 349, "image": "https://dummyimage.com/400x400/2c3e50/3498db.jpg?text=1440p+Gaming", "category": "monitores", "description": "Monitor gaming competitivo", "stock": 7 },
+    { "id": "mon-3", "name": "Monitor Ultrawide 34\"", "price": 799, "image": "https://dummyimage.com/400x400/1abc9c/2c3e50.jpg?text=Ultrawide", "category": "monitores", "description": "Monitor ultrawide 3440x1440", "stock": 2 },
+    { "id": "mon-4", "name": "Monitor 1080p 60Hz Office", "price": 149, "image": "https://dummyimage.com/400x400/c0392b/ecf0f1.jpg?text=1080p+Office", "category": "monitores", "description": "Monitor básico para oficina", "stock": 15 }
+  ]
+}
