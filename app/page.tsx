@@ -5,11 +5,11 @@ import ProductCarousel from './components/Products/ProductCarousel';
 
 export default function Home() {
   return (
-    <div className="w-full overflow-x-hidden">
+    <main className="w-full overflow-x-hidden">
       <Hero />
       <Benefits />
       <Categories />
       <ProductCarousel />
-    </div>
+    </main>
   );
 }

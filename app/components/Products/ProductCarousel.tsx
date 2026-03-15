@@ -141,7 +141,7 @@ function ProductCarouselSection({ title, section, progressColor = '#414141' }: C
                     </div>
 
                     {/* Product Image */}
-                    <div className="product-image w-full h-44 overflow-hidden bg-gray-100">
+                    <div className="product-image w-full h-64 overflow-hidden bg-gray-100 flex items-center justify-center p-4">
                       <img
                         src={getImageUrl(product.imageUrls?.[0] || '')}
                         alt={product.name}
@@ -151,7 +151,7 @@ function ProductCarouselSection({ title, section, progressColor = '#414141' }: C
 
                     {/* Product Info */}
                     <div className="product-info px-4 py-4 flex flex-col flex-1">
-                      <h5 className="text-sm font-semibold text-gray-900 text-center mb-1.5 leading-relaxed">
+                      <h5 className="text-base font-bold text-gray-900 text-center mb-1.5 leading-relaxed">
                         {product.name}
                       </h5>
                       <p className="text-xs text-gray-600 text-center mb-1">

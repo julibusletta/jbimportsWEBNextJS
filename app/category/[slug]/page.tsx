@@ -8,7 +8,9 @@ import { useCart } from '@/app/context/CartContext';
 import type { Category } from '@/lib/api/categoriesService';
 import type { Product } from '@/lib/api/mockCategoryProducts';
 import Link from 'next/link';
-import { FaChevronDown, FaChevronUp, FaShoppingCart, FaEye } from 'react-icons/fa';export default function CategoryPage() {
+import { FaChevronDown, FaChevronUp, FaShoppingCart, FaEye } from 'react-icons/fa';
+
+export default function CategoryPage() {
   const params = useParams();
   const slug = params.slug as string;
   const { addToCart } = useCart();
@@ -217,17 +219,18 @@ import { FaChevronDown, FaChevronUp, FaShoppingCart, FaEye } from 'react-icons/f
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            minHeight: '200px',
-            padding: '16px',
+            minHeight: '260px',
+            padding: '20px',
           }}
         >
           <img
             src={product.image}
             alt={product.name}
             style={{
-              maxHeight: '180px',
+              maxHeight: '230px',
               maxWidth: '100%',
               objectFit: 'contain',
+              transition: 'transform 0.3s',
             }}
           />
         </div>
@@ -239,8 +242,8 @@ import { FaChevronDown, FaChevronUp, FaShoppingCart, FaEye } from 'react-icons/f
             href={`/product/${product.id}`}
             style={{
               color: '#0066cc',
-              fontSize: '13px',
-              fontWeight: 500,
+              fontSize: '15px',
+              fontWeight: 600,
               textDecoration: 'none',
               lineHeight: '1.3',
               display: '-webkit-box',
@@ -340,9 +343,9 @@ import { FaChevronDown, FaChevronUp, FaShoppingCart, FaEye } from 'react-icons/f
   }
 
   return (
-    <div className="bg-white flex flex-col">
+    <div className="bg-white flex flex-col items-center min-h-screen" style={{ paddingTop: '180px' }}>
       {/* Main content — below the global Navbar */}
-      <div className="max-w-[1200px] mx-auto w-full px-4 pt-20 sm:pt-28 md:pt-40 pb-8">
+      <div className="max-w-[1300px] w-full px-4 pb-12 flex flex-col">
 
         {/* Breadcrumb */}
         <div style={{ fontSize: '12px', color: '#666', marginBottom: '10px', display: 'flex', gap: '4px', alignItems: 'center' }}>
@@ -387,9 +390,9 @@ import { FaChevronDown, FaChevronUp, FaShoppingCart, FaEye } from 'react-icons/f
           </span>
         </div>
 
-        <div className="flex flex-col md:grid gap-4 md:gap-5" style={{ gridTemplateColumns: '200px 1fr' }}>
+        <div className="flex flex-col lg:flex-row gap-8 mt-4">
           {/* Sidebar */}
-          <div>
+          <div className="w-full lg:w-[240px] flex-shrink-0">
             {/* Brands filter */}
             <div style={{ border: '1px solid #e0e0e0', borderRadius: '3px', overflow: 'hidden', marginBottom: '10px' }}>
               <button

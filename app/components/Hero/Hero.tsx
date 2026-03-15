@@ -66,7 +66,7 @@ export default function Hero() {
   };
 
   return (
-    <section id="home" className="hero flex items-center justify-center py-5 min-h-[450px] bg-gradient-to-br from-gray-50 to-gray-200 relative overflow-hidden visible">
+    <section id="home" className="hero flex items-center justify-center py-5 min-h-[530px] bg-gradient-to-br from-gray-50 to-gray-200 relative overflow-hidden visible">
       {/* Hero Content */}
       <div className={`hero-content max-w-4xl w-full mb-16 opacity-100 transition-opacity duration-700 text-center z-10 ${!isTyping ? 'fade-out' : ''}`}>
         <h1 className="typewriter text-5xl md:text-7xl font-bold leading-tight mb-8 letter-spacing-tight min-h-32 text-gray-900">

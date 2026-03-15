@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { FaShoppingCart, FaBars, FaTimes, FaSearch, FaUser, FaChevronDown } from 'react-icons/fa';
 import Link from 'next/link';
+import { useSession, signOut } from "next-auth/react";
 import { useCart } from '@/app/context/CartContext';
 import '../../styles/Header.css';
 
@@ -16,6 +17,8 @@ interface NavLink {
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const { data: session } = useSession();
   const { cartCount } = useCart();
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeLink, setActiveLink] = useState('home');
@@ -135,10 +138,80 @@ export default function Header() {
 
         {/* Header Actions */}
         <div className="header-actions flex items-center gap-6 ml-auto">
-          {/* User Icon */}
-          <a href="#" className="hidden sm:block text-gray-700 hover:text-orange-600 transition-colors" aria-label="Usuario">
-            <FaUser size={22} />
-          </a>
+          {/* User Icon & Dropdown */}
+          <div className="relative user-menu-container">
+            <button 
+              onMouseEnter={() => !isMenuOpen && setIsUserMenuOpen(true)}
+              onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+              className="text-gray-700 hover:text-orange-600 transition-colors bg-transparent border-0 p-0 flex items-center gap-2 cursor-pointer" 
+              aria-label="Usuario"
+            >
+              {session?.user?.image ? (
+                <img src={session.user.image} alt="Avatar" className="w-6 h-6 rounded-full" />
+              ) : (
+                <FaUser size={22} />
+              )}
+              <span className="hidden lg:inline text-sm font-medium uppercase">
+                {session ? `Hola, ${session.user?.name?.split(' ')[0]}` : 'MI CUENTA'}
+              </span>
+              <FaChevronDown size={10} className={`transition-transform duration-200 ${isUserMenuOpen ? 'rotate-180' : ''}`} />
+            </button>
+
+            {/* Dropdown Menu */}
+            {isUserMenuOpen && (
+              <div 
+                className="absolute right-0 top-full mt-2 w-56 bg-white shadow-[0_10px_30px_rgba(0,0,0,0.15)] rounded-lg py-2 z-[200] border border-gray-100 animate-dropdown"
+                onMouseLeave={() => setIsUserMenuOpen(false)}
+              >
+                {session ? (
+                  <>
+                    <div className="px-5 py-3 border-b border-gray-50 mb-1">
+                      <p className="text-gray-400 text-sm font-normal m-0 italic">Conectado como {session.user?.email}</p>
+                    </div>
+                    
+                    {[
+                      { label: 'Mi cuenta', href: '/mi-cuenta' },
+                      { label: 'Mis Compras', href: '/mi-cuenta/compras' },
+                      { label: 'Facturas', href: '/mi-cuenta/facturas' },
+                      { label: 'Preguntas', href: '/mi-cuenta/preguntas' },
+                      { label: 'Favoritos', href: '/mi-cuenta/favoritos' },
+                      { label: 'Canje de juegos', href: '/mi-cuenta/canje' },
+                    ].map((item) => (
+                      <Link
+                        key={item.label}
+                        href={item.href}
+                        className="block px-5 py-2.5 text-gray-700 hover:text-orange-600 hover:bg-gray-50 text-sm font-medium transition-all no-underline"
+                        onClick={() => setIsUserMenuOpen(false)}
+                      >
+                        {item.label}
+                      </Link>
+                    ))}
+                    
+                    <div className="border-t border-gray-50 mt-1 pt-1">
+                      <button 
+                        onClick={() => { signOut(); setIsUserMenuOpen(false); }}
+                        className="w-full text-left px-5 py-2.5 text-gray-700 hover:text-red-500 hover:bg-gray-50 text-sm font-medium transition-all bg-transparent border-0 cursor-pointer"
+                      >
+                        Salir
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  <div className="p-4">
+                    <p className="text-gray-500 text-sm mb-4 text-center">Iniciá sesión para ver tus compras y más.</p>
+                    <Link 
+                      href="/api/auth/signin"
+                      className="block w-full text-center bg-blue-600 text-white py-2.5 rounded-lg font-bold text-sm hover:bg-blue-700 transition-colors no-underline"
+                      onClick={() => setIsUserMenuOpen(false)}
+                    >
+                      INGRESAR
+                    </Link>
+                    <p className="text-center text-[10px] text-gray-400 mt-3 uppercase tracking-wider">¿No tenés cuenta? Registrate</p>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
 
           {/* Search Icon Mobile */}
           <button className="md:hidden bg-transparent border-0 cursor-pointer text-gray-700 hover:text-orange-600" aria-label="Buscar">

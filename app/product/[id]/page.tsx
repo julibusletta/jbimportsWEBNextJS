@@ -19,7 +19,7 @@ export default function ProductDetailsPage() {
   const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
 
   useEffect(() => {
-    setLoading(true);
+    // We already have loading: true from useState initial value
     const foundProduct = getProductById(id);
     setProduct(foundProduct || null);
     
@@ -85,10 +85,10 @@ export default function ProductDetailsPage() {
   const sinImpuestos = Math.round(product.price * 0.79);
 
   return (
-    <div style={{ background: '#fff', display: 'flex', flexDirection: 'column' }}>
+    <div className="bg-white flex flex-col items-center min-h-screen" style={{ paddingTop: '180px' }}>
       
-      {/* Breadcrumb Navigation */}
-      <div style={{ maxWidth: '1200px', margin: '0 auto', width: '100%', padding: '160px 16px 16px' }}>
+      {/* Breadcrumb Navigation - Centered wrapper */}
+      <div className="max-w-[1300px] w-full px-4 pb-4">
         <div className="flex items-center gap-2 text-[13px] text-[#0066cc]" style={{ marginBottom: '16px' }}>
           <Link href="/" className="hover:underline">Inicio</Link>
           <span className="text-[#666]">›</span>
@@ -100,7 +100,7 @@ export default function ProductDetailsPage() {
         </div>
       </div>
 
-      <main style={{ maxWidth: '1200px', margin: '0 auto', width: '100%', padding: '0 16px 48px' }}>
+      <main className="max-w-[1300px] w-full px-4 pb-20">
         {/* Top Split Area */}
         <div className="flex flex-col lg:flex-row gap-10">
           

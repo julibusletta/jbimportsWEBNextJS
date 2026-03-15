@@ -5,7 +5,7 @@ import '../../styles/Benefits.css';
 
 export default function Benefits() {
   return (
-    <section id="benefits" className="benefits-section">
+    <section id="benefits" className="benefits-section visible in-view">
       <div className="benefits-wrapper">
         <div className="benefits-container">
           {/* Benefit 1: Payment Plans */}
