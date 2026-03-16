@@ -1,30 +1,27 @@
 import { FaExternalLinkAlt, FaEye } from 'react-icons/fa';
+import { getServerSession } from "next-auth";
+import { db } from "@/lib/db";
+import { redirect } from "next/navigation";
+import Link from 'next/link';
 
-export default function MisComprasPage() {
-  const compras = [
-    {
-      id: '245678',
-      fecha: '12/03/2026',
-      total: '$423.189',
-      estado: 'Entregado',
-      estadoClass: 'bg-green-100 text-green-700',
-      pago: 'Aprobado',
-      pagoClass: 'text-green-600',
-      correo: 'Andreani',
-      seguimiento: 'AND123456789'
-    },
-    {
-      id: '245512',
-      fecha: '05/03/2026',
-      total: '$166.969',
-      estado: 'En camino',
-      estadoClass: 'bg-blue-100 text-blue-700',
-      pago: 'Aprobado',
-      pagoClass: 'text-green-600',
-      correo: 'Andreani',
-      seguimiento: 'AND987654321'
+export default async function MisComprasPage() {
+  const session = await getServerSession();
+  
+  if (!session?.user?.email) {
+    redirect('/auth/signin');
+  }
+
+  const userOrders = await db.getOrdersByEmail(session.user.email);
+
+  // Helper for status classes
+  const getStatusClass = (status: string) => {
+    switch (status) {
+      case 'APPROVED': return 'bg-green-100 text-green-700';
+      case 'PENDING': return 'bg-yellow-100 text-yellow-700';
+      case 'REJECTED': return 'bg-red-100 text-red-700';
+      default: return 'bg-gray-100 text-gray-700';
     }
-  ];
+  };
 
   return (
     <div>
@@ -34,7 +31,7 @@ export default function MisComprasPage() {
           <p className="text-gray-500 text-sm mt-1">Historial detallado de todas tus adquisiciones</p>
         </div>
         <div className="bg-gray-100 px-4 py-2 rounded-full text-xs font-bold text-gray-600">
-          {compras.length} ÓRDENES
+          {userOrders.length} {userOrders.length === 1 ? 'ORDEN' : 'ÓRDENES'}
         </div>
       </div>
 
@@ -53,25 +50,25 @@ export default function MisComprasPage() {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-50">
-            {compras.length > 0 ? (
-              compras.map((compra) => (
+            {userOrders.length > 0 ? (
+              userOrders.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).map((compra) => (
                 <tr key={compra.id} className="hover:bg-gray-50 transition-colors group">
                   <td className="py-5 px-2 text-center text-sm font-bold text-blue-600">
-                    #{compra.id}
+                    #{compra.id.substring(0, 8)}
                   </td>
                   <td className="py-5 px-2 text-center text-sm text-gray-600">
-                    {compra.fecha}
+                    {new Date(compra.createdAt).toLocaleDateString('es-AR')}
                   </td>
                   <td className="py-5 px-2 text-right text-sm font-bold text-gray-900">
-                    {compra.total}
+                    ${compra.total.toLocaleString('es-AR')}
                   </td>
                   <td className="py-5 px-2 text-center">
-                    <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${compra.estadoClass}`}>
-                      {compra.estado}
+                    <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${getStatusClass(compra.status)}`}>
+                      {compra.status === 'APPROVED' ? 'Aprobado' : compra.status === 'PENDING' ? 'Pendiente' : 'Rechazado'}
                     </span>
                   </td>
-                  <td className={`py-5 px-2 text-center text-xs font-bold ${compra.pagoClass}`}>
-                    {compra.pago}
+                  <td className={`py-5 px-2 text-center text-xs font-bold ${compra.status === 'APPROVED' ? 'text-green-600' : 'text-gray-500'}`}>
+                    {compra.status === 'APPROVED' ? 'Confirmado' : '-'}
                   </td>
                   <td className="py-5 px-2 text-center">
                     <button className="text-blue-600 hover:text-blue-800 bg-transparent border-0 cursor-pointer flex items-center justify-center w-full">
@@ -79,16 +76,13 @@ export default function MisComprasPage() {
                     </button>
                   </td>
                   <td className="py-5 px-2 text-center text-sm text-gray-500">
-                    {compra.correo}
+                    Nave
                   </td>
                   <td className="py-5 px-2">
                     <div className="flex items-center gap-2">
                       <span className="text-xs font-medium text-gray-700 bg-gray-100 px-2 py-1 rounded">
-                        {compra.seguimiento}
+                        {compra.navePaymentId ? 'Procesado' : 'Pendiente'}
                       </span>
-                      <button className="text-gray-400 hover:text-blue-600 transition-colors bg-transparent border-0 cursor-pointer">
-                        <FaExternalLinkAlt size={12} />
-                      </button>
                     </div>
                   </td>
                 </tr>

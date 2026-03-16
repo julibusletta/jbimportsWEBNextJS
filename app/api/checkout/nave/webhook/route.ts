@@ -23,14 +23,27 @@ export async function POST(request: Request) {
      * }
      */
 
-    const { reference, status } = body;
+    const { reference, external_payment_id, status } = body;
+    const orderId = reference || external_payment_id;
 
-    if (!reference) {
-      return NextResponse.json({ success: false, message: 'Missing reference' }, { status: 400 });
+    if (!orderId) {
+      return NextResponse.json({ success: false, message: 'Missing reference or external_payment_id' }, { status: 400 });
     }
 
-    // Here you would typically update your database with the payment status
-    console.log(`Order ${reference} updated to status: ${status}`);
+    // Update the database
+    const { db } = await import('@/lib/db');
+    await db.updateOrderStatus(orderId, status as any, body.id);
+
+    // If payment is approved, send confirmation email
+    if (status === 'APPROVED') {
+      const order = await db.getOrderById(orderId);
+      if (order) {
+        const { mailer } = await import('@/lib/mailer');
+        await mailer.sendPurchaseConfirmation(order.userEmail, order.userName, order);
+      }
+    }
+
+    console.log(`Order ${orderId} updated to status: ${status}`);
 
     // Always respond with 200 OK to acknowledge receipt
     return NextResponse.json({ success: true });

@@ -1,0 +1,19 @@
+[
+  {
+    "id": "JB-1773693274557",
+    "userEmail": "invitado@jbimports.com",
+    "userName": "Cliente Invitado",
+    "items": [
+      {
+        "name": "RTX 4090 Founders Edition",
+        "quantity": 2,
+        "price": 1799
+      }
+    ],
+    "total": 3598,
+    "status": "PENDING",
+    "createdAt": "2026-03-16T20:34:37.861Z",
+    "updatedAt": "2026-03-16T20:34:37.861Z",
+    "navePaymentId": "2b0afc2b-fa5c-4594-8876-446edeb6d397"
+  }
+]
