@@ -19,6 +19,8 @@ export default async function MisComprasPage() {
       case 'APPROVED': return 'bg-green-100 text-green-700';
       case 'PENDING': return 'bg-yellow-100 text-yellow-700';
       case 'REJECTED': return 'bg-red-100 text-red-700';
+      case 'SHIPPED': return 'bg-blue-100 text-blue-700';
+      case 'CANCELLED': return 'bg-gray-200 text-gray-700';
       default: return 'bg-gray-100 text-gray-700';
     }
   };
@@ -62,26 +64,34 @@ export default async function MisComprasPage() {
                   <td className="py-5 px-2 text-right text-sm font-bold text-gray-900">
                     ${compra.total.toLocaleString('es-AR')}
                   </td>
-                  <td className="py-5 px-2 text-center">
-                    <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${getStatusClass(compra.status)}`}>
-                      {compra.status === 'APPROVED' ? 'Aprobado' : compra.status === 'PENDING' ? 'Pendiente' : 'Rechazado'}
-                    </span>
-                  </td>
+                  {/* ESTADO Column: Plain text "Procesado" if approved */}
                   <td className={`py-5 px-2 text-center text-xs font-bold ${compra.status === 'APPROVED' ? 'text-green-600' : 'text-gray-500'}`}>
-                    {compra.status === 'APPROVED' ? 'Confirmado' : '-'}
+                    {compra.status === 'APPROVED' ? 'Procesado' : 'Pendiente'}
                   </td>
+                  {/* PAGO Column: Eye icon or similar */}
+                  <td className="py-5 px-2 text-center">
+                    <button className="text-gray-400 hover:text-blue-600 bg-transparent border-0 cursor-pointer flex items-center justify-center w-full">
+                      <FaEye size={16} />
+                    </button>
+                  </td>
+                  {/* DETALLE Column: Eye icon */}
                   <td className="py-5 px-2 text-center">
                     <button className="text-blue-600 hover:text-blue-800 bg-transparent border-0 cursor-pointer flex items-center justify-center w-full">
                       <FaEye size={16} />
                     </button>
                   </td>
+                  {/* CORREO Column */}
                   <td className="py-5 px-2 text-center text-sm text-gray-500">
                     Nave
                   </td>
+                  {/* SEGUIMIENTO Column: Status Pill */}
                   <td className="py-5 px-2">
                     <div className="flex items-center gap-2">
-                      <span className="text-xs font-medium text-gray-700 bg-gray-100 px-2 py-1 rounded">
-                        {compra.navePaymentId ? 'Procesado' : 'Pendiente'}
+                      <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${getStatusClass(compra.status)}`}>
+                        {compra.status === 'APPROVED' ? 'Envío pendiente' : 
+                         compra.status === 'PENDING' ? 'Pago pendiente' : 
+                         compra.status === 'SHIPPED' ? 'Enviado' : 
+                         compra.status === 'CANCELLED' ? 'Cancelado' : 'Rechazado'}
                       </span>
                     </div>
                   </td>

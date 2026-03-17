@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 
 export default async function MiCuentaPage() {
   const session = await getServerSession();
-  
+
   if (!session?.user?.email) {
     redirect('/auth/signin');
   }
@@ -15,7 +15,7 @@ export default async function MiCuentaPage() {
   return (
     <div>
       <h1 className="text-2xl font-bold text-gray-900 mb-6">Mi Perfil</h1>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <section className="space-y-4">
           <h2 className="text-lg font-semibold text-gray-800 border-b border-gray-100 pb-2">Información Personal</h2>
@@ -23,6 +23,10 @@ export default async function MiCuentaPage() {
             <div>
               <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Nombre Completo</label>
               <p className="text-gray-900 font-medium">{session.user.name || 'Julián Busletta'}</p>
+            </div>
+            <div>
+              <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">DNI</label>
+              <p className="text-gray-900 font-medium">{(session.user as any).dni || 'No especificado'}</p>
             </div>
             <div>
               <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Email</label>
@@ -33,10 +37,21 @@ export default async function MiCuentaPage() {
 
         <section className="space-y-4">
           <h2 className="text-lg font-semibold text-gray-800 border-b border-gray-100 pb-2">Dirección de Envío</h2>
-          <div className="p-4 bg-gray-50 rounded-lg border border-gray-100">
-            <p className="text-gray-900 font-medium">Información pendiente</p>
-            <p className="text-gray-600 text-sm italic">Completa tus datos en la siguiente compra</p>
-          </div>
+          {(session.user as any).address ? (
+            <div className="p-4 bg-gray-50 rounded-lg border border-gray-100">
+              <p className="text-gray-900 font-medium">
+                {(session.user as any).address.street} {(session.user as any).address.number}
+              </p>
+              <p className="text-gray-600 text-sm">
+                {(session.user as any).address.city}, {(session.user as any).address.state}
+              </p>
+              <p className="text-gray-600 text-sm">CP: {(session.user as any).address.zip}</p>
+            </div>
+          ) : (
+            <div className="p-4 bg-gray-50 rounded-lg border border-gray-100 italic text-gray-400">
+              No hay dirección registrada
+            </div>
+          )}
         </section>
       </div>
 

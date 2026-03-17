@@ -21,22 +21,50 @@ const CHECKOUT_URL = NAVE_ENV === 'production'
 
 const NAVE_AUDIENCE = 'https://naranja.com/ranty/merchants/api';
 
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "../../auth/[...nextauth]/route";
+
 export async function POST(request: Request) {
   try {
+    const host = request.headers.get('host') || 'localhost:3000';
+    const protocol = host.includes('localhost') ? 'http' : 'https';
+    const baseUrl = `${protocol}://${host}`;
+
     const { items, total, orderId } = await request.json();
+    const session = await getServerSession(authOptions);
 
     // 1. Validation
     if (!total || total <= 0) {
       return NextResponse.json({ success: false, message: 'Monto inválido' }, { status: 400 });
     }
 
+    const currentOrderId = orderId || `JB-${Date.now()}`;
+
     if (!NAVE_CLIENT_ID || !NAVE_CLIENT_SECRET) {
       // IF NO CREDENTIALS, Simulate a success for Testing purposes if in sandbox
       if (NAVE_ENV === 'sandbox') {
+        // Save as PENDING first
+        const { db } = await import('@/lib/db');
+        await db.saveOrder({
+          id: currentOrderId,
+          userEmail: session?.user?.email || 'invitado@jbimports.com',
+          userName: session?.user?.name || 'Cliente Invitado',
+          items: items.map((item: any) => ({
+            name: item.name,
+            quantity: item.quantity,
+            price: item.price
+          })),
+          total,
+          status: 'PENDING',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+          navePaymentId: `mock_${Date.now()}`
+        });
+
         console.warn('NAVE: Missing credentials. Simulating response for testing.');
         return NextResponse.json({ 
           success: true, 
-          url: '/checkout-mock', // Redirect to our local mock page
+          url: `${baseUrl}/checkout-mock?paymentId=mock_${Date.now()}&orderId=${currentOrderId}`, 
           mock: true
         });
       }
@@ -106,7 +134,10 @@ export async function POST(request: Request) {
         }
       ],
       additional_info: {
-        callback_url: `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/checkout/nave/webhook`
+        callback_url: `${baseUrl}/api/checkout/nave/webhook`,
+        back_url: `${baseUrl}/mi-cuenta/compras`,
+        success_url: `${baseUrl}/mi-cuenta/compras`,
+        cancel_url: `${baseUrl}/`
       },
       duration_time: 3600 // 1 hour expiration
     };
@@ -139,9 +170,9 @@ export async function POST(request: Request) {
     // 4. Persistence: Save the order as PENDING
     const { db } = await import('@/lib/db');
     
-    // Attempt to get user info from request or default to guest
-    const userName = (request as any).user?.name || 'Cliente Invitado';
-    const userEmail = (request as any).user?.email || 'invitado@jbimports.com';
+    // Get user info from session
+    const userName = session?.user?.name || 'Cliente Invitado';
+    const userEmail = session?.user?.email || 'invitado@jbimports.com';
 
     await db.saveOrder({
       id: paymentBody.external_payment_id,

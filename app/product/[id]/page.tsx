@@ -21,21 +21,30 @@ export default function ProductDetailsPage() {
   const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
 
   useEffect(() => {
-    // We already have loading: true from useState initial value
-    const foundProduct = getProductById(id);
-    setProduct(foundProduct || null);
-    
-    if (foundProduct) {
-      // Get specs
-      const foundSpecs = getSpecsByProductId(id);
-      setSpecs(foundSpecs);
+    const loadData = async () => {
+      try {
+        setLoading(true);
+        const foundProduct = await getProductById(id);
+        setProduct(foundProduct || null);
+        
+        if (foundProduct) {
+          // Get specs
+          const foundSpecs = getSpecsByProductId(id);
+          setSpecs(foundSpecs);
 
-      // Get related products from the same category
-      const related = getProductsByCategory(foundProduct.category).filter(p => p.id !== id).slice(0, 4);
-      setRelatedProducts(related);
-    }
-    
-    setLoading(false);
+          // Get related products from the same category
+          const products = await getProductsByCategory(foundProduct.category);
+          const related = products.filter(p => p.id !== id).slice(0, 4);
+          setRelatedProducts(related);
+        }
+      } catch (error) {
+        console.error('Error loading product:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadData();
   }, [id]);
 
   const handleAddToCart = () => {

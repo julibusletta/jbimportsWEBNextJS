@@ -1,6 +1,4 @@
-import { mockCategoriesData } from './mockCategories';
-
-// Interfaz para la categoría
+// Interfaz para la categoría (mantenida para tipos)
 export interface Category {
   id: string;
   name: string;
@@ -10,57 +8,102 @@ export interface Category {
   description: string;
 }
 
-// Simulación de llamadas a API usando datos mock
-const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
-
 /**
  * Obtiene todas las categorías
  */
 export const getAllCategories = async (): Promise<Category[]> => {
-  await delay(300);
-  return mockCategoriesData.categories;
+  if (typeof window !== 'undefined') {
+    const res = await fetch('/api/categories');
+    return res.json();
+  }
+
+  const dbConnect = (await import('../mongodb')).default;
+  const CategoryModel = (await import('../../models/Category')).default;
+  await dbConnect();
+  return CategoryModel.find({}).lean();
 };
 
 /**
  * Obtiene la categoría principal
  */
 export const getMainCategory = async (): Promise<Category | null> => {
-  await delay(300);
-  return mockCategoriesData.categories.find(cat => cat.isMain) || null;
+  if (typeof window !== 'undefined') {
+    const categories = await getAllCategories();
+    return categories.find(c => c.isMain) || null;
+  }
+
+  const dbConnect = (await import('../mongodb')).default;
+  const CategoryModel = (await import('../../models/Category')).default;
+  await dbConnect();
+  return CategoryModel.findOne({ isMain: true }).lean();
 };
 
 /**
  * Obtiene las categorías secundarias
  */
 export const getSecondaryCategories = async (): Promise<Category[]> => {
-  await delay(300);
-  return mockCategoriesData.categories.filter(cat => !cat.isMain);
+  if (typeof window !== 'undefined') {
+    const categories = await getAllCategories();
+    return categories.filter(c => !c.isMain);
+  }
+
+  const dbConnect = (await import('../mongodb')).default;
+  const CategoryModel = (await import('../../models/Category')).default;
+  await dbConnect();
+  return CategoryModel.find({ isMain: false }).lean();
 };
 
 /**
  * Obtiene una categoría por ID
  */
 export const getCategoryById = async (id: string): Promise<Category | null> => {
-  await delay(300);
-  return mockCategoriesData.categories.find(cat => cat.id === id) || null;
+  if (typeof window !== 'undefined') {
+    const categories = await getAllCategories();
+    return categories.find(c => c.id === id) || null;
+  }
+
+  const dbConnect = (await import('../mongodb')).default;
+  const CategoryModel = (await import('../../models/Category')).default;
+  await dbConnect();
+  return CategoryModel.findOne({ id }).lean();
 };
 
 /**
  * Obtiene una categoría por slug
  */
 export const getCategoryBySlug = async (slug: string): Promise<Category | null> => {
-  await delay(300);
-  return mockCategoriesData.categories.find(cat => cat.slug === slug) || null;
+  if (typeof window !== 'undefined') {
+    const categories = await getAllCategories();
+    return categories.find(c => c.slug === slug) || null;
+  }
+
+  const dbConnect = (await import('../mongodb')).default;
+  const CategoryModel = (await import('../../models/Category')).default;
+  await dbConnect();
+  return CategoryModel.findOne({ slug }).lean();
 };
 
 /**
  * Busca categorías por nombre
  */
 export const searchCategories = async (query: string): Promise<Category[]> => {
-  await delay(300);
+  if (typeof window !== 'undefined') {
+    const categories = await getAllCategories();
+    const lowerQuery = query.toLowerCase();
+    return categories.filter(cat =>
+      cat.name.toLowerCase().includes(lowerQuery) ||
+      cat.description.toLowerCase().includes(lowerQuery)
+    );
+  }
+
+  const dbConnect = (await import('../mongodb')).default;
+  const CategoryModel = (await import('../../models/Category')).default;
+  await dbConnect();
   const lowerQuery = query.toLowerCase();
-  return mockCategoriesData.categories.filter(cat =>
-    cat.name.toLowerCase().includes(lowerQuery) ||
-    cat.description.toLowerCase().includes(lowerQuery)
-  );
+  return CategoryModel.find({
+    $or: [
+      { name: { $regex: lowerQuery, $options: 'i' } },
+      { description: { $regex: lowerQuery, $options: 'i' } }
+    ]
+  }).lean();
 };

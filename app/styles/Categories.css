@@ -76,37 +76,61 @@
 
 .categories-content {
   display: flex;
-  gap: 10px;
+  gap: 15px;
   width: 100%;
-  height: 400px;
+  height: auto;
 }
 
-/* === MAIN CATEGORY === */
+/* === MAIN CATEGORY (HIDDEN IF NOT USED) === */
 
 .categories-main {
-  flex: 0 0 33%;
-  min-width: 0;
+  display: none; /* Hidden to unify all sizes */
+}
+
+/* === SECONDARY CATEGORIES (NOW PRIMARY) === */
+
+.categories-secondary {
+  flex: 1;
+  width: 100%;
+  overflow: visible;
+  border-radius: 8px;
+}
+
+.categories-carousel {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 15px;
+  width: 100%;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.carousel-slide {
   text-decoration: none;
   color: inherit;
   display: block;
-  height: 100%;
+  width: 100%;
+  aspect-ratio: 1 / 1; /* Square aspect ratio for uniformity */
+  min-width: 0;
 }
 
-.category-max.preview {
+.category-min.preview {
   position: relative;
   width: 100%;
   height: 100%;
   overflow: hidden;
-  border-radius: 8px;
+  border-radius: 12px;
   cursor: pointer;
-  transition: transform 0.3s ease;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
-.category-max.preview:hover {
-  transform: scale(1.02);
+.category-min.preview:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
 }
 
-.category-max.preview-card {
+.category-min.preview-card {
   width: 100%;
   height: 100%;
   background-size: cover;
@@ -115,63 +139,24 @@
   position: relative;
 }
 
-.preview-shadow {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.4) 100%);
-  pointer-events: none;
-  z-index: 1;
-}
-
 .preview-text {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 20px;
-  background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.7) 100%);
+  padding: 15px;
+  background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.8) 100%);
   z-index: 2;
+  text-align: center;
 }
 
 .preview-text p {
   margin: 0;
   color: white;
-  font-size: 18px;
-  font-weight: bold;
-  line-height: 1.4;
-}
-
-.category-min.preview .preview-text p {
-  font-size: 14px;
-  font-weight: 600;
-}
-
-/* === SECONDARY CATEGORIES CAROUSEL === */
-
-.categories-secondary {
-  flex: 1;
-  height: 100%;
-  overflow: hidden;
-  border-radius: 8px;
-  display: flex;
-  align-items: stretch;
-}
-
-.categories-carousel {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  grid-auto-rows: 190px;
-  gap: 10px;
-  width: auto;
-  min-width: 100%;
-  overflow-x: auto;
-  overflow-y: hidden;
-  scroll-behavior: smooth;
-  padding: 10px;
-  box-sizing: border-box;
+  font-size: 16px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .categories-carousel::-webkit-scrollbar {
@@ -227,95 +212,22 @@
 /* === RESPONSIVE === */
 
 @media (max-width: 1024px) {
-  .categories-content {
-    height: 350px;
-  }
-
-  .categories-header h2 {
-    font-size: 2rem;
-  }
-
-  .categories-main {
-    flex: 0 0 40%;
+  .categories-carousel {
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 
 @media (max-width: 768px) {
-  .categories-section {
-    padding: 30px 0;
-    margin: 30px 0;
-  }
-
-  .categories-header {
-    flex-direction: column;
-    align-items: flex-start;
-    margin-bottom: 20px;
-  }
-
-  .categories-arrows {
-    align-self: flex-end;
-  }
-
-  .categories-header h2 {
-    font-size: 1.8rem;
-  }
-
-  .categories-content {
-    flex-direction: column;
-    height: auto;
-  }
-
-  .categories-main {
-    flex: 0 0 300px;
-  }
-
-  .categories-secondary {
-    flex: 1;
-    min-height: 300px;
-  }
-
-  .carousel-slide {
-    min-width: 140px;
-  }
-
   .categories-carousel {
-    grid-template-columns: repeat(3, 1fr);
-    grid-auto-rows: 160px;
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
-/* === SMALL MOBILE / iPhone Pro Max (480px and below) === */
 @media (max-width: 480px) {
-  .categories-section {
-    padding: 20px 0;
-    margin: 16px 0;
-  }
-
-  .categories-header h2 {
-    font-size: 1.5rem;
-  }
-
-  .categories-content {
-    flex-direction: column;
-    height: auto;
-    gap: 8px;
-  }
-
-  .categories-main {
-    flex: 0 0 200px;
-  }
-
-  .categories-secondary {
-    min-height: 260px;
-  }
-
   .categories-mobile-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    grid-auto-rows: 120px;
-    gap: 8px;
-    padding: 4px;
-    width: 100%;
+    gap: 10px;
   }
 
   .fade-in-out {

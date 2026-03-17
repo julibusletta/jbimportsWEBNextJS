@@ -29,8 +29,8 @@ export default function Header() {
     { label: 'PARLANTES', href: '/category/parlantes', id: 'parlantes' },
     {
       label: 'APPLE',
-      href: '/#products',
-      id: 'products',
+      href: '/category/apple',
+      id: 'apple',
       submenu: [
         { label: 'IPHONE', href: '/category/iphone' },
         { label: 'MACBOOK', href: '/category/macbook' },
@@ -179,13 +179,19 @@ export default function Header() {
                   <div className="p-4">
                     <p className="text-gray-500 text-sm mb-4 text-center">Iniciá sesión para ver tus compras y más.</p>
                     <Link
-                      href="/api/auth/signin"
+                      href="/auth/signin"
                       className="block w-full text-center bg-blue-600 text-white py-2.5 rounded-lg font-bold text-sm hover:bg-blue-700 transition-colors no-underline"
                       onClick={() => setIsUserMenuOpen(false)}
                     >
                       INGRESAR
                     </Link>
-                    <p className="text-center text-[10px] text-gray-400 mt-3 uppercase tracking-wider">¿No tenés cuenta? Registrate</p>
+                    <Link 
+                      href="/auth/register"
+                      className="block text-center text-[10px] text-gray-400 mt-3 uppercase tracking-wider hover:text-blue-600 transition-colors no-underline pt-2 border-t border-gray-50"
+                      onClick={() => setIsUserMenuOpen(false)}
+                    >
+                      ¿No tenés cuenta? Registrate
+                    </Link>
                   </div>
                 )}
               </div>

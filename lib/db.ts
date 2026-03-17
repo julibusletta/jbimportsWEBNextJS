@@ -1,86 +1,126 @@
-import fs from 'fs';
-import path from 'path';
+import dbConnect from './mongodb';
 
 /**
- * Simple JSON-based database adapter for Orders
- * Designed to be easily swappable for PostgreSQL/MongoDB/Supabase
+ * MongoDB database adapter for Orders and Users
+ * Replaces the previous JSON-based approach
  */
 
-const ORDERS_FILE = path.join(process.cwd(), 'data', 'orders.json');
-
-// Ensure the data directory and orders file exist
-function ensureDb() {
-  const dir = path.dirname(ORDERS_FILE);
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true });
-  }
-  if (!fs.existsSync(ORDERS_FILE)) {
-    fs.writeFileSync(ORDERS_FILE, JSON.stringify([]));
-  }
-}
-
-export interface OrderItem {
-  name: string;
-  quantity: number;
-  price: number;
-}
-
-export interface Order {
-  id: string; // Internal/External ID
-  userId?: string;
-  userEmail: string;
-  userName: string;
-  items: OrderItem[];
-  total: number;
-  status: 'PENDING' | 'APPROVED' | 'REJECTED';
-  createdAt: string;
-  updatedAt: string;
-  navePaymentId?: string;
-  shippingAddress?: {
-    street: string;
-    city: string;
-    state: string;
-    zip: string;
-  };
-}
-
 export const db = {
-  async getOrders(): Promise<Order[]> {
-    ensureDb();
-    const data = fs.readFileSync(ORDERS_FILE, 'utf-8');
-    return JSON.parse(data);
+  // Helpers to get models dynamically to avoid initialization issues
+  async getUserModel() {
+    const User = (await import('../models/User')).default;
+    return User;
+  },
+  async getOrderModel() {
+    const Order = (await import('../models/Order')).default;
+    return Order;
   },
 
-  async getOrderById(id: string): Promise<Order | undefined> {
-    const orders = await this.getOrders();
-    return orders.find(o => o.id === id);
-  },
-
-  async getOrdersByEmail(email: string): Promise<Order[]> {
-    const orders = await this.getOrders();
-    return orders.filter(o => o.userEmail === email);
-  },
-
-  async saveOrder(order: Order): Promise<void> {
-    ensureDb();
-    const orders = await this.getOrders();
-    const existingIndex = orders.findIndex(o => o.id === order.id);
-    
-    if (existingIndex >= 0) {
-      orders[existingIndex] = { ...orders[existingIndex], ...order, updatedAt: new Date().toISOString() };
-    } else {
-      orders.push({ ...order, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() });
+  // Orders logic
+  async getOrders(): Promise<any[]> {
+    try {
+      await dbConnect();
+      const Order = await this.getOrderModel();
+      return await Order.find({}).sort({ createdAt: -1 }).lean();
+    } catch (error) {
+      console.error('DB Error [getOrders]:', error);
+      throw error;
     }
-    
-    fs.writeFileSync(ORDERS_FILE, JSON.stringify(orders, null, 2));
   },
 
-  async updateOrderStatus(id: string, status: Order['status'], navePaymentId?: string): Promise<void> {
-    const order = await this.getOrderById(id);
-    if (order) {
-      order.status = status;
-      if (navePaymentId) order.navePaymentId = navePaymentId;
-      await this.saveOrder(order);
+  async getOrderById(id: string): Promise<any | undefined> {
+    try {
+      await dbConnect();
+      const Order = await this.getOrderModel();
+      return await Order.findOne({ id }).lean();
+    } catch (error) {
+      console.error('DB Error [getOrderById]:', error);
+      throw error;
+    }
+  },
+
+  async getOrdersByEmail(email: string): Promise<any[]> {
+    try {
+      await dbConnect();
+      const Order = await this.getOrderModel();
+      return await Order.find({ userEmail: email }).sort({ createdAt: -1 }).lean();
+    } catch (error) {
+      console.error('DB Error [getOrdersByEmail]:', error);
+      throw error;
+    }
+  },
+
+  async saveOrder(orderData: any): Promise<void> {
+    try {
+      await dbConnect();
+      const Order = await this.getOrderModel();
+      const existingOrder = await Order.findOne({ id: orderData.id });
+
+      if (existingOrder) {
+        await Order.updateOne({ id: orderData.id }, orderData);
+      } else {
+        await Order.create(orderData);
+      }
+    } catch (error) {
+      console.error('DB Error [saveOrder]:', error);
+      throw error;
+    }
+  },
+
+  async updateOrderStatus(id: string, status: string, navePaymentId?: string): Promise<void> {
+    try {
+      await dbConnect();
+      const Order = await this.getOrderModel();
+      const updateData: any = { status };
+      if (navePaymentId) updateData.navePaymentId = navePaymentId;
+
+      await Order.updateOne(
+        { $or: [{ id }, { navePaymentId }] },
+        updateData
+      );
+    } catch (error) {
+      console.error('DB Error [updateOrderStatus]:', error);
+      throw error;
+    }
+  },
+
+  // Users logic
+  async getUsers(): Promise<any[]> {
+    try {
+      await dbConnect();
+      const User = await this.getUserModel();
+      return await User.find({}).lean();
+    } catch (error) {
+      console.error('DB Error [getUsers]:', error);
+      throw error;
+    }
+  },
+
+  async getUserByEmail(email: string): Promise<any | undefined> {
+    try {
+      await dbConnect();
+      const User = await this.getUserModel();
+      return await User.findOne({ email }).lean();
+    } catch (error) {
+      console.error('DB Error [getUserByEmail]:', error);
+      throw error;
+    }
+  },
+
+  async saveUser(userData: any): Promise<void> {
+    try {
+      await dbConnect();
+      const User = await this.getUserModel();
+      const existingUser = await User.findOne({ email: userData.email });
+
+      if (existingUser) {
+        await User.updateOne({ email: userData.email }, userData);
+      } else {
+        await User.create(userData);
+      }
+    } catch (error) {
+      console.error('DB Error [saveUser]:', error);
+      throw error;
     }
   }
 };

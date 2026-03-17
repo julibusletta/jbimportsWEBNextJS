@@ -53,9 +53,21 @@ export default function SignInPage() {
           <input
             type="email"
             placeholder="Correo electrónico"
+            id="email"
+            className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-sm"
+          />
+          <input
+            type="password"
+            placeholder="Contraseña"
+            id="password"
             className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-sm"
           />
           <button
+            onClick={() => {
+              const email = (document.getElementById('email') as HTMLInputElement).value;
+              const password = (document.getElementById('password') as HTMLInputElement).value;
+              signIn("credentials", { email, password, callbackUrl: "/mi-cuenta" });
+            }}
             className="w-full py-3 px-4 border border-transparent rounded-xl shadow-sm text-sm font-bold text-white bg-gray-900 hover:bg-black transition-all cursor-pointer"
           >
             Siguiente
@@ -64,8 +76,8 @@ export default function SignInPage() {
 
         <div className="text-center mt-6">
           <p className="text-xs text-gray-500">
-            ¿No tenés cuenta? 
-            <Link href="#" className="ml-1 text-blue-600 font-bold hover:underline">
+            ¿No tenés cuenta?
+            <Link href="/auth/register" className="ml-1 text-blue-600 font-bold hover:underline">
               Crear cuenta
             </Link>
           </p>
