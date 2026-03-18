@@ -26,8 +26,31 @@ export const getAllPromotionProducts = async (): Promise<Product[]> => {
 };
 
 export const getProductsBySection = async (section: 'bombas' | 'nuevas'): Promise<Product[]> => {
-    await delay(300);
-    return mockProductsData[section];
+    if (typeof window !== 'undefined') {
+        // Map section to badge if needed, or just fetch all for now
+        // For now, let's fetch all and filter by badge if it matches
+        const res = await fetch('/api/products');
+        const all: any[] = await res.json();
+        
+        if (section === 'bombas') {
+            return all.filter(p => p.badge?.toLowerCase().includes('bomba') || p.price > 1000000).slice(0, 10);
+        }
+        return all.slice(-10).reverse(); // Nuevas = last 10
+    }
+
+    const dbConnect = (await import('../mongodb')).default;
+    const ProductModel = (await import('../../models/Product')).default;
+    await dbConnect();
+    
+    if (section === 'bombas') {
+        return ProductModel.find({ 
+            $or: [
+                { badge: /bomba/i },
+                { price: { $gt: 1000000 } }
+            ]
+        }).limit(10).lean();
+    }
+    return ProductModel.find({}).sort({ createdAt: -1 }).limit(10).lean();
 };
 
 export const getProductByCategory = async (

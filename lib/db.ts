@@ -15,6 +15,10 @@ export const db = {
     const Order = (await import('../models/Order')).default;
     return Order;
   },
+  async getCategoryModel() {
+    const Category = (await import('../models/Category')).default;
+    return Category;
+  },
 
   // Orders logic
   async getOrders(): Promise<any[]> {
@@ -80,6 +84,65 @@ export const db = {
       );
     } catch (error) {
       console.error('DB Error [updateOrderStatus]:', error);
+      throw error;
+    }
+  },
+
+  async getProductModel() {
+    const Product = (await import('../models/Product')).default;
+    return Product;
+  },
+
+  // Products logic
+  async getProducts(): Promise<any[]> {
+    try {
+      await dbConnect();
+      const Product = await this.getProductModel();
+      return await Product.find({}).lean();
+    } catch (error) {
+      console.error('DB Error [getProducts]:', error);
+      throw error;
+    }
+  },
+
+  async saveProducts(products: any[]): Promise<void> {
+    try {
+      await dbConnect();
+      const Product = await this.getProductModel();
+      
+      // We use upsert for each product to either update existing or create new
+      const operations = products.map(p => ({
+        updateOne: {
+          filter: { id: p.id },
+          update: { $set: p },
+          upsert: true
+        }
+      }));
+
+      if (operations.length > 0) {
+        await Product.bulkWrite(operations);
+      }
+
+      // Auto-create missing categories
+      const Category = await this.getCategoryModel();
+      const distinctCategories = [...new Set(products.map(p => p.category).filter(Boolean))];
+      
+      for (const catSlug of distinctCategories) {
+        const existing = await Category.findOne({ slug: catSlug });
+        if (!existing) {
+          console.log(`Auto-creating missing category: ${catSlug}`);
+          await Category.create({
+            id: `cat-${catSlug}`,
+            slug: catSlug,
+            name: catSlug.charAt(0).toUpperCase() + catSlug.slice(1).replace(/-/g, ' '),
+            image: `/images/categories/${catSlug}.png`, // Try to follow naming convention
+            isMain: false,
+            description: `Productos de la categoría ${catSlug}`
+          }).catch(err => console.error(`Failed to auto-create category ${catSlug}:`, err));
+        }
+      }
+    } catch (error) {
+      console.error('DB Error [saveProducts]:', error);
       throw error;
     }
   },

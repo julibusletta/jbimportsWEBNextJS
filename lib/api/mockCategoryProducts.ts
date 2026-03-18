@@ -9,6 +9,18 @@ export interface Product {
   stock: number;
   discount?: number;
   badge?: string;
+  images?: string[];
+  specifications?: { label: string, value: string }[];
+  properties?: {
+    weight?: string;
+    dimensions?: string;
+    color?: string;
+  };
+  seo?: {
+    title?: string;
+    description?: string;
+    keywords?: string;
+  };
 }
 
 /**

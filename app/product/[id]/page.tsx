@@ -19,6 +19,7 @@ export default function ProductDetailsPage() {
   const [quantity, setQuantity] = useState(1);
   const [specs, setSpecs] = useState<Spec[]>([]);
   const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
+  const [mainImage, setMainImage] = useState<string>('');
 
   useEffect(() => {
     const loadData = async () => {
@@ -28,6 +29,7 @@ export default function ProductDetailsPage() {
         setProduct(foundProduct || null);
         
         if (foundProduct) {
+          setMainImage(foundProduct.image);
           // Get specs
           const foundSpecs = getSpecsByProductId(id);
           setSpecs(foundSpecs);
@@ -46,6 +48,19 @@ export default function ProductDetailsPage() {
 
     loadData();
   }, [id]);
+
+  // Handle SEO
+  useEffect(() => {
+    if (product?.seo) {
+      if (product.seo.title) document.title = `${product.seo.title} | JB Imports`;
+      const metaDescription = document.querySelector('meta[name="description"]');
+      if (metaDescription && product.seo.description) {
+        metaDescription.setAttribute('content', product.seo.description);
+      }
+    } else if (product) {
+      document.title = `${product.name} | JB Imports`;
+    }
+  }, [product]);
 
   const handleAddToCart = () => {
     if (!product) return;
@@ -95,9 +110,12 @@ export default function ProductDetailsPage() {
     );
   }
   
-  // Calculated values mimicking Mexx - Moved here after null check
+  // Calculated values mimicking Mexx
   const cuotasPrice = Math.round(product.price * 1.4); 
   const sinImpuestos = Math.round(product.price * 0.79);
+  
+  // Deduplicate images and limit to 4
+  const allImages = Array.from(new Set([product.image, ...(product.images || [])].filter(Boolean))).slice(0, 4);
 
   return (
     <div className="bg-white flex flex-col items-center min-h-screen" style={{ paddingTop: '180px' }}>
@@ -121,22 +139,23 @@ export default function ProductDetailsPage() {
           
           {/* Left Column: Image Gallery (Approx 55%) */}
           <div className="w-full lg:w-[55%] flex flex-col">
-            <div className="flex-1 bg-white flex items-center justify-center p-4 min-h-[400px] border border-transparent hover:border-gray-100 transition-all rounded-md">
+            <div className="flex-1 bg-white flex items-center justify-center p-4 min-h-[400px] border border-transparent hover:border-gray-100 transition-all rounded-md overflow-hidden relative group">
               <img 
-                src={product.image} 
+                src={mainImage} 
                 alt={product.name} 
-                className="max-h-[450px] w-auto object-contain"
+                className="max-h-[450px] w-auto object-contain transition-transform duration-500 group-hover:scale-105"
               />
             </div>
             
             {/* Thumbnails */}
             <div className="flex gap-4 mt-6 justify-center">
-              {[1, 2, 3].map((num) => (
+              {allImages.map((img, idx) => (
                 <div 
-                  key={num}
-                  className={`w-[80px] h-[80px] border flex items-center justify-center cursor-pointer p-1 rounded-sm ${num === 1 ? 'border-[#0066cc]' : 'border-gray-200 hover:border-gray-300'}`}
+                  key={idx}
+                  onClick={() => setMainImage(img)}
+                  className={`w-[80px] h-[80px] border flex items-center justify-center cursor-pointer p-1 rounded-sm transition-all ${mainImage === img ? 'border-[#0066cc] ring-2 ring-blue-50/50' : 'border-gray-200 hover:border-gray-300'}`}
                 >
-                  <img src={product.image} alt="thumb" className="max-h-full max-w-full object-contain" />
+                  <img src={img} alt="thumb" className="max-h-full max-w-full object-contain" />
                 </div>
               ))}
             </div>
@@ -264,7 +283,7 @@ export default function ProductDetailsPage() {
           </div>
         </div>
 
-        {/* Especificación Section (Mocked Data) */}
+        {/* Especificación Section */}
         <div className="mt-[60px]">
           <div className="border-b-2 border-[#e0e0e0] mb-6 flex">
             <h2 className="text-[22px] font-normal text-[#333] pb-2 border-b-2 border-[#0066cc] -mb-[2px] pr-8">
@@ -273,27 +292,60 @@ export default function ProductDetailsPage() {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-y-3 gap-x-12 text-[14px] text-[#444]">
-            {specs.length > 0 ? (
-              specs.map((s, idx) => (
-                <div key={idx} className="flex font-sans">
+            {/* Custom Specifications from DB */}
+            {product.specifications && product.specifications.length > 0 ? (
+              product.specifications.map((s, idx) => (
+                <div key={idx} className="flex font-sans border-b border-gray-50 pb-1">
                   <strong className="w-[160px] text-[#333]">{s.label} :</strong> 
-                  <span>{s.value}</span>
+                  <span className="flex-1">{s.value}</span>
+                </div>
+              ))
+            ) : specs.length > 0 ? (
+              specs.map((s, idx) => (
+                <div key={idx} className="flex font-sans border-b border-gray-50 pb-1">
+                  <strong className="w-[160px] text-[#333]">{s.label} :</strong> 
+                  <span className="flex-1">{s.value}</span>
                 </div>
               ))
             ) : (
               <>
                 <div className="flex font-sans"><strong className="w-[160px] text-[#333]">Marca :</strong> <span>{product.name.split(' ')[0]}</span></div>
                 <div className="flex font-sans"><strong className="w-[160px] text-[#333]">Modelo :</strong> <span>{product.name.split(' ').slice(1, 3).join(' ')}</span></div>
-                <div className="flex font-sans"><strong className="w-[160px] text-[#333]">Condición :</strong> <span>Nuevo en Caja</span></div>
-                <div className="flex font-sans"><strong className="w-[160px] text-[#333]">Stock :</strong> <span>{product.stock} disponibles</span></div>
+                <div className="flex font-sans"><strong className="w-[160px] text-[#333]">ID :</strong> <span>{product.id}</span></div>
+                <div className="flex font-sans"><strong className="w-[160px] text-[#333]">Categoría :</strong> <span className="capitalize">{product.category.replace('-', ' ')}</span></div>
               </>
             )}
-            <div className="flex font-sans"><strong className="w-[160px] text-[#333]">ID :</strong> <span>{product.id}</span></div>
-            <div className="flex font-sans"><strong className="w-[160px] text-[#333]">Categoría :</strong> <span className="capitalize">{product.category.replace('-', ' ')}</span></div>
+
+            {/* Physical Properties */}
+            {product.properties && (
+              <>
+                {product.properties.weight && (
+                  <div className="flex font-sans border-b border-gray-50 pb-1">
+                    <strong className="w-[160px] text-[#333]">Peso :</strong> 
+                    <span>{product.properties.weight}</span>
+                  </div>
+                )}
+                {product.properties.dimensions && (
+                  <div className="flex font-sans border-b border-gray-50 pb-1">
+                    <strong className="w-[160px] text-[#333]">Dimensiones :</strong> 
+                    <span>{product.properties.dimensions}</span>
+                  </div>
+                )}
+                {product.properties.color && (
+                  <div className="flex font-sans border-b border-gray-50 pb-1">
+                    <strong className="w-[160px] text-[#333]">Color :</strong> 
+                    <span>{product.properties.color}</span>
+                  </div>
+                )}
+              </>
+            )}
           </div>
+
           <div className="mt-8 text-[14px] text-[#444] leading-relaxed max-w-[900px]">
             <strong className="text-[#333] block mb-2">Descripción General:</strong>
-            {product.description}. Este excelente {product.category.replace('-', ' ')} está pensado para brindar el máximo rendimiento en su gama. Diseño premium, excelente durabilidad y prestaciones de última generación.
+            <p className="whitespace-pre-line">
+              {product.description || `Este excelente ${product.category.replace('-', ' ')} está pensado para brindar el máximo rendimiento en su gama. Diseño premium, excelente durabilidad y prestaciones de última generación.`}
+            </p>
           </div>
         </div>
 

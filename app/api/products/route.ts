@@ -11,7 +11,8 @@ export async function GET(request: Request) {
     
     let query = {};
     if (category) {
-      query = { category };
+      // Use regex for partial, case-insensitive match (e.g., "iphone" matches "iphones usados")
+      query = { category: { $regex: category, $options: 'i' } };
     }
     
     const products = await ProductModel.find(query).lean();

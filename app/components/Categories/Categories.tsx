@@ -47,18 +47,25 @@ export default function Categories() {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
+  // Filter to show only the categories specified by the user:
+  // celulares, auriculares, parlantes, apple, notebooks
+  const allowedSlugs = ['celulares', 'auriculares', 'parlantes', 'apple', 'notebooks'];
+  const filteredSecondaryCategories = secondaryCategories.filter(cat => 
+    allowedSlugs.includes(cat.slug)
+  );
+
   // Auto-slide on mobile using chunks
   useEffect(() => {
-    if (!isMobile || secondaryCategories.length <= 4) return;
+    if (!isMobile || filteredSecondaryCategories.length <= 4) return;
 
-    const maxChunks = Math.ceil(secondaryCategories.length / 4);
+    const maxChunks = Math.ceil(filteredSecondaryCategories.length / 4);
 
     const interval = setInterval(() => {
       setCurrentChunkIndex((prevIndex) => (prevIndex + 1) % maxChunks);
     }, 4000);
 
     return () => clearInterval(interval);
-  }, [isMobile, secondaryCategories.length]);
+  }, [isMobile, filteredSecondaryCategories.length]);
 
   const scrollCarousel = (direction: 'left' | 'right') => {
     if (carouselRef.current && !isMobile) {
@@ -71,10 +78,10 @@ export default function Categories() {
   };
 
   // Get current categories to display
-  let displayedCategories = secondaryCategories;
+  let displayedCategories = filteredSecondaryCategories;
   if (isMobile) {
     const chunkStart = currentChunkIndex * 4;
-    displayedCategories = secondaryCategories.slice(chunkStart, chunkStart + 4);
+    displayedCategories = filteredSecondaryCategories.slice(chunkStart, chunkStart + 4);
   }
 
   return (
