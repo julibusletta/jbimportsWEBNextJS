@@ -55,10 +55,14 @@ export default function RegisterPage() {
       if (data.success) {
         router.push('/auth/signin?registered=true');
       } else {
-        setError(data.message || 'Error al registrarse');
+        let errorMessage = data.message || 'Error al registrarse';
+        if (data.debug) {
+          errorMessage += ` (Debug: ${data.debug})`;
+        }
+        setError(errorMessage);
       }
-    } catch (err) {
-      setError('Ocurrió un error inesperado');
+    } catch (err: any) {
+      setError('Ocurrió un error inesperado: ' + err.message);
     } finally {
       setLoading(false);
     }

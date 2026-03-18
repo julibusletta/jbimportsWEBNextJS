@@ -80,7 +80,7 @@ export default function Header() {
   };
 
   return (
-    <header className={`sticky top-0 z-100 bg-white transition-shadow duration-300 ${isScrolled ? 'shadow-lg' : 'shadow-sm'
+    <header className={`main-site-header sticky top-0 z-100 bg-white transition-shadow duration-300 ${isScrolled ? 'shadow-lg' : 'shadow-sm'
       }`}>
       <div className="header-top flex items-center gap-6 px-6 md:px-10 py-3 md:py-4 justify-center">
         {/* Hamburger Menu */}
