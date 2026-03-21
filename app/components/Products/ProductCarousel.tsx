@@ -32,12 +32,15 @@ interface CarouselProps {
   progressColor?: string;
 }
 
-function ProductCarouselSection({ title, section, progressColor = '#414141' }: CarouselProps) {
+export function ProductCarouselSection({ title, section, progressColor = '#414141' }: CarouselProps) {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [addedProductId, setAddedProductId] = useState<string | null>(null);
   const { addToCart } = useCart();
   const router = useRouter();
+  
+  // Choose ID based on section
+  const sectionId = section === 'bombas' ? 'bombas-carousel' : 'nuevas-carousel';
 
   useEffect(() => {
     const loadProducts = async () => {
@@ -108,7 +111,7 @@ function ProductCarouselSection({ title, section, progressColor = '#414141' }: C
   };
 
   return (
-    <section id="products" className="carrusel py-8 md:py-10 px-4 bg-gradient-to-br from-gray-100 to-white m-2 md:m-0" data-aos="fadeInUp">
+    <section id={sectionId} className="carrusel py-8 md:py-10 px-4 bg-gradient-to-br from-gray-100 to-white m-2 md:m-0" data-aos="fadeInUp">
       <div className="carousel-header text-center mb-10">
         <div className="carousel-title mb-5">
           <h3 className="text-3xl md:text-4xl font-bold text-gray-900 mb-0 letter-spacing-wide">

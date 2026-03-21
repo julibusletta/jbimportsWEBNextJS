@@ -7,17 +7,31 @@
       "badge": "NUEVO",
       "category": "celulares",
       "createdAt": "2026-03-17T17:34:50.111Z",
-      "description": "El iPhone más potente hasta la fecha",
+      "description": "El iPhone más potente hasta la fecha, hata la fecha?",
       "discount": 6,
       "image": "/images/products/iphone-15-pro.png",
       "name": "iPhone 15 Pro Max 256GB Titanium",
       "originalPrice": 1599,
       "price": 1499,
       "stock": 10,
-      "updatedAt": "2026-03-18T13:29:32.579Z",
+      "updatedAt": "2026-03-18T17:47:20.181Z",
       "images": [
         "/images/products/iphone-15-pro.png",
         "/uploads/products/6b20eeaf-44ca-451f-843d-d3aa42e2be24.png"
+      ],
+      "specifications": [
+        {
+          "label": "MEMORIA RAM",
+          "value": "8GB"
+        },
+        {
+          "label": "MEMORIA 2",
+          "value": "6GB"
+        },
+        {
+          "label": "PROCESADOR",
+          "value": "i5"
+        }
       ]
     },
     {
@@ -34,7 +48,7 @@
       "originalPrice": 1399,
       "price": 1299,
       "stock": 15,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d23887c8",
@@ -48,7 +62,7 @@
       "name": "Xiaomi Redmi Note 14 PRO 4G",
       "price": 433333,
       "stock": 9998,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d23887cb",
@@ -62,7 +76,7 @@
       "name": "Motorola G55 5G - 256GB",
       "price": 319553,
       "stock": 10,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d23887cc",
@@ -77,7 +91,7 @@
       "originalPrice": 1112612,
       "price": 936935,
       "stock": 10,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d23887e1",
@@ -92,7 +106,7 @@
       "originalPrice": 181769,
       "price": 51630,
       "stock": 5,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d23887e2",
@@ -106,7 +120,7 @@
       "name": "MOTOROLA EDGE 50 FUSION",
       "price": 484030,
       "stock": 5,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d23887e3",
@@ -120,7 +134,7 @@
       "name": "MOTOROLA G04S",
       "price": 226178,
       "stock": 5,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d23887e4",
@@ -135,7 +149,7 @@
       "originalPrice": 204453,
       "price": 51114,
       "stock": 5,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d23887e5",
@@ -149,7 +163,7 @@
       "name": "MOTOROLA G14 XT2341-2 4/128GB GRIS",
       "price": 226178,
       "stock": 5,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d23887e6",
@@ -164,7 +178,7 @@
       "originalPrice": 261319,
       "price": 51114,
       "stock": 5,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d23887e7",
@@ -178,7 +192,7 @@
       "name": "MOTOROLA G53  8/256GB 5G",
       "price": 292975,
       "stock": 0,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d23887e8",
@@ -192,7 +206,7 @@
       "name": "MOTOROLA G84 XT2347-2 8RAM 256GB 5G",
       "price": 370572,
       "stock": 5,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d23887e9",
@@ -207,7 +221,7 @@
       "originalPrice": 486856,
       "price": 51114,
       "stock": 5,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d23887ea",
@@ -221,7 +235,7 @@
       "name": "SAMSUNG A16 - 5G",
       "price": 373017,
       "stock": 0,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d23887eb",
@@ -235,7 +249,7 @@
       "name": "SAMSUNG A26 A266M 5G 8/256GB",
       "price": 422592,
       "stock": 4,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d23887ec",
@@ -249,7 +263,7 @@
       "name": "SAMSUNG A36 A366E 5G 8/256GB",
       "price": 530160,
       "stock": 0,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d23887ed",
@@ -263,7 +277,7 @@
       "name": "SAMSUNG A56 A566E 5G",
       "price": 720699,
       "stock": 5,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d23887ee",
@@ -277,7 +291,7 @@
       "name": "SAMSUNG M55 256GB 8RAM 5G",
       "price": 491968,
       "stock": 5,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d2388800",
@@ -292,7 +306,7 @@
       "originalPrice": 1049486,
       "price": 24126,
       "stock": 5,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d2388801",
@@ -307,7 +321,7 @@
       "originalPrice": 427033,
       "price": 24126,
       "stock": 5,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d2388802",
@@ -322,7 +336,7 @@
       "originalPrice": 427033,
       "price": 24126,
       "stock": 5,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d2388803",
@@ -337,7 +351,7 @@
       "originalPrice": 665881,
       "price": 24126,
       "stock": 5,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d2388804",
@@ -352,7 +366,7 @@
       "originalPrice": 629691,
       "price": 24126,
       "stock": 5,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d2388805",
@@ -367,7 +381,7 @@
       "originalPrice": 542837,
       "price": 24126,
       "stock": 5,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d2388806",
@@ -382,7 +396,7 @@
       "originalPrice": 593502,
       "price": 24126,
       "stock": 5,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d2388807",
@@ -397,7 +411,7 @@
       "originalPrice": 331492,
       "price": 24126,
       "stock": 5,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d2388808",
@@ -412,7 +426,7 @@
       "originalPrice": 330769,
       "price": 24126,
       "stock": 5,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d2388809",
@@ -427,7 +441,7 @@
       "originalPrice": 331492,
       "price": 24126,
       "stock": 5,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d238880a",
@@ -442,7 +456,7 @@
       "originalPrice": 385015,
       "price": 25364,
       "stock": 5,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d238880b",
@@ -457,7 +471,7 @@
       "originalPrice": 493063,
       "price": 25364,
       "stock": 5,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d238880c",
@@ -472,7 +486,7 @@
       "originalPrice": 376647,
       "price": 25364,
       "stock": 5,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d238880d",
@@ -486,7 +500,7 @@
       "name": "XIAOMI 14T PRO 512GB 12RAM 5G GLOBAL",
       "price": 974480,
       "stock": 5,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d238880e",
@@ -500,7 +514,7 @@
       "name": "XIAOMI NOTE 13 PRO 256GB 8RAM",
       "price": 440248,
       "stock": 5,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d238880f",
@@ -514,7 +528,7 @@
       "name": "XIAOMI NOTE 14 4G",
       "price": 362708,
       "stock": 5,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d2388810",
@@ -528,7 +542,7 @@
       "name": "XIAOMI NOTE 14 PRO 5G",
       "price": 618701,
       "stock": 5,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d2388811",
@@ -542,7 +556,7 @@
       "name": "XIAOMI NOTE 14 PRO PLUS 5G",
       "price": 715425,
       "stock": 5,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d2388812",
@@ -556,7 +570,7 @@
       "name": "XIAOMI POCO C75 256GB 8RAM",
       "price": 267019,
       "stock": 5,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d2388813",
@@ -570,7 +584,7 @@
       "name": "XIAOMI POCO F7 PRO 5G",
       "price": 936919,
       "stock": 0,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d2388814",
@@ -584,7 +598,7 @@
       "name": "XIAOMI POCO M7 PRO 256GB 5G",
       "price": 403009,
       "stock": 0,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d2388815",
@@ -598,7 +612,7 @@
       "name": "XIAOMI POCO X6 PRO 12RAM 512GB 5G",
       "price": 548739,
       "stock": 5,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d2388816",
@@ -612,7 +626,7 @@
       "name": "XIAOMI POCO X7 12RAM 512GB 5G",
       "price": 438477,
       "stock": 5,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d2388817",
@@ -626,7 +640,7 @@
       "name": "XIAOMI POCO X7 PRO 5G",
       "price": 637241,
       "stock": 5,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d2388818",
@@ -640,7 +654,7 @@
       "name": "XIAOMI REDMI 13X 256GB 8RAM",
       "price": 269050,
       "stock": 9999,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d2388819",
@@ -654,7 +668,7 @@
       "name": "XIAOMI REDMI 14C 256GB 8RAM",
       "price": 266688,
       "stock": 5,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     }
   ],
   "auriculares": [
@@ -672,7 +686,7 @@
       "originalPrice": 449,
       "price": 399,
       "stock": 8,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d23887d2",
@@ -686,7 +700,7 @@
       "name": "JBL CHARGE 6 BLACK",
       "price": 222285,
       "stock": 5,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d23887d3",
@@ -700,7 +714,7 @@
       "name": "JBL CLIP 5",
       "price": 83159,
       "stock": 9999,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d23887d4",
@@ -714,7 +728,7 @@
       "name": "JBL FLIP 6",
       "price": 151194,
       "stock": 9999,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d23887d5",
@@ -728,7 +742,7 @@
       "name": "JBL FLIP 7",
       "price": 187971,
       "stock": 5,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d23887d6",
@@ -742,7 +756,7 @@
       "name": "JBL GO 4",
       "price": 72457,
       "stock": 9999,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d23887d7",
@@ -756,7 +770,7 @@
       "name": "JBL GO ESSENTIAL BT",
       "price": 60226,
       "stock": 9999,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d23887d8",
@@ -770,7 +784,7 @@
       "name": "JBL PARTY BOX CLUB 120 USB/BT",
       "price": 548567,
       "stock": 10,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d23887d9",
@@ -784,7 +798,7 @@
       "name": "JBL PARTY BOX ENCORE ESSENTIAL",
       "price": 451761,
       "stock": 10,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d23887da",
@@ -798,7 +812,7 @@
       "name": "JBL PARTY BOX ON THE GO C/MICROFONO",
       "price": 528627,
       "stock": 10,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d23887db",
@@ -812,7 +826,7 @@
       "name": "JBL PARTY BOX STAGE 320 USB/BT 240W BLACK",
       "price": 780902,
       "stock": 8,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d23887dc",
@@ -826,7 +840,7 @@
       "name": "JBL PULSE 5 BLUETOOTH/LIGHTING",
       "price": 342047,
       "stock": 10,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d23887dd",
@@ -840,7 +854,7 @@
       "name": "JBL XTREME 4",
       "price": 496938,
       "stock": 10,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d23887de",
@@ -854,7 +868,7 @@
       "name": "JBL TOUR ONE M2 WIRELESS",
       "price": 360117,
       "stock": 10,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d23887df",
@@ -868,7 +882,7 @@
       "name": "JBL TUNE 520BT BLUETOOTH",
       "price": 77444,
       "stock": 9997,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d23887e0",
@@ -882,7 +896,7 @@
       "name": "JBL TUNE 720BT BLUETOOTH",
       "price": 96806,
       "stock": 9999,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d238881f",
@@ -896,7 +910,7 @@
       "name": "JBL BOOMBOX 3",
       "price": 745121,
       "stock": 5,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     }
   ],
   "parlantes": [
@@ -911,7 +925,7 @@
       "name": "JBL Boombox 3",
       "price": 499,
       "stock": 5,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     }
   ],
   "iphone": [
@@ -926,7 +940,7 @@
       "name": "iPhone 15 Pro",
       "price": 999,
       "stock": 10,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69b990bab0d81803d2387bc8",
@@ -939,7 +953,7 @@
       "name": "iPhone 14",
       "price": 799,
       "stock": 5,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d23887cd",
@@ -953,7 +967,7 @@
       "name": "IPHONE 16 PRO ESIM",
       "price": 1691755,
       "stock": 0,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d23887ce",
@@ -967,7 +981,7 @@
       "name": "IPHONE 16 PRO MAX  ESIM",
       "price": 2005043,
       "stock": 2,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d23887ef",
@@ -981,7 +995,7 @@
       "name": "IPHONE 16 PRO 128GB ESIM GRADO A/A- (ASIS)",
       "price": 1401429,
       "stock": 1,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d23887f0",
@@ -995,7 +1009,7 @@
       "name": "IPHONE 11 128GB GRADO A",
       "price": 490484,
       "stock": 1,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d23887f1",
@@ -1009,7 +1023,7 @@
       "name": "IPHONE 12 GRADO \"A\"",
       "price": 561475,
       "stock": 1,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d23887f2",
@@ -1023,7 +1037,7 @@
       "name": "IPHONE 12 PRO 128GB GRADO \"A\"",
       "price": 606650,
       "stock": 1,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d23887f3",
@@ -1037,7 +1051,7 @@
       "name": "IPHONE 12 PRO MAX  GRADO \"A\"",
       "price": 800586,
       "stock": 1,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d23887f4",
@@ -1051,7 +1065,7 @@
       "name": "IPHONE 13 GRADO \"A\"",
       "price": 676884,
       "stock": 1,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d23887f5",
@@ -1065,7 +1079,7 @@
       "name": "IPHONE 13 PRO MAX 128GB GRADO \"A\"",
       "price": 902934,
       "stock": 1,
-      "updatedAt": "2026-03-18T13:29:32.581Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d23887f6",
@@ -1079,7 +1093,7 @@
       "name": "IPHONE 14 PRO MAX 128GB GRADO \"A\"",
       "price": 1085389,
       "stock": 1,
-      "updatedAt": "2026-03-18T13:29:32.581Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d23887f7",
@@ -1093,7 +1107,7 @@
       "name": "IPHONE 15 PRO ESIM",
       "price": 1330115,
       "stock": 1,
-      "updatedAt": "2026-03-18T13:29:32.581Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d23887f8",
@@ -1107,7 +1121,7 @@
       "name": "IPHONE 15 PRO MAX 256GB ESIM GRADO A AZUL",
       "price": 1534698,
       "stock": 3,
-      "updatedAt": "2026-03-18T13:29:32.581Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d2388820",
@@ -1121,7 +1135,7 @@
       "name": "IPHONE 16 128GB DUAL SIM",
       "price": 1275000,
       "stock": 1,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d2388821",
@@ -1135,7 +1149,7 @@
       "name": "IPHONE 15 128GB  DUAL SIM",
       "price": 1050000,
       "stock": 1,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d2388822",
@@ -1149,7 +1163,7 @@
       "name": "IPHONE 13 128GB",
       "price": 800000,
       "stock": 1,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     }
   ],
   "macbook": [
@@ -1167,7 +1181,7 @@
       "originalPrice": 2199,
       "price": 1999,
       "stock": 4,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d23887c9",
@@ -1181,7 +1195,7 @@
       "name": "Macbook M1 2020 8GB RAM - 256GB",
       "price": 1288287,
       "stock": 5,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d238881b",
@@ -1195,7 +1209,7 @@
       "name": "MacBook M3 AIR 16/256GB 13'",
       "price": 1869581,
       "stock": 5,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d238881c",
@@ -1209,7 +1223,7 @@
       "name": "MacBook M3 AIR 24RAM 512GB 13.6'",
       "price": 2303106,
       "stock": 9999,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d238881d",
@@ -1223,7 +1237,7 @@
       "name": "MacBook M4 AIR 16RAM 256GB 15.3",
       "price": 2262461,
       "stock": 4,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d238881e",
@@ -1237,7 +1251,7 @@
       "name": "MacBook M4 AIR 16RAM 512GB 13.6'",
       "price": 2405660,
       "stock": 5,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     }
   ],
   "watch": [
@@ -1252,7 +1266,7 @@
       "name": "Apple Watch Ultra 2",
       "price": 799,
       "stock": 12,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d23887cf",
@@ -1266,7 +1280,7 @@
       "name": "APPLE WATCH S10",
       "price": 557102,
       "stock": 0,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d23887d0",
@@ -1281,7 +1295,7 @@
       "originalPrice": 399755,
       "price": 463665,
       "stock": 0,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d23887d1",
@@ -1295,7 +1309,7 @@
       "name": "APPLE WATCH ULTRA 2 49 MM BLACK TITANIUM OCEAN",
       "price": 1503783,
       "stock": 10,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     }
   ],
   "notebooks": [
@@ -1310,7 +1324,7 @@
       "name": "Dell XPS 13 Plus",
       "price": 1599,
       "stock": 7,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     }
   ],
   "consolas y accesorios": [
@@ -1326,7 +1340,7 @@
       "name": "CONSOLA SONY PLAYSTATION 5 SLIM 1TB DIGITAL",
       "price": 907658,
       "stock": 2,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d23887f9",
@@ -1340,7 +1354,7 @@
       "name": "JOYSTICK PS5 DUALSENSE WIRELESS BLANCO",
       "price": 121872,
       "stock": 3,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d23887fa",
@@ -1354,7 +1368,7 @@
       "name": "JOYSTICK PS5 DUALSENSE WIRELESS GALACTIC PURPLE",
       "price": 121872,
       "stock": 3,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d23887fb",
@@ -1368,7 +1382,7 @@
       "name": "JOYSTICK PS5 DUALSENSE WIRELESS NEGRO",
       "price": 121872,
       "stock": 3,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d23887fc",
@@ -1382,7 +1396,7 @@
       "name": "NINTENDO SWITCH 2 256GB LCD GRIS",
       "price": 1053765,
       "stock": 3,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d23887fd",
@@ -1396,7 +1410,7 @@
       "name": "NINTENDO SWITCH 64 GB OLED BLUE/RED",
       "price": 500527,
       "stock": 0,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d23887fe",
@@ -1410,7 +1424,7 @@
       "name": "NINTENDO SWITCH 64 GB OLED LEGEND OF ZELDA BUNDLE",
       "price": 573648,
       "stock": 3,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d23887ff",
@@ -1424,7 +1438,7 @@
       "name": "XBOX SERIES X 1TB BLANCO",
       "price": 940103,
       "stock": 3,
-      "updatedAt": "2026-03-18T13:29:32.579Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     },
     {
       "_id": "69baa8a2b0d81803d238881a",
@@ -1438,7 +1452,7 @@
       "name": "JOYSTICK PS4 SONY NEGRO",
       "price": 47416,
       "stock": 10,
-      "updatedAt": "2026-03-18T13:29:32.581Z"
+      "updatedAt": "2026-03-18T17:47:20.181Z"
     }
   ]
 }

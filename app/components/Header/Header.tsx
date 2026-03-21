@@ -38,6 +38,7 @@ export default function Header() {
       ],
     },
     { label: 'NOTEBOOKS', href: '/category/notebooks', id: 'notebooks' },
+    { label: 'ACCESORIOS STARLINK', href: '/category/accesorios-starlink', id: 'starlink' },
   ];
 
   // Update active link based on scroll position

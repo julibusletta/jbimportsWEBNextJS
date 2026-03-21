@@ -10,20 +10,20 @@ const heroSlides = [
     alt: 'iPhone Premium',
   },
   {
+    image: '/images/DC_20260306150520_9z1vjiMY.jpg',
+    alt: 'Tecnología',
+  },
+  {
     image: '/images/MacBookAirM410.webp',
     alt: 'MacBook Pro',
   },
   {
+    image: '/images/slider5.png',
+    alt: 'Crecimiento Corporativo',
+  },
+  {
     image: '/images/JBLBoombox3Lifestyle01904x560px-(5014).webp',
-    alt: 'Auriculares Premium',
-  },
-  {
-    image: '/images/JBLPortableAudioLifestyleGroupImage1.webp',
-    alt: 'Smartwatch',
-  },
-  {
-    image: '/images/DC_20260306150520_9z1vjiMY.jpg',
-    alt: 'Tecnología',
+    alt: 'Audio Premium',
   },
 ];
 
@@ -74,7 +74,7 @@ export default function Hero() {
   };
 
   return (
-    <section id="home" className="hero flex items-center justify-center py-5 min-h-[530px] bg-gradient-to-br from-gray-50 to-gray-200 relative overflow-hidden visible">
+    <section id="home" className="hero relative overflow-hidden visible">
       {/* Hero Content */}
       <div className={`hero-content max-w-4xl w-full mb-16 opacity-100 transition-opacity duration-700 text-center z-10 ${!isTyping ? 'fade-out' : ''}`}>
         <h1 className="typewriter text-5xl md:text-7xl font-bold leading-tight mb-8 letter-spacing-tight min-h-48 md:min-h-64 text-gray-900 transition-all duration-300">
@@ -99,8 +99,8 @@ export default function Hero() {
       </div>
 
       {/* Hero Slider */}
-      <div className={`hero-slider absolute top-0 left-0 w-full h-full flex items-center justify-center ${!isTyping ? 'active' : ''}`}>
-        <div className="slider-container relative w-full h-full bg-black">
+      <div className={`hero-slider flex items-center justify-center ${!isTyping ? 'active' : ''}`}>
+        <div className="slider-container">
           {heroSlides.map((slide, index) => (
             <div
               key={index}
@@ -109,7 +109,6 @@ export default function Hero() {
               <img
                 src={slide.image}
                 alt={slide.alt}
-                className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
               />
             </div>
           ))}

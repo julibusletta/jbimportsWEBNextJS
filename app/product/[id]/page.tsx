@@ -349,9 +349,12 @@ export default function ProductDetailsPage() {
           </div>
         </div>
 
+        {/* Espaciador garantizado */}
+        <div style={{ height: '160px' }} />
+
         {/* Quienes vieron este producto también compraron */}
         {relatedProducts.length > 0 && (
-          <div className="mt-[80px]">
+          <div className="pt-10 border-t border-gray-100">
             <div className="border-b-2 border-[#e0e0e0] mb-8 flex">
               <h2 className="text-[22px] font-normal text-[#333] pb-2 border-b-2 border-[#0066cc] -mb-[2px] pr-8">
                 Quienes vieron este producto también compraron
