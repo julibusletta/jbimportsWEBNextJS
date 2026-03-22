@@ -8,102 +8,72 @@ export interface Category {
   description: string;
 }
 
+const getBaseUrl = () => {
+  if (typeof window !== 'undefined') return ''; // Browser uses relative path
+  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`; // Vercel environment
+  return `http://localhost:${process.env.PORT || 3000}`; // Local environment
+};
+
 /**
  * Obtiene todas las categorías
  */
 export const getAllCategories = async (): Promise<Category[]> => {
-  if (typeof window !== 'undefined') {
-    const res = await fetch('/api/categories');
-    return res.json();
+  try {
+    const res = await fetch(`${getBaseUrl()}/api/categories`, {
+        next: { revalidate: 60 } // Next.js cache
+    });
+    if (!res.ok) {
+      console.error('Failed to fetch categories. Status:', res.status);
+      return [];
+    }
+    const data = await res.json();
+    return Array.isArray(data) ? data : [];
+  } catch (error) {
+    console.error('Error in getAllCategories fetch:', error);
+    return [];
   }
-
-  const dbConnect = (await import('../mongodb')).default;
-  const CategoryModel = (await import('../../models/Category')).default;
-  await dbConnect();
-  return CategoryModel.find({}).lean();
 };
 
 /**
  * Obtiene la categoría principal
  */
 export const getMainCategory = async (): Promise<Category | null> => {
-  if (typeof window !== 'undefined') {
-    const categories = await getAllCategories();
-    return categories.find(c => c.isMain) || null;
-  }
-
-  const dbConnect = (await import('../mongodb')).default;
-  const CategoryModel = (await import('../../models/Category')).default;
-  await dbConnect();
-  return CategoryModel.findOne({ isMain: true }).lean();
+  const categories = await getAllCategories();
+  return categories.find(c => c.isMain) || null;
 };
 
 /**
  * Obtiene las categorías secundarias
  */
 export const getSecondaryCategories = async (): Promise<Category[]> => {
-  if (typeof window !== 'undefined') {
-    const categories = await getAllCategories();
-    return categories.filter(c => !c.isMain);
-  }
-
-  const dbConnect = (await import('../mongodb')).default;
-  const CategoryModel = (await import('../../models/Category')).default;
-  await dbConnect();
-  return CategoryModel.find({ isMain: false }).lean();
+  const categories = await getAllCategories();
+  return categories.filter(c => !c.isMain);
 };
 
 /**
  * Obtiene una categoría por ID
  */
 export const getCategoryById = async (id: string): Promise<Category | null> => {
-  if (typeof window !== 'undefined') {
-    const categories = await getAllCategories();
-    return categories.find(c => c.id === id) || null;
-  }
-
-  const dbConnect = (await import('../mongodb')).default;
-  const CategoryModel = (await import('../../models/Category')).default;
-  await dbConnect();
-  return CategoryModel.findOne({ id }).lean();
+  const categories = await getAllCategories();
+  return categories.find(c => c.id === id) || null;
 };
 
 /**
  * Obtiene una categoría por slug
  */
 export const getCategoryBySlug = async (slug: string): Promise<Category | null> => {
-  if (typeof window !== 'undefined') {
-    const categories = await getAllCategories();
-    return categories.find(c => c.slug === slug) || null;
-  }
-
-  const dbConnect = (await import('../mongodb')).default;
-  const CategoryModel = (await import('../../models/Category')).default;
-  await dbConnect();
-  return CategoryModel.findOne({ slug }).lean();
+  const categories = await getAllCategories();
+  return categories.find(c => c.slug === slug) || null;
 };
 
 /**
  * Busca categorías por nombre
  */
 export const searchCategories = async (query: string): Promise<Category[]> => {
-  if (typeof window !== 'undefined') {
-    const categories = await getAllCategories();
-    const lowerQuery = query.toLowerCase();
-    return categories.filter(cat =>
-      cat.name.toLowerCase().includes(lowerQuery) ||
-      cat.description.toLowerCase().includes(lowerQuery)
-    );
-  }
-
-  const dbConnect = (await import('../mongodb')).default;
-  const CategoryModel = (await import('../../models/Category')).default;
-  await dbConnect();
+  const categories = await getAllCategories();
   const lowerQuery = query.toLowerCase();
-  return CategoryModel.find({
-    $or: [
-      { name: { $regex: lowerQuery, $options: 'i' } },
-      { description: { $regex: lowerQuery, $options: 'i' } }
-    ]
-  }).lean();
+  return categories.filter(cat =>
+    cat.name.toLowerCase().includes(lowerQuery) ||
+    cat.description.toLowerCase().includes(lowerQuery)
+  );
 };

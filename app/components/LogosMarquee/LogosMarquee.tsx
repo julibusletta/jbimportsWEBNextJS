@@ -32,34 +32,17 @@ export default function LogosMarquee() {
   return (
     <section id="logos" className="logos-marquee w-full py-16 md:py-20 bg-white border-t border-b border-gray-200 overflow-hidden" data-aos="fadeInUp" suppressHydrationWarning>
       <div className="logos-container w-full overflow-hidden" suppressHydrationWarning>
-        <div className="logos-track flex animate-scroll" style={{ 
-          width: 'calc(200px * 12)',
-          animation: 'scrollLogos 30s linear infinite'
-        }}>
-          {/* First set of logos */}
-          {logos.map((logo) => (
+        <div className="logos-track flex animate-scroll" style={{ width: 'max-content' }}>
+          {/* Duplicate set 4 times for seamless loop on wide screens */}
+          {[...logos, ...logos, ...logos, ...logos].map((logo, index) => (
             <div
-              key={`${logo.id}-1`}
-              className="logo-item flex-shrink-0 w-50 h-16 flex items-center justify-center opacity-70 transition-opacity duration-300 hover:opacity-100"
+              key={`${logo.id}-${index}`}
+              className="logo-item flex-shrink-0 w-[200px] h-16 flex items-center justify-center opacity-70 transition-opacity duration-300 hover:opacity-100"
             >
               <img
                 src={logo.src}
                 alt={logo.alt}
-                className="max-w-32 max-h-16 object-contain filter grayscale transition-all duration-300 hover:grayscale-0"
-              />
-            </div>
-          ))}
-
-          {/* Duplicate set for seamless loop */}
-          {logos.map((logo) => (
-            <div
-              key={`${logo.id}-2`}
-              className="logo-item flex-shrink-0 w-50 h-16 flex items-center justify-center opacity-70 transition-opacity duration-300 hover:opacity-100"
-            >
-              <img
-                src={logo.src}
-                alt={logo.alt}
-                className="max-w-32 max-h-16 object-contain filter grayscale transition-all duration-300 hover:grayscale-0"
+                className="max-w-[120px] max-h-16 object-contain filter grayscale transition-all duration-300 hover:grayscale-0"
               />
             </div>
           ))}
@@ -72,7 +55,7 @@ export default function LogosMarquee() {
             transform: translateX(0);
           }
           100% {
-            transform: translateX(-50%);
+            transform: translateX(-25%);
           }
         }
 

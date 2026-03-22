@@ -81,7 +81,7 @@ function CheckoutMockContent() {
       }}>
         {/* Header Nave Style */}
         <div style={{ background: '#000', padding: '20px', textAlign: 'center' }}>
-          <img src="/images/nave.jfif" alt="Nave" style={{ height: '30px', filter: 'brightness(0) invert(1)' }} />
+          <img src="/images/nave.jpg" alt="Nave" style={{ height: '30px', filter: 'brightness(0) invert(1)' }} />
           <div style={{ color: 'white', fontSize: '12px', marginTop: '5px', opacity: 0.7 }}>
             <FaLock style={{ marginRight: '5px' }} /> Pago Seguro con Nave
           </div>

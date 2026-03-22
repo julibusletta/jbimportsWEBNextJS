@@ -21,8 +21,8 @@ export function AnimationInitializer() {
         AOS.init({
           duration: 800,
           easing: 'ease-in-out-cubic',
-          once: false,
-          mirror: true,
+          once: true,
+          mirror: false,
           offset: 120,
           disable: false,
         });
@@ -55,10 +55,7 @@ export function AnimationInitializer() {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add('visible', 'in-view');
-          } else {
-            // We keep the visible class if we want them to stay visible once revealed,
-            // but the user's current logic removes it. 
-            // entry.target.classList.remove('visible');
+            observer.unobserve(entry.target);
           }
         });
       }, observerOptions);

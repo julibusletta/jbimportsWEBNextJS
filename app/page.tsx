@@ -2,6 +2,7 @@ import Hero from './components/Hero/Hero';
 import Benefits from './components/Benefits/Benefits';
 import Categories from './components/Categories/Categories';
 import { ProductCarouselSection } from './components/Products/ProductCarousel';
+import PromoBanners from './components/PromoBanners/PromoBanners';
 
 export default function Home() {
   return (
@@ -14,6 +15,7 @@ export default function Home() {
         progressColor="#414141"
       />
       <Categories />
+      <PromoBanners />
       <ProductCarouselSection 
         title="✨ NUEVAS LLEGADAS"
         section="nuevas"

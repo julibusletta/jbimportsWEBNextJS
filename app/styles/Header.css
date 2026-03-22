@@ -178,7 +178,7 @@ header.scrolled {
 
 .nav-primary {
   display: flex;
-  gap: 32px;
+  gap: 20px;
   list-style: none;
   background: 0;
   border-radius: 0;
@@ -194,8 +194,8 @@ header.scrolled {
   font-weight: 500;
   font-family: 'DM Sans', sans-serif;
   transition: background 0.3s, color 0.3s;
-  font-size: 16px;
-  padding: 6px 16px;
+  font-size: 14px;
+  padding: 6px 12px;
   border-radius: 4px;
 }
 

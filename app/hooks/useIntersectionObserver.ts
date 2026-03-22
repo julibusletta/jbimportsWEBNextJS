@@ -30,10 +30,8 @@ export function useIntersectionObserver(
           entry.target.classList.add('visible', 'in-view');
           options.onIntersect?.(true);
 
-          // Optionally stop observing after first intersection
-          // observer.unobserve(entry.target);
-        } else {
-          entry.target.classList.remove('visible');
+          // Stop observing after first intersection to prevent repeat animations
+          observer.unobserve(entry.target);
         }
       });
     }, observerOptions);
@@ -66,8 +64,8 @@ export function initializeGlobalIntersectionObserver() {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
         entry.target.classList.add('visible', 'in-view');
-      } else {
-        entry.target.classList.remove('visible');
+        // Stop observing once animated
+        observer.unobserve(entry.target);
       }
     });
   }, observerOptions);

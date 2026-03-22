@@ -43,9 +43,9 @@ export default function Footer() {
                     </Link>
                   </li>
                   <li className="mb-2.5">
-                    <Link href="/defensa-consumidor" className="text-gray-400 text-sm md:text-base no-underline transition-colors hover:text-white">
+                    <a href="https://buenosaires.gob.ar/gcaba_historico/gobierno/atencion-ciudadana/defensa-al-consumidor" target="_blank" rel="noopener noreferrer" className="text-gray-400 text-sm md:text-base no-underline transition-colors hover:text-white">
                       Defensa al Consumidor
-                    </Link>
+                    </a>
                   </li>
                 </ul>
               </div>
@@ -138,7 +138,7 @@ export default function Footer() {
       <div className="footer-badges-section w-full bg-gray-100 flex flex-col items-center justify-center py-5 px-4 border-t border-gray-300">
         <div className="badges-container flex gap-5 items-center justify-center flex-wrap mb-3 w-full">
           <img
-            src="/images/nave.jfif"
+            src="/images/nave.jpg"
             alt="Nave Logo"
             className="badge-img w-12 h-12 md:w-20 md:h-20 flex-shrink-0 object-contain"
           />

@@ -25,8 +25,15 @@ export default function Header() {
 
   const navLinks: NavLink[] = [
     { label: 'CELULARES', href: '/category/celulares', id: 'celulares' },
-    { label: 'AURICULARES', href: '/category/auriculares', id: 'auriculares' },
-    { label: 'PARLANTES', href: '/category/parlantes', id: 'parlantes' },
+    {
+      label: 'JBL',
+      href: '/category/parlantes',
+      id: 'jbl',
+      submenu: [
+        { label: 'AURICULARES', href: '/category/auriculares' },
+        { label: 'PARLANTES', href: '/category/parlantes' },
+      ],
+    },
     {
       label: 'APPLE',
       href: '/category/apple',
@@ -35,6 +42,16 @@ export default function Header() {
         { label: 'IPHONE', href: '/category/iphone' },
         { label: 'MACBOOK', href: '/category/macbook' },
         { label: 'WATCH', href: '/category/watch' },
+      ],
+    },
+    {
+      label: 'SMART HOME',
+      href: '/category/smart-home',
+      id: 'smart-home',
+      submenu: [
+        { label: 'ASPIRADORAS ROBOT', href: '/category/aspiradoras-robot' },
+        { label: 'CÁMARAS DE SEGURIDAD', href: '/category/camaras-seguridad' },
+        { label: 'ALEXA', href: '/category/alexa' },
       ],
     },
     { label: 'NOTEBOOKS', href: '/category/notebooks', id: 'notebooks' },
@@ -231,17 +248,20 @@ export default function Header() {
             <div key={link.label} className="dropdown relative inline-block group">
               <Link
                 href={link.href}
-                className={`text-white font-medium text-base py-1.5 px-4 rounded transition-all ${activeLink === link.id
+                className={`text-white font-medium text-base py-1.5 px-4 rounded transition-all flex items-center gap-2 ${activeLink === link.id
                     ? 'font-bold'
                     : 'hover:bg-gray-800'
                   }`}
               >
                 {link.label}
+                {link.submenu && (
+                  <FaChevronDown size={10} className="transition-transform duration-200 group-hover:rotate-180 opacity-70" />
+                )}
               </Link>
 
               {/* Dropdown Content */}
               {link.submenu && (
-                <div className="dropdown-content hidden group-hover:block absolute bg-white min-w-55 shadow-lg rounded-lg top-full left-0 p-3 animation-dropdown">
+                <div className="dropdown-content absolute bg-white min-w-55 shadow-lg rounded-lg top-full left-0 p-3 animation-dropdown">
                   {link.submenu.map((sublink) => (
                     <div key={sublink.label} className="dropdown-submenu relative">
                       {sublink.submenu ? (
@@ -250,7 +270,7 @@ export default function Header() {
                             {sublink.label}
                             <FaChevronDown size={12} />
                           </button>
-                          <div className="submenu-content hidden group-hover:block absolute left-full top-0 min-w-52 bg-white shadow-lg rounded-lg p-2 z-50">
+                          <div className="submenu-content absolute left-full top-0 min-w-52 bg-white shadow-lg rounded-lg p-2 z-50">
                             {sublink.submenu.map((item) => (
                               <Link
                                 key={item.label}

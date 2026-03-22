@@ -14,8 +14,13 @@ const heroSlides = [
     alt: 'Tecnología',
   },
   {
-    image: '/images/MacBookAirM410.webp',
-    alt: 'MacBook Pro',
+    image: '/images/slider-user-tech.png',
+    alt: 'Promoción 6 Cuotas Sin Interés',
+    isCustom: true,
+    title1: 'HASTA 6 CUOTAS',
+    title2: 'SIN INTERÉS',
+    subtitle: 'LA TECNOLOGÍA QUE NECESITAS EN UN SOLO LUGAR',
+    showShippingIcon: false,
   },
   {
     image: '/images/slider5.png',
@@ -100,18 +105,46 @@ export default function Hero() {
 
       {/* Hero Slider */}
       <div className={`hero-slider flex items-center justify-center ${!isTyping ? 'active' : ''}`}>
-        <div className="slider-container">
-          {heroSlides.map((slide, index) => (
-            <div
-              key={index}
-              className={`slider-slide ${index === currentSlide ? 'active' : ''}`}
-            >
-              <img
-                src={slide.image}
-                alt={slide.alt}
-              />
-            </div>
-          ))}
+        <div className="slider-container overflow-hidden relative">
+          <div 
+            className="slider-track"
+            style={{ 
+              display: 'flex', 
+              width: `${heroSlides.length * 100}%`,
+              transform: `translateX(-${currentSlide * (100 / heroSlides.length)}%)`,
+              transition: 'transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+              height: '100%'
+            }}
+          >
+            {heroSlides.map((slide, index) => (
+              <div
+                key={index}
+                className={`slider-slide ${index === currentSlide ? 'active' : ''}`}
+                style={{ width: `${100 / heroSlides.length}%`, height: '100%', position: 'relative' }}
+              >
+                <img
+                  src={slide.image}
+                  alt={slide.alt}
+                />
+                {slide.isCustom && (
+                  <div className="slide-custom-overlay">
+                    <div className="promo-text-container">
+                      <div className="promo-badge">
+                        <span className="promo-title-1">{slide.title1}</span>
+                        <span className="promo-title-2">{slide.title2}</span>
+                      </div>
+                      <div className="promo-shipping">
+                        {slide.showShippingIcon !== false && (
+                          <img src="/images/andreani.png" alt="Envío" className="shipping-icon" />
+                        )}
+                        <span className="shipping-text text-center">{slide.subtitle}</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
 
           {/* Slider Dots */}
           <div className="slider-dots absolute bottom-5 left-1/2 -translate-x-1/2 flex gap-3 z-10">

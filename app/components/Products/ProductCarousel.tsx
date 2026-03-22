@@ -21,7 +21,8 @@ interface Product {
   discountPercentage: number;
   discount?: string;
   description: string;
-  imageUrls: string[];
+  imageUrls?: string[];
+  images?: string[];
   image?: string;
   category: string;
 }
@@ -68,7 +69,7 @@ export function ProductCarouselSection({ title, section, progressColor = '#41414
       name: product.name,
       price: product.price,
       quantity: 1,
-      image: getImageUrl(product.imageUrls?.[0] || ''),
+      image: getImageUrl(product.imageUrls?.[0] || product.images?.[0] || product.image || ''),
     });
 
     setAddedProductId(product.id);
@@ -144,11 +145,11 @@ export function ProductCarouselSection({ title, section, progressColor = '#41414
                     </div>
 
                     {/* Product Image */}
-                    <div className="product-image w-full h-64 overflow-hidden bg-gray-100 flex items-center justify-center p-4">
+                    <div className="product-image w-full h-64 overflow-hidden bg-white flex items-center justify-center p-4">
                       <img
-                        src={getImageUrl(product.imageUrls?.[0] || '')}
+                        src={getImageUrl(product.imageUrls?.[0] || product.images?.[0] || product.image || '')}
                         alt={product.name}
-                        className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                        className="w-full h-full object-contain transition-transform duration-300 hover:scale-105"
                       />
                     </div>
 
