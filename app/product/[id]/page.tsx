@@ -122,7 +122,7 @@ export default function ProductDetailsPage() {
       
       {/* Breadcrumb Navigation - Centered wrapper */}
       <div className="max-w-[1300px] w-full px-4 pb-4">
-        <div className="flex items-center gap-2 text-[13px] text-[#0066cc]" style={{ marginBottom: '16px' }}>
+        <div className="flex flex-wrap items-center gap-2 text-[13px] text-[#0066cc]" style={{ marginBottom: '16px' }}>
           <Link href="/" className="hover:underline">Inicio</Link>
           <span className="text-[#666]">›</span>
           <Link href={`/category/${product.category}`} className="hover:underline capitalize">

@@ -19,7 +19,7 @@ interface Product {
   sku: string;
   price: number;
   discountPercentage: number;
-  discount?: string;
+  discount?: number;
   description: string;
   imageUrls?: string[];
   images?: string[];
@@ -140,9 +140,11 @@ export function ProductCarouselSection({ title, section, progressColor = '#41414
                 <div className="carousel-product px-2.5">
                   <div className="product-card bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 h-full flex flex-col relative transform hover:-translate-y-2">
                     {/* Discount Badge */}
-                    <div className="discount-badge absolute top-3 right-3 bg-red-400 text-white px-3 py-1.5 rounded text-xs font-bold z-10">
-                      {product.discountPercentage}% OFF
-                    </div>
+                    {((product.discount ?? 0) > 0 || (product.discountPercentage ?? 0) > 0) && (
+                      <div className="discount-badge absolute top-3 right-3 bg-red-400 text-white px-3 py-1.5 rounded text-xs font-bold z-10 shadow-sm border border-red-500/50">
+                        {product.discount || product.discountPercentage}% OFF
+                      </div>
+                    )}
 
                     {/* Product Image */}
                     <div className="product-image w-full h-64 overflow-hidden bg-white flex items-center justify-center p-4">

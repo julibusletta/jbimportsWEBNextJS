@@ -58,18 +58,29 @@ export default function ProductsPage() {
   };
 
   const handleProductChange = <K extends keyof Product>(id: string, category: string, field: K, value: Product[K]) => {
-    const updated = { ...products };
-    const p = updated[category]?.find(x => x.id === id);
-    if (p) {
-      p[field] = value;
-      if (field === 'images' && Array.isArray(value)) {
-        p.image = (value[0] as string) || '/images/placeholder.jpg';
+    setProducts(prevProducts => {
+      const updated = { ...prevProducts };
+      if (updated[category]) {
+        updated[category] = updated[category].map(p => {
+          if (p.id === id) {
+             const newP = { ...p, [field]: value };
+             if (field === 'images' && Array.isArray(value)) {
+               newP.image = (value[0] as string) || '/images/placeholder.jpg';
+             }
+             return newP;
+          }
+          return p;
+        });
       }
-    }
-    setProducts(updated);
-    if (editingProduct?.id === id) {
-      setEditingProduct({ ...editingProduct, [field]: value });
-    }
+      return updated;
+    });
+
+    setEditingProduct(prev => {
+      if (prev?.id === id) {
+        return { ...prev, [field]: value };
+      }
+      return prev;
+    });
   };
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>, index: number) => {
@@ -486,15 +497,97 @@ export default function ProductsPage() {
                           placeholder="Ej: iPhone 15 Pro Max"
                         />
                       </div>
+                      {/* Bloque de Descuento */}
+                      <div className="col-span-2 bg-slate-50/70 p-5 rounded-2xl border border-slate-200 space-y-4">
+                        <div className="flex items-center justify-between">
+                          <label className="flex items-center gap-3 cursor-pointer">
+                            <input 
+                              type="checkbox" 
+                              checked={!!(editingProduct.discount && editingProduct.discount > 0)}
+                              onChange={(e) => {
+                                if (e.target.checked) {
+                                  const original = editingProduct.originalPrice || editingProduct.price;
+                                  handleProductChange(editingProduct.id, editingProduct.category, 'originalPrice', original);
+                                  handleProductChange(editingProduct.id, editingProduct.category, 'discount', 10);
+                                  const newPrice = original - (original * 10 / 100);
+                                  handleProductChange(editingProduct.id, editingProduct.category, 'price', newPrice);
+                                } else {
+                                  handleProductChange(editingProduct.id, editingProduct.category, 'discount', 0);
+                                  if (editingProduct.originalPrice) {
+                                    handleProductChange(editingProduct.id, editingProduct.category, 'price', editingProduct.originalPrice);
+                                  }
+                                }
+                              }}
+                              className="w-5 h-5 text-blue-600 rounded border-slate-300 focus:ring-blue-500 transition-all"
+                            />
+                            <span className="text-sm font-bold text-slate-700">Aplica Descuento Especial</span>
+                          </label>
+                        </div>
+                        
+                        {!!(editingProduct.discount && editingProduct.discount > 0) && (
+                          <div className="grid grid-cols-2 gap-6 animate-fadeIn pt-2">
+                            <div>
+                                <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-3 px-1 text-blue-500">Precio Original ($)</label>
+                                <div className="relative">
+                                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold">$</span>
+                                  <input
+                                    type="number"
+                                    value={editingProduct.originalPrice ?? editingProduct.price ?? ''}
+                                    onChange={(e) => {
+                                      const val = e.target.value;
+                                      const newOriginal = val === '' ? ('' as any) : Number(val);
+                                      handleProductChange(editingProduct.id, editingProduct.category, 'originalPrice', newOriginal);
+                                      const numericOriginal = Number(newOriginal) || 0;
+                                      const currentDiscount = Number(editingProduct.discount) || 0;
+                                      const newPrice = numericOriginal - (numericOriginal * currentDiscount / 100);
+                                      handleProductChange(editingProduct.id, editingProduct.category, 'price', newPrice);
+                                    }}
+                                    className="w-full pl-8 pr-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 transition-all outline-none text-sm font-bold text-slate-700"
+                                  />
+                                </div>
+                            </div>
+                            <div>
+                                <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-3 px-1 text-red-400">Descuento (%)</label>
+                                <div className="relative">
+                                  <input
+                                    type="number"
+                                    value={editingProduct.discount ?? ''}
+                                    onChange={(e) => {
+                                      const val = e.target.value;
+                                      const newDiscount = val === '' ? ('' as any) : Number(val);
+                                      handleProductChange(editingProduct.id, editingProduct.category, 'discount', newDiscount);
+                                      const numericDiscount = Number(newDiscount) || 0;
+                                      const basePrice = Number(editingProduct.originalPrice ?? editingProduct.price) || 0;
+                                      const newPrice = basePrice - (basePrice * numericDiscount / 100);
+                                      handleProductChange(editingProduct.id, editingProduct.category, 'price', newPrice);
+                                    }}
+                                    className="w-full pl-4 pr-8 py-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-red-500 transition-all outline-none text-sm font-bold text-red-600"
+                                  />
+                                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold">%</span>
+                                </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
                       <div>
-                        <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-3 px-1">Precio de Venta ($)</label>
+                        <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-3 px-1">
+                          Precio de Venta Final ($)
+                        </label>
                         <div className="relative">
                           <span className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 font-bold">$</span>
                           <input
                             type="number"
                             value={editingProduct.price}
-                            onChange={(e) => handleProductChange(editingProduct.id, editingProduct.category, 'price', Number(e.target.value))}
-                            className="w-full pl-10 pr-5 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all outline-none text-base font-bold text-slate-700"
+                            onChange={(e) => {
+                              const newPrice = Number(e.target.value);
+                              handleProductChange(editingProduct.id, editingProduct.category, 'price', newPrice);
+                              if (editingProduct.discount && editingProduct.discount > 0) {
+                                const newOriginal = newPrice / (1 - (editingProduct.discount / 100));
+                                handleProductChange(editingProduct.id, editingProduct.category, 'originalPrice', newOriginal);
+                              }
+                            }}
+                            className={`w-full pl-10 pr-5 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:bg-white transition-all outline-none text-base font-bold ${editingProduct.discount && editingProduct.discount > 0 ? 'text-green-600 border-green-200 bg-green-50' : 'text-slate-700'}`}
                           />
                         </div>
                       </div>
