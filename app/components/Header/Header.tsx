@@ -24,7 +24,17 @@ export default function Header() {
   const [activeLink, setActiveLink] = useState('home');
 
   const navLinks: NavLink[] = [
-    { label: 'CELULARES', href: '/category/celulares', id: 'celulares' },
+    {
+      label: 'CELULARES',
+      href: '/category/celulares',
+      id: 'celulares',
+      submenu: [
+        { label: 'XIAOMI', href: '/category/xiaomi' },
+        { label: 'MOTOROLA', href: '/category/motorola' },
+        { label: 'SAMSUNG', href: '/category/samsung' },
+        { label: 'REALME', href: '/category/realme' },
+      ],
+    },
     {
       label: 'JBL',
       href: '/category/parlantes',

@@ -118,7 +118,7 @@ export default function ProductDetailsPage() {
   const allImages = Array.from(new Set([product.image, ...(product.images || [])].filter(Boolean))).slice(0, 4);
 
   return (
-    <div className="bg-white flex flex-col items-center min-h-screen" style={{ paddingTop: '180px' }}>
+    <div className="bg-white flex flex-col items-center min-h-screen pt-8">
       
       {/* Breadcrumb Navigation - Centered wrapper */}
       <div className="max-w-[1300px] w-full px-4 pb-4">
