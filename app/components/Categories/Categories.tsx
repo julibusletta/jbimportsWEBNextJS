@@ -92,8 +92,8 @@ export default function Categories() {
   });
 
   useEffect(() => {
-    if (!isMobile || finalCategories.length <= 4) return;
-    const maxChunks = Math.ceil(finalCategories.length / 4);
+    if (!isMobile || finalCategories.length <= 2) return;
+    const maxChunks = Math.ceil(finalCategories.length / 2);
     const interval = setInterval(() => {
       setCurrentChunkIndex((prevIndex) => (prevIndex + 1) % maxChunks);
     }, 4000);
@@ -112,8 +112,8 @@ export default function Categories() {
 
   let displayedCategories = finalCategories;
   if (isMobile) {
-    const chunkStart = currentChunkIndex * 4;
-    displayedCategories = finalCategories.slice(chunkStart, chunkStart + 4);
+    const chunkStart = currentChunkIndex * 2;
+    displayedCategories = finalCategories.slice(chunkStart, chunkStart + 2);
   }
 
   return (
