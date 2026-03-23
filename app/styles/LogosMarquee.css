@@ -159,12 +159,34 @@
 /* === KEYFRAME ANIMATION === */
 @keyframes scrollLogos {
   0% { transform: translateX(0); }
-  100% { transform: translateX(-25%); } /* Assuming 4 sets of 6 logos */
+  100% { transform: translateX(-25%); }
 }
 
 @media (max-width: 768px) {
-  @keyframes scrollLogos {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-25%); }
+  .logos-marquee {
+    padding: 40px 0 !important;
+  }
+
+  .logo-item {
+    height: 60px !important;
+  }
+
+  .logo-image {
+    max-height: 40px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .logos-marquee {
+    padding: 30px 0 !important;
+  }
+
+  .logo-item {
+    height: 50px !important;
+  }
+
+  .logo-image {
+    max-height: 30px !important;
+    max-width: 70px !important;
   }
 }

@@ -44,7 +44,7 @@ export default function LogosMarquee() {
               <img
                 src={logo.src}
                 alt={logo.alt}
-                className="max-w-[120px] max-h-16 object-contain filter grayscale transition-all duration-300 hover:grayscale-0"
+                className="logo-image object-contain filter grayscale transition-all duration-300 hover:grayscale-0"
                 style={{ mixBlendMode: 'multiply' }}
               />
             </div>
