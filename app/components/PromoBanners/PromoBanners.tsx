@@ -11,7 +11,7 @@ const PromoBanners = () => {
             <div className="w-full bg-[#e2e6eb] rounded-[24px] shadow-[0_2px_10px_rgba(0,0,0,0.05)] border border-[#d1d5db]" style={{ maxWidth: '1480px', margin: '0 auto', paddingTop: '48px', paddingBottom: '48px' }}>
                 <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '0 16px' }}>
                     <div className="mb-6 flex justify-start items-center">
-                        <h2 className="text-3xl md:text-[2.5rem] font-bold text-black m-0 leading-[1.2]">
+                        <h2 className="main-section-title">
                             Ofertas <b className="text-[#0066cc]">semanales</b>
                         </h2>
                     </div>

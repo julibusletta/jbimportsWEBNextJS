@@ -108,9 +108,9 @@ export function ProductCarouselSection({ title, section, progressColor = '#41414
 
   return (
     <section id={sectionId} className="carrusel py-4 md:py-10 px-4 bg-gradient-to-br from-gray-100 to-white" data-aos="fadeInUp">
-      <div className="carrusel-header text-center mb-10">
-        <div className="categories-title-wrapper mb-5">
-          <h2 className="font-bold text-gray-900 mb-0 letter-spacing-wide">
+      <div className="carrusel-header text-left mb-6">
+        <div className="categories-title-wrapper mb-3">
+          <h2 className="main-section-title">
             {title}
           </h2>
         </div>
