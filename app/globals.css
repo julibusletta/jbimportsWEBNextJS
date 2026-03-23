@@ -238,3 +238,19 @@ footer.visible {
   color: #1a1a1a;
 }
 
+.main-section-title {
+  font-size: 1.875rem !important; /* text-3xl */
+  font-weight: 700 !important;
+  color: #000 !important;
+  text-align: left !important;
+  line-height: 1.2 !important;
+  margin: 0 !important;
+  font-family: 'DM Sans', sans-serif !important;
+  text-transform: none !important;
+}
+
+@media (min-width: 768px) {
+  .main-section-title {
+    font-size: 2.5rem !important;
+  }
+}

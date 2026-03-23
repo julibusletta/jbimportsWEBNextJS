@@ -132,12 +132,12 @@ export default function Categories() {
     <section className="categories-section" id="categories">
       <div className="categories-container">
         {/* Header */}
-        <div className="categories-header">
-          <div className="categories-title-wrapper">
-            <h2>
-              Explorá nuestras <b>categorías</b>
-            </h2>
-          </div>
+        <div className="carrusel-header text-left mb-6">
+        <div className="categories-title-wrapper mb-3">
+          <h2 className="main-section-title">
+            {title}
+          </h2>
+        </div>
           <div className="categories-arrows hidden md:flex">
             <button
               onClick={() => scrollCarousel('left')}
