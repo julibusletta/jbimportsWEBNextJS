@@ -35,7 +35,7 @@ export async function getProductsByCategory(slug: string): Promise<Product[]> {
   const dbConnect = (await import('../mongodb')).default;
   const ProductModel = (await import('../../models/Product')).default;
   await dbConnect();
-  return ProductModel.find({ category: slug }).lean();
+  return ProductModel.find({ category: slug }).lean() as unknown as Product[];
 }
 
 /**
@@ -51,7 +51,7 @@ export async function getProductById(id: string): Promise<Product | null> {
   const dbConnect = (await import('../mongodb')).default;
   const ProductModel = (await import('../../models/Product')).default;
   await dbConnect();
-  return ProductModel.findOne({ id }).lean();
+  return ProductModel.findOne({ id }).lean() as unknown as Product | null;
 }
 
 /**
@@ -66,6 +66,6 @@ export async function getAllProducts(): Promise<Product[]> {
   const dbConnect = (await import('../mongodb')).default;
   const ProductModel = (await import('../../models/Product')).default;
   await dbConnect();
-  return ProductModel.find({}).lean();
+  return ProductModel.find({}).lean() as unknown as Product[];
 }
 

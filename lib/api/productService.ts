@@ -48,9 +48,9 @@ export const getProductsBySection = async (section: 'bombas' | 'nuevas'): Promis
                 { badge: /bomba/i },
                 { price: { $gt: 1000000 } }
             ]
-        }).limit(10).lean();
+        }).limit(10).lean() as unknown as Product[];
     }
-    return ProductModel.find({}).sort({ createdAt: -1 }).limit(10).lean();
+    return ProductModel.find({}).sort({ createdAt: -1 }).limit(10).lean() as unknown as Product[];
 };
 
 export const getProductByCategory = async (
