@@ -4,7 +4,7 @@
   width: 100%;
   background: white;
   padding: 0;
-  margin: 15px 0 20px 0;
+  margin: 10px 0;
   opacity: 1 !important;
   transform: none !important;
 }
@@ -144,10 +144,12 @@
   }
 
   .benefit-item {
-    flex-direction: column;
-    gap: 8px;
+    flex-direction: row;
+    gap: 10px;
     align-items: center;
-    text-align: center;
+    text-align: left;
+    width: 100%;
+    justify-content: flex-start;
   }
 
   .benefit-text h2 {

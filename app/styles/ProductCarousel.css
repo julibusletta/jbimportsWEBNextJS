@@ -314,11 +314,11 @@
   }
 
   .product-image {
-    height: 140px;
+    height: 120px;
   }
 
   .product-info {
-    padding: 12px;
+    padding: 8px;
   }
 
   .product-name {
@@ -361,7 +361,7 @@
   }
 
   .product-image {
-    height: 120px;
+    height: 110px;
   }
 
   .discount-badge {
@@ -371,7 +371,7 @@
   }
 
   .product-info {
-    padding: 10px;
+    padding: 6px;
   }
 
   .product-name {

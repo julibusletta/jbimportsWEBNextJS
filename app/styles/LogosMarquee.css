@@ -163,10 +163,13 @@
 
 /* === KEYFRAME ANIMATION === */
 @keyframes scrollLogos {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(calc(-200px * 6 - 40px * 6));
+  0% { transform: translateX(0); }
+  100% { transform: translateX(calc(-200px * 6 - 40px * 6)); }
+}
+
+@media (max-width: 768px) {
+  @keyframes scrollLogos {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(calc(-120px * 6 - 20px * 6)); }
   }
 }
