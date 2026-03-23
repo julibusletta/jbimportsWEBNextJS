@@ -18,30 +18,12 @@
   background: white;
 }
 
-.benefits-container {
-  width: 100%;
-}
-
-.slider-container-benefits {
-  width: 100%;
-  overflow: hidden;
-}
-
-.benefit-item-wrapper {
-  display: block !important; /* Changed from flex !important to let Slick handle it */
-  min-height: 76px;
-  outline: none;
-}
-
+/* Base styles for both */
 .benefit-item {
-  display: flex !important; /* Keep internal flex for content alignment */
+  display: flex;
   align-items: center;
   gap: 15px;
-  width: 100%;
-  max-width: 100%;
-  margin: 0 auto;
   justify-content: center;
-  height: 76px;
 }
 
 .benefit-icon {
@@ -50,15 +32,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
   color: #555 !important;
-}
-
-.benefit-text {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  text-align: left;
 }
 
 .benefit-text h2 {
@@ -74,6 +48,71 @@
   font-size: 11px;
   color: #888;
   line-height: 1.2;
+}
+
+/* Desktop Static Layout */
+.benefits-container.desktop-static {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.benefits-container.desktop-static .benefit-item-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 76px;
+}
+
+.divider-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+}
+
+.vertical-divider {
+  width: 1px;
+  height: 100%;
+  background-color: #eee;
+}
+
+/* Mobile Slider specific */
+.slider-container-benefits.mobile-only {
+  width: 100%;
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .benefits-section {
+    padding: 15px 0;
+    margin: 5px 0;
+  }
+
+  .benefit-item-wrapper {
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    min-height: 80px;
+    padding: 0 10px;
+  }
+
+  .benefit-item {
+    width: 100%;
+    max-width: 100%;
+    gap: 12px;
+    justify-content: center;
+  }
+
+  .benefit-text {
+    text-align: left;
+    max-width: 250px;
+  }
+
+  .benefit-text h2 {
+    font-size: 14px;
+  }
 }
 
 .payment-logos {
@@ -94,18 +133,6 @@
 .payment-logos span {
   font-size: 11px;
   color: #777;
-}
-
-/* Responsive adjustments */
-@media (max-width: 769px) {
-  .benefits-section {
-    padding: 10px 0;
-    min-height: 90px;
-  }
-  
-  .benefit-item {
-    padding: 0 10px;
-  }
 }
 
 
