@@ -223,6 +223,7 @@
     aspect-ratio: 16 / 9;
     height: auto;
     margin-top: 5px !important;
+    margin-bottom: 0 !important;
   }
 
   .hero-content {
