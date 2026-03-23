@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Slider from 'react-slick';
-import { getProductsBySection, type Product } from '@/lib/api/productsService';
+import { getProductsBySection, type Product } from '@/lib/api/productService';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
@@ -54,15 +54,24 @@ export function ProductCarouselSection({ title, section, progressColor = '#0066c
     setTimeout(() => setAddedProductId(null), 2000);
   };
 
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   const sectionId = section === 'bombas' ? 'bombas' : 'nuevas-llegadas';
 
   const settings = {
     dots: false,
-    infinite: products.length > 4,
+    infinite: products.length > (isMobile ? 2 : 4),
     speed: 500,
-    slidesToShow: 4,
-    slidesToScroll: 1,
-    arrows: true,
+    slidesToShow: isMobile ? 2 : 4,
+    slidesToScroll: isMobile ? 2 : 1,
+    arrows: !isMobile,
     autoplay: true,
     autoplaySpeed: 3000,
     responsive: [
@@ -70,25 +79,9 @@ export function ProductCarouselSection({ title, section, progressColor = '#0066c
         breakpoint: 1024,
         settings: {
           slidesToShow: 3,
-          infinite: products.length > 3
-        }
-      },
-      {
-        breakpoint: 768,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 2,
-          arrows: false,
-          infinite: products.length > 2
-        }
-      },
-      {
-        breakpoint: 480,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 2,
-          arrows: false,
-          infinite: products.length > 2
+          slidesToScroll: 1,
+          infinite: products.length > 3,
+          arrows: true
         }
       }
     ]
