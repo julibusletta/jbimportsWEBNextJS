@@ -78,21 +78,21 @@ export function ProductCarouselSection({ title, section, progressColor = '#41414
 
   const settings = {
     infinite: true,
-    slidesToShow: 2, // Mobile default (2 columns)
+    slidesToShow: 4, // Desktop default (4 columns)
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 3000,
     speed: 500,
-    arrows: false, // Arrows hidden for mobile by default
+    arrows: true, // Arrows on for desktop
     dots: false,
     pauseOnHover: true,
     responsive: [
       {
         breakpoint: 1024,
         settings: {
-          slidesToShow: 4,
+          slidesToShow: 3,
           slidesToScroll: 1,
-          arrows: true, // Arrows on for desktop
+          arrows: true,
         },
       },
       {
@@ -100,7 +100,7 @@ export function ProductCarouselSection({ title, section, progressColor = '#41414
         settings: {
           slidesToShow: 2,
           slidesToScroll: 1,
-          arrows: false,
+          arrows: false, // Arrows hidden for mobile
         },
       },
     ],
