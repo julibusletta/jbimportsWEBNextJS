@@ -22,22 +22,26 @@
   width: 100%;
 }
 
+.slider-container-benefits {
+  width: 100%;
+  overflow: hidden;
+}
+
 .benefit-item-wrapper {
-  display: flex !important; /* Slick needs this */
-  align-items: center;
-  justify-content: center;
+  display: block !important; /* Changed from flex !important to let Slick handle it */
   min-height: 76px;
   outline: none;
 }
 
 .benefit-item {
-  display: flex;
+  display: flex !important; /* Keep internal flex for content alignment */
   align-items: center;
   gap: 15px;
   width: 100%;
-  max-width: fit-content;
+  max-width: 100%;
   margin: 0 auto;
   justify-content: center;
+  height: 76px;
 }
 
 .benefit-icon {
@@ -47,13 +51,14 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  color: #555 !important; /* Neutral like Compragamer */
+  color: #555 !important;
 }
 
 .benefit-text {
   display: flex;
   flex-direction: column;
   gap: 2px;
+  text-align: left;
 }
 
 .benefit-text h2 {
@@ -61,8 +66,7 @@
   margin: 0;
   line-height: 1.2;
   font-size: 14px;
-  color: #555; /* Neutral like Compragamer */
-  text-transform: none;
+  color: #555;
 }
 
 .benefit-text p {
@@ -92,36 +96,15 @@
   color: #777;
 }
 
-/* Slick adjustments */
-.benefits-container .slick-slide {
-  padding: 10px 0;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
+/* Responsive adjustments */
+@media (max-width: 769px) {
   .benefits-section {
-    padding: 15px 0;
-    margin: 5px 0;
-    min-height: 80px;
+    padding: 10px 0;
+    min-height: 90px;
   }
-
+  
   .benefit-item {
-    flex-direction: row !important; /* Standardize horizontal layout for slider */
-    gap: 12px;
-    text-align: left;
-    width: 100%;
-    justify-content: center;
-    max-width: 100%;
-    padding: 0 20px;
-  }
-
-  .benefit-text {
-    text-align: left;
-  }
-
-  .benefit-icon {
-    width: 28px;
-    height: 28px;
+    padding: 0 10px;
   }
 }
 
