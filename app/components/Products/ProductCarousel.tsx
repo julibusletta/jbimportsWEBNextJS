@@ -77,6 +77,7 @@ export function ProductCarouselSection({ title, section, progressColor = '#0066c
         breakpoint: 768,
         settings: {
           slidesToShow: 2,
+          slidesToScroll: 2,
           arrows: false,
           infinite: products.length > 2
         }
@@ -85,6 +86,7 @@ export function ProductCarouselSection({ title, section, progressColor = '#0066c
         breakpoint: 480,
         settings: {
           slidesToShow: 2,
+          slidesToScroll: 2,
           arrows: false,
           infinite: products.length > 2
         }
