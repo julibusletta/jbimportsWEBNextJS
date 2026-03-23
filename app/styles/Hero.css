@@ -225,17 +225,26 @@
     margin-top: 5px !important;
   }
 
+  .hero-content {
+    top: 25% !important;
+    transform: translate(-50%, -25%) !important;
+    padding: 0 10px !important;
+  }
+
   .hero-content h1 {
-    font-size: 28px !important;
+    font-size: 22px !important;
     line-height: 1.1 !important;
+    margin-bottom: 5px !important;
   }
   
   .typewriter {
-    font-size: 28px !important;
+    font-size: 22px !important;
+    min-height: auto !important;
   }
 
   .hero-content p {
-    font-size: 18px;
+    font-size: 14px !important;
+    margin-bottom: 10px !important;
   }
 
   .hero-image {
@@ -254,6 +263,8 @@
   .hero-slider.active {
     opacity: 1 !important;
     display: flex !important;
+    align-items: flex-start !important; /* Push slider content up */
+    padding-top: 0 !important;
   }
 
   .slider-overlay {
@@ -314,6 +325,10 @@
 
   .overlay-content h2 {
     font-size: 18px !important;
+  }
+  
+  .hero {
+    margin-top: -5px !important; /* Negative margin to stick to header */
   }
 
   .overlay-content p {

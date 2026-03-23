@@ -82,7 +82,7 @@ export default function Hero() {
     <section id="home" className="hero relative overflow-hidden visible">
       {/* Hero Content */}
       <div className={`hero-content max-w-4xl w-full opacity-100 transition-opacity duration-700 text-center z-10 ${!isTyping ? 'fade-out' : ''}`}>
-        <h1 className="typewriter text-5xl md:text-7xl font-bold leading-tight mb-4 md:mb-8 letter-spacing-tight min-h-[120px] md:min-h-64 text-gray-900 transition-all duration-300">
+        <h1 className="typewriter text-5xl md:text-7xl font-bold leading-tight mb-2 md:mb-8 letter-spacing-tight min-h-0 md:min-h-64 text-gray-900 transition-all duration-300">
           <span className="text-[#0066cc]">
             {displayText.slice(0, bluePart.length)}
           </span>
