@@ -1,13 +1,38 @@
 'use client';
 
 import { FaCreditCard, FaTruck, FaShieldAlt } from 'react-icons/fa';
+import Slider from 'react-slick';
 import '../../styles/Benefits.css';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
 export default function Benefits() {
+  const settings = {
+    dots: false,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 4000,
+    arrows: false,
+    pauseOnHover: false,
+    responsive: [
+      {
+        breakpoint: 768,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          autoplay: true,
+        }
+      }
+    ]
+  };
+
   return (
     <section id="benefits" className="benefits-section visible in-view">
       <div className="benefits-wrapper">
-        <div className="benefits-container">
+        <Slider {...settings} className="benefits-container">
           {/* Benefit 1: Payment Plans */}
           <div className="benefit-item-wrapper">
             <div className="benefit-item">
@@ -28,11 +53,6 @@ export default function Benefits() {
             </div>
           </div>
 
-          {/* Divider 1 */}
-          <div className="divider-wrapper">
-            <div className="vertical-divider"></div>
-          </div>
-
           {/* Benefit 2: Shipping */}
           <div className="benefit-item-wrapper">
             <div className="benefit-item">
@@ -43,11 +63,6 @@ export default function Benefits() {
                 <h2><strong>Envíos rápidos</strong> a todo el país.</h2>
               </div>
             </div>
-          </div>
-
-          {/* Divider 2 */}
-          <div className="divider-wrapper">
-            <div className="vertical-divider"></div>
           </div>
 
           {/* Benefit 3: Warranty */}
@@ -62,7 +77,7 @@ export default function Benefits() {
               </div>
             </div>
           </div>
-        </div>
+        </Slider>
       </div>
     </section>
   );
