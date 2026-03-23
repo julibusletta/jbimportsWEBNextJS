@@ -85,17 +85,17 @@
 }
 
 @media (max-width: 768px) {
-  .benefits-section {
-    padding: 2px 0 15px 0 !important;
-    margin: 0 !important;
-  }
-
   .hero {
     min-height: auto;
     aspect-ratio: 16 / 9;
     height: auto;
     margin-top: 5px !important;
     margin-bottom: 0 !important;
+  }
+
+  .benefits-section {
+    padding: 2px 0 15px 0 !important;
+    margin: 0 !important;
   }
 
   .benefit-item-wrapper {
