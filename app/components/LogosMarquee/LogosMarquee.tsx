@@ -25,16 +25,16 @@ export default function LogosMarquee() {
   if (!mounted) {
     return (
       <section id="logos" className="logos-marquee w-full py-16 md:py-20 bg-white border-t border-b border-gray-200 overflow-hidden" data-aos="fadeInUp" suppressHydrationWarning>
-        <div className="logos-container w-full overflow-hidden" suppressHydrationWarning>
-          <div className="logos-track flex" style={{ width: 'calc(200px * 12)' }}></div>
+        <div className="marquee-container w-full overflow-hidden" suppressHydrationWarning>
+          <div className="marquee-track flex" style={{ width: 'calc(200px * 12)' }}></div>
         </div>
       </section>
     );
   }
   return (
     <section id="logos" className="logos-marquee w-full py-16 md:py-20 bg-white border-t border-b border-gray-200 overflow-hidden" data-aos="fadeInUp" suppressHydrationWarning>
-      <div className="logos-container w-full overflow-hidden" suppressHydrationWarning>
-        <div className="logos-track flex animate-scroll" style={{ width: 'max-content' }}>
+      <div className="marquee-container w-full overflow-hidden" suppressHydrationWarning>
+        <div className="marquee-track flex" style={{ width: 'max-content' }}>
           {/* Duplicate set 4 times for seamless loop on wide screens */}
           {[...logos, ...logos, ...logos, ...logos].map((logo, index) => (
             <div
@@ -52,20 +52,7 @@ export default function LogosMarquee() {
         </div>
       </div>
 
-      <style jsx>{`
-        @keyframes scrollLogos {
-          0% {
-            transform: translateX(0);
-          }
-          100% {
-            transform: translateX(-25%);
-          }
-        }
 
-        .animate-scroll {
-          animation: scrollLogos 30s linear infinite;
-        }
-      `}</style>
     </section>
   );
 }

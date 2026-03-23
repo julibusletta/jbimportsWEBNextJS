@@ -62,11 +62,6 @@
   filter: grayscale(0%);
 }
 
-/* Duplicate logos for seamless looping */
-.marquee-track .logo-item:nth-child(n + 7) {
-  display: none;
-}
-
 .marquee-track {
   animation: scrollLogos 40s linear infinite;
 }
@@ -164,12 +159,12 @@
 /* === KEYFRAME ANIMATION === */
 @keyframes scrollLogos {
   0% { transform: translateX(0); }
-  100% { transform: translateX(calc(-200px * 6 - 40px * 6)); }
+  100% { transform: translateX(-25%); } /* Assuming 4 sets of 6 logos */
 }
 
 @media (max-width: 768px) {
   @keyframes scrollLogos {
     0% { transform: translateX(0); }
-    100% { transform: translateX(calc(-120px * 6 - 20px * 6)); }
+    100% { transform: translateX(-25%); }
   }
 }
