@@ -182,11 +182,11 @@
   }
 
   .logo-item {
-    height: 50px !important;
+    height: 45px !important;
   }
 
   .logo-image {
-    max-height: 30px !important;
+    max-height: 22px !important;
     max-width: 70px !important;
   }
 }
