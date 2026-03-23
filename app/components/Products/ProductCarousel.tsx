@@ -74,6 +74,8 @@ export function ProductCarouselSection({ title, section, progressColor = '#0066c
     arrows: !isMobile,
     autoplay: true,
     autoplaySpeed: 3000,
+    centerMode: false,
+    variableWidth: false,
     responsive: [
       {
         breakpoint: 1024,
@@ -88,7 +90,7 @@ export function ProductCarouselSection({ title, section, progressColor = '#0066c
   };
 
   return (
-    <section id={sectionId} className="carrusel py-4 md:py-10 bg-gradient-to-br from-gray-100 to-white" data-aos="fadeInUp">
+    <section id={sectionId} className="carrusel py-4 md:py-10 bg-gradient-to-br from-gray-100 to-white overflow-hidden" data-aos="fadeInUp">
       <div className="max-w-[1400px] mx-auto px-4 w-full">
         {/* Header */}
         <div className="carrusel-header text-left mb-6">
