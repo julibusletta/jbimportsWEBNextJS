@@ -114,7 +114,7 @@ export default function Header() {
         {/* Hamburger Menu */}
         <button
           onClick={toggleMenu}
-          className="md:hidden flex flex-col gap-1.5 w-6 h-5 p-0 bg-transparent border-0 cursor-pointer absolute left-5"
+          className="hamburger-menu md:hidden flex flex-col gap-1.5 w-6 h-5 p-0 bg-transparent border-0 cursor-pointer"
           aria-label="Menú"
         >
           <span className="w-full h-0.5 bg-black rounded-sm"></span>
@@ -314,7 +314,7 @@ export default function Header() {
 
       {/* Mobile Navigation */}
       {isMenuOpen && (
-        <div className="header-nav md:hidden absolute top-full left-0 w-full bg-white overflow-hidden z-50 shadow-lg animate-slideDown">
+        <div id="main-nav" className="header-nav open md:hidden absolute top-full left-0 w-full bg-white overflow-hidden z-50 shadow-lg animate-slideDown">
           <nav className="nav-primary flex flex-col gap-0 p-0 w-full h-auto">
             {navLinks.map((link) => (
               <div key={link.label}>

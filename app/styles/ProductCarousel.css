@@ -65,7 +65,7 @@
 }
 
 .product-card {
-  flex: 0 0 220px;
+  width: 100%;
   background: #fff;
   border-radius: 8px;
   overflow: hidden;
@@ -132,6 +132,7 @@
   text-overflow: ellipsis;
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
 }
 
@@ -309,7 +310,7 @@
   }
 
   .product-card {
-    flex: 0 0 180px;
+    width: 100%;
   }
 
   .product-image {
@@ -356,7 +357,7 @@
   }
 
   .product-card {
-    flex: 0 0 150px;
+    width: 100%;
   }
 
   .product-image {

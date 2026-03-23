@@ -97,7 +97,7 @@ export function ProductCarouselSection({ title, section, progressColor = '#41414
       {
         breakpoint: 768,
         settings: {
-          slidesToShow: 2,
+          slidesToShow: 1,
           slidesToScroll: 1,
         },
       },
@@ -113,11 +113,11 @@ export function ProductCarouselSection({ title, section, progressColor = '#41414
 
   return (
     <section id={sectionId} className="carrusel py-8 md:py-10 px-4 bg-gradient-to-br from-gray-100 to-white m-2 md:m-0" data-aos="fadeInUp">
-      <div className="carousel-header text-center mb-10">
-        <div className="carousel-title mb-5">
-          <h3 className="text-3xl md:text-4xl font-bold text-gray-900 mb-0 letter-spacing-wide">
+      <div className="carrusel-header text-center mb-10">
+        <div className="categories-title-wrapper mb-5">
+          <h2 className="font-bold text-gray-900 mb-0 letter-spacing-wide">
             {title}
-          </h3>
+          </h2>
         </div>
         <div className="carousel-progress max-w-52 mx-auto h-1.5 bg-gray-300 rounded-full overflow-hidden">
           <div
