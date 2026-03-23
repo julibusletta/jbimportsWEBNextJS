@@ -345,59 +345,61 @@
 /* === SMALL MOBILE (480px and below) === */
 @media (max-width: 480px) {
   .carrusel {
-    padding: 15px 5px;
+    padding: 15px 5px !important;
   }
 
   .carrusel-header h2 {
-    font-size: 1.3rem;
+    font-size: 1.2rem !important;
+    margin-bottom: 10px !important;
   }
 
   .carousel-product {
-    padding: 0 4px !important; /* Less gap for 2 columns */
+    padding: 0 4px !important;
+    height: 100% !important;
+    display: flex !important;
   }
 
   .product-card {
-    border-radius: 8px;
-    height: 100%;
+    border-radius: 8px !important;
+    height: 340px !important; /* Fixed total height like Fravega */
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
   }
 
   .product-image {
-    height: 100px;
-    padding: 8px;
-  }
-
-  .discount-badge {
-    width: 32px;
-    height: 32px;
-    font-size: 9px;
-    top: 5px;
-    right: 5px;
+    height: 100px !important;
+    min-height: 100px !important;
+    padding: 10px !important;
   }
 
   .product-info {
-    padding: 8px 4px;
-    min-height: 160px; /* Force uniform height for alignment */
+    padding: 8px 6px !important;
+    flex: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
   }
 
   .product-name {
-    font-size: 11px;
-    margin-bottom: 6px;
-    min-height: 32px; /* Two lines height */
+    font-size: 11px !important;
+    height: 32px !important; /* Fixed 2 lines name */
+    overflow: hidden;
+    margin-bottom: 4px !important;
   }
 
   .product-price {
-    font-size: 13px;
-    margin: 4px 0;
-  }
-
-  .product-price span {
-    font-size: 14px;
+    font-size: 14px !important;
+    margin: 8px 0 !important;
   }
 
   .btn-add-cart {
-    padding: 8px 4px !important;
+    width: 100% !important;
+    padding: 10px 2px !important;
     font-size: 9px !important;
-    border-radius: 4px;
+    text-transform: uppercase;
+    font-weight: bold;
+    margin-top: auto !important;
   }
 
   .slick-prev,
