@@ -97,15 +97,17 @@ export function ProductCarouselSection({ title, section, progressColor = '#41414
       {
         breakpoint: 768,
         settings: {
-          slidesToShow: 1,
+          slidesToShow: 2,
           slidesToScroll: 1,
+          arrows: false,
         },
       },
       {
         breakpoint: 480,
         settings: {
-          slidesToShow: 1,
+          slidesToShow: 2,
           slidesToScroll: 1,
+          arrows: false,
         },
       },
     ],

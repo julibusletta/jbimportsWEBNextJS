@@ -345,45 +345,63 @@
 /* === SMALL MOBILE (480px and below) === */
 @media (max-width: 480px) {
   .carrusel {
-    padding: 16px 8px;
+    padding: 15px 5px;
   }
 
   .carrusel-header h2 {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
   }
 
-  .products-carousel {
-    gap: 12px;
+  .carousel-product {
+    padding: 0 4px !important; /* Less gap for 2 columns */
   }
 
   .product-card {
-    width: 100%;
+    border-radius: 8px;
+    height: 100%;
   }
 
   .product-image {
-    height: 110px;
+    height: 100px;
+    padding: 8px;
   }
 
   .discount-badge {
-    width: 36px;
-    height: 36px;
-    font-size: 10px;
+    width: 32px;
+    height: 32px;
+    font-size: 9px;
+    top: 5px;
+    right: 5px;
   }
 
   .product-info {
-    padding: 6px;
+    padding: 8px 4px;
+    min-height: 160px; /* Force uniform height for alignment */
   }
 
   .product-name {
-    font-size: 12px;
+    font-size: 11px;
+    margin-bottom: 6px;
+    min-height: 32px; /* Two lines height */
   }
 
   .product-price {
+    font-size: 13px;
+    margin: 4px 0;
+  }
+
+  .product-price span {
     font-size: 14px;
   }
 
-  .product-button {
-    padding: 8px 12px;
-    font-size: 10px;
+  .btn-add-cart {
+    padding: 8px 4px !important;
+    font-size: 9px !important;
+    border-radius: 4px;
+  }
+
+  .slick-prev,
+  .slick-next {
+    display: none !important;
   }
 }
