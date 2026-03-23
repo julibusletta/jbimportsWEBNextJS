@@ -126,7 +126,6 @@ export function ProductCarouselSection({ title, section, progressColor = '#41414
             }}
           ></div>
         </div>
-      </div>
 
       <div className="products-carousel-wrapper">
         {loading && <p className="text-center py-8 text-gray-600">Cargando productos...</p>}
