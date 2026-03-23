@@ -33,12 +33,12 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  pointer-events: none;
+  pointer-events: none; visibility: hidden;
 }
 
 .hero-content.fade-out {
   opacity: 0;
-  pointer-events: none;
+  pointer-events: none; visibility: hidden;
 }
 
 .hero-content h1 {
@@ -97,7 +97,7 @@
   height: 100%;
   background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.05) 50%);
   background-size: 100% 4px;
-  pointer-events: none;
+  pointer-events: none; visibility: hidden;
   z-index: 3;
   opacity: 0.3;
 }
