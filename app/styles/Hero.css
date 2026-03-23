@@ -222,11 +222,16 @@
     min-height: auto;
     aspect-ratio: 16 / 9;
     height: auto;
-    margin-top: 45px !important;
+    margin-top: 5px !important;
   }
 
   .hero-content h1 {
-    font-size: 36px;
+    font-size: 28px !important;
+    line-height: 1.1 !important;
+  }
+  
+  .typewriter {
+    font-size: 28px !important;
   }
 
   .hero-content p {
@@ -289,7 +294,7 @@
   .hero {
     height: auto;
     aspect-ratio: 2.2/1; /* Fit very wide desktop banners on mobile */
-    margin-top: 45px !important;
+    margin-top: 5px !important;
     padding: 0;
   }
 
