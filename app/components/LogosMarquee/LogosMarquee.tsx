@@ -39,7 +39,7 @@ export default function LogosMarquee() {
           {[...logos, ...logos, ...logos, ...logos].map((logo, index) => (
             <div
               key={`${logo.id}-${index}`}
-              className="logo-item flex-shrink-0 w-[200px] h-16 flex items-center justify-center opacity-70 transition-opacity duration-300 hover:opacity-100"
+              className="logo-item flex-shrink-0"
             >
               <img
                 src={logo.src}
