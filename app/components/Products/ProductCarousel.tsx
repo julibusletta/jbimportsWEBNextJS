@@ -9,7 +9,7 @@ import "slick-carousel/slick/slick-theme.css";
 
 interface ProductCarouselSectionProps {
   title: string;
-  section: string;
+  section: 'bombas' | 'nuevas';
   progressColor?: string;
 }
 
@@ -109,15 +109,15 @@ export function ProductCarouselSection({ title, section, progressColor = '#0066c
                 <div className="carousel-product px-2.5 pb-4">
                   <div className="product-card bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 h-full flex flex-col relative transform hover:-translate-y-2">
                     {/* Discount Badge */}
-                    {((product.discount ?? 0) > 0 || (product.discountPercentage ?? 0) > 0) && (
+                    {product.discountPercentage > 0 && (
                       <div className="absolute top-3 left-3 bg-red-500 text-white text-[10px] sm:text-xs font-bold px-2 py-1 rounded-full z-10 shadow-sm">
-                        -{product.discountPercentage || Math.round(((product.discount || 0) / (product.price + (product.discount || 0))) * 100)}%
+                        -{product.discountPercentage}%
                       </div>
                     )}
                     
                     <div className="product-image-container relative aspect-square overflow-hidden bg-gray-50 flex items-center justify-center p-4 h-48 sm:h-64">
                       <img
-                        src={product.image}
+                        src={product.imageUrls && product.imageUrls.length > 0 ? product.imageUrls[0] : '/images/placeholder.png'}
                         alt={product.name}
                         className="max-w-full max-height-full object-contain transition-transform duration-500 group-hover:scale-110"
                       />
@@ -129,9 +129,9 @@ export function ProductCarouselSection({ title, section, progressColor = '#0066c
                       <p className="text-[10px] text-gray-400 mb-2 uppercase font-medium">Art: {product.sku || 'N/A'}</p>
                       <div className="mt-auto">
                         <div className="flex flex-col mb-4">
-                          {((product.discount ?? 0) > 0) && (
+                          {product.discountPercentage > 0 && (
                             <span className="text-[10px] sm:text-xs text-gray-400 line-through">
-                              ${(product.price + (product.discount || 0)).toLocaleString('es-AR')}
+                              ${Math.round(product.price / (1 - product.discountPercentage / 100)).toLocaleString('es-AR')}
                             </span>
                           )}
                           <span className="text-sm sm:text-lg font-black text-gray-900 leading-none">
