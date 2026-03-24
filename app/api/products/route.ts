@@ -10,7 +10,15 @@ export async function GET(request: Request) {
     await dbConnect();
     
     let query = {};
-    if (category) {
+    if (category === 'ofertas') {
+      // Special "Ofertas" category: all products with a discount + featured IDs
+      query = { 
+        $or: [
+          { discount: { $gt: 0 } },
+          { id: { $in: ['378', '1339'] } }
+        ]
+      };
+    } else if (category) {
       // Use regex for partial, case-insensitive match (e.g., "iphone" matches "iphones usados")
       query = { category: { $regex: category, $options: 'i' } };
     }

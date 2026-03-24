@@ -7,6 +7,7 @@ import { getSpecsByProductId, Spec } from '@/lib/api/productSpecifications';
 import { useCart } from '@/app/context/CartContext';
 import Link from 'next/link';
 import { FaRegCommentDots, FaTruck, FaShieldAlt, FaCreditCard, FaRegHeart, FaInfoCircle } from 'react-icons/fa';
+import ShippingCalculator from '@/app/components/Shipping/ShippingCalculator';
 
 export default function ProductDetailsPage() {
   const params = useParams();
@@ -140,6 +141,12 @@ export default function ProductDetailsPage() {
           {/* Left Column: Image Gallery (Approx 55%) */}
           <div className="w-full lg:w-[55%] flex flex-col">
             <div className="flex-1 bg-white flex items-center justify-center p-4 min-h-[400px] border border-transparent hover:border-gray-100 transition-all rounded-md overflow-hidden relative group">
+              {(product.discount && product.discount > 0) && (
+                <div className="absolute top-6 left-6 bg-[#e60000] text-white text-[14px] font-black w-16 h-16 rounded-full z-20 flex flex-col items-center justify-center shadow-2xl border-4 border-white animate-bounce leading-none p-1">
+                  <span>{Math.round(product.discount)}%</span>
+                  <span className="text-[9px] font-bold">OFF</span>
+                </div>
+              )}
               <img 
                 src={mainImage} 
                 alt={product.name} 
@@ -258,9 +265,13 @@ export default function ProductDetailsPage() {
                 <div className="w-[36px] h-[36px] bg-[#e8f5e9] rounded-full flex items-center justify-center text-[#28a745]">
                   <FaTruck size={18} />
                 </div>
-                <div className="flex gap-2 items-center">
+                <div className="flex flex-col">
                   <span>Envío a todo el país.</span>
-                  <span className="text-[#0066cc] text-[12px] font-bold cursor-pointer hover:underline">CALCULAR ENVÍO</span>
+                  <ShippingCalculator 
+                    productWeight={product.properties?.weight}
+                    productDimensions={product.properties?.dimensions}
+                    quantity={quantity}
+                  />
                 </div>
               </div>
               
@@ -363,10 +374,18 @@ export default function ProductDetailsPage() {
             
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
               {relatedProducts.map(rp => (
-                <div key={rp.id} className="border border-[#e0e0e0] rounded-sm p-4 hover:shadow-lg transition-shadow bg-white flex flex-col items-center text-center">
-                  <div className="h-[150px] w-full flex items-center justify-center mb-4">
-                    <img src={rp.image} alt={rp.name} className="max-h-full object-contain" />
-                  </div>
+                <div key={rp.id} className="border border-[#e0e0e0] rounded-sm p-4 hover:shadow-lg transition-shadow bg-white flex flex-col items-center text-center relative">
+                  {(rp.discount && rp.discount > 0) && (
+                    <div className="absolute top-2 left-2 bg-[#e60000] text-white text-[9px] font-black w-10 h-10 rounded-full z-10 flex flex-col items-center justify-center shadow-md border-2 border-white leading-none p-0.5">
+                      <span>{Math.round(rp.discount)}%</span>
+                      <span className="text-[6px] font-bold">OFF</span>
+                    </div>
+                  )}
+                  <Link href={`/product/${rp.id}`} className="block w-full">
+                    <div className="h-[150px] w-full flex items-center justify-center mb-4">
+                      <img src={rp.image} alt={rp.name} className="max-h-full object-contain" />
+                    </div>
+                  </Link>
                   <Link href={`/product/${rp.id}`} className="text-[13px] text-[#555] h-[40px] overflow-hidden hover:text-[#0066cc] transition mb-3">
                     {rp.name}
                   </Link>

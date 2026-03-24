@@ -148,11 +148,11 @@ export default function Footer() {
             className="badge-img w-12 h-12 md:w-20 md:h-20 flex-shrink-0 object-contain"
           />
           <Link href="/">
-            <img
-              src="/images/logojbimports.webp"
-              alt="JB Imports Logo"
-              className="badge-img w-12 h-12 md:w-20 md:h-20 flex-shrink-0 object-contain cursor-pointer hover:scale-110 transition-transform"
-            />
+                <img
+                  src="/images/DATAWEBARCA.jpg"
+                  alt="DataweBarca Logo"
+                  className="badge-img w-12 h-12 md:w-20 md:h-20 flex-shrink-0 object-contain cursor-pointer hover:scale-110 transition-transform"
+                />
           </Link>
           <img
             src="/images/png-transparent-cyber-monday-logo-cace-ecommerce-trade-chamber-of-commerce-argentina-blue-text.png"

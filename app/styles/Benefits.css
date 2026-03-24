@@ -27,26 +27,26 @@
 }
 
 .benefit-icon {
-  width: 32px;
-  height: 32px;
+  width: 34px;
+  height: 34px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #555 !important;
+  color: #0066cc !important;
 }
 
 .benefit-text h2 {
   font-weight: 700;
   margin: 0;
   line-height: 1.2;
-  font-size: 14px;
-  color: #555;
+  font-size: 16px;
+  color: #0066cc;
 }
 
 .benefit-text p {
   margin: 0;
-  font-size: 11px;
-  color: #888;
+  font-size: 13px;
+  color: #666;
   line-height: 1.2;
 }
 
@@ -112,7 +112,11 @@
   }
 
   .benefit-text h2 {
-    font-size: 14px;
+    font-size: 15px;
+  }
+
+  .benefit-text p {
+    font-size: 12px;
   }
 }
 

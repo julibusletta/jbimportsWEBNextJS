@@ -30,7 +30,7 @@ export async function POST(request: Request) {
     const protocol = host.includes('localhost') ? 'http' : 'https';
     const baseUrl = `${protocol}://${host}`;
 
-    const { items, total, orderId } = await request.json();
+    const { items, total, orderId, shipping } = await request.json();
     const session = await getServerSession(authOptions);
 
     // 1. Validation
@@ -58,7 +58,15 @@ export async function POST(request: Request) {
           status: 'PENDING',
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
-          navePaymentId: `mock_${Date.now()}`
+          navePaymentId: `mock_${Date.now()}`,
+          shippingAddress: shipping ? {
+            street: `${shipping.address.street} ${shipping.address.number}`,
+            city: shipping.address.city,
+            state: shipping.address.state,
+            zip: shipping.address.zipCode,
+            shippingCost: shipping.cost,
+            shippingMethod: shipping.method
+          } : undefined
         });
 
         console.warn('NAVE: Missing credentials. Simulating response for testing.');
@@ -187,7 +195,15 @@ export async function POST(request: Request) {
       status: 'PENDING',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
-      navePaymentId: checkoutData.id
+      navePaymentId: checkoutData.id,
+      shippingAddress: shipping ? {
+        street: `${shipping.address.street} ${shipping.address.number}`,
+        city: shipping.address.city,
+        state: shipping.address.state,
+        zip: shipping.address.zipCode,
+        shippingCost: shipping.cost,
+        shippingMethod: shipping.method
+      } : undefined
     });
 
     // 5. Return the checkout URL

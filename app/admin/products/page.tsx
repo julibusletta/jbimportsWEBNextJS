@@ -19,6 +19,7 @@ export default function ProductsPage() {
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [activeTab, setActiveTab] = useState<'general' | 'media' | 'specs' | 'seo'>('general');
   const [uploadingIndex, setUploadingIndex] = useState<number | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -114,6 +115,7 @@ export default function ProductsPage() {
 
   const saveProducts = async () => {
     setMessage('Guardando cambios...');
+    setIsSaving(true);
     try {
       const resp = await fetch('/api/admin', {
         method: 'POST',
@@ -129,6 +131,8 @@ export default function ProductsPage() {
       }
     } catch (err) {
       setMessage('Error de conexión al guardar');
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -441,15 +445,9 @@ export default function ProductsPage() {
                   <div className="flex items-center gap-4">
                     <button
                       onClick={() => setEditingProduct(null)}
-                      className="px-6 py-2 text-gray-500 hover:text-gray-900 h-10 font-bold text-xs uppercase tracking-widest transition"
+                      className="px-8 py-2 bg-gray-100 text-gray-700 rounded h-10 font-bold text-xs uppercase tracking-widest hover:bg-gray-200 transition-colors shadow-sm"
                     >
-                      Descartar
-                    </button>
-                    <button
-                      onClick={() => setEditingProduct(null)}
-                      className="px-8 py-2 bg-[#058c8c] text-white rounded h-10 font-bold text-xs uppercase tracking-widest shadow-lg"
-                    >
-                      Listo
+                      Cerrar editor
                     </button>
                   </div>
                 </div>
@@ -696,6 +694,33 @@ export default function ProductsPage() {
                           </div>
                         </div>
                       )}
+
+                      {/* SAVE BUTTON AT THE BOTTOM */}
+                      <div className="mt-12 pt-8 border-t border-gray-100 flex justify-end gap-4">
+                        <button
+                          onClick={() => setEditingProduct(null)}
+                          className="px-6 py-3 text-gray-400 font-bold text-[10px] uppercase tracking-widest hover:text-gray-600 transition"
+                        >
+                          Cancelar
+                        </button>
+                        <button
+                          onClick={saveProducts}
+                          disabled={isSaving}
+                          className={`px-10 py-3 bg-[#058c8c] text-white rounded font-black text-[10px] uppercase tracking-widest shadow-xl hover:bg-[#047a7a] transition-all flex items-center gap-3 ${isSaving ? 'opacity-70 cursor-not-allowed' : 'hover:scale-[1.02]'}`}
+                        >
+                          {isSaving ? (
+                            <>
+                              <div className="w-3 h-3 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                              Guardando...
+                            </>
+                          ) : (
+                            <>
+                              <FaSave size={14} />
+                              Guardar cambios del producto
+                            </>
+                          )}
+                        </button>
+                      </div>
                     </div>
                   </main>
                 </div>

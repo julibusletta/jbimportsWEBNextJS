@@ -2,6 +2,7 @@
 
 import { useContext, useState } from 'react';
 import { useCart } from '../../context/CartContext';
+import { useRouter } from 'next/navigation';
 import '../../styles/Cart.css';
 
 interface CartItem {
@@ -14,8 +15,7 @@ interface CartItem {
 
 export default function Cart() {
   const { cartItems, removeFromCart, addToCart } = useCart();
-  const [isCheckingOut, setIsCheckingOut] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   const total = cartItems.reduce((sum: number, item: CartItem) => sum + item.price * item.quantity, 0);
 
@@ -23,7 +23,6 @@ export default function Cart() {
     if (newQuantity <= 0) {
       removeFromCart(id);
     } else {
-      // Encontrar el item actual
       const currentItem = cartItems.find((item) => item.id === id);
       if (currentItem) {
         removeFromCart(id, currentItem.quantity);
@@ -32,37 +31,9 @@ export default function Cart() {
     }
   };
 
-  const handleCheckout = async () => {
+  const handleCheckout = () => {
     if (cartItems.length === 0) return;
-    
-    setIsCheckingOut(true);
-    setError(null);
-
-    try {
-      const response = await fetch('/api/checkout/nave', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          items: cartItems,
-          total,
-          orderId: `JB-${Date.now()}`
-        }),
-      });
-
-      const data = await response.json();
-
-      if (data.success && data.url) {
-        // Redireccionar al checkout de Nave
-        window.location.href = data.url;
-      } else {
-        setError(data.message || 'Error al iniciar el pago con Nave');
-        setIsCheckingOut(false);
-      }
-    } catch (err) {
-      setError('Ocurrió un error inesperado al conectar con el servidor.');
-      console.error(err);
-      setIsCheckingOut(false);
-    }
+    router.push('/checkout');
   };
 
   if (cartItems.length === 0) {
@@ -101,7 +72,6 @@ export default function Cart() {
                 <button
                   className="qty-btn"
                   onClick={() => handleQuantityChange(item.id, item.quantity - 1)}
-                  disabled={isCheckingOut}
                 >
                   −
                 </button>
@@ -111,12 +81,10 @@ export default function Cart() {
                   value={item.quantity}
                   onChange={(e) => handleQuantityChange(item.id, parseInt(e.target.value) || 1)}
                   className="qty-input"
-                  disabled={isCheckingOut}
                 />
                 <button
                   className="qty-btn"
                   onClick={() => handleQuantityChange(item.id, item.quantity + 1)}
-                  disabled={isCheckingOut}
                 >
                   +
                 </button>
@@ -133,7 +101,6 @@ export default function Cart() {
                 className="btn-remove"
                 onClick={() => removeFromCart(item.id, item.quantity)}
                 title="Eliminar producto"
-                disabled={isCheckingOut}
               >
                 ✕
               </button>
@@ -164,15 +131,13 @@ export default function Cart() {
               <p>*Precio abonando con depósito o transferencia.</p>
             </div>
 
-            {error && <p className="error-message text-red-500 text-sm mt-2">{error}</p>}
 
             <div className="cart-actions">
               <button 
-                className={`btn-checkout ${isCheckingOut ? 'loading opacity-70 cursor-not-allowed' : ''}`}
+                className="btn-checkout"
                 onClick={handleCheckout}
-                disabled={isCheckingOut}
               >
-                {isCheckingOut ? 'Procesando...' : 'Iniciar compra'}
+                Iniciar compra
               </button>
               <a href="/" className="btn-continue">
                 Ver más productos

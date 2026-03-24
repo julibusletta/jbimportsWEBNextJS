@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { FaShoppingCart, FaBars, FaTimes, FaSearch, FaUser, FaChevronDown } from 'react-icons/fa';
 import Link from 'next/link';
 import { useSession, signOut } from "next-auth/react";
@@ -18,6 +18,7 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const userMenuRef = useRef<HTMLDivElement>(null);
   const { data: session } = useSession();
   const { cartCount } = useCart();
   const [isScrolled, setIsScrolled] = useState(false);
@@ -61,7 +62,7 @@ export default function Header() {
       submenu: [
         { label: 'ASPIRADORAS ROBOT', href: '/category/aspiradoras-robot' },
         { label: 'CÁMARAS DE SEGURIDAD', href: '/category/camaras-seguridad' },
-        { label: 'ALEXA', href: '/category/alexa' },
+        { label: 'AMAZON', href: '/category/amazon' },
       ],
     },
     { label: 'NOTEBOOKS', href: '/category/notebooks', id: 'notebooks' },
@@ -93,6 +94,22 @@ export default function Header() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Close user menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
+        setIsUserMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+
+
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -146,7 +163,7 @@ export default function Header() {
         {/* Header Actions */}
         <div className="header-actions flex items-center gap-6 ml-auto">
           {/* User Icon & Dropdown */}
-          <div className="relative user-menu-container">
+          <div className="relative user-menu-container" ref={userMenuRef}>
             <button
               onMouseEnter={() => !isMenuOpen && setIsUserMenuOpen(true)}
               onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
@@ -306,9 +323,11 @@ export default function Header() {
               )}
             </div>
           ))}
-          <button className="comic-button px-4.5 py-1 text-sm font-normal text-white bg-red-400 border-2 border-black rounded-lg whitespace-nowrap hover:bg-white hover:text-red-400 hover:shadow-lg active:bg-yellow-300 active:shadow-none active:transform active:translate-y-1">
-            OFERTAS! 🔥
-          </button>
+          <Link href="/category/ofertas">
+            <button className="comic-button px-4.5 py-1 text-sm font-normal text-white bg-red-400 border-2 border-black rounded-lg whitespace-nowrap hover:bg-white hover:text-red-400 hover:shadow-lg active:bg-yellow-300 active:shadow-none active:transform active:translate-y-1">
+              OFERTAS! 🔥
+            </button>
+          </Link>
         </div>
       </nav>
 

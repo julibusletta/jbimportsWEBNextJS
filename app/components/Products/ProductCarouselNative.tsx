@@ -94,7 +94,7 @@ export function ProductCarouselSection({ title, section }: ProductCarouselSectio
             >
               {products.map((product, index) => {
                 const displayImage = product.image || (product.imageUrls?.[0]) || '/images/placeholder.png';
-                const discountPct = product.discountPercentage || 0;
+                const discountPct = product.discount || product.discountPercentage || 0;
 
                 return (
                   <div 
@@ -112,8 +112,9 @@ export function ProductCarouselSection({ title, section }: ProductCarouselSectio
                     <Link href={`/product/${product.id}`} className="block h-full group no-underline">
                       <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 h-full flex flex-col border border-gray-100 relative">
                         {discountPct > 0 && (
-                          <div className="absolute top-3 left-3 bg-red-600 text-white text-[10px] font-bold px-2 py-1 rounded-full z-20">
-                            -{discountPct}%
+                          <div className="absolute top-3 left-3 bg-[#e60000] text-white text-[10px] sm:text-xs font-black w-10 h-10 sm:w-12 sm:h-12 rounded-full z-20 flex flex-col items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform duration-300 border-2 border-white leading-none">
+                            <span>{Math.round(discountPct)}%</span>
+                            <span className="text-[7px] sm:text-[9px]">OFF</span>
                           </div>
                         )}
                         <div className="aspect-square flex items-center justify-center p-4 sm:p-6 bg-white">

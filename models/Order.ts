@@ -24,6 +24,8 @@ const OrderSchema = new Schema({
     city: String,
     state: String,
     zip: String,
+    shippingCost: Number,
+    shippingMethod: String,
   },
 }, { timestamps: true });
 

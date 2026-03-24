@@ -32,12 +32,22 @@ export default function CategoryPage() {
     const loadData = async () => {
       try {
         setLoading(true);
-        const cat = await getCategoryBySlug(slug);
-        setCategory(cat);
-
         const prods = await getProductsByCategory(slug);
         setProducts(prods);
         setFilteredProducts(prods);
+
+        let cat = await getCategoryBySlug(slug);
+        if (!cat && slug === 'ofertas') {
+          cat = {
+            id: 'ofertas',
+            name: 'OFERTAS SEMANALES',
+            slug: 'ofertas',
+            image: '/images/categories/ofertas.png',
+            isMain: false,
+            description: 'Las mejores ofertas de la semana en JB Imports'
+          };
+        }
+        setCategory(cat);
       } catch (error) {
         console.error('Error loading category:', error);
       } finally {
@@ -67,10 +77,19 @@ export default function CategoryPage() {
       filtered.sort((a, b) => b.price - a.price);
     } else if (sortBy === 'nombre') {
       filtered.sort((a, b) => a.name.localeCompare(b.name));
+    } else if (slug === 'ofertas' && sortBy === 'relevancia') {
+      const featuredIds = ['378', '1339'];
+      filtered.sort((a, b) => {
+        const aFeatured = featuredIds.includes(a.id);
+        const bFeatured = featuredIds.includes(b.id);
+        if (aFeatured && !bFeatured) return -1;
+        if (!aFeatured && bFeatured) return 1;
+        return 0;
+      });
     }
 
     setFilteredProducts(filtered);
-  }, [products, showOnlyAvailable, sortBy, selectedBrands]);
+  }, [products, showOnlyAvailable, sortBy, selectedBrands, slug]);
 
   const handleAddToCart = (product: Product) => {
     addToCart({
@@ -130,21 +149,59 @@ export default function CategoryPage() {
     isAdded: boolean;
     onAddToCart: () => void;
   }) {
+    const isFeaturedOffer = slug === 'ofertas' && ['378', '1339'].includes(product.id);
+
     return (
       <div
         style={{
           background: '#fff',
-          border: '1px solid #e0e0e0',
+          border: isFeaturedOffer ? '2px solid #0066cc' : '1px solid #e0e0e0',
           borderRadius: '4px',
           overflow: 'hidden',
           display: 'flex',
           flexDirection: 'column',
           position: 'relative',
-          transition: 'box-shadow 0.2s',
+          transition: 'all 0.2s',
+          transform: isFeaturedOffer ? 'scale(1.02)' : 'none',
+          zIndex: isFeaturedOffer ? 2 : 1,
+          boxShadow: isFeaturedOffer ? '0 10px 20px rgba(0,102,204,0.15)' : 'none',
         }}
-        onMouseEnter={e => (e.currentTarget.style.boxShadow = '0 2px 12px rgba(0,0,0,0.13)')}
-        onMouseLeave={e => (e.currentTarget.style.boxShadow = 'none')}
+        onMouseEnter={e => {
+          e.currentTarget.style.boxShadow = isFeaturedOffer 
+            ? '0 12px 24px rgba(0,102,204,0.25)' 
+            : '0 2px 12px rgba(0,0,0,0.13)';
+          if (!isFeaturedOffer) e.currentTarget.style.transform = 'translateY(-2px)';
+        }}
+        onMouseLeave={e => {
+          e.currentTarget.style.boxShadow = isFeaturedOffer 
+            ? '0 10px 20px rgba(0,102,204,0.15)' 
+            : 'none';
+          if (!isFeaturedOffer) e.currentTarget.style.transform = 'none';
+        }}
       >
+        {/* DESTACADO badge for featured offers */}
+        {isFeaturedOffer && (
+          <div
+            style={{
+              position: 'absolute',
+              top: '0',
+              left: '50%',
+              transform: 'translateX(-50%)',
+              background: '#0066cc',
+              color: '#fff',
+              fontSize: '10px',
+              fontWeight: 900,
+              padding: '4px 12px',
+              borderBottomLeftRadius: '8px',
+              borderBottomRightRadius: '8px',
+              letterSpacing: '1px',
+              zIndex: 3,
+            }}
+          >
+            OFERTA DESTACADA
+          </div>
+        )}
+
         {/* EN STOCK badge — corner */}
         {product.stock > 0 && (
           <div
@@ -163,6 +220,36 @@ export default function CategoryPage() {
             }}
           >
             EN STOCK
+          </div>
+        )}
+
+        {/* DISCOUNT badge — round circle */}
+        {(product.discount && product.discount > 0) && (
+          <div
+            style={{
+              position: 'absolute',
+              top: '8px',
+              left: '8px',
+              background: '#e60000',
+              color: '#fff',
+              fontSize: '11px',
+              fontWeight: 900,
+              width: '44px',
+              height: '44px',
+              borderRadius: '50%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexDirection: 'column',
+              lineHeight: '0.9',
+              boxShadow: '0 4px 10px rgba(0,0,0,0.2)',
+              zIndex: 1,
+              border: '2px solid white',
+              padding: '2px'
+            }}
+          >
+            <span>{Math.round(product.discount)}%</span>
+            <span style={{ fontSize: '7px', fontWeight: 700 }}>OFF</span>
           </div>
         )}
 
@@ -213,27 +300,29 @@ export default function CategoryPage() {
         </button>
 
         {/* Product Image */}
-        <div
-          style={{
-            background: '#f5f5f5',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            minHeight: '260px',
-            padding: '20px',
-          }}
-        >
-          <img
-            src={product.image}
-            alt={product.name}
+        <Link href={`/product/${product.id}`} style={{ display: 'block', textDecoration: 'none' }}>
+          <div
             style={{
-              maxHeight: '230px',
-              maxWidth: '100%',
-              objectFit: 'contain',
-              transition: 'transform 0.3s',
+              background: '#f5f5f5',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              minHeight: '260px',
+              padding: '20px',
             }}
-          />
-        </div>
+          >
+            <img
+              src={product.image}
+              alt={product.name}
+              style={{
+                maxHeight: '230px',
+                maxWidth: '100%',
+                objectFit: 'contain',
+                transition: 'transform 0.3s',
+              }}
+            />
+          </div>
+        </Link>
 
         {/* Card Body */}
         <div style={{ padding: '10px 12px', flex: 1, display: 'flex', flexDirection: 'column', gap: '4px' }}>
