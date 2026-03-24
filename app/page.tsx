@@ -12,14 +12,12 @@ export default function Home() {
       <ProductCarouselSection 
         title="BOMBAS EN JB IMPORTS"
         section="bombas"
-        progressColor="#414141"
       />
       <Categories />
       <PromoBanners />
       <ProductCarouselSection 
         title="NUEVAS LLEGADAS"
         section="nuevas"
-        progressColor="#0066cc"
       />
     </main>
   );
