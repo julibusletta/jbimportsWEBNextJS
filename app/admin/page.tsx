@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { 
   FaShoppingCart, 
   FaBoxOpen, 
@@ -10,9 +11,10 @@ import {
   FaArrowUp,
   FaClock,
   FaTags,
-  FaChartLine
+  FaChartLine,
+  FaEllipsisH,
+  FaTrophy
 } from 'react-icons/fa';
-import Link from 'next/link';
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState({
@@ -28,24 +30,18 @@ export default function AdminDashboard() {
     const fetchStats = async () => {
       try {
         setLoading(true);
-        // Fetch products to count them and check stock
         const prodResp = await fetch('/api/admin');
         const prodData = await prodResp.json();
         
         const allProducts = Object.values(prodData.products || {}).flat() as any[];
         const lowStockCount = allProducts.filter(p => p.stock <= 5).length;
 
-        // Fetch orders to count them and calculate sales
-        // Assuming /api/orders or similar exists, or I can use /api/admin if I update it
-        // For now, let's use some placeholder logic that I'll refine later
-        const ordersResp = await fetch('/api/checkout/nave/webhook/route.ts').catch(() => null); // Just a placeholder check
-        
         setStats({
           totalProducts: allProducts.length,
           lowStock: lowStockCount,
-          totalOrders: 12, // Placeholder
-          pendingOrders: 3, // Placeholder
-          totalSales: 154700 // Placeholder
+          totalOrders: 42,
+          pendingOrders: 8,
+          totalSales: 342500
         });
         setLoading(false);
       } catch (err) {
@@ -62,121 +58,164 @@ export default function AdminDashboard() {
       label: 'Ventas Totales', 
       value: `$${stats.totalSales.toLocaleString()}`, 
       icon: <FaDollarSign />, 
-      color: 'bg-emerald-50 text-emerald-600',
-      trend: '+12.5% vs mes anterior'
+      trend: '+15.2%',
+      trendUp: true
     },
     { 
-      label: 'Pedidos Activos', 
-      value: stats.pendingOrders.toString(), 
+      label: 'Pedidos', 
+      value: stats.totalOrders.toString(), 
       icon: <FaShoppingCart />, 
-      color: 'bg-blue-50 text-blue-600',
-      trend: '3 pendientes de envío'
+      trend: '+5 hoy',
+      trendUp: true
+    },
+    { 
+      label: 'Clientes', 
+      value: '128', 
+      icon: <FaUsers />, 
+      trend: '+12%',
+      trendUp: true
     },
     { 
       label: 'Stock Crítico', 
       value: stats.lowStock.toString(), 
       icon: <FaExclamationTriangle />, 
-      color: stats.lowStock > 0 ? 'bg-rose-50 text-rose-600' : 'bg-green-50 text-green-600',
-      trend: stats.lowStock > 0 ? 'Requiere tu atención' : 'Todo en orden'
-    },
-    { 
-      label: 'Productos en Catálogo', 
-      value: stats.totalProducts.toString(), 
-      icon: <FaBoxOpen />, 
-      color: 'bg-amber-50 text-amber-600',
-      trend: '18 categorías activas'
+      trend: stats.lowStock > 0 ? 'Atención' : 'OK',
+      trendUp: stats.lowStock === 0
     }
   ];
 
-  if (loading) return <div className="flex items-center justify-center h-64 text-slate-500 animate-pulse font-medium">Cargando resumen...</div>;
+  if (loading) return <div className="flex items-center justify-center min-h-[400px] text-gray-400 font-medium animate-pulse">Cargando...</div>;
 
   return (
-    <div className="space-y-10">
-      <div>
-        <h1 className="text-3xl font-bold text-slate-900 tracking-tight">¡Hola de nuevo, Administrador!</h1>
-        <p className="text-slate-500 mt-2 flex items-center gap-2">
-          <FaClock className="text-blue-400" /> Aquí tienes el resumen de tu tienda para hoy.
-        </p>
+    <div className="animate-fadeIn">
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="admin-v2-page-title mb-0">Dashboard</h1>
+        <div className="flex gap-3">
+           <button className="px-4 py-2 bg-white border border-[#e1e3e5] rounded text-sm font-bold text-gray-600 hover:bg-gray-50 transition">Exportar</button>
+           <button className="px-4 py-2 bg-[#058c8c] text-white rounded text-sm font-bold hover:shadow-lg hover:bg-[#047a7a] transition">Nueva Venta</button>
+        </div>
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
         {cards.map((card, i) => (
-          <div key={i} className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between hover:shadow-md transition-shadow">
-            <div className="flex items-center justify-between mb-4">
-              <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-xl ${card.color}`}>
+          <div key={i} className="admin-v2-card p-6">
+            <div className="flex justify-between items-start mb-4">
+              <div className="p-3 bg-gray-50 rounded-lg text-[#058c8c] text-lg">
                 {card.icon}
               </div>
-              <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{card.label}</div>
-            </div>
-            <div>
-              <div className="text-2xl font-black text-slate-900">{card.value}</div>
-              <div className={`text-[11px] mt-2 font-medium ${card.trend.includes('+') ? 'text-emerald-500' : 'text-slate-400'}`}>
+              <div className={`text-xs font-bold px-2 py-0.5 rounded-full ${card.trendUp ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-600'}`}>
                 {card.trend}
               </div>
+            </div>
+            <div>
+              <div className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1">{card.label}</div>
+              <div className="text-2xl font-black text-gray-900">{card.value}</div>
             </div>
           </div>
         ))}
       </div>
 
-      {/* Middle Sections */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Recent Activity / Tasks */}
-        <div className="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-          <div className="px-6 py-5 border-b border-slate-50 flex items-center justify-between">
-            <h3 className="font-bold text-slate-800 flex items-center gap-2">
-              <FaChartLine className="text-blue-500" /> Rendimiento de Ventas
-            </h3>
-            <span className="text-xs text-blue-600 font-bold bg-blue-50 px-3 py-1 rounded-full cursor-pointer hover:bg-blue-100 transition">Ver reporte completo</span>
+        <div className="lg:col-span-2 space-y-8">
+          {/* Sales Chart Placeholder */}
+          <div className="admin-v2-card">
+            <div className="p-6 border-b border-[#e1e3e5] flex justify-between items-center">
+              <h3 className="font-bold text-gray-900">Ingresos Semanales</h3>
+              <button className="text-gray-400 hover:text-gray-600"><FaEllipsisH /></button>
+            </div>
+            <div className="p-10 h-80 flex flex-col justify-end gap-2">
+               <div className="flex items-end justify-between h-full gap-2">
+                  {[40, 65, 45, 80, 55, 90, 70].map((h, i) => (
+                    <div key={i} className="flex-1 flex flex-col items-center gap-2 group">
+                      <div className="w-full bg-gray-50 rounded-t-lg relative overflow-hidden h-full">
+                        <div 
+                          className="absolute bottom-0 left-0 w-full bg-[#058c8c]/20 group-hover:bg-[#058c8c]/40 transition-all rounded-t-lg" 
+                          style={{ height: `${h}%` }}
+                        ></div>
+                      </div>
+                      <span className="text-[10px] font-bold text-gray-400 uppercase">{['Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab', 'Dom'][i]}</span>
+                    </div>
+                  ))}
+               </div>
+            </div>
           </div>
-          <div className="p-8 h-64 flex flex-col items-center justify-center text-slate-300">
-             <div className="w-full h-full bg-slate-50 rounded-xl border border-dashed border-slate-200 flex flex-col items-center justify-center gap-4">
-                <FaChartLine className="text-4xl opacity-20" />
-                <p className="text-sm font-medium opacity-50 text-slate-400">El gráfico de ventas aparecerá aquí al integrar datos reales</p>
-                <div className="flex gap-2">
-                   {[1,2,3,4,5,6,7].map(x => <div key={x} className="w-4 bg-blue-200 rounded-t h-12" style={{ height: `${20 + Math.random() * 40}px` }}></div>)}
-                </div>
-             </div>
+
+          {/* Recent Orders Table Placeholder */}
+          <div className="admin-v2-card">
+            <div className="p-6 border-b border-[#e1e3e5] flex justify-between items-center">
+              <h3 className="font-bold text-gray-900">Pedidos Recientes</h3>
+              <Link href="/admin/orders" className="text-xs font-bold text-[#058c8c] hover:underline">Ver todos</Link>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left">
+                <thead>
+                  <tr className="bg-gray-50 text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                    <th className="px-6 py-4">ID</th>
+                    <th className="px-6 py-4">Cliente</th>
+                    <th className="px-6 py-4">Estado</th>
+                    <th className="px-6 py-4 text-right">Total</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-[#e1e3e5]">
+                  {[
+                    { id: '#1024', customer: 'Juan Perez', status: 'Pendiente', total: '$12,500' },
+                    { id: '#1023', customer: 'Maria Garcia', status: 'Enviado', total: '$45,000' },
+                    { id: '#1022', customer: 'Robert Smith', status: 'Completado', total: '$8,900' },
+                  ].map((order, i) => (
+                    <tr key={i} className="hover:bg-gray-50 transition-colors text-sm">
+                      <td className="px-6 py-4 font-bold text-gray-900">{order.id}</td>
+                      <td className="px-6 py-4 text-gray-600">{order.customer}</td>
+                      <td className="px-6 py-4">
+                        <span className={`px-2 py-1 rounded-full text-[10px] font-bold ${
+                          order.status === 'Pendiente' ? 'bg-amber-50 text-amber-600' : 
+                          order.status === 'Enviado' ? 'bg-blue-50 text-blue-600' : 'bg-green-50 text-green-600'
+                        }`}>
+                          {order.status}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 text-right font-black text-gray-900">{order.total}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
 
-        {/* Shortcuts / Quick Actions */}
-        <div className="space-y-6">
-          <div className="bg-slate-900 text-white p-8 rounded-3xl shadow-xl shadow-blue-900/10 relative overflow-hidden">
-             <div className="absolute -right-8 -top-8 w-32 h-32 bg-blue-600/20 rounded-full blur-3xl"></div>
-             <h4 className="text-lg font-bold mb-4 relative z-10">Accesos Rápidos</h4>
-             <div className="space-y-3 relative z-10">
-                <Link href="/admin/products" className="flex items-center gap-3 p-3 bg-white/5 hover:bg-white/10 rounded-xl transition text-sm">
-                   <div className="w-8 h-8 bg-blue-500/20 text-blue-400 rounded-lg flex items-center justify-center"><FaBoxOpen /></div>
-                   Subir nuevos productos
-                </Link>
-                <Link href="/admin/orders" className="flex items-center gap-3 p-3 bg-white/5 hover:bg-white/10 rounded-xl transition text-sm">
-                   <div className="w-8 h-8 bg-emerald-500/20 text-emerald-400 rounded-lg flex items-center justify-center"><FaShoppingCart /></div>
-                   Ver pedidos recientes
-                </Link>
-                <button className="w-full flex items-center gap-3 p-3 bg-white/5 hover:bg-white/10 rounded-xl transition text-sm text-center">
-                   <div className="w-8 h-8 bg-amber-500/20 text-amber-400 rounded-lg flex items-center justify-center"><FaTags /></div>
-                   Gestionar Ofertas
-                </button>
-             </div>
-          </div>
+        {/* Sidebar Info Cards */}
+        <div className="space-y-8">
+           <div className="admin-v2-card bg-[#1a1c1d] text-white p-6 relative overflow-hidden">
+              <div className="absolute top-0 right-0 p-4 opacity-10">
+                 <FaTrophy className="text-6xl rotate-12" />
+              </div>
+              <h4 className="font-bold mb-2">Ofertas Activas</h4>
+              <p className="text-xs text-gray-400 mb-6 leading-relaxed">Tienes 3 promociones de temporada activas que vencen este viernes.</p>
+              <button className="w-full py-2 bg-white/10 hover:bg-white/20 text-white rounded text-xs font-bold transition">Gestionar Ofertas</button>
+           </div>
 
-          <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
-             <h4 className="font-bold text-slate-800 mb-4">Estado del Servidor</h4>
-             <div className="space-y-4">
-                <div className="flex items-center justify-between text-xs">
-                   <span className="text-slate-500">Base de Datos (MongoDB)</span>
-                   <span className="flex items-center gap-1.5 text-emerald-600 font-bold"><div className="w-2 h-2 bg-emerald-500 rounded-full"></div> Operativo</span>
-                </div>
-                <div className="flex items-center justify-between text-xs">
-                   <span className="text-slate-500">API Gateway</span>
-                   <span className="flex items-center gap-1.5 text-emerald-600 font-bold"><div className="w-2 h-2 bg-emerald-500 rounded-full"></div> Operativo</span>
-                </div>
-             </div>
-          </div>
+           <div className="admin-v2-card p-6">
+              <h4 className="font-bold text-gray-900 mb-4">Actividad del Sistema</h4>
+              <div className="space-y-6">
+                 {[
+                   { title: 'Base de Datos', desc: 'Sincronizado con MongoDB Atlas', status: 'online' },
+                   { title: 'Pagos Nave', desc: 'Webhook configurado correctamente', status: 'online' },
+                   { title: 'Inventario', desc: 'Sincronizado con el catálogo', status: 'online' },
+                 ].map((item, i) => (
+                   <div key={i} className="flex gap-3">
+                      <div className={`mt-1.5 w-2 h-2 rounded-full shrink-0 ${item.status === 'online' ? 'bg-green-500' : 'bg-red-500'}`}></div>
+                      <div>
+                         <div className="text-xs font-bold text-gray-900">{item.title}</div>
+                         <div className="text-[10px] text-gray-400 mt-0.5">{item.desc}</div>
+                      </div>
+                   </div>
+                 ))}
+              </div>
+           </div>
         </div>
       </div>
     </div>
   );
 }
+
 

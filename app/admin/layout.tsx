@@ -10,82 +10,112 @@ import {
   FaTags, 
   FaCog, 
   FaExternalLinkAlt, 
-  FaChartLine 
+  FaChartLine,
+  FaUsers,
+  FaTrophy,
+  FaSearch
 } from 'react-icons/fa';
+import '../styles/AdminV2.css';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
-  const navItems = [
-    { label: 'Resumen', href: '/admin', icon: <FaChartLine /> },
-    { label: 'Productos', href: '/admin/products', icon: <FaBox /> },
-    { label: 'Pedidos', href: '/admin/orders', icon: <FaShoppingCart /> },
-    { label: 'Categorías', href: '/admin/categories', icon: <FaTags /> },
-    { label: 'Configuración', href: '/admin/settings', icon: <FaCog /> },
+  const navGroups = [
+    {
+      label: 'Resumen',
+      items: [
+        { label: 'Dashboard', href: '/admin', icon: <FaHome /> },
+      ]
+    },
+    {
+      label: 'Catálogo',
+      items: [
+        { label: 'Productos', href: '/admin/products', icon: <FaBox /> },
+        { label: 'Categorías', href: '/admin/categories', icon: <FaTags /> },
+      ]
+    },
+    {
+      label: 'Ventas',
+      items: [
+        { label: 'Pedidos', href: '/admin/orders', icon: <FaShoppingCart /> },
+        { label: 'Descuentos', href: '/admin/promotions', icon: <FaTrophy /> },
+      ]
+    },
+    {
+      label: 'Usuarios',
+      items: [
+        { label: 'Clientes', href: '/admin/customers', icon: <FaUsers /> },
+      ]
+    },
+    {
+      label: 'Sistema',
+      items: [
+        { label: 'Configuración', href: '/admin/settings', icon: <FaCog /> },
+      ]
+    }
   ];
 
   return (
-    <div className="flex min-h-screen bg-gray-50 text-gray-900 font-sans">
+    <div className="admin-v2-container">
       {/* Sidebar */}
-      <aside className="w-64 bg-slate-900 text-white flex-shrink-0 flex flex-col sticky top-0 h-screen z-50 shadow-2xl">
-        <div className="p-6 flex items-center gap-3 border-b border-slate-800">
-          <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center font-bold text-lg">JB</div>
-          <span className="font-bold text-xl tracking-tight">Admin<span className="text-blue-500">Panel</span></span>
+      <aside className="admin-v2-sidebar">
+        <div className="admin-v2-logo">
+          <span>JB IMPORTS</span>
         </div>
 
-        <nav className="flex-1 py-6 px-4 space-y-1 overflow-y-auto custom-scrollbar">
-          {navItems.map((item) => {
-            const isActive = pathname === item.href;
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 group ${
-                  isActive 
-                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-900/20' 
-                  : 'text-slate-400 hover:bg-slate-800 hover:text-white'
-                }`}
-              >
-                <span className={`text-lg transition-transform duration-200 group-hover:scale-110 ${isActive ? 'text-white' : 'text-slate-500 group-hover:text-blue-400'}`}>
-                  {item.icon}
-                </span>
-                <span className="font-medium">{item.label}</span>
-              </Link>
-            );
-          })}
+        <nav className="admin-v2-nav">
+          {navGroups.map((group, gIdx) => (
+            <div key={gIdx} className="mb-6">
+              <div className="admin-v2-nav-group-label">{group.label}</div>
+              <div className="space-y-1">
+                {group.items.map((item) => {
+                  const isActive = pathname === item.href;
+                  return (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className={`admin-v2-nav-item ${isActive ? 'active' : ''}`}
+                    >
+                      <span className="admin-v2-nav-icon">{item.icon}</span>
+                      <span>{item.label}</span>
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
         </nav>
 
-        <div className="p-4 border-t border-slate-800">
+        <div className="p-4 border-t border-[#e1e3e5]">
           <Link 
             href="/" 
-            className="flex items-center justify-between gap-2 px-4 py-3 bg-slate-800 hover:bg-slate-700 rounded-xl transition-colors text-sm font-semibold group"
+            className="flex items-center justify-between gap-2 px-3 py-2 text-xs font-bold text-gray-500 hover:bg-gray-100 rounded-lg transition-colors group"
           >
             <span className="flex items-center gap-2">
-               <FaExternalLinkAlt className="text-blue-400 group-hover:rotate-12 transition-transform" />
+               <FaExternalLinkAlt className="text-gray-400" />
                Ver Tienda
             </span>
-            <span className="bg-slate-900 px-2 py-0.5 rounded text-[10px] text-slate-500">Alt + L</span>
           </Link>
         </div>
       </aside>
 
       {/* Main Content Area */}
-      <main className="flex-1 p-8 min-h-screen bg-[#f8fafc] w-full overflow-x-hidden">
-        {/* Header decoration or breadcrumbs can go here */}
-        <div className="max-w-[1400px] mx-auto">
+      <div className="admin-v2-main">
+        <header className="admin-v2-header">
+           <div className="flex items-center gap-4 text-gray-400">
+              <FaSearch />
+              <input type="text" placeholder="Buscar..." className="bg-transparent border-none outline-none text-sm text-gray-600 w-64" />
+           </div>
+           <div className="flex items-center gap-4">
+              <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-[10px] font-bold text-gray-500">AD</div>
+           </div>
+        </header>
+        
+        <main className="admin-v2-content">
           {children}
-        </div>
-      </main>
-
-      <style jsx global>{`
-        @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(10px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fadeIn {
-          animation: fadeIn 0.4s ease-out forwards;
-        }
-      `}</style>
+        </main>
+      </div>
     </div>
   );
 }
+

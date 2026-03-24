@@ -4,7 +4,8 @@ import React, { useState, useEffect } from 'react';
 import * as XLSX from 'xlsx';
 import { Product as BaseProduct } from '@/lib/api/mockCategoryProducts';
 import { Spec } from '@/lib/api/productSpecifications';
-import { FaUpload, FaSave, FaInfoCircle, FaSearch, FaTable, FaThList, FaTimesCircle, FaTags, FaBoxOpen, FaCogs, FaGlobe, FaPlus, FaTrash } from 'react-icons/fa';
+import Link from 'next/link';
+import { FaUpload, FaSave, FaInfoCircle, FaSearch, FaTable, FaThList, FaTimesCircle, FaTags, FaBoxOpen, FaCogs, FaGlobe, FaPlus, FaTrash, FaExclamationTriangle } from 'react-icons/fa';
 
 import { Product } from '@/lib/api/mockCategoryProducts';
 
@@ -174,7 +175,6 @@ export default function ProductsPage() {
           const priceOriginal = Number(getVal(row, 'Precio', 'price', 'valor') || 0);
           const priceDiscount = getVal(row, 'Precio con descuento', 'preciocondescuento', 'descuento', 'oferta');
           const finalPrice = priceDiscount ? Number(priceDiscount) : priceOriginal;
-          const originalPrice = priceDiscount ? priceOriginal : undefined;
           const imagesRaw = String(getVal(row, 'Imágenes producto', 'imagenesproducto', 'imagen', 'image', 'foto') || '');
           const allImages = imagesRaw.split(/[,\s+]/).map(s => s.trim()).filter(Boolean).slice(0, 4);
           const firstImage = allImages[0] || '/images/placeholder.jpg';
@@ -186,21 +186,11 @@ export default function ProductsPage() {
             price: finalPrice,
             originalPrice: priceOriginal,
             image: firstImage,
-            images: allImages, // Store all detected images (up to 4)
+            images: allImages,
             category: resolveCategory(rawCategory),
             description: String(getVal(row, 'Descripción', 'description', 'descripcion', 'detalle') || ''),
             stock: Number(getVal(row, 'Cantidad', 'stock', 'stock', 'cantidad') || 0),
             badge: String(getVal(row, 'Badge', 'badge', 'etiqueta', 'promo', 'tipo') || ''),
-            weight: Number(getVal(row, 'Peso (gr)', 'pesogr', 'peso') || 0),
-            length: Number(getVal(row, 'Largo (cm)', 'largocm', 'largo') || 0),
-            width: Number(getVal(row, 'Ancho (cm)', 'anchocm', 'ancho') || 0),
-            height: Number(getVal(row, 'Alto (cm)', 'altocm', 'alto') || 0),
-            attributes: [
-              {
-                name: String(getVal(row, 'Nombre Atributo1 (No editable)', 'nombreatributo1noeditable', 'nombreatributo1') || ''),
-                value: String(getVal(row, 'Valor Atributo1 (No editable)', 'valoratributo1noeditable', 'valoratributo1') || '')
-              }
-            ].filter(attr => attr.name && attr.value),
           };
         }).filter(Boolean);
 
@@ -231,93 +221,111 @@ export default function ProductsPage() {
   if (loading) return <div className="flex items-center justify-center h-64 text-slate-500 animate-pulse font-medium">Cargando inventario...</div>;
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div className="animate-fadeIn pb-20">
+      <div className="flex justify-between items-center mb-10">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Gestión de Productos</h1>
-          <p className="text-sm text-slate-500 mt-1">Administra el stock, precios e importa nuevos items masivamente.</p>
+          <h1 className="admin-v2-page-title mb-1">Productos</h1>
+          <nav className="text-[10px] items-center gap-2 text-gray-400 font-bold uppercase tracking-widest flex">
+            <Link href="/admin" className="hover:text-[#058c8c]">Home</Link>
+            <span>/</span>
+            <span className="text-gray-900">Catálogo</span>
+          </nav>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex gap-3">
           <button
             onClick={saveProducts}
-            className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition shadow-sm font-semibold text-sm"
+            className="px-5 py-2.5 bg-[#058c8c] text-white rounded text-sm font-bold hover:shadow-lg hover:bg-[#047a7a] transition flex items-center gap-2"
           >
-            <FaSave /> Guardar Cambios
+            <FaSave /> Guardar Todo
           </button>
         </div>
       </div>
 
-      {/* Control Bar */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Import Card */}
-        <div className="lg:col-span-2 bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col md:flex-row items-center gap-6">
-          <div className="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-600 text-2xl shrink-0">
-            <FaUpload />
+      {/* Stats Quick View */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+        <div className="admin-v2-card p-6 flex items-center gap-5">
+          <div className="w-12 h-12 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center text-xl">
+             <FaBoxOpen />
           </div>
-          <div className="flex-1 text-center md:text-left">
-            <h3 className="font-bold text-slate-800">Importar desde Excel</h3>
-            <p className="text-xs text-slate-500 mt-1 mb-4 leading-relaxed">
-              Soportamos formatos de Tienda Nube y personalizados. Asegúrate de incluir las columnas ID y Nombre.
-            </p>
-            <div className="inline-block relative">
-              <input
-                type="file"
-                accept=".xlsx, .xls"
-                onChange={handleExcelImport}
-                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-              />
-              <div className="px-4 py-2 bg-slate-100 text-slate-700 rounded-lg text-xs font-bold hover:bg-slate-200 transition border border-slate-200">
-                Seleccionar Archivo
-              </div>
-            </div>
-          </div>
-          <div className="hidden xl:block w-px h-12 bg-slate-100"></div>
-          <div className="bg-amber-50 p-3 rounded-xl border border-amber-100 max-w-[200px]">
-            <div className="flex items-center gap-2 text-amber-800 font-bold text-[10px] uppercase tracking-wider mb-1">
-              <FaInfoCircle /> Tips
-            </div>
-            <p className="text-[10px] text-amber-700 leading-tight italic">
-              Usa el mismo ID para actualizar stock/precio de productos existentes.
-            </p>
+          <div>
+             <div className="text-[10px] font-bold text-gray-400 uppercase">Total Items</div>
+             <div className="text-xl font-black text-gray-900">{Object.values(products).flat().length}</div>
           </div>
         </div>
-
-        {/* Search & Filter */}
-        <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-center">
-          <div className="relative">
-            <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-            <input
-              type="text"
-              placeholder="Buscar por nombre o ID..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-sm transition-all"
-            />
+        <div className="admin-v2-card p-6 flex items-center gap-5 border-l-4 border-l-red-500">
+          <div className="w-12 h-12 bg-red-50 text-red-600 rounded-lg flex items-center justify-center text-xl">
+             <FaExclamationTriangle />
           </div>
-          <div className="mt-3 flex gap-2 overflow-x-auto pb-1">
-            <span className="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-[10px] font-bold whitespace-nowrap">Todos</span>
-            <span className="px-3 py-1 bg-slate-50 text-slate-600 rounded-full text-[10px] font-bold whitespace-nowrap hover:bg-slate-100 cursor-pointer">En Stock</span>
-            <span className="px-3 py-1 bg-slate-50 text-slate-600 rounded-full text-[10px] font-bold whitespace-nowrap hover:bg-slate-100 cursor-pointer">Sin Stock</span>
+          <div>
+             <div className="text-[10px] font-bold text-gray-400 uppercase">Stock Crítico</div>
+             <div className="text-xl font-black text-gray-900">{Object.values(products).flat().filter(p => p.stock <= 5).length}</div>
+          </div>
+        </div>
+        <div className="admin-v2-card p-6 flex items-center gap-5">
+           <div className="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-lg flex items-center justify-center text-xl">
+             <FaTags />
+          </div>
+          <div>
+             <div className="text-[10px] font-bold text-gray-400 uppercase">Categorías</div>
+             <div className="text-xl font-black text-gray-900">{Object.keys(products).length}</div>
           </div>
         </div>
       </div>
 
-      {error && (
-        <div className="p-4 bg-red-50 text-red-700 border border-red-100 rounded-xl text-sm font-semibold flex items-center gap-3 animate-slideDown">
-          <div className="w-2 h-2 rounded-full bg-red-500"></div>
-          {error}
+      {/* Tools Card */}
+      <div className="admin-v2-card mb-10">
+        <div className="p-6 border-b border-[#e1e3e5] bg-gray-50/50 flex justify-between items-center">
+           <h3 className="font-bold text-gray-900 text-sm italic">Herramientas de Inventario</h3>
         </div>
-      )}
+        <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-10">
+          <div className="flex gap-6">
+            <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center text-gray-600 shrink-0">
+               <FaUpload />
+            </div>
+            <div>
+              <h4 className="text-sm font-bold text-gray-900 mb-1">Importación Masiva</h4>
+              <p className="text-xs text-gray-400 mb-4 leading-relaxed">Sube tu archivo Excel para actualizar stock y precios.</p>
+              <div className="inline-block relative">
+                <input
+                  type="file"
+                  accept=".xlsx, .xls"
+                  onChange={handleExcelImport}
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                />
+                <button className="px-4 py-2 bg-white border border-[#e1e3e5] text-xs font-black rounded hover:bg-gray-50 transition uppercase tracking-widest">
+                  Seleccionar Excel
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex gap-6">
+             <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center text-gray-600 shrink-0">
+               <FaSearch />
+            </div>
+            <div className="flex-1">
+              <h4 className="text-sm font-bold text-gray-900 mb-2">Buscador Rápido</h4>
+              <input
+                type="text"
+                placeholder="ID o nombre del producto..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full px-4 py-2 bg-gray-50 border border-[#e1e3e5] rounded outline-none text-sm transition focus:border-[#058c8c] focus:bg-white"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
 
       {message && (
-        <div className={`p-4 rounded-xl text-sm font-semibold flex items-center gap-3 animate-slideDown ${message.includes('Error') ? 'bg-red-50 text-red-700 border border-red-100' : 'bg-green-50 text-green-700 border border-green-100'}`}>
+        <div className={`p-4 mb-6 rounded-xl text-sm font-semibold flex items-center gap-3 animate-slideDown ${message.includes('Error') ? 'bg-red-50 text-red-700 border border-red-100' : 'bg-green-50 text-green-700 border border-green-100'}`}>
           <div className={`w-2 h-2 rounded-full ${message.includes('Error') ? 'bg-red-500' : 'bg-green-500'}`}></div>
           {message}
         </div>
       )}
 
       {/* Product Tables */}
-      <div className="space-y-8 pb-20">
+      <div className="space-y-12">
         {products && Object.entries(products).map(([category, items]) => {
           const filteredItems = items.filter(p =>
             p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -327,43 +335,41 @@ export default function ProductsPage() {
           if (filteredItems.length === 0 && searchTerm) return null;
 
           return (
-            <div key={category} className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-              <div className="bg-slate-50/80 px-6 py-4 border-b border-slate-100 flex items-center justify-between">
-                <h3 className="text-sm font-bold uppercase tracking-widest text-slate-600">{category}</h3>
-                <span className="text-[10px] font-bold bg-slate-200 text-slate-600 px-2 py-0.5 rounded-full">{filteredItems.length} items</span>
+            <div key={category} className="admin-v2-card overflow-hidden">
+              <div className="p-6 border-b border-[#e1e3e5] bg-gray-50/20 flex items-center justify-between">
+                <h3 className="text-[11px] font-black uppercase tracking-[0.2em] text-gray-500">{category}</h3>
+                <span className="text-[10px] font-bold bg-[#edeeef] text-gray-600 px-3 py-1 rounded italic">{filteredItems.length} productos</span>
               </div>
               <div className="overflow-x-auto">
-                <table className="w-full text-left border-collapse">
+                <table className="w-full text-left">
                   <thead>
-                    <tr className="text-slate-400 text-[11px] font-bold uppercase tracking-wider">
-                      <th className="px-6 py-4 font-semibold">ID</th>
-                      <th className="px-6 py-4 font-semibold">Producto</th>
-                      <th className="px-6 py-4 font-semibold w-36 text-center">Precio ($)</th>
-                      <th className="px-6 py-4 font-semibold w-32 text-center">Stock</th>
+                    <tr className="bg-gray-50/50 text-gray-400 text-[9px] font-black uppercase tracking-widest border-b border-[#e1e3e5]">
+                      <th className="px-6 py-4 w-16">ID</th>
+                      <th className="px-6 py-4">Producto</th>
+                      <th className="px-6 py-4 w-40">Precio</th>
+                      <th className="px-6 py-4 w-28">Stock</th>
+                      <th className="px-6 py-4 w-28 text-center">Estado</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-50">
+                  <tbody className="divide-y divide-[#e1e3e5]">
                     {filteredItems.map((p) => (
-                      <tr key={p.id} className="hover:bg-slate-50/50 transition-colors group">
+                      <tr key={p.id} className="hover:bg-gray-50/30 transition shadow-none hover:shadow-inner">
                         <td className="px-6 py-4">
-                          <span className="font-mono text-xs text-slate-400">#{p.id}</span>
+                          <span className="text-[10px] font-bold text-gray-300">#{p.id}</span>
                         </td>
                         <td className="px-6 py-4">
-                          <div className="flex items-center gap-3">
+                          <div className="flex items-center gap-4">
                             <div
-                              className="w-10 h-10 bg-slate-100 rounded-lg overflow-hidden border border-slate-200 flex-shrink-0 cursor-pointer hover:ring-2 hover:ring-blue-500 transition-all relative group"
+                              className="w-12 h-12 bg-white rounded border border-[#e1e3e5] overflow-hidden p-1 cursor-pointer hover:border-[#058c8c] transition"
                               onClick={() => {
                                 setEditingProduct(p);
                                 setActiveTab('general');
                               }}
                             >
                               <img src={p.image} alt="" className="w-full h-full object-contain" />
-                              <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                <span className="text-[10px] text-white font-bold tracking-tight text-center px-1">EDITAR</span>
-                              </div>
                             </div>
                             <span
-                              className="font-semibold text-slate-700 text-sm group-hover:text-blue-600 transition-colors cursor-pointer"
+                              className="font-bold text-gray-800 text-xs hover:text-[#058c8c] transition cursor-pointer"
                               onClick={() => {
                                 setEditingProduct(p);
                                 setActiveTab('general');
@@ -373,21 +379,29 @@ export default function ProductsPage() {
                             </span>
                           </div>
                         </td>
-                        <td className="px-6 py-4 text-center">
-                          <input
-                            type="number"
-                            value={p.price}
-                            onChange={(e) => handlePriceChange(category, p.id, Number(e.target.value))}
-                            className="w-28 px-3 py-1.5 bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm font-bold text-slate-700 text-center shadow-inner"
-                          />
+                        <td className="px-6 py-4">
+                          <div className="flex items-center gap-2">
+                            <span className="text-[10px] font-bold text-gray-400">$</span>
+                            <input
+                              type="number"
+                              value={p.price}
+                              onChange={(e) => handlePriceChange(category, p.id, Number(e.target.value))}
+                              className="w-24 bg-transparent border-b border-transparent hover:border-[#e1e3e5] focus:border-[#058c8c] focus:outline-none text-sm font-black text-gray-900 transition-all px-1"
+                            />
+                          </div>
+                        </td>
+                        <td className="px-6 py-4">
+                           <input
+                              type="number"
+                              value={p.stock}
+                              onChange={(e) => handleStockChange(category, p.id, Number(e.target.value))}
+                              className={`w-16 bg-transparent border-b border-transparent hover:border-[#e1e3e5] focus:border-[#058c8c] focus:outline-none text-xs font-bold transition-all px-1 ${p.stock <= 5 ? 'text-red-500' : 'text-gray-900'}`}
+                            />
                         </td>
                         <td className="px-6 py-4 text-center">
-                          <input
-                            type="number"
-                            value={p.stock}
-                            onChange={(e) => handleStockChange(category, p.id, Number(e.target.value))}
-                            className={`w-20 px-3 py-1.5 bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm font-bold text-center shadow-inner ${p.stock <= 5 ? 'text-red-600' : 'text-slate-700'}`}
-                          />
+                           <span className={`px-2 py-1 rounded text-[9px] font-black uppercase tracking-tighter ${p.stock > 0 ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-600'}`}>
+                              {p.stock > 0 ? 'Publicado' : 'Sin Stock'}
+                           </span>
                         </td>
                       </tr>
                     ))}
@@ -398,495 +412,300 @@ export default function ProductsPage() {
           );
         })}
       </div>
+
       {/* Product Editor Full-Screen Overlay */}
       {editingProduct && (
-        <div className="fixed top-0 right-0 bottom-0 left-64 z-40 bg-slate-50 flex flex-col animate-slideInRight border-l border-slate-200 shadow-2xl">
-          {/* Header */}
-          <div className="bg-white border-b border-slate-200 px-8 py-4 flex items-center justify-between shadow-sm z-10">
-            <div className="flex items-center gap-4">
-              <button
-                onClick={() => setEditingProduct(null)}
-                className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-100 transition-colors text-slate-400"
-                title="Descartar cambios"
-              >
-                <FaTimesCircle size={24} />
-              </button>
-              <div>
-                <h3 className="text-xl font-bold text-slate-800 leading-tight">{editingProduct.name || 'Nuevo Producto'}</h3>
-                <div className="flex items-center gap-2 mt-0.5">
-                  <span className="text-[10px] bg-blue-100 text-blue-700 font-bold px-2 py-0.5 rounded uppercase tracking-wider">{editingProduct.category}</span>
-                  <span className="text-[10px] text-slate-400 font-medium">#{editingProduct.id}</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-4">
-              <button
-                onClick={() => setEditingProduct(null)}
-                className="px-6 py-2.5 bg-slate-100 text-slate-600 hover:bg-slate-200 rounded-xl font-bold text-sm transition-all"
-              >
-                CANCELAR
-              </button>
-              <button
-                onClick={() => setEditingProduct(null)}
-                className="px-8 py-2.5 bg-blue-600 text-white rounded-xl font-bold text-sm shadow-lg shadow-blue-200 hover:bg-blue-700 transition-all hover:scale-[1.02] active:scale-[0.98]"
-              >
-                LISTO
-              </button>
-            </div>
-          </div>
-
-          <div className="flex-1 flex overflow-hidden">
-            {/* Sidebar Navigation */}
-            <aside className="w-72 bg-white border-r border-slate-200 flex flex-col p-6 gap-2">
-              <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4 px-2">Configuración</h4>
-              {[
-                { id: 'general', label: 'Información Básica', icon: FaTags, desc: 'Nombre, precio y categoría' },
-                { id: 'media', label: 'Imágenes y Galería', icon: FaBoxOpen, desc: 'Gestiona las fotos del producto' },
-                { id: 'specs', label: 'Ficha Técnica', icon: FaCogs, desc: 'Atributos y características' },
-                { id: 'seo', label: 'SEO y Propiedades', icon: FaGlobe, desc: 'Posicionamiento y logística' },
-              ].map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id as any)}
-                  className={`flex items-start gap-4 p-4 rounded-2xl transition-all text-left group ${activeTab === tab.id
-                      ? 'bg-blue-50 text-blue-600 ring-1 ring-blue-100'
-                      : 'text-slate-500 hover:bg-slate-50 hover:text-slate-700'
-                    }`}
-                >
-                  <div className={`mt-0.5 ${activeTab === tab.id ? 'text-blue-600' : 'text-slate-400 group-hover:text-slate-600'}`}>
-                    <tab.icon size={18} />
-                  </div>
-                  <div>
-                    <div className="text-sm font-bold">{tab.label}</div>
-                    <div className="text-[11px] opacity-70 font-medium mt-0.5">{tab.desc}</div>
-                  </div>
-                </button>
-              ))}
-
-              <div className="mt-auto pt-6 border-t border-slate-100">
-                <div className="bg-slate-50 rounded-2xl p-4 border border-slate-100">
-                  <h5 className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">Resumen de cambios</h5>
-                  <p className="text-[11px] text-slate-400 leading-relaxed font-medium">
-                    Recuerda presionar "Guardar" en el panel principal para confirmar tus ediciones en la base de datos de MongoDB.
-                  </p>
-                </div>
-              </div>
-            </aside>
-
-            {/* Main Content Area */}
-            <main className="flex-1 overflow-y-auto bg-slate-50/30 p-12">
-              <div className="max-w-4xl mx-auto bg-white rounded-3xl shadow-sm border border-slate-200 p-10">
-                {activeTab === 'general' && (
-                  <div className="space-y-8 animate-fadeIn">
-                    <div className="flex items-center gap-3 border-b border-slate-100 pb-4 mb-6">
-                      <div className="w-8 h-8 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center">
-                        <FaTags size={14} />
-                      </div>
-                      <h4 className="text-lg font-bold text-slate-800">Información General</h4>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-8">
-                      <div className="col-span-2">
-                        <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-3 px-1">Nombre del Producto</label>
-                        <input
-                          type="text"
-                          value={editingProduct.name}
-                          onChange={(e) => handleProductChange(editingProduct.id, editingProduct.category, 'name', e.target.value)}
-                          className="w-full px-5 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all outline-none text-base font-semibold text-slate-700"
-                          placeholder="Ej: iPhone 15 Pro Max"
-                        />
-                      </div>
-                      {/* Bloque de Descuento */}
-                      <div className="col-span-2 bg-slate-50/70 p-5 rounded-2xl border border-slate-200 space-y-4">
-                        <div className="flex items-center justify-between">
-                          <label className="flex items-center gap-3 cursor-pointer">
-                            <input 
-                              type="checkbox" 
-                              checked={!!(editingProduct.discount && editingProduct.discount > 0)}
-                              onChange={(e) => {
-                                if (e.target.checked) {
-                                  const original = editingProduct.originalPrice || editingProduct.price;
-                                  handleProductChange(editingProduct.id, editingProduct.category, 'originalPrice', original);
-                                  handleProductChange(editingProduct.id, editingProduct.category, 'discount', 10);
-                                  const newPrice = original - (original * 10 / 100);
-                                  handleProductChange(editingProduct.id, editingProduct.category, 'price', newPrice);
-                                } else {
-                                  handleProductChange(editingProduct.id, editingProduct.category, 'discount', 0);
-                                  if (editingProduct.originalPrice) {
-                                    handleProductChange(editingProduct.id, editingProduct.category, 'price', editingProduct.originalPrice);
-                                  }
-                                }
-                              }}
-                              className="w-5 h-5 text-blue-600 rounded border-slate-300 focus:ring-blue-500 transition-all"
-                            />
-                            <span className="text-sm font-bold text-slate-700">Aplica Descuento Especial</span>
-                          </label>
-                        </div>
-                        
-                        {!!(editingProduct.discount && editingProduct.discount > 0) && (
-                          <div className="grid grid-cols-2 gap-6 animate-fadeIn pt-2">
-                            <div>
-                                <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-3 px-1 text-blue-500">Precio Original ($)</label>
-                                <div className="relative">
-                                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold">$</span>
-                                  <input
-                                    type="number"
-                                    value={editingProduct.originalPrice ?? editingProduct.price ?? ''}
-                                    onChange={(e) => {
-                                      const val = e.target.value;
-                                      const newOriginal = val === '' ? ('' as any) : Number(val);
-                                      handleProductChange(editingProduct.id, editingProduct.category, 'originalPrice', newOriginal);
-                                      const numericOriginal = Number(newOriginal) || 0;
-                                      const currentDiscount = Number(editingProduct.discount) || 0;
-                                      const newPrice = numericOriginal - (numericOriginal * currentDiscount / 100);
-                                      handleProductChange(editingProduct.id, editingProduct.category, 'price', newPrice);
-                                    }}
-                                    className="w-full pl-8 pr-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 transition-all outline-none text-sm font-bold text-slate-700"
-                                  />
-                                </div>
-                            </div>
-                            <div>
-                                <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-3 px-1 text-red-400">Descuento (%)</label>
-                                <div className="relative">
-                                  <input
-                                    type="number"
-                                    value={editingProduct.discount ?? ''}
-                                    onChange={(e) => {
-                                      const val = e.target.value;
-                                      const newDiscount = val === '' ? ('' as any) : Number(val);
-                                      handleProductChange(editingProduct.id, editingProduct.category, 'discount', newDiscount);
-                                      const numericDiscount = Number(newDiscount) || 0;
-                                      const basePrice = Number(editingProduct.originalPrice ?? editingProduct.price) || 0;
-                                      const newPrice = basePrice - (basePrice * numericDiscount / 100);
-                                      handleProductChange(editingProduct.id, editingProduct.category, 'price', newPrice);
-                                    }}
-                                    className="w-full pl-4 pr-8 py-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-red-500 transition-all outline-none text-sm font-bold text-red-600"
-                                  />
-                                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold">%</span>
-                                </div>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-3 px-1">
-                          Precio de Venta Final ($)
-                        </label>
-                        <div className="relative">
-                          <span className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 font-bold">$</span>
-                          <input
-                            type="number"
-                            value={editingProduct.price}
-                            onChange={(e) => {
-                              const newPrice = Number(e.target.value);
-                              handleProductChange(editingProduct.id, editingProduct.category, 'price', newPrice);
-                              if (editingProduct.discount && editingProduct.discount > 0) {
-                                const newOriginal = newPrice / (1 - (editingProduct.discount / 100));
-                                handleProductChange(editingProduct.id, editingProduct.category, 'originalPrice', newOriginal);
-                              }
-                            }}
-                            className={`w-full pl-10 pr-5 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:bg-white transition-all outline-none text-base font-bold ${editingProduct.discount && editingProduct.discount > 0 ? 'text-green-600 border-green-200 bg-green-50' : 'text-slate-700'}`}
-                          />
-                        </div>
-                      </div>
-                      <div>
-                        <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-3 px-1">Categoría</label>
-                        <input
-                          type="text"
-                          value={editingProduct.category}
-                          onChange={(e) => handleProductChange(editingProduct.id, editingProduct.category, 'category', e.target.value)}
-                          className="w-full px-5 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all outline-none text-base font-semibold text-slate-700"
-                          placeholder="iphone, apple-watch, etc."
-                        />
-                      </div>
-                    </div>
+        <div className="fixed top-0 right-0 bottom-0 left-[250px] z-[100] bg-[#f8fafb] flex flex-col animate-fadeIn border-l border-[#e1e3e5] shadow-2xl">
+          {(() => {
+            const p = editingProduct;
+            return (
+              <>
+                {/* Header */}
+                <div className="bg-white border-b border-[#e1e3e5] px-8 py-4 flex items-center justify-between z-10 shrink-0">
+                  <div className="flex items-center gap-4">
+                    <button
+                      onClick={() => setEditingProduct(null)}
+                      className="w-8 h-8 flex items-center justify-center rounded hover:bg-gray-100 transition-colors text-gray-400 font-bold"
+                    >
+                      <FaTimesCircle size={20} />
+                    </button>
                     <div>
-                      <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-3 px-1">Descripción Detallada</label>
-                      <textarea
-                        rows={6}
-                        value={editingProduct.description || ''}
-                        onChange={(e) => handleProductChange(editingProduct.id, editingProduct.category, 'description', e.target.value)}
-                        className="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all outline-none text-base text-slate-600 leading-relaxed"
-                        placeholder="Describe las virtudes del producto para tus clientes..."
-                      />
+                      <h3 className="text-lg font-black text-gray-900 leading-tight">{p.name || 'Nuevo Producto'}</h3>
+                      <div className="flex items-center gap-2 mt-0.5">
+                        <span className="text-[9px] bg-gray-100 text-gray-500 font-bold px-2 py-0.5 rounded uppercase tracking-widest">{p.category}</span>
+                        <span className="text-[9px] text-gray-300 font-bold">#{p.id}</span>
+                      </div>
                     </div>
                   </div>
-                )}
 
-                {activeTab === 'media' && (
-                  <div className="space-y-8 animate-fadeIn">
-                    <div className="flex items-center gap-3 border-b border-slate-100 pb-4 mb-6">
-                      <div className="w-8 h-8 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center">
-                        <FaBoxOpen size={14} />
+                  <div className="flex items-center gap-4">
+                    <button
+                      onClick={() => setEditingProduct(null)}
+                      className="px-6 py-2 text-gray-500 hover:text-gray-900 h-10 font-bold text-xs uppercase tracking-widest transition"
+                    >
+                      Descartar
+                    </button>
+                    <button
+                      onClick={() => setEditingProduct(null)}
+                      className="px-8 py-2 bg-[#058c8c] text-white rounded h-10 font-bold text-xs uppercase tracking-widest shadow-lg"
+                    >
+                      Listo
+                    </button>
+                  </div>
+                </div>
+
+                <div className="flex-1 flex overflow-hidden">
+                  <aside className="w-64 bg-white border-r border-[#e1e3e5] flex flex-col p-6 gap-1 shrink-0">
+                    <h4 className="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-4 px-2">Navegación</h4>
+                    {[
+                      { id: 'general', label: 'Información', icon: <FaTags />, desc: 'Básicos y Precio' },
+                      { id: 'media', label: 'Imágenes', icon: <FaBoxOpen />, desc: 'Galería visual' },
+                      { id: 'specs', label: 'Ficha Técnica', icon: <FaCogs />, desc: 'Especificaciones' },
+                      { id: 'seo', label: 'SEO', icon: <FaGlobe />, desc: 'Meta y Búsqueda' },
+                    ].map((tab) => (
+                      <button
+                        key={tab.id}
+                        onClick={() => setActiveTab(tab.id as any)}
+                        className={`flex flex-col items-start gap-0.5 p-3 rounded transition-all text-left ${activeTab === tab.id ? 'bg-[#edeeef] text-[#058c8c]' : 'text-gray-500 hover:bg-gray-50'}`}
+                      >
+                        <div className="flex items-center gap-3">
+                          <span className="text-sm">{tab.icon}</span>
+                          <span className="text-xs font-bold leading-none">{tab.label}</span>
+                        </div>
+                        <span className="text-[10px] opacity-60 font-medium ml-7">{tab.desc}</span>
+                      </button>
+                    ))}
+                    <div className="mt-auto pt-6 border-t border-gray-100">
+                      <div className="bg-gray-50 rounded p-4 border border-gray-100">
+                        <h5 className="text-[9px] font-black text-gray-500 uppercase tracking-widest mb-2">Cambios Locales</h5>
+                        <p className="text-[10px] text-gray-400 leading-relaxed font-medium">Recuerda guardar los cambios al final.</p>
                       </div>
-                      <h4 className="text-lg font-bold text-slate-800">Galería de Imágenes</h4>
                     </div>
+                  </aside>
 
-                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-                      {[0, 1, 2, 3].map((index) => {
-                        const currentImg = (editingProduct.images || [])[index] || '';
-                        return (
-                          <div key={index} className="space-y-4">
-                            <div className="aspect-square bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200 overflow-hidden flex items-center justify-center relative group transition-all hover:border-blue-300">
-                              {uploadingIndex === index ? (
-                                <div className="flex flex-col items-center gap-2">
-                                  <div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-                                  <span className="text-[10px] font-bold text-blue-600">SUBIENDO</span>
-                                </div>
-                              ) : currentImg ? (
-                                <>
-                                  <img src={currentImg} alt="" className="w-full h-full object-contain p-2" />
-                                  <button
-                                    onClick={() => {
-                                      const newImages = [...(editingProduct.images || [])];
-                                      newImages.splice(index, 1);
-                                      handleProductChange(editingProduct.id, editingProduct.category, 'images', newImages);
-                                    }}
-                                    className="absolute top-3 right-3 w-7 h-7 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all shadow-xl z-10"
-                                  >
-                                    <FaTimesCircle size={16} />
-                                  </button>
-                                </>
-                              ) : (
-                                <div className="text-slate-300 flex flex-col items-center gap-2">
-                                  <FaUpload size={24} />
-                                  <span className="text-[10px] font-bold uppercase tracking-widest">Añadir</span>
-                                </div>
-                              )}
-                              {index === 0 && currentImg && !uploadingIndex && (
-                                <span className="absolute bottom-3 left-3 bg-blue-600 text-white text-[9px] font-black px-2.5 py-1 rounded shadow-lg uppercase z-10 tracking-widest">Principal</span>
-                              )}
-                            </div>
-                            <div className="space-y-3">
+                  <main className="flex-1 overflow-y-auto bg-gray-50/30 p-12">
+                    <div className="max-w-4xl mx-auto admin-v2-card bg-white p-10">
+                      {activeTab === 'general' && (
+                        <div className="space-y-8 animate-fadeIn">
+                          <h4 className="text-sm font-black text-gray-900 uppercase tracking-widest border-b border-gray-100 pb-4 mb-6">Información General</h4>
+                          <div className="grid grid-cols-2 gap-8">
+                            <div className="col-span-2">
+                              <label className="block text-[9px] font-black text-gray-400 uppercase tracking-widest mb-2 px-1">Nombre</label>
                               <input
                                 type="text"
-                                placeholder="URL externa"
-                                value={currentImg}
-                                onChange={(e) => {
-                                  const newImages = [...(editingProduct.images || [])];
-                                  newImages[index] = e.target.value;
-                                  handleProductChange(editingProduct.id, editingProduct.category, 'images', newImages.filter(Boolean));
-                                }}
-                                className="w-full text-xs px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none font-medium truncate"
+                                value={p.name}
+                                onChange={(e) => handleProductChange(p.id, p.category, 'name', e.target.value)}
+                                className="w-full px-4 py-3 bg-gray-50 border border-[#e1e3e5] rounded outline-none text-sm font-bold text-gray-900 focus:border-[#058c8c] focus:bg-white transition"
                               />
-                              <div className="relative">
-                                <input
-                                  type="file"
-                                  accept="image/*"
-                                  onChange={(e) => handleFileUpload(e, index)}
-                                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                            </div>
+                            
+                            <div className="col-span-2 bg-gray-50/50 p-6 border border-[#e1e3e5] rounded space-y-4">
+                              <label className="flex items-center gap-3 cursor-pointer">
+                                <input 
+                                  type="checkbox" 
+                                  checked={!!(p.discount && p.discount > 0)}
+                                  onChange={(e) => {
+                                    if (e.target.checked) {
+                                      const original = p.originalPrice || p.price;
+                                      handleProductChange(p.id, p.category, 'originalPrice', original);
+                                      handleProductChange(p.id, p.category, 'discount', 10);
+                                      handleProductChange(p.id, p.category, 'price', original * 0.9);
+                                    } else {
+                                      handleProductChange(p.id, p.category, 'discount', 0);
+                                      if (p.originalPrice) handleProductChange(p.id, p.category, 'price', p.originalPrice);
+                                    }
+                                  }}
+                                  className="w-4 h-4 text-[#058c8c] rounded border-[#e1e3e5]"
                                 />
-                                <button className="w-full py-2 bg-white text-blue-600 text-[10px] font-bold rounded-lg transition-all border border-blue-100 hover:bg-blue-50 shadow-sm uppercase tracking-widest">
-                                  Subir Foto
-                                </button>
-                              </div>
+                                <span className="text-xs font-black text-gray-900 uppercase tracking-widest">Aplica Descuento</span>
+                              </label>
+
+                              {!!(p.discount && p.discount > 0) && (
+                                <div className="grid grid-cols-2 gap-6 pt-2 animate-fadeIn">
+                                  <div>
+                                    <label className="block text-[9px] font-black text-gray-400 uppercase mb-2">Precio Original ($)</label>
+                                    <input
+                                      type="number"
+                                      value={p.originalPrice ?? p.price}
+                                      onChange={(e) => {
+                                        const orig = Number(e.target.value);
+                                        handleProductChange(p.id, p.category, 'originalPrice', orig);
+                                        handleProductChange(p.id, p.category, 'price', orig * (1 - (p.discount || 0)/100));
+                                      }}
+                                      className="w-full px-4 py-2 bg-white border border-[#e1e3e5] rounded outline-none text-xs font-bold"
+                                    />
+                                  </div>
+                                  <div>
+                                    <label className="block text-[9px] font-black text-gray-400 uppercase mb-2">Descuento (%)</label>
+                                    <input
+                                      type="number"
+                                      value={p.discount}
+                                      onChange={(e) => {
+                                        const disc = Number(e.target.value);
+                                        handleProductChange(p.id, p.category, 'discount', disc);
+                                        handleProductChange(p.id, p.category, 'price', (p.originalPrice || p.price) * (1 - disc/100));
+                                      }}
+                                      className="w-full px-4 py-2 bg-white border border-[#e1e3e5] rounded outline-none text-xs font-bold text-red-500"
+                                    />
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+
+                            <div>
+                              <label className="block text-[9px] font-black text-gray-400 uppercase mb-2">Precio Final ($)</label>
+                              <input
+                                type="number"
+                                value={p.price}
+                                onChange={(e) => handleProductChange(p.id, p.category, 'price', Number(e.target.value))}
+                                className="w-full px-4 py-3 bg-gray-50 border border-[#e1e3e5] rounded outline-none text-sm font-black text-[#058c8c]"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-[9px] font-black text-gray-400 uppercase mb-2">Categoría</label>
+                              <input
+                                type="text"
+                                value={p.category}
+                                onChange={(e) => handleProductChange(p.id, p.category, 'category', e.target.value)}
+                                className="w-full px-4 py-3 bg-gray-50 border border-[#e1e3e5] rounded outline-none text-sm font-bold text-gray-600"
+                              />
                             </div>
                           </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                )}
-
-                {activeTab === 'specs' && (
-                  <div className="space-y-8 animate-fadeIn">
-                    <div className="flex items-center justify-between border-b border-slate-100 pb-4 mb-6">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center">
-                          <FaCogs size={14} />
-                        </div>
-                        <h4 className="text-lg font-bold text-slate-800">Ficha Técnica</h4>
-                      </div>
-                      <button
-                        onClick={() => {
-                          const newSpecs = [...(editingProduct.specifications || [])];
-                          newSpecs.push({ label: '', value: '' });
-                          handleProductChange(editingProduct.id, editingProduct.category, 'specifications', newSpecs);
-                        }}
-                        className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-xl text-xs font-bold hover:bg-blue-700 transition-all shadow-md shadow-blue-100"
-                      >
-                        <FaPlus size={10} /> Añadir Atributo
-                      </button>
-                    </div>
-
-                    <div className="space-y-4">
-                      {(editingProduct.specifications || []).length === 0 && (
-                        <div className="py-20 flex flex-col items-center justify-center border-2 border-dashed border-slate-100 rounded-3xl text-slate-400 bg-slate-50/50">
-                          <FaCogs size={48} className="mb-4 opacity-10" />
-                          <span className="text-sm font-bold tracking-widest uppercase opacity-40">No hay detalles técnicos</span>
+                          <div>
+                            <label className="block text-[9px] font-black text-gray-400 uppercase mb-2">Descripción</label>
+                            <textarea
+                              rows={5}
+                              value={p.description || ''}
+                              onChange={(e) => handleProductChange(p.id, p.category, 'description', e.target.value)}
+                              className="w-full px-4 py-3 bg-gray-50 border border-[#e1e3e5] rounded outline-none text-sm text-gray-600 leading-relaxed"
+                            />
+                          </div>
                         </div>
                       )}
-                      {(editingProduct.specifications || []).map((spec, idx) => (
-                        <div key={idx} className="flex gap-4 animate-fadeIn p-4 bg-slate-50 rounded-2xl border border-slate-100 group transition-all hover:bg-white hover:shadow-sm">
-                          <div className="w-1/3">
-                            <label className="block text-[9px] font-black text-slate-400 uppercase mb-1 px-1">Atributo</label>
-                            <input
-                              type="text"
-                              placeholder="Ej: Memoria RAM"
-                              value={spec.label}
-                              onChange={(e) => {
-                                const newSpecs = [...(editingProduct.specifications || [])];
-                                newSpecs[idx].label = e.target.value;
-                                handleProductChange(editingProduct.id, editingProduct.category, 'specifications', newSpecs);
-                              }}
-                              className="w-full px-4 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-xs font-bold text-slate-700"
-                            />
+
+                      {activeTab === 'media' && (
+                        <div className="space-y-8 animate-fadeIn">
+                          <h4 className="text-sm font-black text-gray-900 uppercase tracking-widest border-b border-gray-100 pb-4 mb-6">Galería de Imágenes</h4>
+                          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+                            {[0, 1, 2, 3].map((index) => {
+                              const currentImg = (p.images || [])[index] || '';
+                              return (
+                                <div key={index} className="space-y-3">
+                                  <div className="aspect-square bg-gray-50 rounded border-2 border-dashed border-[#e1e3e5] overflow-hidden flex items-center justify-center relative group">
+                                     {currentImg ? (
+                                       <img src={currentImg} alt="" className="w-full h-full object-contain p-2" />
+                                     ) : (
+                                       <FaUpload className="text-gray-200" size={24} />
+                                     )}
+                                  </div>
+                                  <input
+                                    type="text"
+                                    placeholder="URL"
+                                    value={currentImg}
+                                    onChange={(e) => {
+                                      const newImgs = [...(p.images || [])];
+                                      newImgs[index] = e.target.value;
+                                      handleProductChange(p.id, p.category, 'images', newImgs.filter(Boolean));
+                                    }}
+                                    className="w-full text-[10px] px-2 py-1 bg-white border border-[#e1e3e5] rounded outline-none"
+                                  />
+                                </div>
+                              );
+                            })}
                           </div>
-                          <div className="flex-1">
-                            <label className="block text-[9px] font-black text-slate-400 uppercase mb-1 px-1">Valor</label>
-                            <input
-                              type="text"
-                              placeholder="Ej: 8GB LPDDR5X"
-                              value={spec.value}
-                              onChange={(e) => {
-                                const newSpecs = [...(editingProduct.specifications || [])];
-                                newSpecs[idx].value = e.target.value;
-                                handleProductChange(editingProduct.id, editingProduct.category, 'specifications', newSpecs);
-                              }}
-                              className="w-full px-4 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-xs text-slate-600 font-medium"
-                            />
-                          </div>
-                          <div className="flex items-end mb-0.5">
+                        </div>
+                      )}
+
+                      {activeTab === 'specs' && (
+                        <div className="space-y-8 animate-fadeIn">
+                          <div className="flex items-center justify-between border-b border-gray-100 pb-4 mb-6">
+                            <h4 className="text-sm font-black text-gray-900 uppercase tracking-widest">Especificaciones</h4>
                             <button
                               onClick={() => {
-                                const newSpecs = (editingProduct.specifications || []).filter((_, i) => i !== idx);
-                                handleProductChange(editingProduct.id, editingProduct.category, 'specifications', newSpecs);
+                                const newSpecs = [...(p.specifications || [])];
+                                newSpecs.push({ label: '', value: '' });
+                                handleProductChange(p.id, p.category, 'specifications', newSpecs);
                               }}
-                              className="w-10 h-10 flex items-center justify-center text-slate-300 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all"
+                              className="px-4 py-2 bg-gray-900 text-white rounded text-[10px] font-black uppercase tracking-widest shadow-sm"
                             >
-                              <FaTrash size={14} />
+                              + Añadir
                             </button>
                           </div>
+                          <div className="space-y-3">
+                            {(p.specifications || []).map((spec, idx) => (
+                              <div key={idx} className="flex gap-4 p-4 bg-gray-50 border border-[#e1e3e5] rounded">
+                                <input
+                                  type="text"
+                                  placeholder="Etiqueta"
+                                  value={spec.label}
+                                  onChange={(e) => {
+                                    const newSpecs = [...(p.specifications || [])];
+                                    newSpecs[idx].label = e.target.value;
+                                    handleProductChange(p.id, p.category, 'specifications', newSpecs);
+                                  }}
+                                  className="w-1/3 px-3 py-2 bg-white border border-[#e1e3e5] rounded text-xs font-bold"
+                                />
+                                <input
+                                  type="text"
+                                  placeholder="Valor"
+                                  value={spec.value}
+                                  onChange={(e) => {
+                                    const newSpecs = [...(p.specifications || [])];
+                                    newSpecs[idx].value = e.target.value;
+                                    handleProductChange(p.id, p.category, 'specifications', newSpecs);
+                                  }}
+                                  className="flex-1 px-3 py-2 bg-white border border-[#e1e3e5] rounded text-xs"
+                                />
+                                <button
+                                  onClick={() => {
+                                    const newSpecs = (p.specifications || []).filter((_, i) => i !== idx);
+                                    handleProductChange(p.id, p.category, 'specifications', newSpecs);
+                                  }}
+                                  className="text-gray-300 hover:text-red-500 transition"
+                                >
+                                  <FaTrash size={14} />
+                                </button>
+                              </div>
+                            ))}
+                          </div>
                         </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
+                      )}
 
-                {activeTab === 'seo' && (
-                  <div className="space-y-10 animate-fadeIn">
-                    {/* Physical Properties */}
-                    <div>
-                      <div className="flex items-center gap-3 border-b border-slate-100 pb-4 mb-6">
-                        <div className="w-8 h-8 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center">
-                          <FaBoxOpen size={14} />
+                      {activeTab === 'seo' && (
+                        <div className="space-y-8 animate-fadeIn">
+                          <h4 className="text-sm font-black text-gray-900 uppercase tracking-widest border-b border-gray-100 pb-4 mb-6">SEO y Logística</h4>
+                          <div className="grid grid-cols-2 gap-8">
+                            <div>
+                               <label className="block text-[9px] font-black text-gray-400 uppercase mb-2">Peso (kg)</label>
+                               <input
+                                 type="text"
+                                 value={p.properties?.weight || ''}
+                                 onChange={(e) => handleProductChange(p.id, p.category, 'properties', { ...p.properties, weight: e.target.value })}
+                                 className="w-full px-4 py-3 bg-gray-50 border border-[#e1e3e5] rounded outline-none text-sm font-bold"
+                               />
+                            </div>
+                            <div>
+                               <label className="block text-[9px] font-black text-gray-400 uppercase mb-2">Dimensiones</label>
+                               <input
+                                 type="text"
+                                 value={p.properties?.dimensions || ''}
+                                 onChange={(e) => handleProductChange(p.id, p.category, 'properties', { ...p.properties, dimensions: e.target.value })}
+                                 className="w-full px-4 py-3 bg-gray-50 border border-[#e1e3e5] rounded outline-none text-sm font-bold"
+                               />
+                            </div>
+                          </div>
                         </div>
-                        <h4 className="text-lg font-bold text-slate-800">Dimensiones y Logística</h4>
-                      </div>
-                      <div className="grid grid-cols-3 gap-8">
-                        <div>
-                          <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-3 px-1">Peso (kg)</label>
-                          <input
-                            type="text"
-                            value={editingProduct.properties?.weight || ''}
-                            onChange={(e) => handleProductChange(editingProduct.id, editingProduct.category, 'properties', { ...editingProduct.properties, weight: e.target.value })}
-                            className="w-full px-5 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 transition-all outline-none text-base font-semibold text-slate-700"
-                            placeholder="Ej: 0.187kg"
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-3 px-1">Dimensiones</label>
-                          <input
-                            type="text"
-                            value={editingProduct.properties?.dimensions || ''}
-                            onChange={(e) => handleProductChange(editingProduct.id, editingProduct.category, 'properties', { ...editingProduct.properties, dimensions: e.target.value })}
-                            className="w-full px-5 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 transition-all outline-none text-base font-semibold text-slate-700"
-                            placeholder="Ej: 146.6 x 70.6 mm"
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-3 px-1">Color Principal</label>
-                          <input
-                            type="text"
-                            value={editingProduct.properties?.color || ''}
-                            onChange={(e) => handleProductChange(editingProduct.id, editingProduct.category, 'properties', { ...editingProduct.properties, color: e.target.value })}
-                            className="w-full px-5 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 transition-all outline-none text-base font-semibold text-slate-700"
-                            placeholder="Ej: Titanio Natural"
-                          />
-                        </div>
-                      </div>
+                      )}
                     </div>
-
-                    {/* SEO Config */}
-                    <div>
-                      <div className="flex items-center gap-3 border-b border-slate-100 pb-4 mb-6">
-                        <div className="w-8 h-8 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center">
-                          <FaGlobe size={14} />
-                        </div>
-                        <h4 className="text-lg font-bold text-slate-800">Posicionamiento SEO</h4>
-                      </div>
-                      <div className="space-y-8">
-                        <div>
-                          <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-3 px-1 flex items-center justify-between">
-                            Meta Title
-                            <span className="text-[9px] lowercase font-normal opacity-60">Sugerido: 50-60 caracteres</span>
-                          </label>
-                          <input
-                            type="text"
-                            value={editingProduct.seo?.title || ''}
-                            onChange={(e) => handleProductChange(editingProduct.id, editingProduct.category, 'seo', { ...editingProduct.seo, title: e.target.value })}
-                            className="w-full px-5 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all outline-none text-base font-semibold text-slate-700"
-                            placeholder="Título optimizado para Google..."
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-3 px-1 flex items-center justify-between">
-                            Meta Description
-                            <span className="text-[9px] lowercase font-normal opacity-60">Sugerido: 150-160 caracteres</span>
-                          </label>
-                          <textarea
-                            rows={4}
-                            value={editingProduct.seo?.description || ''}
-                            onChange={(e) => handleProductChange(editingProduct.id, editingProduct.category, 'seo', { ...editingProduct.seo, description: e.target.value })}
-                            className="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all outline-none text-base text-slate-600 leading-relaxed"
-                            placeholder="Descripción corta que atraerá clics en resultados de búsqueda..."
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-3 px-1">Palabras Clave (Keywords)</label>
-                          <input
-                            type="text"
-                            value={editingProduct.seo?.keywords || ''}
-                            onChange={(e) => handleProductChange(editingProduct.id, editingProduct.category, 'seo', { ...editingProduct.seo, keywords: e.target.value })}
-                            className="w-full px-5 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 transition-all outline-none text-base font-semibold text-slate-700"
-                            placeholder="Ej: iphone, tecnología, apple, premium..."
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Final Actions Footer Area */}
-              <div className="max-w-4xl mx-auto mt-12 flex items-center justify-between px-4 pb-12">
-                <div className="flex items-center gap-3 text-slate-400 italic text-sm">
-                  <FaInfoCircle size={14} />
-                  <span>Los cambios se consolidan al presionar el botón azul arriba.</span>
+                  </main>
                 </div>
-                <button
-                  onClick={() => setEditingProduct(null)}
-                  className="flex items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-all text-sm group"
-                >
-                  Descartar cambios actuales
-                  <FaTimesCircle className="group-hover:translate-x-1 transition-transform" />
-                </button>
-              </div>
-            </main>
-          </div>
+              </>
+            );
+          })()}
         </div>
       )}
 
       <style jsx>{`
-        @keyframes slideInRight {
-          from { transform: translateX(100%); }
-          to { transform: translateX(0); }
-        }
-        .animate-slideInRight {
-          animation: slideInRight 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
         @keyframes fadeIn {
           from { opacity: 0; }
           to { opacity: 1; }
@@ -894,8 +713,14 @@ export default function ProductsPage() {
         .animate-fadeIn {
           animation: fadeIn 0.3s ease-out forwards;
         }
+        @keyframes slideDown {
+          from { transform: translateY(-10px); opacity: 0; }
+          to { transform: translateY(0); opacity: 1; }
+        }
+        .animate-slideDown {
+          animation: slideDown 0.3s ease-out forwards;
+        }
       `}</style>
     </div>
   );
 }
-
