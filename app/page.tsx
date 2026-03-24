@@ -1,7 +1,7 @@
 import Hero from './components/Hero/Hero';
 import Benefits from './components/Benefits/Benefits';
 import Categories from './components/Categories/Categories';
-import { ProductCarouselSection } from './components/Products/ProductCarousel';
+import { ProductCarouselSection } from './components/Products/ProductCarouselNative';
 import PromoBanners from './components/PromoBanners/PromoBanners';
 
 export default function Home() {
