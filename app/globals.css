@@ -220,11 +220,11 @@ footer.visible {
 }
 
 .slick-track {
-  display: flex;
+  display: block;
 }
 
 .slick-slide {
-  margin: 0 10px;
+  outline: none;
 }
 
 .slick-prev:before,
