@@ -10,7 +10,9 @@ import {
   FaCheckCircle, 
   FaLock,
   FaCreditCard,
-  FaSpinner
+  FaSpinner,
+  FaShieldAlt,
+  FaStore
 } from 'react-icons/fa';
 
 interface ShippingOption {
@@ -28,6 +30,9 @@ function CheckoutContent() {
   const [loading, setLoading] = useState(false);
   const [shippingRates, setShippingRates] = useState<ShippingOption[]>([]);
   const [selectedRate, setSelectedRate] = useState<ShippingOption | null>(null);
+  const [branches, setBranches] = useState<any[]>([]);
+  const [selectedBranch, setSelectedBranch] = useState<any | null>(null);
+  const [loadingBranches, setLoadingBranches] = useState(false);
   
   const [formData, setFormData] = useState({
     email: '',
@@ -50,6 +55,30 @@ function CheckoutContent() {
       calculateShipping();
     }
   }, [formData.zipCode]);
+
+  // Fetch branches if SUCURSAL is selected
+  useEffect(() => {
+    if (selectedRate?.type === 'SUCURSAL') {
+      fetchBranches();
+    } else {
+      setSelectedBranch(null);
+    }
+  }, [selectedRate]);
+
+  const fetchBranches = async () => {
+    setLoadingBranches(true);
+    try {
+      const resp = await fetch(`/api/shipping/branches?zipCode=${formData.zipCode}`);
+      const data = await resp.json();
+      if (data.success) {
+        setBranches(data.branches);
+      }
+    } catch (err) {
+      console.error('Failed to fetch branches');
+    } finally {
+      setLoadingBranches(false);
+    }
+  };
 
   const calculateShipping = async () => {
     setLoading(true);
@@ -108,11 +137,12 @@ function CheckoutContent() {
             method: selectedRate.name,
             cost: selectedRate.price,
             address: {
-              street: formData.street,
-              number: formData.number,
-              city: formData.city,
-              state: formData.state,
-              zipCode: formData.zipCode
+              street: selectedBranch ? selectedBranch.direccion : formData.street,
+              number: selectedBranch ? '' : formData.number,
+              city: selectedBranch ? selectedBranch.localidad : formData.city,
+              state: selectedBranch ? selectedBranch.provincia : formData.state,
+              zipCode: formData.zipCode,
+              branchDetail: selectedBranch ? `${selectedBranch.nombre} - ${selectedBranch.direccion}` : null
             }
           }
         }),
@@ -314,6 +344,42 @@ function CheckoutContent() {
                 <p className="text-gray-400 text-sm italic">No se encontraron métodos de envío para este CP.</p>
               ) : (
                 <p className="text-gray-400 text-sm italic">Ingresa tu código postal para ver opciones.</p>
+              )}
+
+              {/* Branch Selection UI */}
+              {selectedRate?.type === 'SUCURSAL' && (
+                <div className="mt-8 pt-6 border-t border-gray-100">
+                  <h4 className="text-[14px] font-bold text-gray-700 mb-4 flex items-center gap-2">
+                    <FaStore className="text-[#0066cc]" /> Selecciona una Sucursal Andreani
+                  </h4>
+
+                  {loadingBranches ? (
+                     <div className="flex items-center gap-2 text-gray-400 text-sm italic">
+                       <FaSpinner className="animate-spin" /> Buscando sucursales...
+                     </div>
+                  ) : branches.length > 0 ? (
+                    <div className="grid grid-cols-1 gap-3">
+                      {branches.map((branch) => (
+                        <div 
+                          key={branch.id || branch.numero}
+                          onClick={() => setSelectedBranch(branch)}
+                          className={`p-4 border rounded-lg cursor-pointer transition-all ${selectedBranch?.numero === branch.numero ? 'border-[#0066cc] bg-blue-50/20 ring-1 ring-[#0066cc]' : 'border-gray-100 hover:border-blue-200'}`}
+                        >
+                          <div className="flex justify-between items-start">
+                            <div className="flex flex-col">
+                              <span className="font-bold text-gray-800 text-[14px]">{branch.nombre}</span>
+                              <span className="text-[12px] text-gray-500 mt-1">{branch.direccion}, {branch.localidad}</span>
+                              <span className="text-[10px] text-gray-400 mt-1 uppercase font-bold">{branch.provincia}</span>
+                            </div>
+                            {selectedBranch?.numero === branch.numero && <FaCheckCircle className="text-[#0066cc]" />}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-amber-600 text-[13px] bg-amber-50 p-3 rounded-md">No se encontraron sucursales para este código postal.</p>
+                  )}
+                </div>
               )}
             </section>
           </div>

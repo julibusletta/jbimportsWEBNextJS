@@ -70,25 +70,19 @@ export default function Header() {
   ];
 
   // Update active link based on scroll position
-  const updateActiveLink = () => {
-    const sections = document.querySelectorAll('section, .hero');
-    let currentSection = 'home';
-
-    sections.forEach((section) => {
-      const sectionTop = section.getBoundingClientRect().top;
-      if (sectionTop <= 150) {
-        currentSection = section.id || 'home';
-      }
-    });
-
-    setActiveLink(currentSection);
-  };
-
-  // Scroll effect - Add shadow when scrolled
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
-      updateActiveLink();
+      
+      const sections = document.querySelectorAll('section, .hero');
+      let currentSection = 'home';
+      sections.forEach((section) => {
+        const sectionTop = section.getBoundingClientRect().top;
+        if (sectionTop <= 150) {
+          currentSection = section.id || 'home';
+        }
+      });
+      setActiveLink(currentSection);
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -103,21 +97,13 @@ export default function Header() {
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
-
-
-
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
-    if (!isMenuOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
+    // On mobile we don't necessarily want to lock body scroll for a dropdown
+    // but if it's very long, maybe we do. Compragamer doesn't lock it usually.
   };
 
   const toggleDropdown = (label: string) => {
@@ -125,31 +111,30 @@ export default function Header() {
   };
 
   return (
-    <header className={`main-site-header sticky top-0 z-100 bg-white transition-shadow duration-300 ${isScrolled ? 'shadow-lg' : 'shadow-sm'
-      }`}>
-      <div className="header-top flex items-center gap-6 px-6 md:px-10 py-3 md:py-4 justify-center">
-        {/* Hamburger Menu */}
+    <header 
+      className={`main-site-header sticky top-0 z-[1000] bg-white transition-shadow duration-300 ${isScrolled ? 'shadow-lg' : 'shadow-sm'}`}
+    >
+      <div className="header-top flex items-center justify-between px-4 md:px-10 py-3 md:py-4">
+        {/* Left: Hamburger (Mobile Only) */}
         <button
           onClick={toggleMenu}
-          className="hamburger-menu md:hidden flex flex-col gap-1.5 w-6 h-5 p-0 bg-transparent border-0 cursor-pointer"
-          aria-label="Menú"
+          className="hamburger-menu md:hidden flex items-center justify-center w-10 h-10 p-0 bg-transparent border-0 cursor-pointer text-black z-[1100]"
+          aria-label={isMenuOpen ? "Cerrar menú" : "Abrir menú"}
         >
-          <span className="w-full h-0.5 bg-black rounded-sm"></span>
-          <span className="w-full h-0.5 bg-black rounded-sm"></span>
-          <span className="w-full h-0.5 bg-black rounded-sm"></span>
+          {isMenuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
         </button>
 
-        {/* Logo */}
-        <Link href="/" className="logo flex-shrink-0 h-11 sm:h-14 md:h-28 flex items-center">
+        {/* Center/Left: Logo */}
+        <Link href="/" className="logo flex items-center">
           <img
             src="/images/logotest9.png"
             alt="JBimports Logo"
-            className="h-full w-auto max-w-xs object-contain cursor-pointer transition-transform hover:scale-105"
+            className="w-auto object-contain cursor-pointer transition-transform hover:scale-105"
           />
         </Link>
 
         {/* Search Bar - Desktop */}
-        <div className="hidden md:flex search-bar items-center rounded-lg border border-gray-300 bg-white shadow-sm">
+        <div className="hidden md:flex search-bar flex-1 max-w-2xl mx-10 items-center rounded-lg border border-gray-300 bg-white shadow-sm">
           <input
             type="text"
             placeholder="Buscar productos..."
@@ -160,8 +145,13 @@ export default function Header() {
           </button>
         </div>
 
-        {/* Header Actions */}
-        <div className="header-actions flex items-center gap-6 ml-auto">
+        {/* Right: Actions */}
+        <div className="header-actions flex items-center gap-4 md:gap-6">
+          {/* Search Icon Mobile */}
+          <button className="md:hidden bg-transparent border-0 cursor-pointer text-gray-700 hover:text-orange-600" aria-label="Buscar">
+            <FaSearch size={22} />
+          </button>
+
           {/* User Icon & Dropdown */}
           <div className="relative user-menu-container" ref={userMenuRef}>
             <button
@@ -181,25 +171,18 @@ export default function Header() {
               <FaChevronDown size={10} className={`transition-transform duration-200 ${isUserMenuOpen ? 'rotate-180' : ''}`} />
             </button>
 
-            {/* Dropdown Menu */}
             {isUserMenuOpen && (
-              <div
-                className="absolute right-0 top-full mt-2 w-56 bg-white shadow-[0_10px_30px_rgba(0,0,0,0.15)] rounded-lg py-2 z-[200] border border-gray-100 animate-dropdown"
-                onMouseLeave={() => setIsUserMenuOpen(false)}
-              >
+              <div className="absolute right-0 top-full mt-2 w-56 bg-white shadow-[0_10px_30px_rgba(0,0,0,0.15)] rounded-lg py-2 z-[200] border border-gray-100 animate-dropdown">
                 {session ? (
                   <>
                     <div className="px-5 py-3 border-b border-gray-50 mb-1">
                       <p className="text-gray-400 text-sm font-normal m-0 italic">Conectado como {session.user?.email}</p>
                     </div>
-
                     {[
                       { label: 'Mi cuenta', href: '/mi-cuenta' },
                       { label: 'Mis Compras', href: '/mi-cuenta/compras' },
                       { label: 'Facturas', href: '/mi-cuenta/facturas' },
-                      { label: 'Preguntas', href: '/mi-cuenta/preguntas' },
                       { label: 'Favoritos', href: '/mi-cuenta/favoritos' },
-                      { label: 'Canje de juegos', href: '/mi-cuenta/canje' },
                     ].map((item) => (
                       <Link
                         key={item.label}
@@ -210,7 +193,6 @@ export default function Header() {
                         {item.label}
                       </Link>
                     ))}
-
                     <div className="border-t border-gray-50 mt-1 pt-1">
                       <button
                         onClick={() => { signOut(); setIsUserMenuOpen(false); }}
@@ -222,7 +204,6 @@ export default function Header() {
                   </>
                 ) : (
                   <div className="p-4">
-                    <p className="text-gray-500 text-sm mb-4 text-center">Iniciá sesión para ver tus compras y más.</p>
                     <Link
                       href="/auth/signin"
                       className="block w-full text-center bg-blue-600 text-white py-2.5 rounded-lg font-bold text-sm hover:bg-blue-700 transition-colors no-underline"
@@ -230,23 +211,11 @@ export default function Header() {
                     >
                       INGRESAR
                     </Link>
-                    <Link 
-                      href="/auth/register"
-                      className="block text-center text-[10px] text-gray-400 mt-3 uppercase tracking-wider hover:text-blue-600 transition-colors no-underline pt-2 border-t border-gray-50"
-                      onClick={() => setIsUserMenuOpen(false)}
-                    >
-                      ¿No tenés cuenta? Registrate
-                    </Link>
                   </div>
                 )}
               </div>
             )}
           </div>
-
-          {/* Search Icon Mobile */}
-          <button className="md:hidden bg-transparent border-0 cursor-pointer text-gray-700 hover:text-orange-600" aria-label="Buscar">
-            <FaSearch size={22} />
-          </button>
 
           {/* Cart */}
           <Link href="/cart" className="cart-icon relative flex items-center text-gray-700 hover:text-orange-600 cursor-pointer transition-colors">
@@ -260,14 +229,6 @@ export default function Header() {
         </div>
       </div>
 
-      {/* Menu Overlay */}
-      {isMenuOpen && (
-        <div
-          className="menu-overlay fixed inset-0 bg-black bg-opacity-40 md:hidden z-40"
-          onClick={toggleMenu}
-        ></div>
-      )}
-
       {/* Desktop Navigation */}
       <nav className="hidden md:flex bg-black header-nav px-10 py-0 items-center justify-center h-14">
         <div className="nav-primary flex gap-8 list-none m-0 p-0 w-auto h-14 items-center">
@@ -275,49 +236,21 @@ export default function Header() {
             <div key={link.label} className="dropdown relative inline-block group">
               <Link
                 href={link.href}
-                className={`text-white font-medium text-base py-1.5 px-4 rounded transition-all flex items-center gap-2 ${activeLink === link.id
-                    ? 'font-bold'
-                    : 'hover:bg-gray-800'
-                  }`}
+                className={`text-white font-medium text-base py-1.5 px-4 rounded transition-all flex items-center gap-2 ${activeLink === link.id ? 'font-bold' : 'hover:bg-gray-800'}`}
               >
                 {link.label}
-                {link.submenu && (
-                  <FaChevronDown size={10} className="transition-transform duration-200 group-hover:rotate-180 opacity-70" />
-                )}
+                {link.submenu && <FaChevronDown size={10} className="transition-transform duration-200 group-hover:rotate-180 opacity-70" />}
               </Link>
-
-              {/* Dropdown Content */}
               {link.submenu && (
-                <div className="dropdown-content absolute bg-white min-w-55 shadow-lg rounded-lg top-full left-0 p-3 animation-dropdown">
+                <div className="dropdown-content absolute bg-white min-w-55 shadow-lg rounded-lg top-full left-0 p-3 hidden group-hover:block transition-all">
                   {link.submenu.map((sublink) => (
-                    <div key={sublink.label} className="dropdown-submenu relative">
-                      {sublink.submenu ? (
-                        <>
-                          <button className="w-full text-left text-gray-900 px-6 py-2.5 text-base font-medium hover:bg-gray-100 rounded transition-all flex items-center justify-between">
-                            {sublink.label}
-                            <FaChevronDown size={12} />
-                          </button>
-                          <div className="submenu-content absolute left-full top-0 min-w-52 bg-white shadow-lg rounded-lg p-2 z-50">
-                            {sublink.submenu.map((item) => (
-                              <Link
-                                key={item.label}
-                                href={item.href}
-                                className="block text-gray-900 px-6 py-2 text-base font-medium hover:bg-gray-100 rounded transition-all"
-                              >
-                                {item.label}
-                              </Link>
-                            ))}
-                          </div>
-                        </>
-                      ) : (
-                        <Link
-                          href={sublink.href}
-                          className="block text-gray-900 px-6 py-2.5 text-base font-medium hover:bg-gray-100 rounded transition-all"
-                        >
-                          {sublink.label}
-                        </Link>
-                      )}
-                    </div>
+                    <Link
+                      key={sublink.label}
+                      href={sublink.href}
+                      className="block text-gray-900 px-6 py-2.5 text-base font-medium hover:bg-gray-100 rounded transition-all no-underline"
+                    >
+                      {sublink.label}
+                    </Link>
                   ))}
                 </div>
               )}
@@ -331,46 +264,59 @@ export default function Header() {
         </div>
       </nav>
 
-      {/* Mobile Navigation */}
-      {isMenuOpen && (
-        <div id="main-nav" className="header-nav open md:hidden absolute top-full left-0 w-full bg-white overflow-hidden z-50 shadow-lg animate-slideDown">
-          <nav className="nav-primary flex flex-col gap-0 p-0 w-full h-auto">
-            {navLinks.map((link) => (
-              <div key={link.label}>
-                <button
-                  onClick={() => link.submenu && toggleDropdown(link.label)}
-                  className="w-full text-left text-black px-5 py-4 text-base font-medium border-b border-gray-200 hover:bg-gray-100 flex items-center justify-between"
+      {/* Mobile Navigation Dropdown (Compragamer style) */}
+      <div 
+        id="main-nav" 
+        className={`md:hidden absolute top-full left-0 w-full bg-white z-[900] shadow-xl overflow-hidden transition-all duration-300 ease-in-out ${
+          isMenuOpen ? 'max-h-[85vh] opacity-100' : 'max-h-0 opacity-0 pointer-events-none'
+        }`}
+      >
+        <nav className="mobile-dropdown-nav flex flex-col overflow-y-auto">
+          {navLinks.map((link) => (
+            <div key={link.label} className="mobile-menu-item border-b border-gray-100">
+              <div className="flex items-center justify-between px-6 py-4">
+                <Link 
+                  href={link.href} 
+                  className="text-black text-sm font-bold uppercase no-underline flex-1"
+                  onClick={() => setIsMenuOpen(false)}
                 >
                   {link.label}
-                  {link.submenu && (
-                    <FaChevronDown
-                      size={12}
-                      className={`transition-transform ${openDropdown === link.label ? 'rotate-180' : ''
-                        }`}
-                    />
-                  )}
-                </button>
-
-                {/* Mobile Dropdown */}
-                {link.submenu && openDropdown === link.label && (
-                  <div className="dropdown-content bg-gray-50 border-b border-gray-200">
-                    {link.submenu.map((sublink) => (
-                      <div key={sublink.label} className="pl-5">
-                        <Link
-                          href={sublink.href}
-                          className="block text-gray-800 px-5 py-3 text-sm font-medium border-b border-gray-200 hover:bg-gray-100"
-                        >
-                          {sublink.label}
-                        </Link>
-                      </div>
-                    ))}
-                  </div>
+                </Link>
+                {link.submenu && (
+                  <button 
+                    onClick={() => toggleDropdown(link.label)}
+                    className="p-2 text-gray-400 bg-transparent border-0 cursor-pointer"
+                  >
+                    <FaChevronDown className={`transition-transform duration-300 ${openDropdown === link.label ? 'rotate-180' : ''}`} size={16} />
+                  </button>
                 )}
               </div>
-            ))}
-          </nav>
-        </div>
-      )}
+              
+              {link.submenu && openDropdown === link.label && (
+                <div className="bg-gray-50 animate-slideDown">
+                  {link.submenu.map((sublink) => (
+                    <Link
+                      key={sublink.label}
+                      href={sublink.href}
+                      className="block text-gray-600 px-10 py-3 text-xs font-semibold border-b border-gray-100 last:border-0 hover:text-blue-600 no-underline uppercase"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      {sublink.label}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
+          <div className="p-5 bg-gray-50">
+            <Link href="/category/ofertas" onClick={() => setIsMenuOpen(false)}>
+              <button className="w-full comic-button py-3 text-sm font-bold text-white bg-red-500 border-2 border-black rounded-lg shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-x-1 active:translate-y-1 transition-all">
+                ¡OFERTAS IMPERDIBLES! 🔥
+              </button>
+            </Link>
+          </div>
+        </nav>
+      </div>
     </header>
   );
 }

@@ -51,8 +51,8 @@ export default function SignInPage() {
 
         <div className="space-y-4">
           <input
-            type="email"
-            placeholder="Correo electrónico"
+            type="text"
+            placeholder="Correo electrónico o usuario"
             id="email"
             className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-sm"
           />

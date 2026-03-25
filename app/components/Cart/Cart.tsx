@@ -1,23 +1,13 @@
 'use client';
 
 import { useContext, useState } from 'react';
-import { useCart } from '../../context/CartContext';
+import { useCart, CartItem } from '../../context/CartContext';
 import { useRouter } from 'next/navigation';
 import '../../styles/Cart.css';
 
-interface CartItem {
-  id: string;
-  name: string;
-  price: number;
-  quantity: number;
-  image: string;
-}
-
 export default function Cart() {
-  const { cartItems, removeFromCart, addToCart } = useCart();
+  const { cartItems, removeFromCart, addToCart, total } = useCart();
   const router = useRouter();
-
-  const total = cartItems.reduce((sum: number, item: CartItem) => sum + item.price * item.quantity, 0);
 
   const handleQuantityChange = (id: string, newQuantity: number) => {
     if (newQuantity <= 0) {

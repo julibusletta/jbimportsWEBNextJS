@@ -86,8 +86,8 @@
 
 @media (max-width: 768px) {
   .benefits-section {
-    padding: 0 0 10px 0 !important;
-    margin: 0 !important;
+    padding: 0 !important;
+    margin: -10px 0 0 0 !important; /* Slightly negative top margin to bridge gap */
     border-top: none;
   }
 

@@ -3,6 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { signOut } from 'next-auth/react';
 import { 
   FaHome, 
   FaBox, 
@@ -86,7 +87,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           ))}
         </nav>
 
-        <div className="p-4 border-t border-[#e1e3e5]">
+        <div className="p-4 border-t border-[#e1e3e5] space-y-2">
           <Link 
             href="/" 
             className="flex items-center justify-between gap-2 px-3 py-2 text-xs font-bold text-gray-500 hover:bg-gray-100 rounded-lg transition-colors group"
@@ -96,6 +97,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                Ver Tienda
             </span>
           </Link>
+
+          <button
+            onClick={() => signOut({ callbackUrl: '/' })}
+            className="w-full flex items-center gap-2 px-3 py-2 text-xs font-bold text-red-500 hover:bg-red-50 rounded-lg transition-colors border-none bg-transparent cursor-pointer"
+          >
+            <FaExternalLinkAlt className="rotate-180" />
+            Cerrar Sesión
+          </button>
         </div>
       </aside>
 

@@ -24,6 +24,16 @@ export const authOptions: NextAuthOptions = {
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null;
         
+        // Specific Admin access
+        if (credentials.email === 'admin' && credentials.password === 'Deporte$1993') {
+          return {
+            id: 'admin',
+            email: 'admin',
+            name: 'Administrador',
+            role: 'ADMIN',
+          } as any;
+        }
+
         const user = await db.getUserByEmail(credentials.email);
         if (!user || !user.password) return null;
         
@@ -34,7 +44,7 @@ export const authOptions: NextAuthOptions = {
           id: user.email,
           email: user.email,
           name: `${user.firstName} ${user.lastName}`,
-          role: user.role,
+          role: user.role || 'USER',
           dni: user.dni,
           address: user.address,
         } as any;
