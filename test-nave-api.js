@@ -1,11 +1,11 @@
 
-const NAVE_ENV = 'sandbox';
-const NAVE_TERMINAL_ID = 'f71ba756-1d80-4ab3-9f43-5dc247fd6c4a';
-const NAVE_CLIENT_ID = 'Juqi59VtYox8Ty8vFLehVkEsc0dpqxYa';
-const NAVE_CLIENT_SECRET = 'rBBQWfBAPDvQZUx1Trwzh7-zTLSvLh14mtDKyCKNJHGCLOVn3T2p9HF22n7u1aEZ';
+const NAVE_ENV = 'production';
+const NAVE_TERMINAL_ID = 'bf1b6c74-59b7-4b90-a579-fa3b6ad2b492';
+const NAVE_CLIENT_ID = 'TRG54rWLT09FFHPDQysXosdJp8g1Ehbl';
+const NAVE_CLIENT_SECRET = 'hG-5o1v2Kjm5QfxRu7FMR8V4GtVjJM_6CfoiGg2cWHCamG4NE68czTRQQTtEkbHO';
 
-const AUTH_URL = 'https://homoservices.apinaranja.com/security-ms/api/security/auth0/b2b/m2ms';
-const CHECKOUT_URL = 'https://api-sandbox.ranty.io/api/payment_request/ecommerce';
+const AUTH_URL = 'https://services.apinaranja.com/security-ms/api/security/auth0/b2b/m2ms';
+const CHECKOUT_URL = 'https://api.ranty.io/api/payment_request/ecommerce';
 const NAVE_AUDIENCE = 'https://naranja.com/ranty/merchants/api';
 
 async function testNave() {
