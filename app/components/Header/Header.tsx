@@ -1,8 +1,9 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, FormEvent } from 'react';
 import { FaShoppingCart, FaBars, FaTimes, FaSearch, FaUser, FaChevronDown } from 'react-icons/fa';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useSession, signOut } from "next-auth/react";
 import { useCart } from '@/app/context/CartContext';
 import '../../styles/Header.css';
@@ -23,6 +24,18 @@ export default function Header() {
   const { cartCount } = useCart();
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeLink, setActiveLink] = useState('home');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
+  const router = useRouter();
+
+  const handleSearch = (e: FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+      setIsMobileSearchOpen(false);
+      setIsMenuOpen(false);
+    }
+  };
 
   const navLinks: NavLink[] = [
     {
@@ -133,22 +146,27 @@ export default function Header() {
           />
         </Link>
 
-        {/* Search Bar - Desktop */}
-        <div className="hidden md:flex search-bar flex-1 max-w-2xl mx-10 items-center rounded-lg border border-gray-300 bg-white shadow-sm">
+        <form onSubmit={handleSearch} className="hidden md:flex search-bar flex-1 max-w-2xl mx-10 items-center rounded-lg border border-gray-300 bg-white shadow-sm">
           <input
             type="text"
             placeholder="Buscar productos..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
             className="flex-1 px-6 py-3 border-0 bg-transparent font-sans text-base outline-0"
           />
           <button type="submit" className="px-5 py-3 border-0 bg-transparent cursor-pointer flex items-center justify-center text-gray-600 hover:text-orange-600">
             <FaSearch size={20} />
           </button>
-        </div>
+        </form>
 
         {/* Right: Actions */}
         <div className="header-actions flex items-center gap-4 md:gap-6">
           {/* Search Icon Mobile */}
-          <button className="md:hidden bg-transparent border-0 cursor-pointer text-gray-700 hover:text-orange-600" aria-label="Buscar">
+          <button 
+            className="md:hidden bg-transparent border-0 cursor-pointer text-gray-700 hover:text-orange-600" 
+            aria-label="Buscar"
+            onClick={() => setIsMobileSearchOpen(!isMobileSearchOpen)}
+          >
             <FaSearch size={22} />
           </button>
 
@@ -228,6 +246,24 @@ export default function Header() {
           </Link>
         </div>
       </div>
+      {/* Mobile Search Input */}
+      {isMobileSearchOpen && (
+        <div className="md:hidden px-4 pb-3 bg-white border-b border-gray-100 animate-slideDown">
+          <form onSubmit={handleSearch} className="flex search-bar items-center rounded-lg border border-gray-300 bg-gray-50 shadow-inner">
+            <input
+              type="text"
+              placeholder="¿Qué estás buscando?"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              autoFocus
+              className="flex-1 px-4 py-2 border-0 bg-transparent font-sans text-sm outline-0"
+            />
+            <button type="submit" className="px-4 py-2 border-0 bg-transparent cursor-pointer flex items-center justify-center text-gray-600 hover:text-orange-600">
+              <FaSearch size={16} />
+            </button>
+          </form>
+        </div>
+      )}
 
       {/* Desktop Navigation */}
       <nav className="hidden md:flex bg-black header-nav px-10 py-0 items-center justify-center h-14">

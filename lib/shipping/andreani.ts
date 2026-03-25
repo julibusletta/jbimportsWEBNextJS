@@ -110,7 +110,7 @@ export async function calculateRates(zipCode: string, items: ShippingItem[]): Pr
     return (data.tarifas || []).map((t: any) => ({
       id: t.id_servicio || String(Math.random()),
       name: t.detalle || 'Envío Andreani',
-      price: parseFloat(t.valor) || 0,
+      price: 0, // Force free shipping
       estimatedDays: parseInt(t.dias_entrega) || 3,
       type: t.es_sucursal ? 'SUCURSAL' : 'DOMICILIO'
     }));
@@ -124,8 +124,8 @@ export async function calculateRates(zipCode: string, items: ShippingItem[]): Pr
 function getDefaultRates(): RateOption[] {
   // Safe fallback to ensure the user can at least see mock rates if API is down
   return [
-    { id: 'dom-std', name: 'Envío a Domicilio (Andreani)', price: 4800, estimatedDays: 3, type: 'DOMICILIO' },
-    { id: 'suc-std', name: 'Retiro en Sucursal (Andreani)', price: 3500, estimatedDays: 2, type: 'SUCURSAL' }
+    { id: 'dom-std', name: 'Envío a Domicilio (Andreani)', price: 0, estimatedDays: 3, type: 'DOMICILIO' },
+    { id: 'suc-std', name: 'Retiro en Sucursal (Andreani)', price: 0, estimatedDays: 2, type: 'SUCURSAL' }
   ];
 }
 

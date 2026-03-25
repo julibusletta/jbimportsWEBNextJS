@@ -110,7 +110,9 @@ export default function ShippingCalculator({
                 <span className="text-[13px] font-bold text-[#333]">{option.name}</span>
                 <span className="text-[11px] text-[#666]">Llega en {option.estimatedDays} días hábiles</span>
               </div>
-              <span className="text-[#0066cc] font-bold">${option.price.toLocaleString('es-AR')}</span>
+              <span className="text-[#0066cc] font-bold">
+                {option.price === 0 ? 'SIN CARGO' : `$${option.price.toLocaleString('es-AR')}`}
+              </span>
             </div>
           ))}
           <button 

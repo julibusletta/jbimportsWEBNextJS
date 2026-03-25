@@ -10,6 +10,8 @@ export interface Product {
     discountPercentage: number;
     description: string;
     imageUrls: string[];
+    image?: string;
+    discount?: number;
     category: string;
     discountBase: boolean;
 }

@@ -336,7 +336,9 @@ function CheckoutContent() {
                           <span className="text-[12px] text-gray-500">Llega en {rate.estimatedDays} días hábiles aprox.</span>
                         </div>
                       </div>
-                      <span className="font-bold text-[#0066cc]">${rate.price.toLocaleString()}</span>
+                      <span className="font-bold text-[#0066cc]">
+                        {rate.price === 0 ? 'SIN CARGO' : `$${rate.price.toLocaleString()}`}
+                      </span>
                     </div>
                   ))}
                 </div>
@@ -415,7 +417,12 @@ function CheckoutContent() {
                   </div>
                   <div className="flex justify-between text-gray-600">
                     <span>Envío</span>
-                    <span>{selectedRate ? `$${selectedRate.price.toLocaleString()}` : <span className="text-gray-300 italic text-sm">A calcular</span>}</span>
+                    <span className="font-bold text-[#0066cc]">
+                      {selectedRate 
+                        ? (selectedRate.price === 0 ? 'SIN CARGO' : `$${selectedRate.price.toLocaleString()}`) 
+                        : <span className="text-gray-300 italic text-sm font-normal">A calcular</span>
+                      }
+                    </span>
                   </div>
                   <div className="flex justify-between text-[18px] font-bold text-gray-900 pt-2">
                     <span>Total Final</span>
