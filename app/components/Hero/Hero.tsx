@@ -92,15 +92,6 @@ export default function Hero() {
           </span>
           {isTyping && <span className="animate-pulse ml-1 text-gray-400">|</span>}
         </h1>
-        <p className="hero-hidden text-2xl text-gray-600 mb-12 font-medium leading-relaxed opacity-0 animate-fadeInUp delay-500">
-          Los mejores precios del mercado
-        </p>
-        <a
-          href="#contact"
-          className="hero-hidden inline-block bg-gray-900 text-white px-10 py-3 rounded text-lg font-semibold transition-all hover:bg-gray-800 transform hover:-translate-y-0.5 opacity-0 animate-fadeInUp delay-1000"
-        >
-          Acceder al shop!
-        </a>
       </div>
 
       {/* Hero Slider */}
