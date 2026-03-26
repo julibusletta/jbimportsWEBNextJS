@@ -1,16 +1,31 @@
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { redirect } from "next/navigation";
-import { FaMapMarkerAlt, FaPlus, FaHome, FaBriefcase, FaEllipsisV } from 'react-icons/fa';
+'use client';
 
-export default async function DireccionesPage() {
-  const session = await getServerSession(authOptions);
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useState } from 'react';
+import { FaMapMarkerAlt, FaPlus, FaHome, FaBriefcase, FaEllipsisV, FaSpinner } from 'react-icons/fa';
+import AddressForm from "./AddressForm";
 
-  if (!session?.user?.email) {
-    redirect('/auth/signin');
+export default function DireccionesPage() {
+  const { data: session, status } = useSession();
+  const router = useRouter();
+  const [showForm, setShowForm] = useState(false);
+
+  if (status === 'loading') {
+    return (
+      <div className="flex flex-col items-center justify-center py-20 animate-pulse">
+        <FaSpinner className="animate-spin text-slate-300 mb-4" size={30} />
+        <p className="text-slate-400 font-bold text-xs uppercase tracking-widest">Cargando direcciones...</p>
+      </div>
+    );
   }
 
-  const userAddress = (session.user as any).address;
+  if (status === 'unauthenticated') {
+    router.push('/auth/signin');
+    return null;
+  }
+
+  const userAddress = (session?.user as any)?.address;
 
   return (
     <div className="animate-in fade-in duration-700">
@@ -19,14 +34,17 @@ export default async function DireccionesPage() {
           <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Mis Direcciones</h1>
           <p className="text-slate-500 text-sm mt-2 font-medium">Gestioná tus domicilios de entrega y facturación.</p>
         </div>
-        <button className="flex items-center gap-2 px-5 py-3 bg-slate-900 text-white rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-slate-800 transition-all shadow-lg active:scale-95">
+        <button 
+          onClick={() => setShowForm(true)}
+          className="flex items-center gap-2 px-5 py-3 bg-slate-900 text-white rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-slate-800 transition-all shadow-lg active:scale-95"
+        >
           <FaPlus />
-          Nueva Dirección
+          {userAddress ? 'Editar Dirección' : 'Nueva Dirección'}
         </button>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {userAddress ? (
+        {userAddress && userAddress.street ? (
           <div className="bg-white border-2 border-slate-900 rounded-2xl p-7 relative group shadow-[0_10px_30px_rgba(0,0,0,0.04)]">
             <div className="flex items-start justify-between mb-6">
               <div className="flex items-center gap-3">
@@ -38,9 +56,6 @@ export default async function DireccionesPage() {
                   <p className="font-bold text-slate-900 uppercase tracking-tight text-sm">Principal</p>
                 </div>
               </div>
-              <button className="text-slate-300 hover:text-slate-600 bg-transparent border-0 cursor-pointer">
-                <FaEllipsisV />
-              </button>
             </div>
             
             <div className="space-y-1">
@@ -54,7 +69,10 @@ export default async function DireccionesPage() {
             </div>
 
             <div className="mt-8 pt-6 border-t border-slate-50 flex gap-4">
-              <button className="flex-1 py-3 bg-slate-50 text-slate-600 text-[10px] font-bold uppercase tracking-widest rounded-lg border border-slate-100 hover:bg-slate-100 transition-colors">
+              <button 
+                onClick={() => setShowForm(true)}
+                className="flex-1 py-3 bg-slate-50 text-slate-600 text-[10px] font-bold uppercase tracking-widest rounded-lg border border-slate-100 hover:bg-slate-100 transition-colors"
+              >
                 Editar
               </button>
               <button className="px-4 py-3 bg-slate-50 text-slate-400 text-[10px] font-bold uppercase tracking-widest rounded-lg border border-slate-100 hover:text-red-500 hover:bg-red-50 transition-colors">
@@ -63,11 +81,17 @@ export default async function DireccionesPage() {
             </div>
           </div>
         ) : (
-          <div className="bg-slate-50/50 border border-slate-100 border-dashed rounded-3xl p-10 flex flex-col items-center justify-center text-center">
+          <div className="bg-slate-50/50 border border-slate-200 border-dashed rounded-3xl p-10 flex flex-col items-center justify-center text-center">
             <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center text-slate-200 mb-4 shadow-sm">
               <FaMapMarkerAlt size={24} />
             </div>
-            <p className="text-slate-400 font-bold text-xs uppercase tracking-widest">Sin direcciones registradas</p>
+            <p className="text-slate-400 font-bold text-xs uppercase tracking-widest mb-4">Sin direcciones registradas</p>
+            <button 
+              onClick={() => setShowForm(true)}
+              className="text-blue-600 text-[10px] font-black uppercase tracking-[0.15em] hover:underline"
+            >
+              Agregar dirección ahora
+            </button>
           </div>
         )}
 
@@ -77,9 +101,20 @@ export default async function DireccionesPage() {
               <FaBriefcase size={20} />
             </div>
             <p className="text-slate-400 font-bold text-[10px] uppercase tracking-widest mb-1 leading-none">¿Dirección en el trabajo?</p>
-            <button className="text-blue-600 text-[10px] font-black uppercase tracking-[0.15em] hover:underline">Agregar ahora</button>
+            <p className="text-[10px] text-slate-300 font-medium italic">Próximamente...</p>
         </div>
       </div>
+
+      {showForm && (
+        <AddressForm 
+          initialData={userAddress}
+          onClose={() => setShowForm(false)}
+          onSuccess={() => {
+            setShowForm(false);
+            window.location.reload(); // Refresh session data
+          }}
+        />
+      )}
     </div>
   );
 }
