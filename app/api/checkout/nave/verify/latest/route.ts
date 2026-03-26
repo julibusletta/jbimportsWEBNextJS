@@ -103,6 +103,7 @@ export async function GET(request: Request) {
     return NextResponse.json({ success: true, status: normalizedStatus, updated: false });
 
   } catch (error: any) {
+    await db.logWebhook('NAVE_VERIFY_EXCEPTION', 'ERROR', { message: error.message, stack: error.stack });
     return NextResponse.json({ success: false, message: error.message });
   }
 }
