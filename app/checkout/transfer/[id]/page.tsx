@@ -75,7 +75,7 @@ export default function TransferPage() {
   deadline.setDate(deadline.getDate() + 2); // 48 hours deadline
 
   return (
-    <div className="min-h-screen bg-[#eee] pt-48 pb-12 font-[Montserrat,sans-serif]">
+    <div className="min-h-screen bg-[#eee] pt-48 pb-12 font-[Montserrat,sans-serif] flex flex-col items-center w-full">
       <style jsx global>{`
         @keyframes pulse-yellow {
           0% { transform: scale(1); opacity: 1; }
@@ -86,7 +86,7 @@ export default function TransferPage() {
           animation: pulse-yellow 2s infinite ease-in-out;
         }
       `}</style>
-      <div className="max-w-[1000px] mx-auto px-4 lg:px-10">
+      <div className="w-full max-w-[1000px] px-4 lg:px-10 flex flex-col items-center">
         
         {/* Reservation Header (CompraGamer Style) */}
         <div className="bg-gradient-to-b from-white to-[#fff6df] rounded-[32px] p-10 mb-8 flex flex-col items-center text-center shadow-sm border border-amber-100">
