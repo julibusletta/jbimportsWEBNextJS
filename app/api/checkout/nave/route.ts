@@ -23,22 +23,21 @@ const NAVE_AUDIENCE = 'https://naranja.com/ranty/merchants/api';
 
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "../../auth/[...nextauth]/route";
-
 export async function POST(request: Request) {
   try {
     const { items, total, orderId, shipping, email, firstName, lastName } = await request.json();
     const { db } = await import('@/lib/db');
-    
+
     // Ensure we have a valid public URL for Nave's callback
     const host = request.headers.get('host') || '';
     let baseUrl = process.env.NEXTAUTH_URL || '';
     
-    // FORCE the primary domain if we're in production to ensure Nave reaches us
-    if (NAVE_ENV === 'production') {
-      baseUrl = 'https://jbimports.com.ar';
-    } else if (!baseUrl || baseUrl.includes('localhost') && host && !host.includes('localhost')) {
+    // In production, if host is available and points to Vercel/Domain, use it
+    if (host && !host.includes('localhost')) {
+      baseUrl = `https://${host}`;
+    } else if (!baseUrl || baseUrl.includes('localhost')) {
       const protocol = host.includes('localhost') ? 'http' : 'https';
-      baseUrl = `${protocol}://${host}`;
+      baseUrl = `${protocol}://${host || 'localhost:3000'}`;
     }
     
     // Clean trailing slash
@@ -153,6 +152,7 @@ export async function POST(request: Request) {
           }))
         }
       ],
+      redirection_url: `${baseUrl}/mi-cuenta/compras?verify=${orderId || `order_${Date.now()}`}`,
       additional_info: {
         callback_url: `${baseUrl}/api/checkout/nave/webhook`,
         back_url: `${baseUrl}/mi-cuenta/compras`,

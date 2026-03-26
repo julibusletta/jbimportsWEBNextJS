@@ -5,6 +5,8 @@ import { redirect } from "next/navigation";
 import { FaShoppingBag } from 'react-icons/fa';
 import Link from 'next/link';
 import OrderCard from '@/app/components/Profile/OrderCard';
+import StatusChecker from '@/app/components/Checkout/StatusChecker';
+import { Suspense } from 'react';
 
 export default async function MisComprasPage() {
   const session = await getServerSession(authOptions);
@@ -18,6 +20,9 @@ export default async function MisComprasPage() {
 
   return (
     <div className="animate-in fade-in duration-700">
+      <Suspense fallback={null}>
+        <StatusChecker />
+      </Suspense>
       <div className="mb-10 flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-slate-100 pb-8">
         <div>
           <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Mis Compras</h1>
