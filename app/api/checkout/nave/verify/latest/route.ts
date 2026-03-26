@@ -20,6 +20,9 @@ const STATUS_URL = NAVE_ENV === 'production'
 const NAVE_AUDIENCE = 'https://naranja.com/ranty/merchants/api';
 
 export async function GET(request: Request) {
+  const { db } = await import('@/lib/db');
+  await db.logWebhook('NAVE_VERIFY_REQUEST', 'GET', { url: request.url });
+
   const session = await getServerSession(authOptions);
   
   // For guests, we might not have a session, so this specific "latest" check 

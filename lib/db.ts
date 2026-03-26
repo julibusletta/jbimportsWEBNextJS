@@ -51,7 +51,8 @@ export const db = {
     try {
       await dbConnect();
       const Order = await this.getOrderModel();
-      return await Order.find({ userEmail: email }).sort({ createdAt: -1 }).lean();
+      const normalizedEmail = email.toLowerCase();
+      return await Order.find({ userEmail: normalizedEmail }).sort({ createdAt: -1 }).lean();
     } catch (error) {
       console.error('DB Error [getOrdersByEmail]:', error);
       throw error;
@@ -62,8 +63,11 @@ export const db = {
     try {
       await dbConnect();
       const Order = await this.getOrderModel();
-      const existingOrder = await Order.findOne({ id: orderData.id });
+      if (orderData.userEmail) {
+        orderData.userEmail = orderData.userEmail.toLowerCase();
+      }
 
+      const existingOrder = await Order.findOne({ id: orderData.id });
       if (existingOrder) {
         await Order.updateOne({ id: orderData.id }, orderData);
       } else {
