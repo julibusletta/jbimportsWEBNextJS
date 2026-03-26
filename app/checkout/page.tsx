@@ -396,47 +396,6 @@ function CheckoutContent() {
                 </div>
               )}
             </section>
-            {/* 4. Payment Method */}
-            <section className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
-              <h2 className="text-lg font-bold mb-6 flex items-center gap-2">
-                <span className="w-8 h-8 rounded-full bg-[#0066cc] text-white flex items-center justify-center text-[14px]">3</span>
-                Método de Pago
-              </h2>
-
-              <div className="flex flex-col gap-3">
-                <div 
-                  onClick={() => setPaymentMethod('nave')}
-                  className={`flex items-center justify-between p-4 border rounded-lg cursor-pointer transition-all ${paymentMethod === 'nave' ? 'border-[#0066cc] bg-blue-50/30 ring-1 ring-[#0066cc]' : 'border-gray-100 hover:border-blue-200'}`}
-                >
-                  <div className="flex items-center gap-4">
-                    <div className={`w-5 h-5 rounded-full border flex items-center justify-center ${paymentMethod === 'nave' ? 'border-[#0066cc] bg-[#0066cc]' : 'border-gray-300'}`}>
-                      {paymentMethod === 'nave' && <div className="w-2 h-2 rounded-full bg-white" />}
-                    </div>
-                    <div className="flex flex-col">
-                      <span className="font-bold text-gray-800 text-[15px]">Nave Negocios (Galicia)</span>
-                      <span className="text-[12px] text-gray-500">Tarjetas de Crédito/Débito y QR</span>
-                    </div>
-                  </div>
-                  <img src="/images/nave.jpg" alt="Nave" className="h-[18px]" />
-                </div>
-
-                <div 
-                  onClick={() => setPaymentMethod('transfer')}
-                  className={`flex items-center justify-between p-4 border rounded-lg cursor-pointer transition-all ${paymentMethod === 'transfer' ? 'border-[#0066cc] bg-blue-50/30 ring-1 ring-[#0066cc]' : 'border-gray-100 hover:border-blue-200'}`}
-                >
-                  <div className="flex items-center gap-4">
-                    <div className={`w-5 h-5 rounded-full border flex items-center justify-center ${paymentMethod === 'transfer' ? 'border-[#0066cc] bg-[#0066cc]' : 'border-gray-300'}`}>
-                      {paymentMethod === 'transfer' && <div className="w-2 h-2 rounded-full bg-white" />}
-                    </div>
-                    <div className="flex flex-col">
-                      <span className="font-bold text-gray-800 text-[15px]">Transferencia Bancaria</span>
-                      <span className="text-[12px] text-gray-500">Aboná y subí tu comprobante para agilizar el envío</span>
-                    </div>
-                  </div>
-                  <FaTruck size={20} className="text-gray-400" />
-                </div>
-              </div>
-            </section>
           </div>
 
           {/* Sidebar Summary */}
@@ -444,7 +403,40 @@ function CheckoutContent() {
             <div className="sticky top-[140px] flex flex-col gap-6">
               
               <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-md">
-                <h2 className="text-lg font-bold mb-6 pb-2 border-b">Resumen de Compra</h2>
+                <div className="flex justify-between items-center mb-6 pb-2 border-b">
+                   <h2 className="text-lg font-bold">Resumen de Compra</h2>
+                   <span className="text-[10px] text-gray-300 font-mono">V2.1</span>
+                </div>
+                
+                {/* 4. Payment Method (Moved here for better visibility) */}
+                <div className="mb-8 p-4 bg-slate-50 rounded-xl border border-slate-100">
+                  <h3 className="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-4">Selecciona Método de Pago</h3>
+                  <div className="flex flex-col gap-2">
+                    <div 
+                      onClick={() => setPaymentMethod('nave')}
+                      className={`flex items-center justify-between p-3 border rounded-lg cursor-pointer transition-all ${paymentMethod === 'nave' ? 'border-[#0066cc] bg-white ring-1 ring-[#0066cc]' : 'bg-white border-gray-200 hover:border-blue-200'}`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${paymentMethod === 'nave' ? 'border-[#0066cc] bg-[#0066cc]' : 'border-gray-300'}`}>
+                          {paymentMethod === 'nave' && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
+                        </div>
+                        <span className="font-bold text-gray-700 text-[13px]">Nave (Tarjetas/QR)</span>
+                      </div>
+                    </div>
+
+                    <div 
+                      onClick={() => setPaymentMethod('transfer')}
+                      className={`flex items-center justify-between p-3 border rounded-lg cursor-pointer transition-all ${paymentMethod === 'transfer' ? 'border-[#0066cc] bg-white ring-1 ring-[#0066cc]' : 'bg-white border-gray-200 hover:border-blue-200'}`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${paymentMethod === 'transfer' ? 'border-[#0066cc] bg-[#0066cc]' : 'border-gray-300'}`}>
+                          {paymentMethod === 'transfer' && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
+                        </div>
+                        <span className="font-bold text-gray-700 text-[13px]">Transferencia</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
                 
                 <div className="flex flex-col gap-4 mb-6 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
                   {cartItems.map((item) => (
