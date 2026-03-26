@@ -9,7 +9,10 @@ import {
   FaHome, 
   FaCopy, 
   FaExclamationTriangle,
-  FaFileInvoiceDollar
+  FaFileInvoiceDollar,
+  FaShieldAlt,
+  FaLock,
+  FaUniversity
 } from 'react-icons/fa';
 
 export default function TransferPage() {
@@ -19,6 +22,7 @@ export default function TransferPage() {
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [uploadSuccess, setUploadSuccess] = useState(false);
+  const [copiedField, setCopiedField] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchOrder = async () => {
@@ -37,9 +41,10 @@ export default function TransferPage() {
     if (id) fetchOrder();
   }, [id]);
 
-  const copyToClipboard = (text: string) => {
+  const copyToClipboard = (text: string, field: string) => {
     navigator.clipboard.writeText(text);
-    // Could add a toast here
+    setCopiedField(field);
+    setTimeout(() => setCopiedField(null), 2000);
   };
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -59,7 +64,6 @@ export default function TransferPage() {
       const data = await resp.json();
       if (data.success) {
         setUploadSuccess(true);
-        // Refresh order status if needed
       }
     } catch (err) {
       console.error('Upload failed');
@@ -69,188 +73,166 @@ export default function TransferPage() {
   };
 
   if (loading) return <div className="min-h-screen flex items-center justify-center pt-40">Cargando datos de transferencia...</div>;
-  if (!order) return <div className="min-h-screen flex items-center justify-center pt-40 text-red-500">Orden no encontrada</div>;
+  if (!order) return <div className="min-h-screen flex items-center justify-center pt-40 text-red-500 font-bold">Orden no encontrada</div>;
 
   const deadline = new Date(order.createdAt || Date.now());
-  deadline.setDate(deadline.getDate() + 2); // 48 hours deadline
+  deadline.setDate(deadline.getDate() + 2);
 
   return (
-    <div className="min-h-screen bg-[#eee] pt-48 pb-12 font-[Montserrat,sans-serif] flex flex-col items-center w-full">
+    <div className="min-h-screen bg-[#f4f7f6] pt-48 pb-20 font-[Montserrat,sans-serif] flex flex-col items-center w-full">
       <style jsx global>{`
-        @keyframes pulse-yellow {
-          0% { transform: scale(1); opacity: 1; }
-          50% { transform: scale(1.1); opacity: 0.8; }
-          100% { transform: scale(1); opacity: 1; }
+        @keyframes subtle-glow {
+          0% { box-shadow: 0 0 5px rgba(252, 187, 17, 0.2); }
+          50% { box-shadow: 0 0 20px rgba(252, 187, 17, 0.4); }
+          100% { box-shadow: 0 0 5px rgba(252, 187, 17, 0.2); }
         }
-        .animate-pulse-yellow {
-          animation: pulse-yellow 2s infinite ease-in-out;
+        .animate-glow {
+          animation: subtle-glow 3s infinite ease-in-out;
         }
       `}</style>
-      <div className="w-full max-w-[1000px] px-4 lg:px-10 flex flex-col items-center">
+      
+      <div className="w-full max-w-[900px] px-4 flex flex-col items-center">
         
-        {/* Reservation Header (CompraGamer Style) */}
-        <div className="bg-gradient-to-b from-white to-[#fff6df] rounded-[32px] p-10 mb-8 flex flex-col items-center text-center shadow-sm border border-amber-100">
-          <div className="w-48 h-48 flex items-center justify-center bg-white rounded-full shadow-inner border border-amber-50 mb-6 animate-pulse-yellow">
-             <div className="flex flex-col items-center text-[#fcbb11]">
-                <FaExclamationTriangle size={80} />
-                <span className="text-xs font-black mt-2 tracking-widest uppercase">PENDIENTE</span>
-             </div>
+        {/* Main Status Card */}
+        <div className="w-full bg-white shadow-xl border border-gray-100 rounded-none overflow-hidden mb-10 text-center">
+          <div className="bg-[#fffcf0] p-10 flex flex-col items-center border-b border-amber-100/50">
+            <div className="w-32 h-32 bg-white rounded-full flex items-center justify-center mb-6 animate-glow border border-amber-100 shadow-sm">
+               <div className="flex flex-col items-center text-[#fcbb11]">
+                  <FaExclamationTriangle size={50} />
+                  <span className="text-[10px] font-black mt-2 tracking-[0.2em] uppercase">Pendiente</span>
+               </div>
+            </div>
+            
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 max-w-[700px] leading-tight">
+              Tu reserva <span className="text-[#f0320a]">#{order.id}</span> está confirmada
+            </h1>
+            <p className="text-gray-500 text-lg">
+              Sólo falta que realices el pago para que podamos avanzar con tu envío.
+            </p>
           </div>
           
-          <div className="flex-1 max-w-[800px]">
-            <h1 className="text-2xl md:text-3xl text-gray-800 mb-6 leading-tight">
-              Tu reserva <b className="text-black">{order.id}</b> ya fue confirmada. Sólo falta que realices el pago para que podamos avanzar.
-            </h1>
-            <p className="text-gray-600 mb-8 text-lg">
-              Tenés tiempo hasta el <b>{deadline.toLocaleDateString('es-AR')}</b> para abonar.
-            </p>
-            
+          <div className="p-8 bg-white">
+            <div className="flex flex-col md:flex-row items-center justify-center gap-4 mb-8">
+              <div className="flex items-center gap-2 text-gray-400 font-medium bg-gray-50 px-4 py-2 border border-gray-100">
+                <FaLock className="text-xs" />
+                <span className="text-xs tracking-widest uppercase">Pago Seguro SSL</span>
+              </div>
+              <p className="text-gray-400 text-sm italic">
+                Cierre de reserva: <b>{deadline.toLocaleDateString('es-AR')}</b>
+              </p>
+            </div>
+
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <label className={`cursor-pointer bg-[#f0320a] hover:bg-[#d62b08] text-white px-10 py-5 rounded-none font-bold flex items-center justify-center gap-2 transition-all shadow-md active:scale-95 ${uploading ? 'opacity-70 pointer-events-none' : ''}`}>
+              <label className={`cursor-pointer bg-[#f0320a] hover:bg-black text-white px-12 py-5 rounded-none font-bold text-sm tracking-widest uppercase flex items-center justify-center gap-3 transition-all active:scale-95 shadow-lg shadow-red-100 ${uploading ? 'opacity-70 pointer-events-none text-gray-300 bg-gray-800' : ''}`}>
                 <FaUpload />
-                {uploading ? 'SUBIENDO...' : 'SUBIR COMPROBANTE'}
+                {uploading ? 'Procesando...' : 'Subir Comprobante'}
                 <input type="file" className="hidden" onChange={handleFileUpload} accept="image/*,application/pdf" />
               </label>
               
               <button 
                 onClick={() => router.push('/')}
-                className="bg-white border-2 border-gray-200 hover:border-[#f0320a] hover:text-[#f0320a] text-gray-700 px-10 py-5 rounded-none font-bold flex items-center justify-center gap-2 transition-all shadow-sm"
+                className="bg-white border-2 border-gray-200 hover:border-black hover:text-black text-gray-500 px-12 py-5 rounded-none font-bold text-sm tracking-widest uppercase flex items-center justify-center gap-3 transition-all active:scale-95"
               >
-                <FaHome /> VOLVER AL INICIO
+                <FaHome /> Inicio
               </button>
             </div>
           </div>
         </div>
 
-        {/* Status Message for Upload */}
         {uploadSuccess && (
-          <div className="mb-8 p-4 bg-green-50 border-l-4 border-green-500 text-green-700 rounded-lg flex items-center gap-3 animate-bounce">
-            <FaCheckCircle /> <b>¡Comprobante subido con éxito!</b> Revisaremos tu pago a la brevedad.
+          <div className="w-full mb-10 p-5 bg-green-600 text-white rounded-none flex items-center justify-center gap-4 font-bold shadow-lg animate-in slide-in-from-top duration-500">
+            <FaCheckCircle className="text-xl" /> ¡Comprobante recibido! Lo verificaremos a la brevedad.
           </div>
         )}
 
-        {/* Bank Details Container (CompraGamer Style) */}
-        <div className="bg-white rounded-2xl shadow-sm p-8 md:p-12">
-          <h2 className="text-xl font-bold mb-8 border-b pb-4">Datos para el pago</h2>
+        {/* Info Grid */}
+        <div className="w-full grid grid-cols-1 lg:grid-cols-1 gap-0 bg-white shadow-xl border border-gray-100 overflow-hidden">
           
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 relative">
-            {/* Vertical Splitter (Desktop) */}
-            <div className="hidden lg:block absolute left-1/2 top-0 bottom-0 w-[1px] bg-gray-200 -translate-x-1/2"></div>
-            
-            {/* Transferencia Column */}
-            <div className="flex flex-col gap-6">
-              <div className="flex items-center gap-3 mb-2">
-                <div className="w-10 h-10 bg-[#f0300a13] rounded-full flex items-center justify-center text-[#f0320a]">
-                  <FaFileInvoiceDollar size={20} />
-                </div>
-                <h3 className="text-lg font-bold">Transferencia</h3>
-              </div>
-              
-              <div className="space-y-4 text-sm md:text-base">
-                <div className="flex flex-col">
-                  <span className="text-xs text-gray-400 font-bold uppercase mb-1">Banco</span>
-                  <div className="font-bold flex justify-between items-center group">
-                    <span>BANCO GALICIA</span>
-                    <FaCopy className="opacity-0 group-hover:opacity-100 cursor-pointer text-[#f0320a]" onClick={() => copyToClipboard('BANCO GALICIA')} />
+          <div className="p-10 border-b border-gray-50 flex flex-col md:flex-row justify-between items-center gap-10">
+            <div className="flex flex-col gap-8 flex-1">
+               <div className="flex items-center gap-4 border-l-4 border-[#f0320a] pl-4">
+                  <FaUniversity className="text-[#f0320a] text-2xl" />
+                  <h2 className="text-xl font-black uppercase tracking-widest">Datos Bancarios</h2>
+               </div>
+               
+               <div className="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-12">
+                  <div className="flex flex-col border-b border-gray-50 pb-2 group">
+                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Banco</span>
+                    <span className="font-bold text-gray-800">BANCO GALICIA</span>
                   </div>
-                </div>
-                
-                <div className="flex flex-col">
-                  <span className="text-xs text-gray-400 font-bold uppercase mb-1">CBU</span>
-                  <div className="font-bold flex justify-between items-center group bg-gray-50 p-2 rounded">
-                    <span className="font-mono">0070000000000000000000</span>
-                    <FaCopy className="cursor-pointer text-[#f0320a]" onClick={() => copyToClipboard('0070000000000000000000')} />
+                  <div className="flex flex-col border-b border-gray-50 pb-2 group relative">
+                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">CBU</span>
+                    <div className="flex justify-between items-center">
+                      <span className="font-mono text-gray-800 font-bold">0070000000000000000000</span>
+                      <button onClick={() => copyToClipboard('0070000000000000000000', 'cbu')} className="text-[#f0320a] hover:scale-110 transition-transform">
+                        {copiedField === 'cbu' ? <FaCheckCircle /> : <FaCopy />}
+                      </button>
+                    </div>
                   </div>
-                </div>
-
-                <div className="flex flex-col">
-                  <span className="text-xs text-gray-400 font-bold uppercase mb-1">Alias</span>
-                  <div className="font-bold flex justify-between items-center group bg-gray-50 p-2 rounded">
-                    <span>JBIMPORTS.GALICIA</span>
-                    <FaCopy className="cursor-pointer text-[#f0320a]" onClick={() => copyToClipboard('JBIMPORTS.GALICIA')} />
+                  <div className="flex flex-col border-b border-gray-50 pb-2 group relative">
+                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Alias</span>
+                    <div className="flex justify-between items-center">
+                      <span className="font-bold text-gray-800 uppercase">JBIMPORTS.GALICIA</span>
+                      <button onClick={() => copyToClipboard('JBIMPORTS.GALICIA', 'alias')} className="text-[#f0320a] hover:scale-110 transition-transform">
+                        {copiedField === 'alias' ? <FaCheckCircle /> : <FaCopy />}
+                      </button>
+                    </div>
                   </div>
-                </div>
-
-                <div className="flex flex-col">
-                  <span className="text-xs text-gray-400 font-bold uppercase mb-1">Titular</span>
-                  <span className="font-bold">JULIAN BUSLETTA</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Depósito Column */}
-            <div className="flex flex-col gap-6 pt-12 lg:pt-0">
-               {/* Horizontal Splitter (Mobile) */}
-               <div className="lg:hidden absolute left-0 right-0 top-[45%] h-[1px] bg-gray-200"></div>
-
-              <div className="flex items-center gap-3 mb-2">
-                <div className="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center text-blue-600">
-                  <FaHome size={20} />
-                </div>
-                <h3 className="text-lg font-bold">Depósito Bancario</h3>
-              </div>
-              
-              <div className="space-y-4 text-sm md:text-base">
-                <div className="flex flex-col">
-                  <span className="text-xs text-gray-400 font-bold uppercase mb-1">Tipo de Cuenta</span>
-                  <span className="font-bold">CAJA DE AHORRO $</span>
-                </div>
-                
-                <div className="flex flex-col">
-                  <span className="text-xs text-gray-400 font-bold uppercase mb-1">Número de Cuenta</span>
-                  <div className="font-bold flex justify-between items-center group">
-                    <span>000-000000/0</span>
-                    <FaCopy className="opacity-0 group-hover:opacity-100 cursor-pointer text-blue-600" onClick={() => copyToClipboard('000-000000/0')} />
+                  <div className="flex flex-col border-b border-gray-50 pb-2 group">
+                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Titular</span>
+                    <span className="font-bold text-gray-800">JULIAN BUSLETTA</span>
                   </div>
-                </div>
-
-                <div className="flex flex-col">
-                  <span className="text-xs text-gray-400 font-bold uppercase mb-1">CUIT</span>
-                  <div className="font-bold flex justify-between items-center group">
-                    <span>20-00000000-0</span>
-                    <FaCopy className="opacity-0 group-hover:opacity-100 cursor-pointer text-blue-600" onClick={() => copyToClipboard('20-00000000-0')} />
+                  <div className="flex flex-col border-b border-gray-50 pb-2 group">
+                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">CUIT</span>
+                    <span className="font-bold text-gray-800">20-00000000-0</span>
                   </div>
-                </div>
-
-                <div className="flex flex-col">
-                  <span className="text-xs text-gray-400 font-bold uppercase mb-1">Importe a abonar</span>
-                  <span className="text-2xl font-bold text-[#f0320a]">${order.total?.toLocaleString()}</span>
-                </div>
-              </div>
+                  <div className="flex flex-col border-b border-gray-50 pb-2 group">
+                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Total a Transferir</span>
+                    <span className="text-2xl font-black text-[#f0320a] tracking-tighter">${order.total?.toLocaleString()}</span>
+                  </div>
+               </div>
             </div>
           </div>
 
-          {/* Important Info Alert */}
-          <div className="mt-12 p-6 rounded-2xl border border-blue-200 bg-blue-50/50 flex gap-4">
-            <FaInfoCircle className="text-blue-500 shrink-0 mt-1" size={24} />
-            <div className="text-sm md:text-base text-gray-700 leading-relaxed">
-              <h4 className="font-bold text-blue-800 mb-1 leading-snug">IMPORTANTE</h4>
-              <p>
-                Una vez realizado el pago recordá <b>subir el comprobante</b> utilizando el botón superior para que podamos procesar tu envío.
-                Las transferencias suelen acreditarse en el acto, pero los depósitos mediante cajero pueden demorar hasta 24hs hábiles.
-              </p>
-            </div>
+          <div className="p-10 bg-gray-50 flex items-start gap-6 border-t border-gray-100">
+             <div className="bg-[#f0320a] text-white p-3 shadow-lg shadow-red-100">
+                <FaInfoCircle size={20} />
+             </div>
+             <div className="text-sm text-gray-600 leading-relaxed font-medium">
+                <h4 className="font-black text-black uppercase tracking-widest mb-2 flex items-center gap-2">
+                   Importante
+                   <span className="w-10 h-[1px] bg-red-200"></span>
+                </h4>
+                <p>
+                  Una vez realizado el pago recordá <b>subir el comprobante</b> utilizando el botón superior para procesar tu envío de inmediato.
+                  Las transferencias suelen acreditarse en el acto, pero los depósitos mediante cajero físico pueden demorar hasta 24hs hábiles.
+                </p>
+             </div>
           </div>
         </div>
 
-        {/* Items Summary (Mini) */}
-        <div className="mt-8 bg-white/50 backdrop-blur rounded-xl p-4 flex flex-col md:flex-row justify-between items-center gap-4 text-sm">
-           <div className="flex items-center gap-3">
-              <span className="text-gray-500 italic">Estás pagando por:</span>
-              <div className="flex -space-x-2">
-                {order.items?.slice(0, 3).map((item: any, i: number) => (
-                  <div key={i} className="w-8 h-8 rounded-full border border-white bg-white shadow-sm flex items-center justify-center overflow-hidden" title={item.name}>
-                    <img src={item.image} alt="" className="max-h-full" />
-                  </div>
-                ))}
-                {order.items?.length > 3 && (
-                  <div className="w-8 h-8 rounded-full border border-white bg-gray-200 flex items-center justify-center text-[10px] font-bold">
-                    +{order.items.length - 3}
-                  </div>
-                )}
+        {/* Order Summary Line */}
+        <div className="w-full mt-10 border-t border-gray-200 pt-8 flex flex-col items-center opacity-70">
+           <div className="flex items-center gap-4 text-gray-400 text-xs font-bold uppercase tracking-[0.3em] mb-4">
+              <FaShieldAlt /> 
+              <span>Compra 100% Protegida</span>
+           </div>
+           <div className="flex items-center gap-10">
+              <div className="flex flex-col items-center">
+                 <span className="text-[10px] font-bold text-gray-400 uppercase mb-1">Pedido</span>
+                 <span className="font-bold text-gray-500">#{order.id.substring(0,8)}</span>
+              </div>
+              <div className="w-[1px] h-6 bg-gray-200"></div>
+              <div className="flex flex-col items-center">
+                 <span className="text-[10px] font-bold text-gray-400 uppercase mb-1">Items</span>
+                 <span className="font-bold text-gray-500">{order.items?.length || 0} productos</span>
+              </div>
+              <div className="w-[1px] h-6 bg-gray-200"></div>
+              <div className="flex flex-col items-center">
+                 <span className="text-[10px] font-bold text-gray-400 uppercase mb-1">Total</span>
+                 <span className="font-bold text-gray-900">${order.total?.toLocaleString()}</span>
               </div>
            </div>
-           <div className="font-bold">Total: ${order.total?.toLocaleString()}</div>
         </div>
 
       </div>
