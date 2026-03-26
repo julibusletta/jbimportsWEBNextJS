@@ -78,6 +78,8 @@ export async function GET(request: Request) {
     }
 
     const naveData = await statusResp.json();
+    await db.logWebhook('NAVE_VERIFY_RESPONSE', 'GET', { orderId, naveData });
+    
     const rawStatus = naveData.status || '';
     let normalizedStatus = rawStatus.toUpperCase();
 

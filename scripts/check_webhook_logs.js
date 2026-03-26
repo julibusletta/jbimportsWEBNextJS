@@ -33,7 +33,7 @@ async function checkLogs() {
     await mongoose.connect(MONGODB_URI);
     console.log('Connected to DB');
 
-    const logs = await WebhookLog.find({}).sort({ timestamp: -1 }).limit(5).lean();
+    const logs = await WebhookLog.find({}).sort({ timestamp: -1 }).limit(20).lean();
 
     if (logs.length === 0) {
       console.log('NO WEBHOOK LOGS FOUND. Nave is NOT hitting the endpoint.');
