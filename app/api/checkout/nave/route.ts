@@ -26,9 +26,20 @@ import { authOptions } from "../../auth/[...nextauth]/route";
 
 export async function POST(request: Request) {
   try {
-    const host = request.headers.get('host') || 'localhost:3000';
-    const protocol = host.includes('localhost') ? 'http' : 'https';
-    const baseUrl = `${protocol}://${host}`;
+    const { db } = await import('@/lib/db');
+    
+    // Ensure we have a valid public URL for Nave's callback
+    const host = request.headers.get('host') || '';
+    let baseUrl = process.env.NEXTAUTH_URL || '';
+    
+    // If not in env or if we are in a request where headers are reliable and not localhost
+    if (!baseUrl || baseUrl.includes('localhost') && host && !host.includes('localhost')) {
+      const protocol = host.includes('localhost') ? 'http' : 'https';
+      baseUrl = `${protocol}://${host}`;
+    }
+    
+    // Clean trailing slash
+    if (baseUrl.endsWith('/')) baseUrl = baseUrl.slice(0, -1);
 
     const { items, total, orderId, shipping } = await request.json();
     const session = await getServerSession(authOptions);
@@ -150,7 +161,14 @@ export async function POST(request: Request) {
       duration_time: 3600 // 1 hour expiration
     };
 
-    console.log(`NAVE: Creating payment intention with ${CHECKOUT_URL}`);
+    // Log the outgoing request for tracing
+    await db.logWebhook('NAVE_OUTGOING', 'POST', { 
+      orderId: paymentBody.external_payment_id,
+      callback_url: paymentBody.additional_info.callback_url,
+      total: paymentBody.transactions[0].amount.value 
+    }, { url: CHECKOUT_URL });
+
+    console.log(`NAVE: Creating payment intention with ${CHECKOUT_URL} and callback ${paymentBody.additional_info.callback_url}`);
     const checkoutResponse = await fetch(CHECKOUT_URL, {
       method: 'POST',
       headers: {
@@ -176,7 +194,6 @@ export async function POST(request: Request) {
     }
 
     // 4. Persistence: Save the order as PENDING
-    const { db } = await import('@/lib/db');
     
     // Get user info from session
     const userName = session?.user?.name || 'Cliente Invitado';
