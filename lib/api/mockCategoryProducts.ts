@@ -35,7 +35,31 @@ export async function getProductsByCategory(slug: string): Promise<Product[]> {
   const dbConnect = (await import('../mongodb')).default;
   const ProductModel = (await import('../../models/Product')).default;
   await dbConnect();
-  return ProductModel.find({ category: slug }).lean() as unknown as Product[];
+
+  // Category mapping for parent categories (must match app/api/products/route.ts)
+  const categoryMapping: { [key: string]: string[] } = {
+    'celulares': ['celulares', 'samsung', 'xiaomi', 'motorola', 'realme', 'iphone'],
+    'apple': ['apple', 'iphone', 'macbook', 'watch', 'ipad', 'airpods'],
+    'jbl': ['jbl', 'parlantes', 'auriculares', 'sounds-bars'],
+    'smart-home': ['smart-home', 'amazon', 'google', 'xiaomi-home', 'aspiradoras-robot', 'camaras-seguridades']
+  };
+
+  const cleanSlug = slug.toLowerCase().trim();
+
+  if (cleanSlug === 'ofertas') {
+    return ProductModel.find({ 
+      $or: [
+        { discount: { $gt: 0 } },
+        { id: { $in: ['378', '1339'] } }
+      ]
+    }).lean() as unknown as Product[];
+  }
+
+  if (categoryMapping[cleanSlug]) {
+    return ProductModel.find({ category: { $in: categoryMapping[cleanSlug] } }).lean() as unknown as Product[];
+  }
+
+  return ProductModel.find({ category: { $regex: cleanSlug, $options: 'i' } }).lean() as unknown as Product[];
 }
 
 /**

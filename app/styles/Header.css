@@ -420,8 +420,8 @@ header.scrolled .logo {
     align-items: center !important;
     justify-content: space-between !important;
     padding: 0 15px !important;
-    height: 88px !important;
-    min-height: 88px !important;
+    height: 80px !important;
+    min-height: 80px !important;
     background: #fff !important;
   }
 

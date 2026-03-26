@@ -4,6 +4,7 @@ import { db } from "@/lib/db";
 import { redirect } from "next/navigation";
 import { FaUser, FaMapMarkerAlt, FaShoppingBag } from 'react-icons/fa';
 import Link from 'next/link';
+import OrderCard from '@/app/components/Profile/OrderCard';
 
 export default async function MiCuentaPage() {
   const session = await getServerSession(authOptions);
@@ -17,7 +18,7 @@ export default async function MiCuentaPage() {
 
   return (
     <div className="animate-in fade-in duration-700">
-      <div className="mb-12 flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-slate-100 pb-10">
+      <div className="mb-20 flex flex-col sm:flex-row sm:items-end justify-between gap-6 border-b border-slate-100 pb-16">
         <div>
           <div className="flex items-center gap-3 mb-2">
             <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.4)]"></span>
@@ -33,7 +34,7 @@ export default async function MiCuentaPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
         {/* Personal Info */}
         <section className="space-y-6">
           <div className="flex items-center gap-2 mb-2">
@@ -86,28 +87,10 @@ export default async function MiCuentaPage() {
         </section>
       </div>
 
-      <div className="mt-16 pt-12 border-t border-slate-100">
+      <div className="mt-24 pt-20 border-t border-slate-100">
         <h2 className="text-[11px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-8 px-1">Actividad Reciente</h2>
         {latestOrder ? (
-          <div className="bg-white border border-slate-200 rounded-xl p-6 flex justify-between items-center shadow-sm transition-all hover:border-slate-300 hover:shadow-md">
-            <div className="flex items-center gap-5">
-              <div className="w-12 h-12 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400 border border-slate-100">
-                <FaShoppingBag size={20} />
-              </div>
-              <div>
-                <p className="text-sm font-bold text-slate-900">Pedido #{latestOrder.id.substring(0, 8).toUpperCase()}</p>
-                <p className="text-slate-400 text-[10px] font-bold uppercase mt-1 tracking-wider">{new Date(latestOrder.createdAt).toLocaleDateString('es-AR', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
-              </div>
-            </div>
-            <div className="text-right">
-              <p className="text-lg font-bold text-slate-900 tracking-tight">${latestOrder.total.toLocaleString()}</p>
-              <span className={`inline-flex items-center px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-widest mt-1 ${
-                latestOrder.status === 'APPROVED' ? 'bg-green-50 text-green-700' : 'bg-orange-50 text-orange-700'
-              }`}>
-                {latestOrder.status === 'APPROVED' ? 'Aprobado' : 'Pendiente'}
-              </span>
-            </div>
-          </div>
+          <OrderCard order={JSON.parse(JSON.stringify(latestOrder))} />
         ) : (
           <div className="bg-slate-50/50 border border-slate-100 rounded-2xl p-16 text-center">
             <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center text-slate-200 mx-auto mb-6 shadow-sm">

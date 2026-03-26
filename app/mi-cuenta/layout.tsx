@@ -28,14 +28,14 @@ export default function AccountLayout({
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col items-center selection:bg-slate-200">
-      {/* Definitive Spacer for Global Header Clearance */}
-      <div className="h-[400px] w-full flex-shrink-0" />
+      {/* Minimal Spacer for Global Header Clearance */}
+      <div className="h-4 w-full flex-shrink-0" />
 
       <div className="max-w-7xl w-full px-4 sm:px-6 lg:px-8 py-12 flex-1 relative">
         <div className="flex flex-col lg:flex-row gap-10">
           {/* Sidebar */}
           <aside className="w-full lg:w-72 flex-shrink-0">
-            <div className="sticky top-[400px] bg-white rounded-2xl shadow-[0_4px_25px_rgba(0,0,0,0.03)] border border-slate-200 overflow-hidden">
+            <div className="sticky top-[100px] bg-white rounded-2xl shadow-[0_4px_25px_rgba(0,0,0,0.03)] border border-slate-200 overflow-hidden">
               {/* Profile Brief */}
               <div className="p-6 bg-slate-900 flex items-center gap-4">
                 <div className="w-12 h-12 bg-slate-700 rounded-full flex items-center justify-center text-white text-lg font-bold border border-slate-600 shadow-sm">

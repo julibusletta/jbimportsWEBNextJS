@@ -1,6 +1,6 @@
 'use client';
 
-import { FaYoutube, FaTiktok, FaEnvelope, FaComments } from 'react-icons/fa';
+import { FaInstagram, FaWhatsapp, FaEnvelope, FaComments } from 'react-icons/fa';
 import Link from 'next/link';
 import '../../styles/Footer.css';
 
@@ -104,20 +104,20 @@ export default function Footer() {
                 </p>
                 <div className="flex gap-2.5 mt-4" id="socialiconfooter">
                   <a
-                    href="https://www.youtube.com"
+                    href="https://www.instagram.com/jbimportsarg"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-white transition-all hover:bg-red-600"
+                    className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-white transition-all hover:bg-gradient-to-tr hover:from-yellow-400 hover:via-red-500 hover:to-purple-600"
                   >
-                    <FaYoutube size={22} />
+                    <FaInstagram size={22} />
                   </a>
                   <a
-                    href="https://www.tiktok.com"
+                    href="https://wa.me/5491151457720"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-white transition-all hover:bg-black border hover:border-white"
+                    className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-white transition-all hover:bg-green-500"
                   >
-                    <FaTiktok size={22} />
+                    <FaWhatsapp size={22} />
                   </a>
                 </div>
               </div>

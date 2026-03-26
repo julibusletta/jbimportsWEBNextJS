@@ -174,10 +174,10 @@ function CheckoutContent() {
   }
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] pt-[120px] pb-20 px-4">
-      <div className="max-w-[1200px] mx-auto">
-        <div className="flex items-center gap-2 mb-8 text-[#0066cc] cursor-pointer" onClick={() => router.back()}>
-          <FaChevronLeft /> <span>Volver al carrito</span>
+    <div className="min-h-screen bg-[#f8fafc] pt-40 pb-8 w-full flex flex-col items-center">
+      <div className="w-full max-w-[1240px] px-4 md:px-10">
+        <div className="flex items-center gap-2 mb-8 text-[#0066cc] cursor-pointer hover:underline" onClick={() => router.back()}>
+          <FaChevronLeft size={12} /> <span className="text-sm font-bold uppercase tracking-wider">Volver al carrito</span>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">

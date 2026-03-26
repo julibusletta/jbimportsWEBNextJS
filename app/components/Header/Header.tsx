@@ -146,105 +146,105 @@ export default function Header() {
           />
         </Link>
 
-        <form onSubmit={handleSearch} className="hidden md:flex search-bar flex-1 max-w-2xl mx-10 items-center rounded-lg border border-gray-300 bg-white shadow-sm">
-          <input
-            type="text"
-            placeholder="Buscar productos..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="flex-1 px-6 py-3 border-0 bg-transparent font-sans text-base outline-0"
-          />
-          <button type="submit" className="px-5 py-3 border-0 bg-transparent cursor-pointer flex items-center justify-center text-gray-600 hover:text-orange-600">
-            <FaSearch size={20} />
-          </button>
-        </form>
+          <form onSubmit={handleSearch} className="hidden md:flex search-bar flex-1 max-w-2xl mx-10 items-center rounded-lg border border-gray-300 bg-white shadow-sm">
+            <input
+              type="text"
+              placeholder="Buscar productos..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="flex-1 px-6 py-3 border-0 bg-transparent font-sans text-base outline-0"
+            />
+            <button type="submit" className="px-5 py-3 border-0 bg-transparent cursor-pointer flex items-center justify-center text-gray-600 hover:text-orange-600">
+              <FaSearch size={20} />
+            </button>
+          </form>
 
-        {/* Right: Actions */}
-        <div className="header-actions flex items-center gap-4 md:gap-6">
-          {/* Search Icon Mobile */}
-          <button 
-            className="md:hidden bg-transparent border-0 cursor-pointer text-gray-700 hover:text-orange-600" 
-            aria-label="Buscar"
-            onClick={() => setIsMobileSearchOpen(!isMobileSearchOpen)}
-          >
-            <FaSearch size={22} />
-          </button>
-
-          {/* User Icon & Dropdown */}
-          <div className="relative user-menu-container" ref={userMenuRef}>
-            <button
-              onMouseEnter={() => !isMenuOpen && setIsUserMenuOpen(true)}
-              onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-              className="text-gray-700 hover:text-orange-600 transition-colors bg-transparent border-0 p-0 flex items-center gap-2 cursor-pointer"
-              aria-label="Usuario"
+          {/* Right: Actions */}
+          <div className="header-actions flex items-center gap-4 md:gap-6">
+            {/* Search Icon Mobile */}
+            <button 
+              className="md:hidden bg-transparent border-0 cursor-pointer text-gray-700 hover:text-orange-600" 
+              aria-label="Buscar"
+              onClick={() => setIsMobileSearchOpen(!isMobileSearchOpen)}
             >
-              {session?.user?.image ? (
-                <img src={session.user.image} alt="Avatar" className="w-6 h-6 rounded-full" />
-              ) : (
-                <FaUser size={22} />
-              )}
-              <span className="hidden lg:inline text-sm font-medium uppercase">
-                {session ? `Hola, ${session.user?.name?.split(' ')[0]}` : 'MI CUENTA'}
-              </span>
-              <FaChevronDown size={10} className={`transition-transform duration-200 ${isUserMenuOpen ? 'rotate-180' : ''}`} />
+              <FaSearch size={22} />
             </button>
 
-            {isUserMenuOpen && (
-              <div className="absolute right-0 top-full mt-2 w-56 bg-white shadow-[0_10px_30px_rgba(0,0,0,0.15)] rounded-lg py-2 z-[200] border border-gray-100 animate-dropdown">
-                {session ? (
-                  <>
-                    <div className="px-5 py-3 border-b border-gray-50 mb-1">
-                      <p className="text-gray-400 text-sm font-normal m-0 italic">Conectado como {session.user?.email}</p>
-                    </div>
-                    {[
-                      { label: 'Mi cuenta', href: '/mi-cuenta' },
-                      { label: 'Mis Compras', href: '/mi-cuenta/compras' },
-                      { label: 'Facturas', href: '/mi-cuenta/facturas' },
-                      { label: 'Favoritos', href: '/mi-cuenta/favoritos' },
-                    ].map((item) => (
+            {/* User Icon & Dropdown */}
+            <div className="relative user-menu-container" ref={userMenuRef}>
+              <button
+                onMouseEnter={() => !isMenuOpen && setIsUserMenuOpen(true)}
+                onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                className="text-gray-700 hover:text-orange-600 transition-colors bg-transparent border-0 p-0 flex items-center gap-2 cursor-pointer"
+                aria-label="Usuario"
+              >
+                {session?.user?.image ? (
+                  <img src={session.user.image} alt="Avatar" className="w-6 h-6 rounded-full" />
+                ) : (
+                  <FaUser size={22} />
+                )}
+                <span className="hidden lg:inline text-sm font-medium uppercase">
+                  {session ? `Hola, ${session.user?.name?.split(' ')[0]}` : 'MI CUENTA'}
+                </span>
+                <FaChevronDown size={10} className={`transition-transform duration-200 ${isUserMenuOpen ? 'rotate-180' : ''}`} />
+              </button>
+
+              {isUserMenuOpen && (
+                <div className="absolute right-0 top-full mt-2 w-56 bg-white shadow-[0_10px_30px_rgba(0,0,0,0.15)] rounded-lg py-2 z-[200] border border-gray-100 animate-dropdown">
+                  {session ? (
+                    <>
+                      <div className="px-5 py-3 border-b border-gray-50 mb-1">
+                        <p className="text-gray-400 text-sm font-normal m-0 italic">Conectado como {session.user?.email}</p>
+                      </div>
+                      {[
+                        { label: 'Mi cuenta', href: '/mi-cuenta' },
+                        { label: 'Mis Compras', href: '/mi-cuenta/compras' },
+                        { label: 'Facturas', href: '/mi-cuenta/facturas' },
+                        { label: 'Favoritos', href: '/mi-cuenta/favoritos' },
+                      ].map((item) => (
+                        <Link
+                          key={item.label}
+                          href={item.href}
+                          className="block px-5 py-2.5 text-gray-700 hover:text-orange-600 hover:bg-gray-50 text-sm font-medium transition-all no-underline"
+                          onClick={() => setIsUserMenuOpen(false)}
+                        >
+                          {item.label}
+                        </Link>
+                      ))}
+                      <div className="border-t border-gray-50 mt-1 pt-1">
+                        <button
+                          onClick={() => { signOut(); setIsUserMenuOpen(false); }}
+                          className="w-full text-left px-5 py-2.5 text-gray-700 hover:text-red-500 hover:bg-gray-50 text-sm font-medium transition-all bg-transparent border-0 cursor-pointer"
+                        >
+                          Salir
+                        </button>
+                      </div>
+                    </>
+                  ) : (
+                    <div className="p-4">
                       <Link
-                        key={item.label}
-                        href={item.href}
-                        className="block px-5 py-2.5 text-gray-700 hover:text-orange-600 hover:bg-gray-50 text-sm font-medium transition-all no-underline"
+                        href="/auth/signin"
+                        className="block w-full text-center bg-blue-600 text-white py-2.5 rounded-lg font-bold text-sm hover:bg-blue-700 transition-colors no-underline"
                         onClick={() => setIsUserMenuOpen(false)}
                       >
-                        {item.label}
+                        INGRESAR
                       </Link>
-                    ))}
-                    <div className="border-t border-gray-50 mt-1 pt-1">
-                      <button
-                        onClick={() => { signOut(); setIsUserMenuOpen(false); }}
-                        className="w-full text-left px-5 py-2.5 text-gray-700 hover:text-red-500 hover:bg-gray-50 text-sm font-medium transition-all bg-transparent border-0 cursor-pointer"
-                      >
-                        Salir
-                      </button>
                     </div>
-                  </>
-                ) : (
-                  <div className="p-4">
-                    <Link
-                      href="/auth/signin"
-                      className="block w-full text-center bg-blue-600 text-white py-2.5 rounded-lg font-bold text-sm hover:bg-blue-700 transition-colors no-underline"
-                      onClick={() => setIsUserMenuOpen(false)}
-                    >
-                      INGRESAR
-                    </Link>
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
+                  )}
+                </div>
+              )}
+            </div>
 
-          {/* Cart */}
-          <Link href="/cart" className="cart-icon relative flex items-center text-gray-700 hover:text-orange-600 cursor-pointer transition-colors">
-            <FaShoppingCart size={28} />
-            {cartCount > 0 && (
-              <span className="cart-count absolute -top-2 -right-3 bg-blue-600 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center">
-                {cartCount}
-              </span>
-            )}
-          </Link>
-        </div>
+            {/* Cart */}
+            <Link href="/cart" className="cart-icon relative flex items-center text-gray-700 hover:text-orange-600 cursor-pointer transition-colors">
+              <FaShoppingCart size={28} />
+              {cartCount > 0 && (
+                <span className="cart-count absolute -top-2 -right-3 bg-blue-600 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center">
+                  {cartCount}
+                </span>
+              )}
+            </Link>
+          </div>
       </div>
       {/* Mobile Search Input */}
       {isMobileSearchOpen && (

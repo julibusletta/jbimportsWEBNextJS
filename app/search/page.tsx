@@ -61,7 +61,7 @@ function SearchContent() {
   }
 
   return (
-    <div className="bg-white flex flex-col items-center min-h-screen" style={{ paddingTop: '30px' }}>
+    <div className="bg-white flex flex-col items-center min-h-screen pt-4">
       <div className="max-w-[1300px] w-full px-4 pb-12 flex flex-col">
         {/* Breadcrumb */}
         <div style={{ fontSize: '12px', color: '#666', marginBottom: '10px', display: 'flex', gap: '4px', alignItems: 'center' }}>
