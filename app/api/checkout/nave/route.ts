@@ -32,16 +32,26 @@ export async function POST(request: Request) {
     const host = request.headers.get('host') || '';
     let baseUrl = process.env.NEXTAUTH_URL || '';
     
-    // In production, if host is available and points to Vercel/Domain, use it
-    if (host && !host.includes('localhost')) {
+    // If we're on Vercel, use the VERCEL_URL as a fallback if the host is problematic
+    const vercelUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : '';
+    const isLocalhost = host.includes('localhost');
+
+    if (host && !isLocalhost) {
+      // If we're in production but the domain is not linked, we might want to prefer the Vercel URL
+      // However, usually host IS what's in the browser. 
+      // If the user says it's not linked, they are likely visiting the .vercel.app URL.
       baseUrl = `https://${host}`;
-    } else if (!baseUrl || baseUrl.includes('localhost')) {
-      const protocol = host.includes('localhost') ? 'http' : 'https';
-      baseUrl = `${protocol}://${host || 'localhost:3000'}`;
+    } else if (vercelUrl) {
+      baseUrl = vercelUrl;
+    } else if (!baseUrl || isLocalhost) {
+      baseUrl = 'http://localhost:3000';
     }
     
     // Clean trailing slash
     if (baseUrl.endsWith('/')) baseUrl = baseUrl.slice(0, -1);
+    
+    // Log for debugging
+    await db.logWebhook('NAVE_DEBUG', 'POST', { host, baseUrl, vercelUrl, env: NAVE_ENV });
     const session = await getServerSession(authOptions);
 
     // 1. Validation

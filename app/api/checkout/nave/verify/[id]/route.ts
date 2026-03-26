@@ -19,11 +19,14 @@ const NAVE_AUDIENCE = 'https://naranja.com/ranty/merchants/api';
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const orderId = params.id;
+  const { id: orderId } = await params;
+  const { db } = await import('@/lib/db');
 
   try {
+    // Log the verification attempt
+    await db.logWebhook('NAVE_VERIFY', 'GET', { orderId });
     // 1. Check if order is already APPROVED in our DB
     const order = await db.getOrderById(orderId);
     if (!order) {
