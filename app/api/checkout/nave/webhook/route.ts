@@ -9,9 +9,14 @@ import { logToFile } from '@/lib/logger';
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    
-    // Log the received notification for debugging
-    logToFile('NAVE WEBHOOK RECEIVED:', body);
+    const headers: Record<string, string> = {};
+    request.headers.forEach((value, key) => { headers[key] = value; });
+
+    const { db } = await import('@/lib/db');
+
+    // 1. Log the webhook to MongoDB (Persistent across Vercel instances)
+    await db.logWebhook('NAVE', 'POST', body, headers);
+    logToFile('NAVE WEBHOOK RECEIVED (PERSISTED TO DB)');
 
     const { reference, external_payment_id, status } = body;
     const orderId = reference || external_payment_id;
@@ -21,38 +26,37 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: false, message: 'Missing reference or external_payment_id' }, { status: 400 });
     }
 
-    logToFile(`NAVE WEBHOOK: Processing order ${orderId} with status ${status}`);
+    // 2. Normalize status
+    const rawStatus = status?.toString() || '';
+    let normalizedStatus = rawStatus.toUpperCase();
 
-    // Update the database
-    const { db } = await import('@/lib/db');
-    
-    // Normalize status to uppercase for comparison
-    const normalizedStatus = status?.toString().toUpperCase();
+    // Mapping for common payment success statuses
+    if (['PAID', 'PAGADO', 'SUCCESS', 'COMPLETED'].includes(normalizedStatus)) {
+      normalizedStatus = 'APPROVED';
+    }
 
+    logToFile(`NAVE WEBHOOK: Processing order ${orderId} (Raw: ${rawStatus} -> Normalized: ${normalizedStatus})`);
+
+    // 3. Update the database
     await db.updateOrderStatus(orderId, normalizedStatus as any, body.id);
-    logToFile(`NAVE WEBHOOK: Order ${orderId} status updated to ${normalizedStatus} in DB`);
+    logToFile(`NAVE WEBHOOK: Order ${orderId} status updated in DB`);
 
-    // If payment is approved, send confirmation email
+    // 4. If payment is approved, send confirmation email
     if (normalizedStatus === 'APPROVED') {
       const order = await db.getOrderById(orderId);
       if (order) {
         logToFile(`NAVE WEBHOOK: Attempting to send email to ${order.userEmail} for order ${orderId}`);
         try {
           const { mailer } = await import('@/lib/mailer');
-          // Fire and forget (with logging inside mailer)
-          mailer.sendPurchaseConfirmation(order.userEmail, order.userName, order).catch(e => {
-            logToFile(`ASYNC EMAIL ERROR for ${order.userEmail}:`, e.message);
-          });
-          logToFile(`NAVE WEBHOOK: Triggered background email sending for ${order.userEmail}`);
+          await mailer.sendPurchaseConfirmation(order.userEmail, order.userName, order);
+          logToFile(`NAVE WEBHOOK: Confirmation email sent to ${order.userEmail}`);
         } catch (mailError: any) {
-          logToFile(`NAVE WEBHOOK ERROR importing mailer:`, mailError.message);
+          logToFile(`NAVE WEBHOOK EMAIL ERROR:`, mailError.message);
+          // We don't throw here to avoid returning 500 to Nave (which would trigger retries)
         }
-      } else {
-        logToFile(`NAVE WEBHOOK ERROR: Order ${orderId} not found in DB after update`);
       }
     }
 
-    // Always respond with 200 OK to acknowledge receipt
     return NextResponse.json({ success: true });
 
   } catch (error: any) {

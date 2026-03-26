@@ -19,6 +19,10 @@ export const db = {
     const Category = (await import('../models/Category')).default;
     return Category;
   },
+  async getWebhookLogModel() {
+    const WebhookLog = (await import('../models/WebhookLog')).default;
+    return WebhookLog;
+  },
 
   // Orders logic
   async getOrders(): Promise<any[]> {
@@ -85,6 +89,28 @@ export const db = {
     } catch (error) {
       console.error('DB Error [updateOrderStatus]:', error);
       throw error;
+    }
+  },
+
+  async logWebhook(service: string, method: string, payload: any, headers?: any): Promise<void> {
+    try {
+      await dbConnect();
+      const WebhookLog = await this.getWebhookLogModel();
+      
+      const orderId = payload?.reference || payload?.external_payment_id || payload?.id;
+      const status = payload?.status || payload?.state;
+
+      await WebhookLog.create({
+        service,
+        method,
+        payload,
+        headers,
+        orderId,
+        status: status?.toString()
+      });
+    } catch (error) {
+      console.error('DB Error [logWebhook]:', error);
+      // Don't throw for logging failures to avoid breaking the main flow
     }
   },
 
