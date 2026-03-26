@@ -1,12 +1,13 @@
 'use client';
 
-import { useContext, useState } from 'react';
+import { useSession } from 'next-auth/react';
 import { useCart, CartItem } from '../../context/CartContext';
 import { useRouter } from 'next/navigation';
 import '../../styles/Cart.css';
 
 export default function Cart() {
   const { cartItems, removeFromCart, addToCart, total } = useCart();
+  const { status } = useSession();
   const router = useRouter();
 
   const handleQuantityChange = (id: string, newQuantity: number) => {
@@ -23,6 +24,12 @@ export default function Cart() {
 
   const handleCheckout = () => {
     if (cartItems.length === 0) return;
+    
+    if (status === 'unauthenticated') {
+      router.push('/auth/signin?callbackUrl=/checkout');
+      return;
+    }
+    
     router.push('/checkout');
   };
 

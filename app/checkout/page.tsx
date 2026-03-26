@@ -3,6 +3,7 @@
 import { useState, useEffect, Suspense } from 'react';
 import { useCart } from '../context/CartContext';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import { 
   FaTruck, 
   FaMapMarkerAlt, 
@@ -25,6 +26,7 @@ interface ShippingOption {
 
 function CheckoutContent() {
   const { cartItems, total: cartTotal } = useCart();
+  const { data: session } = useSession();
   const router = useRouter();
   
   const [loading, setLoading] = useState(false);
@@ -49,6 +51,26 @@ function CheckoutContent() {
 
   const [paymentMethod, setPaymentMethod] = useState<'nave' | 'transfer'>('nave');
   const [error, setError] = useState<string | null>(null);
+
+  // Pre-fill user data from session
+  useEffect(() => {
+    if (session?.user) {
+      const u = session.user as any;
+      const names = u.name?.split(' ') || [];
+      setFormData(prev => ({
+        ...prev,
+        email: u.email || prev.email,
+        firstName: names[0] || prev.firstName,
+        lastName: names.slice(1).join(' ') || prev.lastName,
+        street: u.address?.street || prev.street,
+        number: u.address?.number || prev.number,
+        city: u.address?.city || prev.city,
+        state: u.address?.state || prev.state,
+        zipCode: u.address?.zip || prev.zipCode,
+        phone: u.phone || prev.phone
+      }));
+    }
+  }, [session]);
 
   // Auto-calculate rates when zipCode is 4 digits
   useEffect(() => {
@@ -124,7 +146,8 @@ function CheckoutContent() {
     setLoading(true);
     setError(null);
 
-    const finalTotal = cartTotal + selectedRate.price;
+    const subtotalWithShipping = cartTotal + selectedRate.price;
+    const finalTotal = paymentMethod === 'transfer' ? subtotalWithShipping * 0.9 : subtotalWithShipping;
 
     const endpoint = paymentMethod === 'nave' ? '/api/checkout/nave' : '/api/checkout/transfer';
 
@@ -409,30 +432,34 @@ function CheckoutContent() {
                 </div>
                 
                 {/* 4. Payment Method (Moved here for better visibility) */}
-                <div className="mb-8 p-4 bg-slate-50 rounded-xl border border-slate-100">
-                  <h3 className="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-4">Selecciona Método de Pago</h3>
-                  <div className="flex flex-col gap-2">
+                <div className="mb-8 p-0 bg-white border border-gray-200 shadow-sm rounded-none overflow-hidden">
+                  <div className="p-4 bg-gray-50 border-b border-gray-100">
+                    <h3 className="text-[12px] font-black text-gray-800 uppercase tracking-[0.15em]">Selecciona Método de Pago</h3>
+                  </div>
+                  <div className="flex flex-col">
                     <div 
                       onClick={() => setPaymentMethod('nave')}
-                      className={`flex items-center justify-between p-3 border rounded-lg cursor-pointer transition-all ${paymentMethod === 'nave' ? 'border-[#0066cc] bg-white ring-1 ring-[#0066cc]' : 'bg-white border-gray-200 hover:border-blue-200'}`}
+                      className={`flex items-center justify-between p-6 cursor-pointer transition-all border-b border-gray-100 last:border-0 ${paymentMethod === 'nave' ? 'bg-blue-50/40 ring-inset ring-2 ring-[#0066cc]' : 'hover:bg-gray-50'}`}
                     >
-                      <div className="flex items-center gap-3">
-                        <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${paymentMethod === 'nave' ? 'border-[#0066cc] bg-[#0066cc]' : 'border-gray-300'}`}>
-                          {paymentMethod === 'nave' && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
+                      <div className="flex items-center gap-4">
+                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${paymentMethod === 'nave' ? 'border-[#0066cc]' : 'border-gray-300'}`}>
+                          {paymentMethod === 'nave' && <div className="w-2.5 h-2.5 rounded-full bg-[#0066cc]" />}
                         </div>
-                        <span className="font-bold text-gray-700 text-[13px]">Nave (Tarjetas/QR)</span>
+                        <span className="font-bold text-gray-800 text-[14px]">Tarjetas de crédito y/o débito. QR</span>
                       </div>
                     </div>
 
                     <div 
                       onClick={() => setPaymentMethod('transfer')}
-                      className={`flex items-center justify-between p-3 border rounded-lg cursor-pointer transition-all ${paymentMethod === 'transfer' ? 'border-[#0066cc] bg-white ring-1 ring-[#0066cc]' : 'bg-white border-gray-200 hover:border-blue-200'}`}
+                      className={`flex items-center justify-between p-6 cursor-pointer transition-all ${paymentMethod === 'transfer' ? 'bg-blue-50/40 ring-inset ring-2 ring-[#0066cc]' : 'hover:bg-gray-50'}`}
                     >
-                      <div className="flex items-center gap-3">
-                        <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${paymentMethod === 'transfer' ? 'border-[#0066cc] bg-[#0066cc]' : 'border-gray-300'}`}>
-                          {paymentMethod === 'transfer' && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
+                      <div className="flex items-center gap-4">
+                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${paymentMethod === 'transfer' ? 'border-[#0066cc]' : 'border-gray-300'}`}>
+                          {paymentMethod === 'transfer' && <div className="w-2.5 h-2.5 rounded-full bg-[#0066cc]" />}
                         </div>
-                        <span className="font-bold text-gray-700 text-[13px]">Transferencia</span>
+                        <span className="font-bold text-gray-800 text-[14px]">
+                          Transferencia <span className="text-red-600 ml-1">(10% OFF)</span>
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -469,9 +496,20 @@ function CheckoutContent() {
                       }
                     </span>
                   </div>
+                  {paymentMethod === 'transfer' && (
+                    <div className="flex justify-between text-red-600 font-bold text-sm">
+                      <span>Descuento Transferencia (10%)</span>
+                      <span>-${((cartTotal + (selectedRate?.price || 0)) * 0.1).toLocaleString()}</span>
+                    </div>
+                  )}
                   <div className="flex justify-between text-[18px] font-bold text-gray-900 pt-2">
                     <span>Total Final</span>
-                    <span>${(cartTotal + (selectedRate?.price || 0)).toLocaleString()}</span>
+                    <span>
+                      ${(
+                        (cartTotal + (selectedRate?.price || 0)) * 
+                        (paymentMethod === 'transfer' ? 0.9 : 1)
+                      ).toLocaleString()}
+                    </span>
                   </div>
                 </div>
 
