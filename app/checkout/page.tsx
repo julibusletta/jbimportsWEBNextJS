@@ -133,6 +133,9 @@ function CheckoutContent() {
           items: cartItems,
           total: finalTotal,
           orderId: `JB-${Date.now()}`,
+          email: formData.email,
+          firstName: formData.firstName,
+          lastName: formData.lastName,
           shipping: {
             method: selectedRate.name,
             cost: selectedRate.price,

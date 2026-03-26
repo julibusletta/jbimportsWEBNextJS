@@ -26,22 +26,23 @@ import { authOptions } from "../../auth/[...nextauth]/route";
 
 export async function POST(request: Request) {
   try {
+    const { items, total, orderId, shipping, email, firstName, lastName } = await request.json();
     const { db } = await import('@/lib/db');
     
     // Ensure we have a valid public URL for Nave's callback
     const host = request.headers.get('host') || '';
     let baseUrl = process.env.NEXTAUTH_URL || '';
     
-    // If not in env or if we are in a request where headers are reliable and not localhost
-    if (!baseUrl || baseUrl.includes('localhost') && host && !host.includes('localhost')) {
+    // FORCE the primary domain if we're in production to ensure Nave reaches us
+    if (NAVE_ENV === 'production') {
+      baseUrl = 'https://jbimports.com.ar';
+    } else if (!baseUrl || baseUrl.includes('localhost') && host && !host.includes('localhost')) {
       const protocol = host.includes('localhost') ? 'http' : 'https';
       baseUrl = `${protocol}://${host}`;
     }
     
     // Clean trailing slash
     if (baseUrl.endsWith('/')) baseUrl = baseUrl.slice(0, -1);
-
-    const { items, total, orderId, shipping } = await request.json();
     const session = await getServerSession(authOptions);
 
     // 1. Validation
@@ -195,9 +196,9 @@ export async function POST(request: Request) {
 
     // 4. Persistence: Save the order as PENDING
     
-    // Get user info from session
-    const userName = session?.user?.name || 'Cliente Invitado';
-    const userEmail = session?.user?.email || 'invitado@jbimports.com';
+    // Get user info: prefer explicit fields from checkout form, then session, then fallback
+    const userName = `${firstName || ''} ${lastName || ''}`.trim() || session?.user?.name || 'Cliente Invitado';
+    const userEmail = email || session?.user?.email || 'invitado@jbimports.com';
 
     await db.saveOrder({
       id: paymentBody.external_payment_id,
