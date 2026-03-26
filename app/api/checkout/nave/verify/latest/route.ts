@@ -82,6 +82,14 @@ export async function GET(request: Request) {
         statusResp = await fetch(NaveStatusUrl, {
           headers: { 'Authorization': authData.access_token }
         });
+        
+        // Final fallback: try Bearer=<token> (with equal-sign as requested by error)
+        if (!statusResp.ok) {
+           await db.logWebhook('NAVE_VERIFY_RETRY_2', 'GET', { orderId, attempt: 'Bearer=' });
+           statusResp = await fetch(NaveStatusUrl, {
+             headers: { 'Authorization': `Bearer=${authData.access_token}` }
+           });
+        }
       }
     }
 
