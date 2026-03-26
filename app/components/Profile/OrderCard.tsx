@@ -1,9 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { FaShoppingBag, FaChevronRight, FaRegEye, FaCreditCard, FaTruck, FaSpinner } from 'react-icons/fa';
+import { FaShoppingBag, FaChevronRight, FaRegEye, FaCreditCard, FaTruck, FaSpinner, FaUpload } from 'react-icons/fa';
 import OrderDetailsModal from './OrderDetailsModal';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 interface OrderItem {
   name: string;
@@ -25,6 +26,7 @@ interface Order {
     shippingCost?: number;
     shippingMethod?: string;
   };
+  paymentMethod?: 'NAVE' | 'TRANSFERENCIA';
 }
 
 interface OrderCardProps {
@@ -32,10 +34,16 @@ interface OrderCardProps {
 }
 
 export default function OrderCard({ order }: OrderCardProps) {
+  const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPaying, setIsPaying] = useState(false);
 
-  const handleRestartPayment = async () => {
+  const handleAction = async () => {
+    if (order.paymentMethod === 'TRANSFERENCIA') {
+      router.push(`/checkout/transfer/${order.id}`);
+      return;
+    }
+
     try {
       setIsPaying(true);
       const response = await fetch('/api/checkout/nave', {
@@ -74,6 +82,7 @@ export default function OrderCard({ order }: OrderCardProps) {
   };
 
   const isPending = order.status === 'PENDING';
+  const isReview = order.status === 'PENDING_REVIEW';
   const isApprovedOrShipped = ['APPROVED', 'SHIPPED'].includes(order.status);
 
   return (
@@ -91,9 +100,11 @@ export default function OrderCard({ order }: OrderCardProps) {
               <span className={`px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-widest border ${
                 order.status === 'APPROVED' || order.status === 'SHIPPED' 
                   ? 'bg-green-50 text-green-700 border-green-100' 
+                  : order.status === 'PENDING_REVIEW'
+                  ? 'bg-blue-50 text-blue-700 border-blue-100'
                   : 'bg-orange-50 text-orange-700 border-orange-100'
               }`}>
-                {order.status === 'APPROVED' ? 'Aprobado' : order.status === 'SHIPPED' ? 'Enviado' : 'Pendiente'}
+                {order.status === 'APPROVED' ? 'Aprobado' : order.status === 'SHIPPED' ? 'Enviado' : order.status === 'PENDING_REVIEW' ? 'En revisión' : 'Pendiente'}
               </span>
             </div>
             <p className="text-slate-400 text-[11px] font-bold uppercase mt-1 tracking-wider">
@@ -119,15 +130,21 @@ export default function OrderCard({ order }: OrderCardProps) {
               <span>Ver Detalle</span>
             </button>
 
-            {/* Conditional Action Button */}
-            {isPending && (
+            {/* Conditional Action Button or Upload/View Transfer Button */}
+            {(isPending || isReview) && (
               <button 
-                onClick={handleRestartPayment}
+                onClick={handleAction}
                 disabled={isPaying}
-                className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 text-white border border-blue-500 hover:bg-blue-700 transition-all font-bold text-[10px] uppercase tracking-wider cursor-pointer shadow-lg shadow-blue-600/10 active:scale-95 disabled:opacity-50"
+                className={`flex items-center gap-2 px-5 py-2.5 rounded-xl transition-all font-bold text-[10px] uppercase tracking-wider cursor-pointer shadow-lg active:scale-95 disabled:opacity-50 ${
+                  isReview ? 'bg-slate-900 text-white border-slate-800' : 'bg-blue-600 text-white border-blue-500 hover:bg-blue-700'
+                }`}
               >
-                {isPaying ? <FaSpinner className="animate-spin" size={14} /> : <FaCreditCard size={14} />}
-                <span>{isPaying ? 'Procesando...' : 'Realizar Pago'}</span>
+                {isPaying ? <FaSpinner className="animate-spin" size={14} /> : order.paymentMethod === 'TRANSFERENCIA' ? <FaUpload size={14} /> : <FaCreditCard size={14} />}
+                <span>
+                  {isPaying ? 'Procesando...' : 
+                   isReview ? 'Ver Comprobante' : 
+                   order.paymentMethod === 'TRANSFERENCIA' ? 'Subir Comprobante' : 'Realizar Pago'}
+                </span>
               </button>
             )}
 

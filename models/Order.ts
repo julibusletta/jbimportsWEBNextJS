@@ -15,9 +15,12 @@ const OrderSchema = new Schema({
   total: { type: Number, required: true },
   status: { 
     type: String, 
-    enum: ['PENDING', 'APPROVED', 'REJECTED', 'SHIPPED', 'CANCELLED'],
+    enum: ['PENDING', 'APPROVED', 'REJECTED', 'SHIPPED', 'CANCELLED', 'PENDING_REVIEW'],
     default: 'PENDING'
   },
+  paymentMethod: { type: String, enum: ['NAVE', 'TRANSFERENCIA'], default: 'NAVE' },
+  proofUrl: String,
+  proofUploadedAt: Date,
   navePaymentId: String,
   shippingAddress: {
     street: String,
