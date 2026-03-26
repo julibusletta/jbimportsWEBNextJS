@@ -162,10 +162,10 @@ export async function POST(request: Request) {
           }))
         }
       ],
-      redirection_url: `${baseUrl}/mi-cuenta/compras?verify=${orderId || `order_${Date.now()}`}`,
       additional_info: {
         callback_url: `${baseUrl}/api/checkout/nave/webhook`,
-        back_url: `${baseUrl}/mi-cuenta/compras`,
+        back_url: `${baseUrl}/mi-cuenta/compras?verify=${orderId || `order_${Date.now()}`}`,
+        external_reference: orderId || `order_${Date.now()}`,
         success_url: `${baseUrl}/mi-cuenta/compras`,
         cancel_url: `${baseUrl}/`
       },
