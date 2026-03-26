@@ -75,28 +75,38 @@ export default function TransferPage() {
   deadline.setDate(deadline.getDate() + 2); // 48 hours deadline
 
   return (
-    <div className="min-h-screen bg-[#eee] pt-32 pb-12 font-[Montserrat,sans-serif]">
-      <div className="max-w-[1200px] mx-auto px-4 lg:px-10">
+    <div className="min-h-screen bg-[#eee] pt-48 pb-12 font-[Montserrat,sans-serif]">
+      <style jsx global>{`
+        @keyframes pulse-yellow {
+          0% { transform: scale(1); opacity: 1; }
+          50% { transform: scale(1.1); opacity: 0.8; }
+          100% { transform: scale(1); opacity: 1; }
+        }
+        .animate-pulse-yellow {
+          animation: pulse-yellow 2s infinite ease-in-out;
+        }
+      `}</style>
+      <div className="max-w-[1000px] mx-auto px-4 lg:px-10">
         
         {/* Reservation Header (CompraGamer Style) */}
-        <div className="bg-gradient-to-b from-white to-[#fff6df] rounded-[32px] p-8 mb-8 flex flex-col md:flex-row items-center gap-8 shadow-sm">
-          <div className="w-48 h-48 flex items-center justify-center bg-white rounded-full shadow-inner border border-amber-100">
+        <div className="bg-gradient-to-b from-white to-[#fff6df] rounded-[32px] p-10 mb-8 flex flex-col items-center text-center shadow-sm border border-amber-100">
+          <div className="w-48 h-48 flex items-center justify-center bg-white rounded-full shadow-inner border border-amber-50 mb-6 animate-pulse-yellow">
              <div className="flex flex-col items-center text-[#fcbb11]">
                 <FaExclamationTriangle size={80} />
-                <span className="text-xs font-bold mt-2">PENDIENTE</span>
+                <span className="text-xs font-black mt-2 tracking-widest uppercase">PENDIENTE</span>
              </div>
           </div>
           
-          <div className="flex-1 text-center md:text-left">
-            <h1 className="text-2xl md:text-3xl text-gray-800 mb-4">
+          <div className="flex-1 max-w-[800px]">
+            <h1 className="text-2xl md:text-3xl text-gray-800 mb-6 leading-tight">
               Tu reserva <b className="text-black">{order.id}</b> ya fue confirmada. Sólo falta que realices el pago para que podamos avanzar.
             </h1>
-            <p className="text-gray-600 mb-6">
+            <p className="text-gray-600 mb-8 text-lg">
               Tenés tiempo hasta el <b>{deadline.toLocaleDateString('es-AR')}</b> para abonar.
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-4">
-              <label className={`cursor-pointer bg-[#f0320a] hover:bg-[#d62b08] text-white px-8 py-4 rounded-xl font-bold flex items-center justify-center gap-2 transition-all shadow-md active:scale-95 ${uploading ? 'opacity-70 pointer-events-none' : ''}`}>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <label className={`cursor-pointer bg-[#f0320a] hover:bg-[#d62b08] text-white px-10 py-5 rounded-none font-bold flex items-center justify-center gap-2 transition-all shadow-md active:scale-95 ${uploading ? 'opacity-70 pointer-events-none' : ''}`}>
                 <FaUpload />
                 {uploading ? 'SUBIENDO...' : 'SUBIR COMPROBANTE'}
                 <input type="file" className="hidden" onChange={handleFileUpload} accept="image/*,application/pdf" />
@@ -104,7 +114,7 @@ export default function TransferPage() {
               
               <button 
                 onClick={() => router.push('/')}
-                className="bg-white border-2 border-gray-200 hover:border-[#f0320a] hover:text-[#f0320a] text-gray-700 px-8 py-4 rounded-xl font-bold flex items-center justify-center gap-2 transition-all"
+                className="bg-white border-2 border-gray-200 hover:border-[#f0320a] hover:text-[#f0320a] text-gray-700 px-10 py-5 rounded-none font-bold flex items-center justify-center gap-2 transition-all shadow-sm"
               >
                 <FaHome /> VOLVER AL INICIO
               </button>
