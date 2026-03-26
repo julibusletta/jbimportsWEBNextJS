@@ -13,17 +13,36 @@ export default function StatusChecker() {
   const [message, setMessage] = useState('');
 
   useEffect(() => {
-    if (verifyId && status === 'idle') {
-      verifyPayment();
+    if (status === 'idle') {
+      if (verifyId) {
+        verifyPayment(verifyId);
+      } else {
+        verifyLatest();
+      }
     }
   }, [verifyId]);
 
-  const verifyPayment = async () => {
+  const verifyLatest = async () => {
+    try {
+      // Quietly check for latest pending order
+      const resp = await fetch('/api/checkout/nave/verify/latest');
+      const data = await resp.json();
+      if (data.success && data.updated) {
+        setStatus('success');
+        setMessage('¡Pago Detectado y Aprobado!');
+        router.refresh();
+      }
+    } catch (err) {
+      // Fail silently for automatic check
+    }
+  };
+
+  const verifyPayment = async (id: string) => {
     setStatus('loading');
     setMessage('Verificando estado del pago...');
 
     try {
-      const resp = await fetch(`/api/checkout/nave/verify/${verifyId}`);
+      const resp = await fetch(`/api/checkout/nave/verify/${id}`);
       const data = await resp.json();
 
       if (data.success) {
