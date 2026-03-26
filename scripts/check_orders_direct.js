@@ -30,8 +30,8 @@ const OrderSchema = new mongoose.Schema({
   userName: String,
   status: String,
   navePaymentId: String,
-  createdAt: Date
-}, { timestamps: true });
+  createdAt: { type: Date, default: Date.now },
+});
 
 const Order = mongoose.models.Order || mongoose.model('Order', OrderSchema);
 
@@ -46,7 +46,7 @@ async function checkOrders() {
 
     console.log('ORDERS FOUND:');
     orders.forEach(o => {
-      console.log(`- ID: ${o.id} | Email: ${o.userEmail} | Status: ${o.status} | Created: ${o.createdAt}`);
+      console.log(`- ID: ${o.id} | Email: ${o.userEmail} | Status: ${o.status} | NaveID: ${o.navePaymentId || 'N/A'} | Created: ${o.createdAt}`);
     });
 
     process.exit(0);

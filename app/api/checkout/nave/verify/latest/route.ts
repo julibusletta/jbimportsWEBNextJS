@@ -68,30 +68,14 @@ export async function GET(request: Request) {
     }
 
     // 3. Check status in Nave
-    const NaveStatusUrl = `${STATUS_URL}/${orderId}`;
+    const lookupId = latestPending.navePaymentId || orderId;
+    const NaveStatusUrl = `${STATUS_URL}/${lookupId}`;
     
+    await db.logWebhook('NAVE_VERIFY_LOOKUP', 'GET', { orderId, lookupId, url: NaveStatusUrl });
+
     let statusResp = await fetch(NaveStatusUrl, {
       headers: { 'Authorization': `Bearer ${authData.access_token}` }
     });
-
-    // Fallback: If 403 and message mentions "missing equal-sign", try without "Bearer "
-    if (statusResp.status === 403) {
-      const errRetry = await statusResp.clone().json().catch(() => ({}));
-      if (errRetry.message?.includes('missing equal-sign')) {
-        await db.logWebhook('NAVE_VERIFY_RETRY', 'GET', { orderId, attempt: 'No Bearer' });
-        statusResp = await fetch(NaveStatusUrl, {
-          headers: { 'Authorization': authData.access_token }
-        });
-        
-        // Final fallback: try Bearer=<token> (with equal-sign as requested by error)
-        if (!statusResp.ok) {
-           await db.logWebhook('NAVE_VERIFY_RETRY_2', 'GET', { orderId, attempt: 'Bearer=' });
-           statusResp = await fetch(NaveStatusUrl, {
-             headers: { 'Authorization': `Bearer=${authData.access_token}` }
-           });
-        }
-      }
-    }
 
     if (!statusResp.ok) {
        const errorData = await statusResp.json().catch(() => ({}));
