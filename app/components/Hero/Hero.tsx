@@ -83,8 +83,11 @@ export default function Hero() {
       {/* Hero Content */}
       <div className={`hero-content max-w-4xl w-full opacity-100 transition-opacity duration-700 text-center z-10 ${!isTyping ? 'fade-out' : ''}`}>
         <h1 className="typewriter text-5xl md:text-7xl font-bold leading-tight mb-2 md:mb-8 letter-spacing-tight min-h-0 md:min-h-64 text-gray-900 transition-all duration-300">
+          <span className="text-black">
+            {displayText.slice(0, 1)}
+          </span>
           <span className="text-[#0066cc]">
-            {displayText.slice(0, bluePart.length)}
+            {displayText.slice(1, bluePart.length)}
           </span>
           {displayText.length > bluePart.length && <br />}
           <span className="text-black">
