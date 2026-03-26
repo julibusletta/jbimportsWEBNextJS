@@ -74,7 +74,9 @@ export async function GET(request: Request) {
     });
 
     if (!statusResp.ok) {
-       return NextResponse.json({ success: false, message: 'Nave order not found' });
+       const errorData = await statusResp.json().catch(() => ({}));
+       await db.logWebhook('NAVE_VERIFY_ERROR', 'GET', { orderId, errorData, statusCode: statusResp.status });
+       return NextResponse.json({ success: false, message: 'Nave order not found or error' });
     }
 
     const naveData = await statusResp.json();
