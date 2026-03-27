@@ -14,7 +14,7 @@ export default function MaintenancePage() {
         {/* Animated Icon */}
         <div className="relative inline-block">
           <div className="absolute inset-0 bg-blue-500 blur-3xl opacity-20 animate-pulse"></div>
-          <div className="relative bg-white/5 backdrop-blur-xl p-8 rounded-[2.5rem] border border-white/10 shadow-2xl animate-bounce-slow">
+          <div className="relative bg-white/5 backdrop-blur-xl p-8 rounded-none border border-white/10 shadow-2xl animate-bounce-slow">
             <FaTools className="text-white text-6xl" />
           </div>
         </div>
@@ -24,7 +24,7 @@ export default function MaintenancePage() {
           <h1 className="text-5xl md:text-7xl font-black text-white tracking-tighter leading-none">
             MUY <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-blue-400 to-indigo-500">PRONTO</span>
           </h1>
-          <p className="text-gray-400 text-xl md:text-2xl font-medium max-w-xl mx-auto leading-relaxed">
+          <p className="text-gray-400 text-xl md:text-2xl font-medium max-w-xl mx-auto leading-relaxed text-center">
             Estamos renovando <span className="text-white font-bold">JB Imports</span> para ofrecerte la mejor tecnología con una experiencia de compra premium.
           </p>
         </div>
@@ -43,20 +43,28 @@ export default function MaintenancePage() {
         {/* Contact Actions */}
         <div className="flex flex-wrap items-center justify-center gap-6 pt-8">
           <a 
-            href="https://wa.me/5491122334455" // Replace with real number if known
+            href="#" // Placeholder for now, or use original if known
             target="_blank"
             rel="noopener noreferrer"
-            className="px-8 py-5 bg-white text-black font-black rounded-2xl flex items-center gap-3 hover:scale-[1.05] transition-all shadow-xl active:scale-95"
+            className="px-8 py-5 bg-white text-black font-black rounded-none flex items-center gap-3 hover:scale-[1.05] transition-all shadow-xl active:scale-95"
           >
             <FaWhatsapp size={22} />
             <span>CONSULTAS POR WHATSAPP</span>
           </a>
           
           <div className="flex items-center gap-4">
-            <a href="#" className="p-5 bg-white/5 border border-white/10 rounded-2xl text-gray-400 hover:text-white hover:bg-white/10 transition-all">
+            <a 
+              href="https://www.instagram.com/jbimportsarg/" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="p-5 bg-white/5 border border-white/10 rounded-none text-gray-400 hover:text-white hover:bg-white/10 transition-all"
+            >
               <FaInstagram size={24} />
             </a>
-            <a href="mailto:info@jbimports.com.ar" className="p-5 bg-white/5 border border-white/10 rounded-2xl text-gray-400 hover:text-white hover:bg-white/10 transition-all">
+            <a 
+              href="mailto:contacto@jbimports.com.ar" 
+              className="p-5 bg-white/5 border border-white/10 rounded-none text-gray-400 hover:text-white hover:bg-white/10 transition-all"
+            >
               <FaEnvelope size={24} />
             </a>
           </div>
@@ -64,7 +72,7 @@ export default function MaintenancePage() {
 
         {/* Tagline */}
         <div className="pt-12">
-          <p className="text-[11px] font-black text-gray-600 uppercase tracking-[0.4em]">JB IMPORTS &copy; 2026 - CALIDAD PREMIUM</p>
+          <p className="text-[11px] font-black text-gray-600 uppercase tracking-[0.4em]">JB IMPORTS &copy; 2026</p>
         </div>
       </div>
 
