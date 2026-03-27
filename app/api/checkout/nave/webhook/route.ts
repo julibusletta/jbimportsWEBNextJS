@@ -30,34 +30,34 @@ export async function POST(request: Request) {
     const rawStatus = status?.toString() || '';
     let normalizedStatus = rawStatus.toUpperCase();
 
-    // Mapping for common payment success statuses
-    if (['PAID', 'PAGADO', 'SUCCESS', 'COMPLETED'].includes(normalizedStatus)) {
+    // Mapping for Nave payment success statuses (Production uses APPROVED, Sandbox might vary)
+    const successStatuses = ['PAID', 'PAGADO', 'SUCCESS', 'COMPLETED', 'APPROVED', 'APROBADA'];
+    if (successStatuses.includes(normalizedStatus)) {
       normalizedStatus = 'APPROVED';
+    } else if (['REJECTED', 'RECHAZADA', 'FAILED', 'FALLIDA'].includes(normalizedStatus)) {
+      normalizedStatus = 'REJECTED';
     }
 
-    logToFile(`NAVE WEBHOOK: Processing order ${orderId} (Raw: ${rawStatus} -> Normalized: ${normalizedStatus})`);
-
     // 3. Update the database
-    await db.updateOrderStatus(orderId, normalizedStatus as any, body.id);
-    logToFile(`NAVE WEBHOOK: Order ${orderId} status updated in DB`);
-
+    const naveInternalId = body.id || body.payment_id;
+    await db.updateOrderStatus(orderId, normalizedStatus as any, naveInternalId);
+    
     // 4. If payment is approved, send confirmation email
     if (normalizedStatus === 'APPROVED') {
       const order = await db.getOrderById(orderId);
-      if (order) {
-        logToFile(`NAVE WEBHOOK: Attempting to send email to ${order.userEmail} for order ${orderId}`);
+      if (order && order.userEmail) {
         try {
           const { mailer } = await import('@/lib/mailer');
           await mailer.sendPurchaseConfirmation(order.userEmail, order.userName, order);
-          logToFile(`NAVE WEBHOOK: Confirmation email sent to ${order.userEmail}`);
+          await db.logWebhook('NAVE_EMAIL_SENT', 'POST', { orderId, email: order.userEmail });
         } catch (mailError: any) {
-          logToFile(`NAVE WEBHOOK EMAIL ERROR:`, mailError.message);
-          // We don't throw here to avoid returning 500 to Nave (which would trigger retries)
+          console.error(`WEBHOOK EMAIL ERROR for ${orderId}:`, mailError.message);
+          await db.logWebhook('NAVE_EMAIL_ERROR', 'POST', { orderId, error: mailError.message });
         }
       }
     }
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ success: true, received: true });
 
   } catch (error: any) {
     console.error('Nave Webhook Fatal Error:', error.message);

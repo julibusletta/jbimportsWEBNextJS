@@ -32,84 +32,23 @@ export async function POST(request: Request) {
     const { items, total, orderId, shipping, email, firstName, lastName } = body;
     currentOrderId = orderId || `JB-${Date.now()}`;
 
-    // LOG INMEDIATO AL ENTRAR (Antes de cualquier lógica)
-    await db.logWebhook('NAVE_ENTER_ROUTE', 'POST', { 
-      orderId: currentOrderId, 
-      env: process.env.NAVE_ENV,
-      total 
-    });
+    // 1. Log Entry
+    await db.logWebhook('NAVE_CHECKOUT_START', 'POST', { orderId: currentOrderId, env: NAVE_ENV, total });
 
-    // Ensure we have a valid public URL for Nave's callback
+    // 2. Base URL Calculation for callbacks
     const host = request.headers.get('host') || '';
-    let baseUrl = process.env.NEXTAUTH_URL || '';
-    
-    // If we're on Vercel, use the VERCEL_URL as a fallback if the host is problematic
-    const vercelUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : '';
-    const isLocalhost = host.includes('localhost');
-
-    if (host && !isLocalhost) {
-      baseUrl = `https://${host}`;
-    } else if (vercelUrl) {
-      baseUrl = vercelUrl;
-    } else if (!baseUrl || isLocalhost) {
-      baseUrl = 'http://localhost:3000';
-    }
-    
-    // Clean trailing slash
+    let baseUrl = `https://${host}`;
+    if (host.includes('localhost')) baseUrl = 'http://localhost:3000';
+    if (process.env.NEXTAUTH_URL && !host) baseUrl = process.env.NEXTAUTH_URL;
     if (baseUrl.endsWith('/')) baseUrl = baseUrl.slice(0, -1);
-    
-    // Log for debugging
-    await db.logWebhook('NAVE_DEBUG', 'POST', { host, baseUrl, vercelUrl, env: NAVE_ENV });
-    const session = await getServerSession(authOptions);
 
-    // 1. Validation & Header Sanitization
-    if (!total || total <= 0) {
-      return NextResponse.json({ success: false, message: 'Monto inválido' }, { status: 400 });
-    }
-
-    if (!NAVE_CLIENT_ID || !NAVE_CLIENT_SECRET) {
-      // IF NO CREDENTIALS, Simulate a success for Testing purposes if in sandbox
-      if (NAVE_ENV === 'sandbox') {
-        const { db } = await import('@/lib/db');
-        await db.saveOrder({
-          id: currentOrderId,
-          userEmail: email || 'invitado@jbimports.com',
-          userName: `${firstName} ${lastName}`.trim() || 'Cliente Invitado',
-          items: items.map((item: any) => ({
-            name: item.name,
-            quantity: item.quantity,
-            price: item.price
-          })),
-          total,
-          status: 'PENDING',
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-          navePaymentId: `mock_${Date.now()}`,
-        });
-
-        console.warn('NAVE: Missing credentials. Simulating response for testing.');
-        return NextResponse.json({ 
-          success: true, 
-          url: `${baseUrl}/checkout-mock?paymentId=mock_${Date.now()}&orderId=${currentOrderId}`, 
-          mock: true
-        });
-      }
-      return NextResponse.json({ success: false, message: 'Configuración de Nave incompleta' }, { status: 500 });
-    }
-
-    // 2. Get Access Token
+    // 3. Authenticate with Nave (M2M)
     const authBody = {
       client_id: NAVE_CLIENT_ID,
       client_secret: NAVE_CLIENT_SECRET,
-      audience: NAVE_AUDIENCE, 
+      audience: NAVE_AUDIENCE,
       grant_type: 'client_credentials',
     };
-    
-    console.log(`NAVE AUTH ATTEMPT:`, {
-      url: AUTH_URL,
-      audience: NAVE_AUDIENCE,
-      clientId: NAVE_CLIENT_ID?.substring(0, 5) + '...'
-    });
 
     const authResponse = await fetch(AUTH_URL, {
       method: 'POST',
@@ -119,143 +58,72 @@ export async function POST(request: Request) {
 
     if (!authResponse.ok) {
       const errorText = await authResponse.text();
-      console.error(`NAVE AUTH ERROR (${authResponse.status}):`, errorText);
-      // Log the full response for deep debugging
-      throw new Error(`Auth failed: ${errorText}`);
+      await db.logWebhook('NAVE_AUTH_ERROR', 'POST', { status: authResponse.status, error: errorText });
+      throw new Error(`Authentication failed: ${errorText}`);
     }
 
-    let authData;
-    const authRaw = await authResponse.text();
-    try {
-      authData = JSON.parse(authRaw);
-    } catch (e) {
-      console.error('NAVE AUTH JSON PARSE ERROR:', authRaw);
-      throw new Error(`Nave Auth returned invalid JSON: ${authRaw.substring(0, 50)}...`);
-    }
+    const { access_token } = await authResponse.json();
+    if (!access_token) throw new Error('No access token received from Nave');
 
-    // REGISTRO DE DEPURE - Solo para diagnostico inicial
-    await db.logWebhook('NAVE_AUTH_RESPONSE', 'POST', {
-      status: authResponse.status,
-      hasToken: !!authData.access_token,
-      tokenLength: authData.access_token?.length,
-      expires: authData.expires_in,
-      tokenType: authData.token_type,
-      rawSnipped: authRaw.substring(0, 100)
-    });
-
-    const { access_token } = authData;
-
-    if (!access_token) {
-      throw new Error(`No se pudo obtener el token de acceso de Nave. Respuesta: ${authRaw.substring(0, 100)}`);
-    }
-
-    // 3. Create Payment Intention
+    // 4. Create Payment Request
     const paymentBody = {
-      external_payment_id: orderId || `order_${Date.now()}`,
-      seller: {
-        pos_id: NAVE_TERMINAL_ID || ''
-      },
-      transactions: [
-        {
-          amount: {
-            currency: "ARS",
-            value: total.toFixed(2).toString()
-          },
-          products: items.map((item: any) => ({
-            name: item.name,
-            description: item.name,
-            quantity: item.quantity,
-            unit_price: {
-              currency: "ARS",
-              value: item.price.toFixed(2).toString()
-            }
-          }))
-        }
-      ],
+      external_payment_id: currentOrderId,
+      seller: { pos_id: NAVE_TERMINAL_ID },
+      transactions: [{
+        amount: { currency: "ARS", value: total.toFixed(2).toString() },
+        products: items.map((item: any) => ({
+          name: item.name,
+          quantity: item.quantity,
+          unit_price: { currency: "ARS", value: item.price.toFixed(2).toString() }
+        }))
+      }],
       additional_info: {
         callback_url: `${baseUrl}/api/checkout/nave/webhook`,
-        back_url: `${baseUrl}/mi-cuenta/compras?verify=${orderId || `order_${Date.now()}`}`,
-        external_reference: orderId || `order_${Date.now()}`,
+        back_url: `${baseUrl}/mi-cuenta/compras`,
+        external_reference: currentOrderId,
         success_url: `${baseUrl}/mi-cuenta/compras`,
         cancel_url: `${baseUrl}/`
       },
-      duration_time: 3600 // 1 hour expiration
+      duration_time: 3600
     };
 
-    // Log the outgoing request for tracing
-    await db.logWebhook('NAVE_OUTGOING', 'POST', { 
-      orderId: paymentBody.external_payment_id,
-      callback_url: paymentBody.additional_info.callback_url,
-      total: paymentBody.transactions[0].amount.value 
-    }, { url: CHECKOUT_URL });
-
-    console.log(`NAVE: Creating payment intention with ${CHECKOUT_URL} and callback ${paymentBody.additional_info.callback_url}`);
-    
-    // Header sanitization
+    // Standard headers only
     const cleanToken = access_token.trim();
+    const headers = {
+      'Authorization': `Bearer ${cleanToken}`,
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'X-Terminal-Id': NAVE_TERMINAL_ID,
+    };
 
-    // FINAL BYPASS STRATEGY: 
-    // The Gateway requires an '=' in Authorization header.
-    // The App requires a 'Bearer [token]' in Authorization header.
-    // Solution: Send a compound header that satisfies both.
-    const finalCheckoutUrl = `${CHECKOUT_URL}?apikey=${NAVE_CLIENT_ID}`;
-    const compoundAuth = `Bearer ${cleanToken}, apikey=${NAVE_CLIENT_ID}`;
-
-    const checkoutResponse = await fetch(finalCheckoutUrl, {
+    const checkoutResponse = await fetch(CHECKOUT_URL, {
       method: 'POST',
-      headers: {
-        'Authorization': compoundAuth,
-        'X-Authorization': `Bearer ${cleanToken}`,
-        'x-auth-token': cleanToken,
-        'x-api-key': NAVE_CLIENT_ID,
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'X-Terminal-Id': NAVE_TERMINAL_ID,
-        'X-POS-Id': NAVE_TERMINAL_ID
-      },
+      headers: headers,
       body: JSON.stringify(paymentBody),
     });
 
+    const checkoutData = await checkoutResponse.json();
+
     if (!checkoutResponse.ok) {
-      const errorText = await checkoutResponse.text();
-      console.error(`NAVE CHECKOUT ERROR (${checkoutResponse.status}):`, errorText);
-      
-      // Log failure to DB
-      await db.logWebhook('NAVE_CHECKOUT_ERROR', 'POST', {
-        status: checkoutResponse.status,
-        error: errorText,
-        tokenSnipped: cleanToken.substring(0, 10),
-        terminalId: NAVE_TERMINAL_ID,
-        orderId: paymentBody.external_payment_id
+      await db.logWebhook('NAVE_CHECKOUT_ERROR', 'POST', { 
+        status: checkoutResponse.status, 
+        error: JSON.stringify(checkoutData),
+        orderId: currentOrderId
       });
-
-      throw new Error(`Checkout failed: ${errorText}`);
+      throw new Error(`Checkout failed: ${JSON.stringify(checkoutData)}`);
     }
 
-    let checkoutData;
-    const checkoutRaw = await checkoutResponse.text();
-    try {
-      checkoutData = JSON.parse(checkoutRaw);
-    } catch (e) {
-      console.error('NAVE CHECKOUT JSON PARSE ERROR:', checkoutRaw);
-      throw new Error(`Nave Checkout returned invalid JSON: ${checkoutRaw.substring(0, 50)}...`);
-    }
+    // 5. Success Logging & Persistence
+    await db.logWebhook('NAVE_CHECKOUT_SUCCESS', 'POST', { orderId: currentOrderId, checkoutId: checkoutData.id });
 
-    // 4. Persistence: Save the order as PENDING
-    
-    // Get user info: prefer explicit fields from checkout form, then session, then fallback
-    const userName = `${firstName || ''} ${lastName || ''}`.trim() || session?.user?.name || 'Cliente Invitado';
-    const userEmail = email || session?.user?.email || 'invitado@jbimports.com';
+    const userName = `${firstName || ''} ${lastName || ''}`.trim() || 'Cliente Invitado';
+    const userEmail = email || 'invitado@jbimports.com';
 
     await db.saveOrder({
-      id: paymentBody.external_payment_id,
+      id: currentOrderId,
       userEmail,
       userName,
-      items: items.map((item: any) => ({
-        name: item.name,
-        quantity: item.quantity,
-        price: item.price
-      })),
+      items: items.map((item: any) => ({ name: item.name, quantity: item.quantity, price: item.price })),
       total,
       status: 'PENDING',
       createdAt: new Date().toISOString(),
@@ -271,15 +139,14 @@ export async function POST(request: Request) {
       } : undefined
     });
 
-    // 5. Return the checkout URL
     return NextResponse.json({ 
       success: true, 
-      url: checkoutData.url || checkoutData.checkout_url,
+      url: checkoutData.url || checkoutData.checkout_url, 
       id: checkoutData.id 
     });
 
   } catch (error: any) {
-    console.error('Nave Integration Error DETAILS:', error.message);
+    console.error('Nave Reset Error:', error);
     return NextResponse.json({ success: false, message: error.message }, { status: 500 });
   }
 }
