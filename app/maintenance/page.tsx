@@ -79,15 +79,8 @@ export default function MaintenancePage() {
           </div>
         </div>
 
-        {/* Footer Section with Logo */}
+        {/* Footer Section */}
         <div className="pt-20 flex flex-col items-center gap-6">
-          <div className="bg-white p-4 rounded-none shadow-xl">
-            <img 
-              src="/images/logotest9.png" 
-              alt="JB Imports Logo" 
-              className="h-10 md:h-12 w-auto opacity-100" 
-            />
-          </div>
           <p className="text-[11px] font-black text-gray-600 uppercase tracking-[0.4em]">JB IMPORTS &copy; 2026</p>
         </div>
       </div>
