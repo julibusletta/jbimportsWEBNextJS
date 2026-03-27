@@ -27,7 +27,7 @@ export async function POST(request: Request) {
     }
 
     // 2. Normalize status
-    const rawStatus = status?.toString() || '';
+    const rawStatus = (typeof status === 'object' && status !== null ? (status.name || JSON.stringify(status)) : (status?.toString() || ''));
     let normalizedStatus = rawStatus.toUpperCase();
 
     // Mapping for Nave payment success statuses (Production uses APPROVED, Sandbox might vary)

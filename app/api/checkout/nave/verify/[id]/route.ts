@@ -70,7 +70,7 @@ export async function GET(
     }
 
     const naveData = await statusResp.json();
-    const rawStatus = naveData.status || '';
+    const rawStatus = (naveData.status?.name || naveData.status || '').toString();
     let normalizedStatus = rawStatus.toUpperCase();
 
     // Mapping success statuses
