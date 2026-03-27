@@ -197,7 +197,7 @@ export async function POST(request: Request) {
     const checkoutResponse = await fetch(CHECKOUT_URL, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${cleanToken}`,
+        'Authorization': `apikey=${NAVE_CLIENT_ID}`, 
         'X-Authorization': `Bearer ${cleanToken}`,
         'x-auth-token': cleanToken,
         'x-api-key': NAVE_CLIENT_ID,
