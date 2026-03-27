@@ -30,16 +30,16 @@ export default function MaintenancePage() {
 
         {/* Text Section */}
         <div className="space-y-6 w-full flex flex-col items-center">
-          <h1 className="text-5xl md:text-7xl font-black text-white tracking-tighter leading-none text-center">
+          <h1 className="text-4xl md:text-7xl font-black text-white tracking-tighter leading-none text-center">
             MUY <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-blue-400 to-indigo-500">PRONTO</span>
           </h1>
-          <p className="text-gray-400 text-xl md:text-2xl font-medium max-w-xl leading-relaxed text-center">
+          <p className="text-gray-400 text-lg md:text-2xl font-medium max-w-xl leading-relaxed text-center px-4">
             Estamos renovando <span className="text-white font-bold">JB Imports</span> para ofrecerte la mejor tecnología con una experiencia de compra superior.
           </p>
         </div>
 
         {/* Progress Bar placeholder */}
-        <div className="max-w-md w-full mx-auto space-y-3">
+        <div className="max-w-md w-full mx-auto space-y-3 px-6">
           <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden">
             <div className="h-full bg-gradient-to-r from-blue-600 to-indigo-600 w-[85%] animate-shimmer"></div>
           </div>
@@ -50,12 +50,12 @@ export default function MaintenancePage() {
         </div>
 
         {/* Contact Actions */}
-        <div className="flex flex-wrap items-center justify-center gap-6 pt-8 w-full">
+        <div className="flex flex-wrap items-center justify-center gap-6 pt-8 w-full px-4">
           <a 
-            href="#" 
+            href="https://wa.me/5491131070621" 
             target="_blank"
             rel="noopener noreferrer"
-            className="px-10 py-5 bg-white/5 border border-white/10 text-white font-black rounded-none flex items-center gap-3 hover:bg-white/10 hover:scale-[1.05] transition-all shadow-xl active:scale-95"
+            className="px-8 py-4 md:px-10 md:py-5 bg-white/5 border border-white/10 text-white font-black rounded-none flex items-center gap-3 hover:bg-white/10 hover:scale-[1.05] transition-all shadow-xl active:scale-95 text-sm md:text-base"
           >
             <FaWhatsapp size={22} className="text-[#25D366]" />
             <span className="whitespace-nowrap">CONSULTAS POR WHATSAPP</span>
