@@ -35,10 +35,10 @@ export default function AccountLayout({
         <div className="flex flex-col lg:flex-row gap-10">
           {/* Sidebar */}
           <aside className="w-full lg:w-72 flex-shrink-0">
-            <div className="sticky top-[100px] bg-white rounded-2xl shadow-[0_4px_25px_rgba(0,0,0,0.03)] border border-slate-200 overflow-hidden">
+            <div className="sticky top-[100px] bg-white rounded-none shadow-[0_4px_25px_rgba(0,0,0,0.03)] border-2 border-slate-900 overflow-hidden">
               {/* Profile Brief */}
               <div className="p-8 bg-slate-900 flex items-center gap-5 border-b-4 border-blue-600">
-                <div className="w-14 h-14 bg-slate-800 rounded-2xl flex items-center justify-center text-white text-xl font-black border border-blue-500/20 shadow-[0_0_20px_rgba(37,99,235,0.2)]">
+                <div className="w-14 h-14 bg-slate-800 rounded-none flex items-center justify-center text-white text-xl font-black border border-blue-500/20 shadow-[0_0_20px_rgba(37,99,235,0.2)]">
                   {firstInitial}
                 </div>
                 <div className="min-w-0">
@@ -55,7 +55,7 @@ export default function AccountLayout({
                     <Link
                       key={item.label}
                       href={item.href}
-                      className={`flex items-center gap-4 px-6 py-4.5 rounded-2xl text-[15px] font-bold transition-all duration-300 border-2 ${
+                      className={`flex items-center gap-4 px-6 py-4.5 rounded-none text-[15px] font-bold transition-all duration-300 border-2 ${
                         isActive 
                           ? 'bg-slate-900 text-white border-slate-900 shadow-xl shadow-slate-900/10' 
                           : 'text-slate-500 border-transparent hover:bg-slate-50 hover:text-slate-900'
@@ -70,7 +70,7 @@ export default function AccountLayout({
                 <div className="mt-8 pt-4 border-t-2 border-slate-50">
                   <button 
                     onClick={() => signOut({ callbackUrl: '/' })}
-                    className="w-full flex items-center gap-4 px-6 py-4.5 rounded-2xl text-[15px] font-bold text-red-500 hover:bg-red-50 transition-all duration-300 bg-transparent border-2 border-transparent cursor-pointer text-left"
+                    className="w-full flex items-center gap-4 px-6 py-4.5 rounded-none text-[15px] font-bold text-red-500 hover:bg-red-50 transition-all duration-300 bg-transparent border-2 border-transparent cursor-pointer text-left"
                   >
                     <FaSignOutAlt className="text-xl" />
                     Cerrar Sesión
@@ -82,7 +82,7 @@ export default function AccountLayout({
 
           {/* Main Content */}
           <main className="flex-1">
-            <div className="bg-white rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-slate-200 p-8 sm:p-10 min-h-[600px]">
+            <div className="bg-white rounded-none shadow-[0_4px_20px_rgba(0,0,0,0.03)] border-2 border-slate-100 p-8 sm:p-10 min-h-[600px]">
               {children}
             </div>
           </main>
