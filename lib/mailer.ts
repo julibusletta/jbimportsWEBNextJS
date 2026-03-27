@@ -107,7 +107,7 @@ export const mailer = {
 
     try {
       const info = await transporter.sendMail({
-        from: process.env.EMAIL_USER,
+        from: `"JB Imports" <${process.env.EMAIL_USER}>`,
         to,
         bcc: process.env.EMAIL_USER, // Send a copy to the store
         subject: `Confirmación de pedido #${orderDetails.id} - JB Imports`,
