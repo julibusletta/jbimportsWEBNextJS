@@ -89,10 +89,15 @@ export async function GET(request: Request) {
     const naveData = await statusResp.json();
     await db.logWebhook('NAVE_VERIFY_RESPONSE', 'GET', { orderId, naveData });
     
-    const rawStatus = (naveData.status?.name || naveData.status || '').toString();
+    const rawStatus = (
+      naveData.status?.name || 
+      naveData.payment?.status?.name || 
+      naveData.status || 
+      ''
+    ).toString();
     let normalizedStatus = rawStatus.toUpperCase();
 
-    if (['PAID', 'PAGADO', 'SUCCESS', 'COMPLETED', 'APPROVED'].includes(normalizedStatus)) {
+    if (['PAID', 'PAGADO', 'SUCCESS', 'SUCCESS_PROCESSED', 'COMPLETED', 'APPROVED', 'APROBADA'].includes(normalizedStatus)) {
       normalizedStatus = 'APPROVED';
     }
 

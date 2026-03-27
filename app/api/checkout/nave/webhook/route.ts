@@ -63,7 +63,13 @@ export async function POST(request: Request) {
             });
             if (statusResp.ok) {
               const naveData = await statusResp.json();
-              rawStatus = (naveData.status?.name || naveData.status || '').toString();
+              // Check top-level status or payment object status
+              rawStatus = (
+                naveData.status?.name || 
+                naveData.payment?.status?.name || 
+                naveData.status || 
+                ''
+              ).toString();
               logToFile(`NAVE WEBHOOK: Status fetched: ${rawStatus}`);
             }
           }
@@ -76,7 +82,7 @@ export async function POST(request: Request) {
     let normalizedStatus = rawStatus.toUpperCase();
 
     // Mapping for Nave payment success statuses
-    const successStatuses = ['PAID', 'PAGADO', 'SUCCESS', 'COMPLETED', 'APPROVED', 'APROBADA'];
+    const successStatuses = ['PAID', 'PAGADO', 'SUCCESS', 'SUCCESS_PROCESSED', 'COMPLETED', 'APPROVED', 'APROBADA'];
     if (successStatuses.includes(normalizedStatus)) {
       normalizedStatus = 'APPROVED';
     } else if (['REJECTED', 'RECHAZADA', 'FAILED', 'FALLIDA'].includes(normalizedStatus)) {
@@ -91,10 +97,10 @@ export async function POST(request: Request) {
       logToFile(`NAVE WEBHOOK: Skipping DB update for ${orderId} (empty status)`);
     }
     
-    // 4. If payment is approved, send confirmation email
+    // 4. If payment is approved and was not approved before, send confirmation email
     if (normalizedStatus === 'APPROVED') {
       const order = await db.getOrderById(orderId);
-      if (order && order.userEmail) {
+      if (order && order.status !== 'APPROVED' && order.userEmail) {
         try {
           const { mailer } = await import('@/lib/mailer');
           await mailer.sendPurchaseConfirmation(order.userEmail, order.userName, order);

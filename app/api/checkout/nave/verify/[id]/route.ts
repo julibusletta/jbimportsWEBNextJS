@@ -70,11 +70,16 @@ export async function GET(
     }
 
     const naveData = await statusResp.json();
-    const rawStatus = (naveData.status?.name || naveData.status || '').toString();
+    const rawStatus = (
+      naveData.status?.name || 
+      naveData.payment?.status?.name || 
+      naveData.status || 
+      ''
+    ).toString();
     let normalizedStatus = rawStatus.toUpperCase();
 
     // Mapping success statuses
-    if (['PAID', 'PAGADO', 'SUCCESS', 'COMPLETED', 'APPROVED'].includes(normalizedStatus)) {
+    if (['PAID', 'PAGADO', 'SUCCESS', 'SUCCESS_PROCESSED', 'COMPLETED', 'APPROVED', 'APROBADA'].includes(normalizedStatus)) {
       normalizedStatus = 'APPROVED';
     }
 
