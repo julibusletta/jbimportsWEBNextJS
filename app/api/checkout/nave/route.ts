@@ -194,15 +194,15 @@ export async function POST(request: Request) {
     // Header sanitization
     const cleanToken = access_token.trim();
 
-    // Gateway Bypass: Append apikey to URL to prevent it from scanning Authorization for key=value pairs
+    // Gateway Bypass: REMOVE Authorization header entirely as it triggers the 403 error
+    // Use x-auth-token and x-api-key which are the preferred headers for Nave production.
     const finalCheckoutUrl = `${CHECKOUT_URL}?apikey=${NAVE_CLIENT_ID}`;
 
     const checkoutResponse = await fetch(finalCheckoutUrl, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${cleanToken}`,
-        'X-Authorization': `Bearer ${cleanToken}`,
         'x-auth-token': cleanToken,
+        'X-Authorization': `Bearer ${cleanToken}`,
         'x-api-key': NAVE_CLIENT_ID,
         'Content-Type': 'application/json',
         'Accept': 'application/json',
