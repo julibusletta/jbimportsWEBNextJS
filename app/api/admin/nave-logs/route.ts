@@ -6,7 +6,7 @@ import { authOptions } from "../../auth/[...nextauth]/route";
 /**
  * Temporary diagnostic route to view Nave production logs
  */
-export async function GET() {
+export async function GET(request: Request) {
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user || (session.user as any).role !== 'ADMIN') {
@@ -17,10 +17,16 @@ export async function GET() {
     const { getWebhookLogModel } = db;
     const WebhookLog = await getWebhookLogModel();
     
-    // Get last 20 Nave related logs
+    // Log a "Ping" to verify writes are working
+    await db.logWebhook('NAVE_LOGS_VIEW_PING', 'GET', { 
+      msg: 'Verifying DB connectivity from diagnostic route',
+      ua: request.headers.get('user-agent')
+    });
+
+    // Get last 50 Nave related logs, newest first
     const logs = await WebhookLog.find({ 
       service: { $regex: /NAVE/i } 
-    }).sort({ createdAt: -1 }).limit(20).lean();
+    }).sort({ timestamp: -1, _id: -1 }).limit(50).lean();
 
     return NextResponse.json({ success: true, logs });
   } catch (error: any) {

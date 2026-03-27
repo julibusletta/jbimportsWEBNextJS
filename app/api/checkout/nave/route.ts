@@ -24,9 +24,20 @@ const NAVE_AUDIENCE = 'https://naranja.com/ranty/merchants/api';
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "../../auth/[...nextauth]/route";
 export async function POST(request: Request) {
+  const { db } = await import('@/lib/db');
+  let currentOrderId = 'unknown';
+  
   try {
-    const { items, total, orderId, shipping, email, firstName, lastName } = await request.json();
-    const { db } = await import('@/lib/db');
+    const body = await request.json();
+    const { items, total, orderId, shipping, email, firstName, lastName } = body;
+    currentOrderId = orderId || `JB-${Date.now()}`;
+
+    // LOG INMEDIATO AL ENTRAR (Antes de cualquier lógica)
+    await db.logWebhook('NAVE_ENTER_ROUTE', 'POST', { 
+      orderId: currentOrderId, 
+      env: process.env.NAVE_ENV,
+      total 
+    });
 
     // Ensure we have a valid public URL for Nave's callback
     const host = request.headers.get('host') || '';
@@ -50,8 +61,6 @@ export async function POST(request: Request) {
     // Log for debugging
     await db.logWebhook('NAVE_DEBUG', 'POST', { host, baseUrl, vercelUrl, env: NAVE_ENV });
     const session = await getServerSession(authOptions);
-
-    const currentOrderId = orderId || `JB-${Date.now()}`;
 
     // 1. Validation & Header Sanitization
     if (!total || total <= 0) {
