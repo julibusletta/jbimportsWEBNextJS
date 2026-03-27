@@ -190,11 +190,18 @@ export async function POST(request: Request) {
     }, { url: CHECKOUT_URL });
 
     console.log(`NAVE: Creating payment intention with ${CHECKOUT_URL} and callback ${paymentBody.additional_info.callback_url}`);
+    
+    // Header sanitization
+    const cleanToken = access_token.trim();
+
     const checkoutResponse = await fetch(CHECKOUT_URL, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${access_token}`,
+        'Authorization': `Bearer ${cleanToken}`,
         'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'X-Terminal-Id': NAVE_TERMINAL_ID,
+        'X-POS-Id': NAVE_TERMINAL_ID
       },
       body: JSON.stringify(paymentBody),
     });
@@ -202,6 +209,16 @@ export async function POST(request: Request) {
     if (!checkoutResponse.ok) {
       const errorText = await checkoutResponse.text();
       console.error(`NAVE CHECKOUT ERROR (${checkoutResponse.status}):`, errorText);
+      
+      // Log failure to DB
+      await db.logWebhook('NAVE_CHECKOUT_ERROR', 'POST', {
+        status: checkoutResponse.status,
+        error: errorText,
+        tokenSnipped: cleanToken.substring(0, 10),
+        terminalId: NAVE_TERMINAL_ID,
+        orderId: paymentBody.external_payment_id
+      });
+
       throw new Error(`Checkout failed: ${errorText}`);
     }
 
