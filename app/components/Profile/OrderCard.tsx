@@ -30,7 +30,7 @@ interface Order {
 
 interface OrderCardProps {
   order: Order;
-  onViewDetail: () => void;
+  onViewDetail?: () => void;
 }
 
 export default function OrderCard({ order, onViewDetail }: OrderCardProps) {
@@ -80,6 +80,14 @@ export default function OrderCard({ order, onViewDetail }: OrderCardProps) {
     }
   };
 
+  const handleViewDetail = () => {
+    if (onViewDetail) {
+      onViewDetail();
+    } else {
+      router.push('/mi-cuenta/compras');
+    }
+  };
+
   const isPending = order.status === 'PENDING';
   const isReview = order.status === 'PENDING_REVIEW';
   const isApprovedOrShipped = ['APPROVED', 'SHIPPED'].includes(order.status);
@@ -121,7 +129,7 @@ export default function OrderCard({ order, onViewDetail }: OrderCardProps) {
           <div className="flex flex-wrap items-center gap-4">
             {/* View Detail Button */}
             <button 
-              onClick={onViewDetail}
+              onClick={handleViewDetail}
               className="flex items-center gap-3 px-6 py-4 rounded-none border-2 border-slate-900 bg-slate-50 text-slate-900 hover:bg-slate-900 hover:text-white transition-all font-black text-[10px] uppercase tracking-[0.4em] cursor-pointer shadow-xl active:scale-95"
             >
               <FaRegEye size={14} />
