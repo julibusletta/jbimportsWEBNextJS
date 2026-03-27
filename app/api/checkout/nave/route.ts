@@ -124,7 +124,21 @@ export async function POST(request: Request) {
       throw new Error(`Nave Auth returned invalid JSON: ${authRaw.substring(0, 50)}...`);
     }
 
+    // REGISTRO DE DEPURE - Solo para diagnostico inicial
+    await db.logWebhook('NAVE_AUTH_RESPONSE', 'POST', {
+      status: authResponse.status,
+      hasToken: !!authData.access_token,
+      tokenLength: authData.access_token?.length,
+      expires: authData.expires_in,
+      tokenType: authData.token_type,
+      rawSnipped: authRaw.substring(0, 100)
+    });
+
     const { access_token } = authData;
+
+    if (!access_token) {
+      throw new Error(`No se pudo obtener el token de acceso de Nave. Respuesta: ${authRaw.substring(0, 100)}`);
+    }
 
     // 3. Create Payment Intention
     const paymentBody = {
