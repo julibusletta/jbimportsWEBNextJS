@@ -24,54 +24,52 @@ export default async function SeguimientoPage() {
 
   return (
     <div className="animate-in fade-in duration-700">
-      <div className="mb-10 flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-slate-100 pb-8">
+      <div className="mb-14 flex flex-col sm:flex-row sm:items-end justify-between gap-6 border-b-2 border-slate-50 pb-10">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Seguimiento</h1>
-          <p className="text-slate-500 text-sm mt-2 font-medium">Rastreo en tiempo real de tus envíos activos.</p>
+          <h1 className="text-4xl font-black text-slate-900 tracking-tighter uppercase">Seguimiento</h1>
+          <p className="text-slate-500 text-sm mt-3 font-bold uppercase tracking-widest opacity-60">Rastreo en tiempo real de tus envíos activos.</p>
         </div>
-        {activeOrder && (
-          <div className="px-6 py-3 bg-slate-900 border-l-4 border-blue-600 rounded-none shadow-xl">
-             <span className="text-[11px] font-black text-blue-400 uppercase tracking-[0.3em] mr-3">Nro Guía:</span>
-             <span className="text-sm font-black text-white uppercase select-all tracking-[0.1em]">JB-{activeOrder.id.substring(0, 15).toUpperCase()}</span>
-          </div>
-        )}
       </div>
 
       {activeOrder ? (
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-12 items-start">
           {/* Tracking Status Card */}
-          <div className="xl:col-span-2 space-y-8">
-            <div className="bg-white border border-slate-200 rounded-3xl p-8 relative overflow-hidden">
-               <div className="flex items-center gap-4 mb-10">
-                  <div className="w-16 h-16 bg-blue-600 text-white rounded-3xl flex items-center justify-center shadow-[0_15px_40px_rgba(37,99,235,0.3)] shrink-0">
-                    <FaTruck size={28} />
-                  </div>
-                  <div>
-                    <h3 className="text-2xl font-black text-slate-900 leading-none tracking-tight uppercase">En Camino</h3>
-                    <p className="text-slate-400 text-[11px] font-black uppercase tracking-[0.2em] mt-3">Llegada estimada: <span className="text-blue-600 font-black ml-1">18 de Marzo</span></p>
-                  </div>
+          <div className="xl:col-span-2 space-y-10">
+            <div className="bg-white border border-slate-200 rounded-[2.5rem] p-10 relative overflow-hidden shadow-2xl shadow-slate-200/50">
+               <div className="flex items-center gap-6 mb-16 border-b border-slate-50 pb-10">
+                   <div className="w-16 h-16 bg-blue-600 text-white rounded-3xl flex items-center justify-center shadow-[0_15px_40px_rgba(37,99,235,0.3)] shrink-0">
+                     <FaTruck size={28} />
+                   </div>
+                   <div>
+                     <h3 className="text-2xl font-black text-slate-900 leading-none tracking-tight uppercase">En Camino</h3>
+                     <p className="text-slate-400 text-[11px] font-black uppercase tracking-[0.2em] mt-3">Llegada estimada: <span className="text-blue-600 font-black ml-1">18 de Marzo</span></p>
+                   </div>
                </div>
 
-               {/* Stepper Vertical */}
-               <div className="relative pl-1">
-                  {/* Vertical Line */}
-                  <div className="absolute left-[11px] top-2 bottom-2 w-0.5 bg-slate-100" />
+               {/* Stepper Logic with Flex for Stability */}
+               <div className="relative pl-2">
+                  {/* Vertical Line - Adjusted for new flex layout */}
+                  <div className="absolute left-[13px] top-4 bottom-4 w-0.5 bg-slate-100" />
                   
-                  <div className="space-y-20 py-4">
+                  <div className="space-y-16">
                     {steps.map((step, idx) => (
-                      <div key={idx} className="relative pl-12 group">
-                        {/* Dot */}
-                        <div className={`absolute left-0 top-1.5 w-7 h-7 rounded-full flex items-center justify-center z-10 transition-transform group-hover:scale-110 ${
-                          step.status === 'completed' ? 'bg-green-500 text-white shadow-lg shadow-green-500/20' : 
-                          step.status === 'current' ? 'bg-blue-600 text-white shadow-[0_10px_30px_rgba(37,99,235,0.4)] ring-4 ring-blue-50' : 
-                          'bg-white border-2 border-slate-200 text-slate-300'
-                        }`}>
-                          {step.status === 'completed' ? <FaCheckCircle size={16} /> : <FaCircle size={10} />}
+                      <div key={idx} className="flex items-start gap-8 relative z-10 group">
+                        {/* Dot Container */}
+                        <div className="shrink-0 flex items-center justify-center pt-1.5">
+                           <div className={`w-7 h-7 rounded-full flex items-center justify-center transition-all duration-500 group-hover:scale-125 ${
+                             step.status === 'completed' ? 'bg-green-500 text-white shadow-lg shadow-green-500/20' : 
+                             step.status === 'current' ? 'bg-blue-600 text-white shadow-[0_10px_30px_rgba(37,99,235,0.4)] ring-4 ring-blue-50' : 
+                             'bg-white border-2 border-slate-200 text-slate-300'
+                           }`}>
+                             {step.status === 'completed' ? <FaCheckCircle size={16} /> : <FaCircle size={10} />}
+                           </div>
                         </div>
                         
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                        <div className="flex-1 flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
                           <p className={`font-black text-lg tracking-tight ${step.status === 'pending' ? 'text-slate-300' : 'text-slate-900'}`}>{step.label}</p>
-                          <p className={`text-xs font-black uppercase tracking-[0.2em] px-3 py-1 rounded-full ${step.status === 'pending' ? 'text-slate-200' : 'text-slate-400 bg-slate-50 border border-slate-100'}`}>{step.date}</p>
+                          <p className={`text-xs font-black uppercase tracking-[0.2em] px-4 py-1.5 rounded-none border-b-2 border-transparent transition-all ${
+                            step.status === 'pending' ? 'text-slate-200' : 'text-slate-400 bg-slate-50 border-slate-200/50 italic opacity-80'
+                          }`}>{step.date}</p>
                         </div>
                       </div>
                     ))}
@@ -81,8 +79,13 @@ export default async function SeguimientoPage() {
           </div>
 
           {/* Details Sidebar */}
-          <div className="space-y-6">
+          <div className="space-y-8">
              <div className="bg-white border border-slate-200 rounded-[2.5rem] p-10 shadow-xl shadow-slate-200/40">
+                <div className="mb-10 p-6 bg-slate-900 rounded-none border-l-[12px] border-blue-600 shadow-xl -mx-4">
+                   <p className="text-[10px] font-black text-blue-400 uppercase tracking-[0.4em] mb-2 opacity-60">Nro Guía Oficial</p>
+                   <p className="text-sm font-black text-white uppercase tracking-widest select-all">JB-{activeOrder.id.substring(0, 15).toUpperCase()}</p>
+                </div>
+
                 <h4 className="text-[11px] font-black text-slate-900 uppercase tracking-[0.4em] mb-10 pb-4 border-b-2 border-slate-100 flex items-center gap-3">
                    <span className="w-2 h-2 bg-blue-600 rounded-full"></span>
                    Detalle del Envío
