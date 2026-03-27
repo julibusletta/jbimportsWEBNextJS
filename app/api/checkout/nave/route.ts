@@ -198,9 +198,11 @@ export async function POST(request: Request) {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${cleanToken}`,
+        'X-Authorization': `Bearer ${cleanToken}`,
+        'x-auth-token': cleanToken,
+        'x-api-key': NAVE_CLIENT_ID,
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'x-api-key': NAVE_CLIENT_ID,
         'X-Terminal-Id': NAVE_TERMINAL_ID,
         'X-POS-Id': NAVE_TERMINAL_ID
       },
