@@ -30,9 +30,9 @@ export default async function SeguimientoPage() {
           <p className="text-slate-500 text-sm mt-2 font-medium">Rastreo en tiempo real de tus envíos activos.</p>
         </div>
         {activeOrder && (
-          <div className="px-4 py-2 bg-slate-50 border border-slate-100 rounded-xl">
-             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mr-2">Nro Guía:</span>
-             <span className="text-[11px] font-bold text-slate-900 uppercase select-all">JB-{activeOrder.id.substring(0, 10).toUpperCase()}</span>
+          <div className="px-6 py-3 bg-slate-900 border-l-4 border-blue-600 rounded-none shadow-xl">
+             <span className="text-[11px] font-black text-blue-400 uppercase tracking-[0.3em] mr-3">Nro Guía:</span>
+             <span className="text-sm font-black text-white uppercase select-all tracking-[0.1em]">JB-{activeOrder.id.substring(0, 15).toUpperCase()}</span>
           </div>
         )}
       </div>
@@ -43,12 +43,12 @@ export default async function SeguimientoPage() {
           <div className="xl:col-span-2 space-y-8">
             <div className="bg-white border border-slate-200 rounded-3xl p-8 relative overflow-hidden">
                <div className="flex items-center gap-4 mb-10">
-                  <div className="w-12 h-12 bg-blue-600 text-white rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/20">
-                    <FaTruck size={20} />
+                  <div className="w-16 h-16 bg-blue-600 text-white rounded-3xl flex items-center justify-center shadow-[0_15px_40px_rgba(37,99,235,0.3)] shrink-0">
+                    <FaTruck size={28} />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-slate-900">En Camino</h3>
-                    <p className="text-slate-400 text-sm font-medium">Llegada estimada: <span className="text-slate-900 font-bold">18 de Marzo</span></p>
+                    <h3 className="text-2xl font-black text-slate-900 leading-none tracking-tight uppercase">En Camino</h3>
+                    <p className="text-slate-400 text-[11px] font-black uppercase tracking-[0.2em] mt-3">Llegada estimada: <span className="text-blue-600 font-black ml-1">18 de Marzo</span></p>
                   </div>
                </div>
 
@@ -57,21 +57,21 @@ export default async function SeguimientoPage() {
                   {/* Vertical Line */}
                   <div className="absolute left-[11px] top-2 bottom-2 w-0.5 bg-slate-100" />
                   
-                  <div className="space-y-12">
+                  <div className="space-y-20 py-4">
                     {steps.map((step, idx) => (
-                      <div key={idx} className="relative pl-10">
+                      <div key={idx} className="relative pl-12 group">
                         {/* Dot */}
-                        <div className={`absolute left-0 top-1 w-6 h-6 rounded-full flex items-center justify-center z-10 ${
-                          step.status === 'completed' ? 'bg-green-500 text-white' : 
-                          step.status === 'current' ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/30' : 
-                          'bg-white border-2 border-slate-100 text-slate-200'
+                        <div className={`absolute left-0 top-1.5 w-7 h-7 rounded-full flex items-center justify-center z-10 transition-transform group-hover:scale-110 ${
+                          step.status === 'completed' ? 'bg-green-500 text-white shadow-lg shadow-green-500/20' : 
+                          step.status === 'current' ? 'bg-blue-600 text-white shadow-[0_10px_30px_rgba(37,99,235,0.4)] ring-4 ring-blue-50' : 
+                          'bg-white border-2 border-slate-200 text-slate-300'
                         }`}>
-                          {step.status === 'completed' ? <FaCheckCircle size={14} /> : <FaCircle size={8} />}
+                          {step.status === 'completed' ? <FaCheckCircle size={16} /> : <FaCircle size={10} />}
                         </div>
                         
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
-                          <p className={`font-bold text-sm ${step.status === 'pending' ? 'text-slate-300' : 'text-slate-900'}`}>{step.label}</p>
-                          <p className={`text-[10px] font-bold uppercase tracking-widest ${step.status === 'pending' ? 'text-slate-200' : 'text-slate-400'}`}>{step.date}</p>
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                          <p className={`font-black text-lg tracking-tight ${step.status === 'pending' ? 'text-slate-300' : 'text-slate-900'}`}>{step.label}</p>
+                          <p className={`text-xs font-black uppercase tracking-[0.2em] px-3 py-1 rounded-full ${step.status === 'pending' ? 'text-slate-200' : 'text-slate-400 bg-slate-50 border border-slate-100'}`}>{step.date}</p>
                         </div>
                       </div>
                     ))}
@@ -82,21 +82,28 @@ export default async function SeguimientoPage() {
 
           {/* Details Sidebar */}
           <div className="space-y-6">
-             <div className="bg-slate-50 border border-slate-100 rounded-3xl p-8">
-                <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-6 border-b border-slate-200 pb-3">Detalle del Envío</h4>
-                <div className="space-y-6">
-                   <div className="flex gap-4">
-                      <FaBox className="text-slate-300 mt-1" size={16} />
+             <div className="bg-white border border-slate-200 rounded-[2.5rem] p-10 shadow-xl shadow-slate-200/40">
+                <h4 className="text-[11px] font-black text-slate-900 uppercase tracking-[0.4em] mb-10 pb-4 border-b-2 border-slate-100 flex items-center gap-3">
+                   <span className="w-2 h-2 bg-blue-600 rounded-full"></span>
+                   Detalle del Envío
+                </h4>
+                <div className="space-y-10">
+                   <div className="flex gap-5">
+                      <div className="w-10 h-10 bg-slate-50 rounded-2xl flex items-center justify-center flex-shrink-0">
+                        <FaBox className="text-slate-400" size={18} />
+                      </div>
                       <div>
-                        <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-0.5">Producto</p>
-                        <p className="text-sm font-bold text-slate-900">Apple iPhone 15 Pro Max 256GB - Titanium</p>
+                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5 opacity-60">Producto Logístico</p>
+                        <p className="text-lg font-black text-slate-900 leading-tight tracking-tight">Apple iPhone 15 Pro Max 256GB - Titanium</p>
                       </div>
                    </div>
-                   <div className="flex gap-4">
-                      <FaMapMarkerAlt className="text-slate-300 mt-1" size={16} />
+                   <div className="flex gap-5">
+                      <div className="w-10 h-10 bg-slate-50 rounded-2xl flex items-center justify-center flex-shrink-0">
+                        <FaMapMarkerAlt className="text-blue-500" size={18} />
+                      </div>
                       <div>
-                        <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-0.5">Destino</p>
-                        <p className="text-sm font-bold text-slate-900 leading-relaxed">{(session.user as any).address?.street} {(session.user as any).address?.number}<br />{(session.user as any).address?.city}, {(session.user as any).address?.state}</p>
+                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5 opacity-60">Punto de Entrega</p>
+                        <p className="text-base font-bold text-slate-900 leading-relaxed italic">{(session.user as any).address?.street} {(session.user as any).address?.number}<br /><span className="text-slate-400 not-italic">{(session.user as any).address?.city}, {(session.user as any).address?.state}</span></p>
                       </div>
                    </div>
                 </div>
