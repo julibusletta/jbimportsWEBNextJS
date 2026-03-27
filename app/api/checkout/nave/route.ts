@@ -200,6 +200,7 @@ export async function POST(request: Request) {
         'Authorization': `Bearer ${cleanToken}`,
         'Content-Type': 'application/json',
         'Accept': 'application/json',
+        'x-api-key': NAVE_CLIENT_ID,
         'X-Terminal-Id': NAVE_TERMINAL_ID,
         'X-POS-Id': NAVE_TERMINAL_ID
       },
