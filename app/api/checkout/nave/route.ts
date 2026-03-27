@@ -5,10 +5,10 @@ import { NextResponse } from 'next/server';
  * Handles authentication and payment intention creation for Sandbox/Production
  */
 
-const NAVE_ENV = process.env.NAVE_ENV || 'sandbox';
-const NAVE_TERMINAL_ID = process.env.NAVE_TERMINAL_ID;
-const NAVE_CLIENT_ID = process.env.NAVE_CLIENT_ID;
-const NAVE_CLIENT_SECRET = process.env.NAVE_CLIENT_SECRET;
+const NAVE_ENV = (process.env.NAVE_ENV || 'sandbox').trim();
+const NAVE_TERMINAL_ID = (process.env.NAVE_TERMINAL_ID || '').trim();
+const NAVE_CLIENT_ID = (process.env.NAVE_CLIENT_ID || '').trim();
+const NAVE_CLIENT_SECRET = (process.env.NAVE_CLIENT_SECRET || '').trim();
 
 // Endpoints according to official manual:
 const AUTH_URL = NAVE_ENV === 'production' 
@@ -37,9 +37,6 @@ export async function POST(request: Request) {
     const isLocalhost = host.includes('localhost');
 
     if (host && !isLocalhost) {
-      // If we're in production but the domain is not linked, we might want to prefer the Vercel URL
-      // However, usually host IS what's in the browser. 
-      // If the user says it's not linked, they are likely visiting the .vercel.app URL.
       baseUrl = `https://${host}`;
     } else if (vercelUrl) {
       baseUrl = vercelUrl;
@@ -54,22 +51,21 @@ export async function POST(request: Request) {
     await db.logWebhook('NAVE_DEBUG', 'POST', { host, baseUrl, vercelUrl, env: NAVE_ENV });
     const session = await getServerSession(authOptions);
 
-    // 1. Validation
+    const currentOrderId = orderId || `JB-${Date.now()}`;
+
+    // 1. Validation & Header Sanitization
     if (!total || total <= 0) {
       return NextResponse.json({ success: false, message: 'Monto inválido' }, { status: 400 });
     }
 
-    const currentOrderId = orderId || `JB-${Date.now()}`;
-
     if (!NAVE_CLIENT_ID || !NAVE_CLIENT_SECRET) {
       // IF NO CREDENTIALS, Simulate a success for Testing purposes if in sandbox
       if (NAVE_ENV === 'sandbox') {
-        // Save as PENDING first
         const { db } = await import('@/lib/db');
         await db.saveOrder({
           id: currentOrderId,
-          userEmail: session?.user?.email || 'invitado@jbimports.com',
-          userName: session?.user?.name || 'Cliente Invitado',
+          userEmail: email || 'invitado@jbimports.com',
+          userName: `${firstName} ${lastName}`.trim() || 'Cliente Invitado',
           items: items.map((item: any) => ({
             name: item.name,
             quantity: item.quantity,
@@ -80,14 +76,6 @@ export async function POST(request: Request) {
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
           navePaymentId: `mock_${Date.now()}`,
-          shippingAddress: shipping ? {
-            street: `${shipping.address.street} ${shipping.address.number}`,
-            city: shipping.address.city,
-            state: shipping.address.state,
-            zip: shipping.address.zipCode,
-            shippingCost: shipping.cost,
-            shippingMethod: shipping.method
-          } : undefined
         });
 
         console.warn('NAVE: Missing credentials. Simulating response for testing.');
@@ -106,7 +94,6 @@ export async function POST(request: Request) {
       client_secret: NAVE_CLIENT_SECRET,
       audience: NAVE_AUDIENCE, 
       grant_type: 'client_credentials',
-      cache: true
     };
     
     console.log(`NAVE AUTH ATTEMPT:`, {
