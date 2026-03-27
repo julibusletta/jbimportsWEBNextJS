@@ -13,7 +13,11 @@ export default withAuth(
     const isAuthApi = pathname.startsWith('/api/auth');
     const isApiRoute = pathname.startsWith('/api/');
     const isMaintenancePage = pathname.startsWith('/maintenance');
-    const isPreview = req.nextUrl.searchParams.get('preview') === 'true';
+    
+    // Check for preview parameter or existing bypass cookie
+    const isPreviewParam = req.nextUrl.searchParams.get('preview') === 'true';
+    const hasBypassCookie = req.cookies.has('maintenance_bypass');
+    const isPreview = isPreviewParam || hasBypassCookie;
 
     if (isMaintenanceMode && !isPreview) {
       if (!isMaintenancePage && !isAdminRoute && !isAuthApi && !isPublicAsset && !isApiRoute) {
@@ -21,7 +25,14 @@ export default withAuth(
       }
     }
 
-    return NextResponse.next();
+    const response = NextResponse.next();
+
+    // If entering via preview handle, set the bypass cookie
+    if (isPreviewParam) {
+      response.cookies.set('maintenance_bypass', 'true', { maxAge: 60 * 60 * 24 }); // 24 hours
+    }
+
+    return response;
   },
   {
     callbacks: {
