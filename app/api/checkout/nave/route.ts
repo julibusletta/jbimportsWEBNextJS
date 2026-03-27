@@ -194,15 +194,19 @@ export async function POST(request: Request) {
     // Header sanitization
     const cleanToken = access_token.trim();
 
-    // Gateway Bypass: REMOVE Authorization header entirely as it triggers the 403 error
-    // Use x-auth-token and x-api-key which are the preferred headers for Nave production.
+    // FINAL BYPASS STRATEGY: 
+    // The Gateway requires an '=' in Authorization header.
+    // The App requires a 'Bearer [token]' in Authorization header.
+    // Solution: Send a compound header that satisfies both.
     const finalCheckoutUrl = `${CHECKOUT_URL}?apikey=${NAVE_CLIENT_ID}`;
+    const compoundAuth = `Bearer ${cleanToken}, apikey=${NAVE_CLIENT_ID}`;
 
     const checkoutResponse = await fetch(finalCheckoutUrl, {
       method: 'POST',
       headers: {
-        'x-auth-token': cleanToken,
+        'Authorization': compoundAuth,
         'X-Authorization': `Bearer ${cleanToken}`,
+        'x-auth-token': cleanToken,
         'x-api-key': NAVE_CLIENT_ID,
         'Content-Type': 'application/json',
         'Accept': 'application/json',
