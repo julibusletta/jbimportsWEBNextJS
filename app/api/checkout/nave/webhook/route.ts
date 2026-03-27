@@ -27,10 +27,55 @@ export async function POST(request: Request) {
     }
 
     // 2. Normalize status
-    const rawStatus = (typeof status === 'object' && status !== null ? (status.name || JSON.stringify(status)) : (status?.toString() || ''));
+    let rawStatus = (typeof status === 'object' && status !== null ? (status.name || JSON.stringify(status)) : (status?.toString() || ''));
+    
+    // If status is missing in webhook, try to fetch it from Nave API
+    if (!rawStatus) {
+      try {
+        const NAVE_ENV = process.env.NAVE_ENV || 'sandbox';
+        const NAVE_CLIENT_ID = process.env.NAVE_CLIENT_ID;
+        const NAVE_CLIENT_SECRET = process.env.NAVE_CLIENT_SECRET;
+        const AUTH_URL = NAVE_ENV === 'production' 
+          ? 'https://services.apinaranja.com/security-ms/api/security/auth0/b2b/m2ms' 
+          : 'https://homoservices.apinaranja.com/security-ms/api/security/auth0/b2b/m2ms';
+        const STATUS_URL = NAVE_ENV === 'production'
+          ? 'https://api.ranty.io/api/payment_requests'
+          : 'https://api-sandbox.ranty.io/api/payment_requests';
+        const NAVE_AUDIENCE = 'https://naranja.com/ranty/merchants/api';
+
+        if (NAVE_CLIENT_ID && NAVE_CLIENT_SECRET) {
+          logToFile(`NAVE WEBHOOK: Fetching status for ${orderId}...`);
+          const authResp = await fetch(AUTH_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              client_id: NAVE_CLIENT_ID,
+              client_secret: NAVE_CLIENT_SECRET,
+              audience: NAVE_AUDIENCE,
+              grant_type: 'client_credentials'
+            })
+          });
+          const authData = await authResp.json();
+          if (authData.access_token) {
+            const naveInternalId = body.id || body.payment_id || body.reference;
+            const statusResp = await fetch(`${STATUS_URL}/${naveInternalId}`, {
+              headers: { 'Authorization': `Bearer ${authData.access_token}` }
+            });
+            if (statusResp.ok) {
+              const naveData = await statusResp.json();
+              rawStatus = (naveData.status?.name || naveData.status || '').toString();
+              logToFile(`NAVE WEBHOOK: Status fetched: ${rawStatus}`);
+            }
+          }
+        }
+      } catch (fetchError: any) {
+        logToFile(`NAVE WEBHOOK FETCH ERROR: ${fetchError.message}`);
+      }
+    }
+
     let normalizedStatus = rawStatus.toUpperCase();
 
-    // Mapping for Nave payment success statuses (Production uses APPROVED, Sandbox might vary)
+    // Mapping for Nave payment success statuses
     const successStatuses = ['PAID', 'PAGADO', 'SUCCESS', 'COMPLETED', 'APPROVED', 'APROBADA'];
     if (successStatuses.includes(normalizedStatus)) {
       normalizedStatus = 'APPROVED';
@@ -38,9 +83,13 @@ export async function POST(request: Request) {
       normalizedStatus = 'REJECTED';
     }
 
-    // 3. Update the database
+    // 3. Update the database - ONLY if we have a status
     const naveInternalId = body.id || body.payment_id;
-    await db.updateOrderStatus(orderId, normalizedStatus as any, naveInternalId);
+    if (normalizedStatus) {
+      await db.updateOrderStatus(orderId, normalizedStatus as any, naveInternalId);
+    } else {
+      logToFile(`NAVE WEBHOOK: Skipping DB update for ${orderId} (empty status)`);
+    }
     
     // 4. If payment is approved, send confirmation email
     if (normalizedStatus === 'APPROVED') {

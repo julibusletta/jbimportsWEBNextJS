@@ -37,7 +37,10 @@ export async function GET(request: Request) {
     // 1. Find the latest PENDING order for this user (created in last 30 mins)
     const thirtyMinsAgo = new Date(Date.now() - 30 * 60 * 1000);
     const userOrders = await db.getOrdersByEmail(session.user.email);
-    const latestPending = userOrders.find(o => o.status === 'PENDING' && new Date(o.createdAt) > thirtyMinsAgo);
+    const latestPending = userOrders.find(o => 
+      (o.status === 'PENDING' || (!o.status && o.navePaymentId)) && 
+      new Date(o.createdAt) > thirtyMinsAgo
+    );
 
     if (!latestPending) {
       return NextResponse.json({ success: false, message: 'No recent pending orders' });

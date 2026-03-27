@@ -126,6 +126,7 @@ export async function POST(request: Request) {
       items: items.map((item: any) => ({ name: item.name, quantity: item.quantity, price: item.price })),
       total,
       status: 'PENDING',
+      paymentMethod: 'NAVE',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       navePaymentId: checkoutData.id,
