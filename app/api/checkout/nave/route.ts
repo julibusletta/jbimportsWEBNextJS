@@ -194,10 +194,13 @@ export async function POST(request: Request) {
     // Header sanitization
     const cleanToken = access_token.trim();
 
-    const checkoutResponse = await fetch(CHECKOUT_URL, {
+    // Gateway Bypass: Append apikey to URL to prevent it from scanning Authorization for key=value pairs
+    const finalCheckoutUrl = `${CHECKOUT_URL}?apikey=${NAVE_CLIENT_ID}`;
+
+    const checkoutResponse = await fetch(finalCheckoutUrl, {
       method: 'POST',
       headers: {
-        'Authorization': `apikey=${NAVE_CLIENT_ID}`, 
+        'Authorization': `Bearer ${cleanToken}`,
         'X-Authorization': `Bearer ${cleanToken}`,
         'x-auth-token': cleanToken,
         'x-api-key': NAVE_CLIENT_ID,
