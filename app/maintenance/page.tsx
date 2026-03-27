@@ -34,7 +34,7 @@ export default function MaintenancePage() {
             MUY <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-blue-400 to-indigo-500">PRONTO</span>
           </h1>
           <p className="text-gray-400 text-xl md:text-2xl font-medium max-w-xl leading-relaxed text-center">
-            Estamos renovando <span className="text-white font-bold">JB Imports</span> para ofrecerte la mejor tecnología con una experiencia de compra premium.
+            Estamos renovando <span className="text-white font-bold">JB Imports</span> para ofrecerte la mejor tecnología con una experiencia de compra superior.
           </p>
         </div>
 
@@ -55,9 +55,9 @@ export default function MaintenancePage() {
             href="#" 
             target="_blank"
             rel="noopener noreferrer"
-            className="px-8 py-5 bg-white text-black font-black rounded-none flex items-center gap-3 hover:scale-[1.05] transition-all shadow-xl active:scale-95"
+            className="px-8 py-5 bg-white/5 border border-white/10 text-white font-black rounded-none flex items-center gap-3 hover:bg-white/10 hover:scale-[1.05] transition-all shadow-xl active:scale-95"
           >
-            <FaWhatsapp size={22} />
+            <FaWhatsapp size={22} className="text-[#25D366]" />
             <span>CONSULTAS POR WHATSAPP</span>
           </a>
           
@@ -84,7 +84,7 @@ export default function MaintenancePage() {
           <img 
             src="/images/logotest9.png" 
             alt="JB Imports Logo" 
-            className="h-10 md:h-12 w-auto grayscale opacity-40 hover:opacity-80 transition-opacity" 
+            className="h-10 md:h-12 w-auto opacity-90 hover:opacity-100 transition-opacity" 
           />
           <p className="text-[11px] font-black text-gray-600 uppercase tracking-[0.4em]">JB IMPORTS &copy; 2026</p>
         </div>
