@@ -13,8 +13,9 @@ export default withAuth(
     const isAuthApi = pathname.startsWith('/api/auth');
     const isApiRoute = pathname.startsWith('/api/');
     const isMaintenancePage = pathname.startsWith('/maintenance');
+    const isPreview = req.nextUrl.searchParams.get('preview') === 'true';
 
-    if (isMaintenanceMode) {
+    if (isMaintenanceMode && !isPreview) {
       if (!isMaintenancePage && !isAdminRoute && !isAuthApi && !isPublicAsset && !isApiRoute) {
         return NextResponse.redirect(new URL('/maintenance', req.url));
       }
