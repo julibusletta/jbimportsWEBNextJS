@@ -12,8 +12,8 @@ const AUTH_URL = NAVE_ENV === 'production'
   : 'https://homoservices.apinaranja.com/security-ms/api/security/auth0/b2b/m2ms';
 
 const STATUS_URL = NAVE_ENV === 'production'
-  ? 'https://api.ranty.io/api/payment_request/ecommerce'
-  : 'https://api-sandbox.ranty.io/api/payment_request/ecommerce';
+  ? 'https://api.ranty.io/api/payment_requests'
+  : 'https://api-sandbox.ranty.io/api/payment_requests';
 
 const NAVE_AUDIENCE = 'https://naranja.com/ranty/merchants/api';
 
@@ -58,9 +58,8 @@ export async function GET(
       return NextResponse.json({ success: false, message: 'Error de autenticación con Nave' }, { status: 500 });
     }
 
-    // 3. Check status in Nave
-    // Nave ecommerce status endpoint is often the same URL + /external_payment_id
-    const NaveStatusUrl = `${STATUS_URL}/${orderId}`;
+    // 3. Check status in Nave using the Nave Payment ID
+    const NaveStatusUrl = `${STATUS_URL}/${order.navePaymentId || orderId}`;
     const statusResp = await fetch(NaveStatusUrl, {
       headers: { 'Authorization': `Bearer ${authData.access_token}` }
     });

@@ -16,8 +16,8 @@ const AUTH_URL = NAVE_ENV === 'production'
   : 'https://homoservices.apinaranja.com/security-ms/api/security/auth0/b2b/m2ms';
 
 const CHECKOUT_URL = NAVE_ENV === 'production' 
-  ? 'https://api.ranty.io/api/payment_request/ecommerce' 
-  : 'https://api-sandbox.ranty.io/api/payment_request/ecommerce';
+  ? 'https://api.ranty.io/api/payment_requests' 
+  : 'https://api-sandbox.ranty.io/api/payment_requests';
 
 const NAVE_AUDIENCE = 'https://naranja.com/ranty/merchants/api';
 
