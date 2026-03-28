@@ -3,12 +3,14 @@
 import { useSession } from 'next-auth/react';
 import { useCart, CartItem } from '../../context/CartContext';
 import { useRouter } from 'next/navigation';
+import { useAuthModal } from '@/app/context/AuthModalContext';
 import '../../styles/Cart.css';
 
 export default function Cart() {
   const { cartItems, removeFromCart, addToCart, total } = useCart();
   const { status } = useSession();
   const router = useRouter();
+  const { openLogin } = useAuthModal();
 
   const handleQuantityChange = (id: string, newQuantity: number) => {
     if (newQuantity <= 0) {
@@ -26,7 +28,7 @@ export default function Cart() {
     if (cartItems.length === 0) return;
     
     if (status === 'unauthenticated') {
-      router.push('/auth/signin?callbackUrl=/checkout');
+      openLogin('/checkout');
       return;
     }
     

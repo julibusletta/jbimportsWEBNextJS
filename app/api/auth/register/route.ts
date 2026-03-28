@@ -11,6 +11,7 @@ export async function POST(req: Request) {
       firstName, 
       lastName, 
       dni, 
+      phone,
       street, 
       number, 
       city, 
@@ -45,6 +46,7 @@ export async function POST(req: Request) {
       firstName,
       lastName,
       dni,
+      phone,
       role: 'user', // Rol por defecto
       address: {
         street,

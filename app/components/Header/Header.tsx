@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useSession, signOut } from "next-auth/react";
 import { useCart } from '@/app/context/CartContext';
+import { useAuthModal } from '@/app/context/AuthModalContext';
 import '../../styles/Header.css';
 
 interface NavLink {
@@ -27,6 +28,7 @@ export default function Header() {
   const [searchQuery, setSearchQuery] = useState('');
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
   const router = useRouter();
+  const { openLogin } = useAuthModal();
 
   const handleSearch = (e: FormEvent) => {
     e.preventDefault();
@@ -222,13 +224,12 @@ export default function Header() {
                     </>
                   ) : (
                     <div className="p-4">
-                      <Link
-                        href="/auth/signin"
-                        className="block w-full text-center bg-blue-600 text-white py-2.5 rounded-lg font-bold text-sm hover:bg-blue-700 transition-colors no-underline"
-                        onClick={() => setIsUserMenuOpen(false)}
+                      <button
+                        onClick={() => { openLogin(); setIsUserMenuOpen(false); }}
+                        className="block w-full text-center bg-blue-600 text-white py-2.5 rounded-lg font-bold text-sm hover:bg-blue-700 transition-colors no-underline border-0 cursor-pointer"
                       >
                         INGRESAR
-                      </Link>
+                      </button>
                     </div>
                   )}
                 </div>

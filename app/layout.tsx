@@ -9,6 +9,8 @@ import LogosMarquee from "./components/LogosMarquee/LogosMarquee";
 import Footer from "./components/Footer/Footer";
 import { AuthProvider } from "./components/AuthProvider/AuthProvider";
 import ConditionalLayout from "./components/ConditionalLayout";
+import { AuthModalProvider } from "./context/AuthModalContext";
+import AuthModal from "./components/Auth/AuthModal";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -45,9 +47,12 @@ export default function RootLayout({
         <AnimationInitializer />
         <CartProvider>
           <AuthProvider>
-            <ConditionalLayout>
-              {children}
-            </ConditionalLayout>
+            <AuthModalProvider>
+              <ConditionalLayout>
+                {children}
+              </ConditionalLayout>
+              <AuthModal />
+            </AuthModalProvider>
           </AuthProvider>
         </CartProvider>
       </body>
