@@ -2,11 +2,9 @@
 
 import { useParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import { getProductsByCategory } from '@/lib/api/mockCategoryProducts';
-import { getCategoryBySlug } from '@/lib/api/categoriesService';
+import { getProductsByCategory, Product } from '@/lib/api/productService';
+import { getCategoryBySlug, Category } from '@/lib/api/categoriesService';
 import { useCart } from '@/app/context/CartContext';
-import type { Category } from '@/lib/api/categoriesService';
-import type { Product } from '@/lib/api/mockCategoryProducts';
 import Link from 'next/link';
 import { FaChevronDown, FaChevronUp, FaShoppingCart, FaEye } from 'react-icons/fa';
 

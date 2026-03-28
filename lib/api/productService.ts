@@ -1,74 +1,130 @@
-import { mockProductsData } from './mockProducts';
+// import { mockProductsData } from './mockProducts';
 
-// Interfaz para el producto
+// Interfaz para el producto (debe coincidir con el modelo de MongoDB)
 export interface Product {
+    _id?: string;
     id: string;
     name: string;
-    brand: string;
-    sku: string;
+    brand?: string;
+    sku?: string;
     price: number;
-    discountPercentage: number;
-    description: string;
-    imageUrls: string[];
-    image?: string;
+    originalPrice?: number;
+    discountPercentage?: number;
     discount?: number;
+    description: string;
+    imageUrls?: string[];
+    images?: string[];
+    image: string; // Required for detail page
     category: string;
-    discountBase: boolean;
+    discountBase?: boolean;
+    badge?: string;
+    stock: number; // Required for detail page
+    specifications?: { label: string, value: string }[];
+    properties?: {
+        weight?: string;
+        dimensions?: string;
+        color?: string;
+    };
+    seo?: {
+        title?: string;
+        description?: string;
+        keywords?: string;
+    };
 }
 
-// Simulación de llamadas a API usando datos mock
-// En producción, esto haría fetch real a un servidor
-
-const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
-
-export const getAllPromotionProducts = async (): Promise<Product[]> => {
-    await delay(300);
-    // Retorna solo productos con descuento
-    return [...mockProductsData.bombas, ...mockProductsData.nuevas].filter(p => p.discountBase);
+const getBaseUrl = () => {
+    if (typeof window !== 'undefined') return ''; // Browser uses relative path
+    if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`; 
+    return `http://localhost:${process.env.PORT || 3000}`; 
 };
 
+/**
+ * Obtiene todos los productos en oferta o destacados
+ */
+export const getAllPromotionProducts = async (): Promise<Product[]> => {
+    try {
+        const res = await fetch(`${getBaseUrl()}/api/products?category=ofertas`);
+        if (!res.ok) return [];
+        return await res.json();
+    } catch (error) {
+        console.error('Error in getAllPromotionProducts:', error);
+        return [];
+    }
+};
+
+/**
+ * Obtiene productos por sección (Bombas o Nuevas)
+ */
 export const getProductsBySection = async (section: 'bombas' | 'nuevas'): Promise<Product[]> => {
+    // Client-side execution
     if (typeof window !== 'undefined') {
-        // Map section to badge if needed, or just fetch all for now
-        // For now, let's fetch all and filter by badge if it matches
-        const res = await fetch('/api/products');
-        const all: any[] = await res.json();
+        try {
+            const res = await fetch('/api/products');
+            const all: any[] = await res.json();
+            
+            if (section === 'bombas') {
+                return all.filter(p => 
+                    p.badge?.toLowerCase().includes('bomba') || 
+                    p.price > 1000000
+                ).slice(0, 10);
+            }
+            // Sort by creation date if available, or just take the last 10
+            return all.slice().reverse().slice(0, 10); 
+        } catch (error) {
+            console.error('Error fetching products by section (client):', error);
+            return [];
+        }
+    }
+
+    // Server-side execution
+    try {
+        const dbConnect = (await import('../mongodb')).default;
+        const ProductModel = (await import('../../models/Product')).default;
+        await dbConnect();
         
         if (section === 'bombas') {
-            return all.filter(p => p.badge?.toLowerCase().includes('bomba') || p.price > 1000000).slice(0, 10);
+            return await ProductModel.find({ 
+                $or: [
+                    { badge: /bomba/i },
+                    { price: { $gt: 1000000 } }
+                ]
+            }).sort({ createdAt: -1 }).limit(10).lean() as unknown as Product[];
         }
-        return all.slice(-10).reverse(); // Nuevas = last 10
+        return await ProductModel.find({}).sort({ createdAt: -1 }).limit(10).lean() as unknown as Product[];
+    } catch (error) {
+        console.error('Error fetching products by section (server):', error);
+        return [];
     }
-
-    const dbConnect = (await import('../mongodb')).default;
-    const ProductModel = (await import('../../models/Product')).default;
-    await dbConnect();
-    
-    if (section === 'bombas') {
-        return ProductModel.find({ 
-            $or: [
-                { badge: /bomba/i },
-                { price: { $gt: 1000000 } }
-            ]
-        }).limit(10).lean() as unknown as Product[];
-    }
-    return ProductModel.find({}).sort({ createdAt: -1 }).limit(10).lean() as unknown as Product[];
 };
 
-export const getProductByCategory = async (
+/**
+ * Obtiene productos por categoría y búsqueda
+ */
+export const getProductsByCategory = async (
     category: string,
     search: string = '',
     page: number = 1,
     pageSize: number = 200
 ): Promise<Product[]> => {
-    await delay(300);
-    const allProducts = [...mockProductsData.bombas, ...mockProductsData.nuevas];
-    return allProducts.filter(product =>
-        product.category.toLowerCase().includes(category.toLowerCase()) &&
-        product.name.toLowerCase().includes(search.toLowerCase())
-    );
+    try {
+        const queryParams = new URLSearchParams();
+        if (category) queryParams.append('category', category);
+        if (search) queryParams.append('search', search);
+
+        const res = await fetch(`${getBaseUrl()}/api/products?${queryParams.toString()}`);
+        if (!res.ok) return [];
+        
+        const data = await res.json();
+        return Array.isArray(data) ? data : [];
+    } catch (error) {
+        console.error('Error in getProductsByCategory:', error);
+        return [];
+    }
 };
 
+/**
+ * Obtiene todos los productos con filtros y paginación
+ */
 export const getAllProducts = async (
     search: string = '',
     page: number = 1,
@@ -79,44 +135,67 @@ export const getAllProducts = async (
     sortField?: string,
     sortDirection?: string
 ): Promise<{ items: Product[]; totalCount: number }> => {
-    await delay(300);
-    let products = [...mockProductsData.bombas, ...mockProductsData.nuevas];
+    try {
+        const res = await fetch(`${getBaseUrl()}/api/products`);
+        if (!res.ok) return { items: [], totalCount: 0 };
+        
+        let products: Product[] = await res.json();
 
-    // Aplicar filtros
-    if (search) {
-        products = products.filter(p =>
-            p.name.toLowerCase().includes(search.toLowerCase())
-        );
+        // Aplicar filtros locales
+        if (search) {
+            products = products.filter(p =>
+                p.name.toLowerCase().includes(search.toLowerCase())
+            );
+        }
+
+        if (minPrice !== undefined) products = products.filter(p => p.price >= minPrice);
+        if (maxPrice !== undefined) products = products.filter(p => p.price <= maxPrice);
+
+        // Aplicar ordenamiento
+        if (sortField) {
+            products.sort((a, b) => {
+                const aVal = (a as any)[sortField];
+                const bVal = (b as any)[sortField];
+                return sortDirection === 'desc' ? bVal - aVal : aVal - bVal;
+            });
+        }
+
+        const start = (page - 1) * pageSize;
+        const items = products.slice(start, start + pageSize);
+
+        return {
+            items: items,
+            totalCount: products.length,
+        };
+    } catch (error) {
+        console.error('Error in getAllProducts:', error);
+        return { items: [], totalCount: 0 };
     }
+};
 
-    if (minPrice !== undefined) {
-        products = products.filter(p => p.price >= minPrice);
-    }
-
-    if (maxPrice !== undefined) {
-        products = products.filter(p => p.price <= maxPrice);
-    }
-
-    // Aplicar ordenamiento
-    if (sortField) {
-        products.sort((a, b) => {
-            const aVal = (a as any)[sortField];
-            const bVal = (b as any)[sortField];
-            if (sortDirection === 'desc') {
-                return bVal - aVal;
-            }
-            return aVal - bVal;
+/**
+ * Obtiene un producto por su ID
+ */
+export const getProductById = async (id: string | number): Promise<Product | null> => {
+    try {
+        const res = await fetch(`${getBaseUrl()}/api/products/${id}`, {
+            next: { revalidate: 60 }
         });
+        
+        if (!res.ok) {
+            console.log(`Product ${id} not found via API`);
+            return null;
+        }
+        
+        return await res.json();
+    } catch (error) {
+        console.error(`Error fetching product ${id}:`, error);
+        return null;
     }
+};
 
-    // Paginación
-    const start = (page - 1) * pageSize;
-    const end = start + pageSize;
-
-    return {
-        items: products.slice(start, end),
-        totalCount: products.length,
-    };
+export const getPublicProductById = async (id: string | number): Promise<Product | null> => {
+    return getProductById(id);
 };
 
 export const getAllPublic = async (
@@ -132,55 +211,39 @@ export const getAllPublic = async (
     return getAllProducts(search, page, pageSize, minPrice, maxPrice, minStock, sortField, sortDirection);
 };
 
-export const getProductById = async (id: string | number): Promise<Product | null> => {
-    await delay(300);
-    const allProducts = [...mockProductsData.bombas, ...mockProductsData.nuevas];
-    return allProducts.find(p => p.id === String(id)) || null;
-};
-
-export const getPublicProductById = async (id: string | number): Promise<Product | null> => {
-    return getProductById(id);
-};
-
-export const getAllServices = async (
-    search: string = '',
-    page: number = 1,
-    pageSize: number = 10,
-    minPrice?: number,
-    maxPrice?: number,
-    minStock?: number,
-    sortField?: string,
-    sortDirection?: string
-): Promise<{ items: Product[]; totalCount: number }> => {
-    return getAllProducts(search, page, pageSize, minPrice, maxPrice, minStock, sortField, sortDirection);
-};
-
 export const getAllPublicServices = async (): Promise<{ items: Product[]; totalCount: number }> => {
-    await delay(300);
-    const products = [...mockProductsData.bombas, ...mockProductsData.nuevas];
-    return {
-        items: products,
-        totalCount: products.length,
-    };
+    try {
+        const res = await fetch(`${getBaseUrl()}/api/products`);
+        if (!res.ok) return { items: [], totalCount: 0 };
+        const items = await res.json();
+        return { items, totalCount: items.length };
+    } catch (error) {
+        return { items: [], totalCount: 0 };
+    }
 };
 
-// Funciones adicionales (no implementadas en mock pero disponibles para extensión)
+// Funciones de escritura (requieren implementación en el backend)
 export const createProduct = async (productData: any) => {
-    throw new Error('No disponible en modo mock');
+    const res = await fetch(`${getBaseUrl()}/api/admin/products`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(productData)
+    });
+    return res.json();
 };
 
 export const updateProduct = async (id: string | number, productData: any) => {
-    throw new Error('No disponible en modo mock');
+    const res = await fetch(`${getBaseUrl()}/api/admin/products/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(productData)
+    });
+    return res.json();
 };
 
 export const deleteProduct = async (id: string | number) => {
-    throw new Error('No disponible en modo mock');
-};
-
-export const importProductsFromExcel = (formData: FormData) => {
-    throw new Error('No disponible en modo mock');
-};
-
-export const exportProductsToExcel = async () => {
-    throw new Error('No disponible en modo mock');
+    const res = await fetch(`${getBaseUrl()}/api/admin/products/${id}`, {
+        method: 'DELETE'
+    });
+    return res.ok;
 };

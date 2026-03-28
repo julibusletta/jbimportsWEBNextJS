@@ -2,7 +2,7 @@
 
 import { useParams, useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import { getProductById, getProductsByCategory, Product } from '@/lib/api/mockCategoryProducts';
+import { getProductById, getProductByCategory, Product } from '@/lib/api/productService';
 import { getSpecsByProductId, Spec } from '@/lib/api/productSpecifications';
 import { useCart } from '@/app/context/CartContext';
 import Link from 'next/link';
@@ -37,7 +37,7 @@ export default function ProductDetailsPage() {
 
           // Get related products from the same category
           const products = await getProductsByCategory(foundProduct.category);
-          const related = products.filter(p => p.id !== id).slice(0, 4);
+          const related = products.filter((p: Product) => p.id !== id).slice(0, 4);
           setRelatedProducts(related);
         }
       } catch (error) {

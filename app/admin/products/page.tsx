@@ -2,12 +2,10 @@
 
 import React, { useState, useEffect } from 'react';
 import * as XLSX from 'xlsx';
-import { Product as BaseProduct } from '@/lib/api/mockCategoryProducts';
+import { Product } from '@/lib/api/productService';
 import { Spec } from '@/lib/api/productSpecifications';
 import Link from 'next/link';
 import { FaUpload, FaSave, FaInfoCircle, FaSearch, FaTable, FaThList, FaTimesCircle, FaTags, FaBoxOpen, FaCogs, FaGlobe, FaPlus, FaTrash, FaExclamationTriangle } from 'react-icons/fa';
-
-import { Product } from '@/lib/api/mockCategoryProducts';
 
 export default function ProductsPage() {
   const [products, setProducts] = useState<{ [key: string]: Product[] }>({});
