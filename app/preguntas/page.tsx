@@ -124,41 +124,41 @@ export default function FAQPage() {
           ))}
         </div>
 
-        {/* Professional Help Section (Minimalist & Solid) */}
-        <div className="px-2">
-          <div className="bg-slate-900 text-white rounded-2xl overflow-hidden shadow-2xl relative">
-            <div className="p-10 md:p-14 relative z-10">
-              <h2 className="text-2xl font-bold mb-6">Servicio postventa y garantías</h2>
-              <div className="space-y-4 max-w-2xl text-slate-300 text-sm md:text-base leading-relaxed mb-10">
-                <p>
-                  ¿Tu producto presenta alguna falla? No te preocupes. Contamos con un equipo especializado en soporte para ayudarte a gestionar tu garantía de forma rápida.
-                </p>
-                <p className="font-medium text-blue-400">
-                  Recordá que podés gestionar turnos presenciales o tramitar con la marca directamente tras 30 días.
-                </p>
+        {/* Professional Help Section (Refined & Less Invasive) */}
+        <div className="px-2 mt-28">
+          <div className="bg-slate-50 rounded-2xl border border-slate-100 p-10 md:p-14 transition-all hover:border-blue-100 hover:shadow-xl hover:shadow-slate-200/20">
+            <div className="flex items-center gap-4 mb-8">
+              <div className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-200">
+                <FaShieldAlt size={24} />
               </div>
+              <h2 className="text-2xl font-bold text-slate-900 m-0">Servicio postventa y garantías</h2>
+            </div>
+            
+            <div className="space-y-6 max-w-3xl">
+              <p className="text-slate-600 text-base md:text-lg leading-relaxed m-0">
+                ¿Tu producto presenta alguna falla? No te preocupes. Contamos con un equipo especializado en soporte para ayudarte de forma rápida y profesional.
+              </p>
               
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Link 
-                  href="/contacto" 
-                  className="px-8 py-4 bg-blue-600 text-white font-bold rounded-lg text-center no-underline hover:bg-white hover:text-slate-900 transition-all shadow-lg shadow-blue-500/20"
+              <div className="p-6 bg-white border border-slate-100 rounded-xl inline-block">
+                <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-2">Contacto Directo</p>
+                <a 
+                  href="mailto:soporte@jbimports.com.ar" 
+                  className="text-lg md:text-xl font-black text-blue-600 no-underline hover:text-slate-900 transition-colors tracking-tight"
                 >
-                  Sacar turno presencial
-                </Link>
-                <Link 
-                  href="/contacto" 
-                  className="px-8 py-4 border border-slate-700 text-white font-bold rounded-lg text-center no-underline hover:bg-slate-800 transition-all"
-                >
-                  Gestionar garantía marca
-                </Link>
+                  soporte@jbimports.com.ar
+                </a>
               </div>
+
+              <p className="text-slate-400 text-xs italic leading-relaxed m-0">
+                Nuestro equipo técnico revisará tu caso y se pondrá en contacto a la brevedad para indicarte los pasos a seguir.
+              </p>
             </div>
           </div>
         </div>
 
         {/* Elegant Footer Signature */}
         <div className="mt-32 pb-20 text-center">
-          <div className="bg-slate-100 h-px w-24 mx-auto mb-10"></div>
+          <div className="bg-slate-200 h-px w-16 mx-auto mb-10"></div>
           <p className="text-[11px] font-bold text-slate-300 uppercase tracking-[0.5em] mb-2">JB Imports</p>
           <p className="text-[10px] text-slate-400 font-medium tracking-wide">Excelencia en tecnología & soporte oficial</p>
         </div>
