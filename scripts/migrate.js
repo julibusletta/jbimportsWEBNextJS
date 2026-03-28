@@ -58,10 +58,8 @@ async function migrate() {
     // 2. Migrate Products
     console.log('Migrating Products...');
     const productsData = JSON.parse(fs.readFileSync(path.join(DATA_DIR, 'products.json'), 'utf8'));
-    for (const slug in productsData) {
-      for (const prod of productsData[slug]) {
-        await ProductModel.findOneAndUpdate({ id: prod.id }, prod, { upsert: true });
-      }
+    for (const prod of productsData) {
+      await ProductModel.findOneAndUpdate({ id: prod.id }, prod, { upsert: true });
     }
 
     // 3. Migrate Users
