@@ -2,7 +2,7 @@
 
 import { useParams, useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import { getProductById, getProductByCategory, Product } from '@/lib/api/productService';
+import { getProductById, getProductsByCategory, Product } from '@/lib/api/productService';
 import { getSpecsByProductId, Spec } from '@/lib/api/productSpecifications';
 import { useCart } from '@/app/context/CartContext';
 import Link from 'next/link';
