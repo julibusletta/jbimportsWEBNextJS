@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { FaChevronDown, FaChevronLeft } from 'react-icons/fa';
+import { FaChevronDown, FaChevronLeft, FaShieldAlt } from 'react-icons/fa';
 import Link from 'next/link';
 
 interface AccordionItem {
@@ -71,48 +71,51 @@ export default function FAQPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f8f9fa] py-16 px-4 md:px-0 flex flex-col items-center">
-      <div className="w-full max-w-6xl px-4 md:px-10">
+    <div className="min-h-screen bg-[#fafafa] pt-28 pb-32 px-4 md:px-0 flex flex-col items-center w-full">
+      <div className="w-full max-w-4xl">
         
-        {/* CompraGamer Style Header */}
-        <section className="flex items-center gap-6 py-4 mb-8">
+        {/* Professional Header Section */}
+        <section className="flex items-center gap-6 mb-12 px-2">
           <Link 
             href="/" 
-            className="flex items-center justify-center w-12 h-12 bg-white rounded-md border border-slate-200 text-slate-400 hover:bg-slate-50 hover:text-slate-900 transition-all no-underline shadow-sm"
+            className="group flex items-center justify-center w-12 h-12 bg-white rounded-xl border border-slate-100 text-slate-400 hover:border-blue-600 hover:text-blue-600 transition-all no-underline shadow-sm hover:shadow-md"
           >
-            <FaChevronLeft size={20} />
+            <FaChevronLeft size={18} />
           </Link>
-          <h1 className="text-3xl font-bold text-slate-800 m-0">Preguntas Frecuentes</h1>
+          <div className="flex flex-col">
+            <h1 className="text-3xl font-bold text-slate-900 m-0 tracking-tight">Preguntas Frecuentes</h1>
+            <p className="text-slate-400 text-sm mt-1">Encontrá respuestas rápidas a tus consultas</p>
+          </div>
         </section>
 
-        {/* Categories Grid (Material Design inspired expansion list) */}
-        <div className="space-y-4 mb-16">
+        {/* Categories List (Refined CompraGamer Style) */}
+        <div className="space-y-4 mb-20 px-2">
           {faqData.map((faq, index) => (
             <div 
               key={index} 
-              className={`bg-white border border-slate-200 rounded-sm transition-all duration-300 ${openIndex === index ? 'shadow-md ring-1 ring-blue-100 mb-6' : 'hover:bg-slate-50'}`}
+              className={`group bg-white rounded-xl border border-slate-100 transition-all duration-300 ${openIndex === index ? 'shadow-xl shadow-slate-200/40 scale-[1.01] border-blue-100' : 'hover:shadow-md hover:border-slate-200'}`}
             >
               <button
                 onClick={() => toggleAccordion(index)}
-                className="w-full flex items-center justify-between p-6 md:p-8 text-left bg-transparent border-0 cursor-pointer group"
+                className="w-full flex items-center justify-between p-7 text-left bg-transparent border-0 cursor-pointer rounded-xl transition-colors"
                 aria-expanded={openIndex === index}
               >
-                <div className="flex flex-col">
-                  <h3 className={`text-lg md:text-xl font-semibold m-0 transition-colors ${openIndex === index ? 'text-blue-600' : 'text-slate-700'}`}>
-                    {faq.title}
-                  </h3>
-                </div>
-                <span className={`flex items-center justify-center w-8 h-8 rounded-full transition-all duration-300 ${openIndex === index ? 'rotate-180 bg-blue-50 text-blue-600' : 'text-slate-300 group-hover:text-slate-500'}`}>
-                  <FaChevronDown size={14} />
+                <span className={`text-base md:text-lg font-medium transition-colors ${openIndex === index ? 'text-blue-600 font-bold' : 'text-slate-700 group-hover:text-slate-900'}`}>
+                  {faq.title}
                 </span>
+                <FaChevronDown 
+                  size={14} 
+                  className={`text-blue-600 transition-transform duration-500 ease-out ${openIndex === index ? 'rotate-180' : 'opacity-60 group-hover:opacity-100'}`} 
+                />
               </button>
               
               <div 
-                className={`transition-all duration-300 ease-in-out ${openIndex === index ? 'max-h-[800px] opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}
+                className={`transition-all duration-500 ease-in-out ${openIndex === index ? 'max-h-[800px] opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}
               >
-                <div className="px-8 pb-10 pt-4 border-t border-slate-100">
-                  <p className="text-slate-900 font-bold text-lg mb-5">{faq.question}</p>
-                  <p className="text-slate-600 text-base leading-relaxed mb-0">
+                <div className="px-8 pb-10 pt-2 text-slate-600">
+                  <div className="w-12 h-1 bg-blue-100 mb-6 rounded-full"></div>
+                  <p className="text-slate-900 font-bold text-lg mb-4 leading-tight">{faq.question}</p>
+                  <p className="text-sm md:text-base leading-relaxed mb-0 font-normal opacity-90">
                     {faq.content}
                   </p>
                 </div>
@@ -121,50 +124,51 @@ export default function FAQPage() {
           ))}
         </div>
 
-        {/* Information Cards Section */}
-        <div className="space-y-8">
-          <div className="bg-white p-10 md:p-14 border border-slate-200 shadow-sm rounded-sm">
-            <h2 className="text-2xl font-bold text-slate-900 mb-8">Servicio postventa y garantías</h2>
-            <div className="space-y-6 text-slate-600 text-base md:text-lg leading-relaxed">
-              <p>
-                Para realizar consultas o reclamos relacionadas con la garantía o devolución de alguna de tus compras, contamos con canales directos en el apartado de Ayuda donde podés exponer tu caso.
-              </p>
-              <p>
-                Podes gestionar tu garantía de forma presencial o directamente con la marca una vez transcurridos los 30 días de la compra. Consultá nuestros términos para más detalles.
-              </p>
-            </div>
-            
-            <div className="flex flex-col md:flex-row gap-5 justify-center mt-12 pt-10 border-t border-slate-100">
-              <Link 
-                href="/contacto" 
-                className="w-full md:w-auto px-10 py-5 bg-blue-600 text-white font-bold uppercase text-xs tracking-widest rounded-sm text-center no-underline hover:bg-slate-900 transition-all shadow-lg shadow-blue-50"
-              >
-                Sacar turno presencial
-              </Link>
-              <Link 
-                href="/contacto" 
-                className="w-full md:w-auto px-10 py-5 border border-slate-300 text-slate-700 font-bold uppercase text-xs tracking-widest rounded-sm text-center no-underline hover:bg-slate-50 transition-all"
-              >
-                Gestionar con la marca
-              </Link>
+        {/* Professional Help Section (Minimalist & Solid) */}
+        <div className="px-2">
+          <div className="bg-slate-900 text-white rounded-2xl overflow-hidden shadow-2xl relative">
+            <div className="p-10 md:p-14 relative z-10">
+              <h2 className="text-2xl font-bold mb-6">Servicio postventa y garantías</h2>
+              <div className="space-y-4 max-w-2xl text-slate-300 text-sm md:text-base leading-relaxed mb-10">
+                <p>
+                  ¿Tu producto presenta alguna falla? No te preocupes. Contamos con un equipo especializado en soporte para ayudarte a gestionar tu garantía de forma rápida.
+                </p>
+                <p className="font-medium text-blue-400">
+                  Recordá que podés gestionar turnos presenciales o tramitar con la marca directamente tras 30 días.
+                </p>
+              </div>
+              
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Link 
+                  href="/contacto" 
+                  className="px-8 py-4 bg-blue-600 text-white font-bold rounded-lg text-center no-underline hover:bg-white hover:text-slate-900 transition-all shadow-lg shadow-blue-500/20"
+                >
+                  Sacar turno presencial
+                </Link>
+                <Link 
+                  href="/contacto" 
+                  className="px-8 py-4 border border-slate-700 text-white font-bold rounded-lg text-center no-underline hover:bg-slate-800 transition-all"
+                >
+                  Gestionar garantía marca
+                </Link>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Simple Professional Footer Note */}
-        <div className="mt-24 py-12 text-center border-t border-slate-100">
-          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.4em] mb-4">JB Imports</p>
-          <p className="text-[12px] text-slate-300 uppercase tracking-widest">
-            Calidad y confianza en cada compra
-          </p>
+        {/* Elegant Footer Signature */}
+        <div className="mt-32 pb-20 text-center">
+          <div className="bg-slate-100 h-px w-24 mx-auto mb-10"></div>
+          <p className="text-[11px] font-bold text-slate-300 uppercase tracking-[0.5em] mb-2">JB Imports</p>
+          <p className="text-[10px] text-slate-400 font-medium tracking-wide">Excelencia en tecnología & soporte oficial</p>
         </div>
       </div>
 
       <style jsx global>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
         body { 
           font-family: 'Inter', sans-serif; 
-          background-color: #f8f9fa;
+          background-color: #fafafa;
         }
       `}</style>
     </div>
