@@ -106,7 +106,7 @@ export default function TransferPage() {
   deadline.setDate(deadline.getDate() + 2);
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] pt-44 pb-20 px-4 md:px-10 flex flex-col items-center">
+    <div className="min-h-screen bg-[#f8fafc] pt-56 pb-20 px-4 md:px-10 flex flex-col items-center">
       <style jsx global>{`
         @keyframes pulse-soft {
           0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.4); }
@@ -255,16 +255,6 @@ export default function TransferPage() {
            </div>
 
         </div>
-
-        {/* Support Section */}
-        <div className="text-center py-10 opacity-40">
-           <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.5em] flex items-center justify-center gap-4">
-             <span className="w-10 h-[1px] bg-slate-200"></span>
-             ¿Necesitas Ayuda? Contacta por WhatsApp
-             <span className="w-10 h-[1px] bg-slate-200"></span>
-           </p>
-        </div>
-
       </div>
     </div>
   );
