@@ -238,5 +238,17 @@
     ],
     "description": "Tablet Fire HD 10 (13ra Gen) Púrpura. Entretenimiento vibrante en pantalla grande.",
     "stock": 10
+  },
+  {
+    "id": "st-mini-3522",
+    "name": "CABLE INVERSOR 12V-30V STARLINK MINI AUTO",
+    "price": 51100,
+    "category": "Accesorios Starlink",
+    "image": "/images/products/starlink-mini-cable.webp",
+    "images": [
+      "/images/products/starlink-mini-cable.webp"
+    ],
+    "description": "Cable adaptador conversor para Starlink MINI de 12v a 30V. Ideal para vehículos (autos, camionetas, motorhomes). Conexión directa al encendedor, 3 metros de largo, ficha original e impermeable (IP67). 90W de potencia.",
+    "stock": 10
   }
 ]
