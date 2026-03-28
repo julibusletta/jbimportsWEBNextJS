@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { FaChevronDown, FaChevronLeft, FaShieldAlt } from 'react-icons/fa';
+import { FaChevronDown, FaChevronLeft } from 'react-icons/fa';
 import Link from 'next/link';
 
 interface AccordionItem {
@@ -62,7 +62,7 @@ export default function FAQPage() {
     {
       title: 'Garantías',
       question: '¿Cómo utilizo el servicio de PosVenta y garantías?',
-      content: 'Para realizar consultas/reclamos relacionadas con la garantía o devolución de alguna de tus compras, al final de esta sección contamos con el apartado de contacto donde debes exponer tu caso y uno de nuestros representantes te ofrecerá la información correspondiente sobre cómo proceder.'
+      content: 'Para realizar consultas/reclamos relacionadas con la garantía o devolución de alguna de tus compras, contamos con canales oficiales donde debes exponer tu caso y uno de nuestros representantes te ofrecerá la información correspondiente sobre cómo proceder.'
     }
   ];
 
@@ -71,43 +71,48 @@ export default function FAQPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white pt-24 pb-20 px-6 flex flex-col items-center">
-      <div className="w-full max-w-4xl">
-        {/* Navigation / Return */}
-        <div className="mb-10 flex items-center gap-4">
+    <div className="min-h-screen bg-[#f8f9fa] py-16 px-4 md:px-0 flex flex-col items-center">
+      <div className="w-full max-w-6xl px-4 md:px-10">
+        
+        {/* CompraGamer Style Header */}
+        <section className="flex items-center gap-6 py-4 mb-8">
           <Link 
             href="/" 
-            className="flex items-center justify-center w-10 h-10 bg-slate-50 text-slate-900 border border-slate-100 transition-colors hover:bg-slate-900 hover:text-white"
+            className="flex items-center justify-center w-12 h-12 bg-white rounded-md border border-slate-200 text-slate-400 hover:bg-slate-50 hover:text-slate-900 transition-all no-underline shadow-sm"
           >
-            <FaChevronLeft size={16} />
+            <FaChevronLeft size={20} />
           </Link>
-          <h1 className="text-xl md:text-2xl font-black text-slate-900 uppercase tracking-tight m-0">Preguntas Frecuentes</h1>
-        </div>
+          <h1 className="text-3xl font-bold text-slate-800 m-0">Preguntas Frecuentes</h1>
+        </section>
 
-        {/* Accordion List */}
-        <div className="space-y-4 mb-20">
+        {/* Categories Grid (Material Design inspired expansion list) */}
+        <div className="space-y-4 mb-16">
           {faqData.map((faq, index) => (
-            <div key={index} className="border border-slate-100 bg-white shadow-sm overflow-hidden transition-all">
+            <div 
+              key={index} 
+              className={`bg-white border border-slate-200 rounded-sm transition-all duration-300 ${openIndex === index ? 'shadow-md ring-1 ring-blue-100 mb-6' : 'hover:bg-slate-50'}`}
+            >
               <button
                 onClick={() => toggleAccordion(index)}
-                className="w-full flex items-center justify-between p-6 md:p-8 text-left bg-transparent border-0 cursor-pointer group hover:bg-slate-50 transition-colors"
+                className="w-full flex items-center justify-between p-6 md:p-8 text-left bg-transparent border-0 cursor-pointer group"
                 aria-expanded={openIndex === index}
               >
-                <h3 className="text-base md:text-lg font-black text-slate-900 uppercase tracking-tight m-0 group-hover:text-blue-600 transition-colors">
-                  {faq.title}
-                </h3>
-                <FaChevronDown 
-                  size={14} 
-                  className={`text-slate-300 transition-transform duration-300 ${openIndex === index ? 'rotate-180 text-blue-600' : ''}`} 
-                />
+                <div className="flex flex-col">
+                  <h3 className={`text-lg md:text-xl font-semibold m-0 transition-colors ${openIndex === index ? 'text-blue-600' : 'text-slate-700'}`}>
+                    {faq.title}
+                  </h3>
+                </div>
+                <span className={`flex items-center justify-center w-8 h-8 rounded-full transition-all duration-300 ${openIndex === index ? 'rotate-180 bg-blue-50 text-blue-600' : 'text-slate-300 group-hover:text-slate-500'}`}>
+                  <FaChevronDown size={14} />
+                </span>
               </button>
               
               <div 
-                className={`transition-all duration-300 ease-in-out ${openIndex === index ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}
+                className={`transition-all duration-300 ease-in-out ${openIndex === index ? 'max-h-[800px] opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}
               >
-                <div className="p-8 md:p-10 border-t border-slate-50 bg-slate-50/30">
-                  <p className="text-slate-900 font-bold mb-4">{faq.question}</p>
-                  <p className="text-slate-500 text-sm md:text-base leading-relaxed mb-0">
+                <div className="px-8 pb-10 pt-4 border-t border-slate-100">
+                  <p className="text-slate-900 font-bold text-lg mb-5">{faq.question}</p>
+                  <p className="text-slate-600 text-base leading-relaxed mb-0">
                     {faq.content}
                   </p>
                 </div>
@@ -116,35 +121,51 @@ export default function FAQPage() {
           ))}
         </div>
 
-        {/* Post-Sale & Warranty Information Card */}
-        <section className="p-10 md:p-16 bg-slate-900 text-white flex flex-col items-center text-center">
-          <FaShieldAlt className="text-blue-400 mb-8" size={48} />
-          <h2 className="text-xl md:text-2xl font-black uppercase tracking-tight mb-6">Servicio Postventa y Garantías</h2>
-          <p className="text-slate-400 text-sm md:text-base leading-relaxed max-w-2xl mb-10">
-            Para realizar consultas o reclamos relacionados con la garantía o devolución de alguna de tus compras, 
-            podés contactarnos a través de nuestros canales oficiales. Uno de nuestros representantes te ofrecerá la 
-            información correspondiente sobre cómo proceder. 
-          </p>
-          <div className="flex flex-col md:flex-row gap-6">
-            <Link 
-              href="/contacto" 
-              className="px-10 py-5 bg-blue-600 text-white font-black uppercase text-[10px] tracking-[0.3em] no-underline hover:bg-white hover:text-slate-900 transition-all shadow-xl shadow-blue-500/20"
-            >
-              Contactar Soporte
-            </Link>
-            <Link 
-              href="/terminos" 
-              className="px-10 py-5 border border-white text-white font-black uppercase text-[10px] tracking-[0.3em] no-underline hover:bg-white hover:text-slate-900 transition-all"
-            >
-              Ver Términos y Condiciones
-            </Link>
+        {/* Information Cards Section */}
+        <div className="space-y-8">
+          <div className="bg-white p-10 md:p-14 border border-slate-200 shadow-sm rounded-sm">
+            <h2 className="text-2xl font-bold text-slate-900 mb-8">Servicio postventa y garantías</h2>
+            <div className="space-y-6 text-slate-600 text-base md:text-lg leading-relaxed">
+              <p>
+                Para realizar consultas o reclamos relacionadas con la garantía o devolución de alguna de tus compras, contamos con canales directos en el apartado de Ayuda donde podés exponer tu caso.
+              </p>
+              <p>
+                Podes gestionar tu garantía de forma presencial o directamente con la marca una vez transcurridos los 30 días de la compra. Consultá nuestros términos para más detalles.
+              </p>
+            </div>
+            
+            <div className="flex flex-col md:flex-row gap-5 justify-center mt-12 pt-10 border-t border-slate-100">
+              <Link 
+                href="/contacto" 
+                className="w-full md:w-auto px-10 py-5 bg-blue-600 text-white font-bold uppercase text-xs tracking-widest rounded-sm text-center no-underline hover:bg-slate-900 transition-all shadow-lg shadow-blue-50"
+              >
+                Sacar turno presencial
+              </Link>
+              <Link 
+                href="/contacto" 
+                className="w-full md:w-auto px-10 py-5 border border-slate-300 text-slate-700 font-bold uppercase text-xs tracking-widest rounded-sm text-center no-underline hover:bg-slate-50 transition-all"
+              >
+                Gestionar con la marca
+              </Link>
+            </div>
           </div>
-        </section>
+        </div>
+
+        {/* Simple Professional Footer Note */}
+        <div className="mt-24 py-12 text-center border-t border-slate-100">
+          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.4em] mb-4">JB Imports</p>
+          <p className="text-[12px] text-slate-300 uppercase tracking-widest">
+            Calidad y confianza en cada compra
+          </p>
+        </div>
       </div>
 
       <style jsx global>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800;900&display=swap');
-        body { font-family: 'Inter', sans-serif; }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
+        body { 
+          font-family: 'Inter', sans-serif; 
+          background-color: #f8f9fa;
+        }
       `}</style>
     </div>
   );
