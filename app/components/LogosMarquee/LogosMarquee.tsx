@@ -13,7 +13,7 @@ const logos = [
   { id: 6, src: '/images/66964.webp', alt: 'ASUS' },
   { id: 7, src: '/images/starlink_logo.png', alt: 'Starlink' },
   { id: 8, src: '/images/amazon_logo.png', alt: 'Amazon' },
-  { id: 9, src: '/images/tplink_logo.png', alt: 'TP-LINK' },
+  { id: 9, src: '/images/tplink_logo.jpg', alt: 'TP-LINK' },
 ];
 
 import { useEffect, useState } from 'react';
@@ -39,19 +39,26 @@ export default function LogosMarquee() {
       <div className="marquee-container w-full overflow-hidden" suppressHydrationWarning>
         <div className="marquee-track flex" style={{ width: 'max-content' }}>
           {/* Duplicate set 4 times for seamless loop on wide screens */}
-          {[...logos, ...logos, ...logos, ...logos].map((logo, index) => (
-            <div
-              key={`${logo.id}-${index}`}
-              className="logo-item flex-shrink-0"
-            >
-              <img
-                src={logo.src}
-                alt={logo.alt}
-                className="logo-image object-contain filter grayscale transition-all duration-300 hover:grayscale-0"
-                style={{ mixBlendMode: 'multiply' }}
-              />
-            </div>
-          ))}
+          {[...logos, ...logos, ...logos, ...logos].map((logo, index) => {
+            // Apply specific tweaks for better visibility based on logo shape
+            const specificStyle = logo.alt === 'Starlink' ? { transform: 'scale(1.3)' } :
+                                  logo.alt === 'TP-LINK' ? { transform: 'scale(0.85)' } : 
+                                  {};
+            
+            return (
+              <div
+                key={`${logo.id}-${index}`}
+                className="logo-item flex-shrink-0"
+              >
+                <img
+                  src={logo.src}
+                  alt={logo.alt}
+                  className="logo-image object-contain filter grayscale transition-all duration-300 hover:grayscale-0"
+                  style={{ ...specificStyle, mixBlendMode: 'multiply' }}
+                />
+              </div>
+            );
+          })}
         </div>
       </div>
 
