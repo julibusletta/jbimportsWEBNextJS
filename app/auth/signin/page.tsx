@@ -6,19 +6,14 @@ import Link from "next/link";
 
 export default function SignInPage() {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 px-4 py-12 sm:px-6 lg:px-8" style={{ paddingTop: '180px' }}>
+    <div className="min-h-screen flex flex-col items-center bg-gray-50 px-4 py-12 sm:px-6 lg:px-8" style={{ paddingTop: '100px' }}>
       <div className="max-w-md w-full space-y-8 bg-white p-8 sm:p-10 rounded-2xl shadow-xl border border-gray-100">
         <div className="text-center">
-          <img
-            src="/images/logotest9.png"
-            alt="JBimports Logo"
-            className="mx-auto h-20 w-auto"
-          />
-          <h2 className="mt-6 text-3xl font-extrabold text-gray-900 tracking-tight">
-            Bienvenido a JBimports
+          <h2 className="text-2xl font-black text-gray-900 tracking-tight leading-tight">
+            Registrate para poder continuar con tu compra!
           </h2>
-          <p className="mt-2 text-sm text-gray-500">
-            Ingresá a tu cuenta para gestionar tus compras
+          <p className="mt-4 text-[11px] text-gray-400 font-bold uppercase tracking-[0.2em]">
+            Ingresá a tu cuenta para gestionar tus pedidos
           </p>
         </div>
 
