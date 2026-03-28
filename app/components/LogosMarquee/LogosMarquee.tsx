@@ -41,8 +41,8 @@ export default function LogosMarquee() {
           {/* Duplicate set 4 times for seamless loop on wide screens */}
           {[...logos, ...logos, ...logos, ...logos].map((logo, index) => {
             // Apply specific tweaks for better visibility based on logo shape
-            const specificStyle = logo.alt === 'Starlink' ? { transform: 'scale(1.3)' } :
-                                  logo.alt === 'TP-LINK' ? { transform: 'scale(0.85)' } : 
+            const specificStyle = logo.alt === 'Starlink' ? { transform: 'scale(1.05)' } :
+                                  logo.alt === 'TP-LINK' ? { transform: 'scale(0.9)' } : 
                                   {};
             
             return (
