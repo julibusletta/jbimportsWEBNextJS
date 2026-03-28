@@ -37,6 +37,14 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: false, message: 'Orden no encontrada' }, { status: 404 });
     }
 
+    // 3. Notify Admins (New)
+    try {
+      const { mailer } = await import('@/lib/mailer');
+      await mailer.notifyAdminProofUploaded(orderId, updatedOrder.userName || 'Cliente');
+    } catch (mailError) {
+      console.error('Failed to notify admins of proof upload:', mailError);
+    }
+
     return NextResponse.json({ 
       success: true, 
       message: 'Comprobante subido correctamente' 

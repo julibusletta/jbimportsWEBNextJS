@@ -19,7 +19,7 @@ export async function POST(request: Request) {
     const userName = `${firstName || ''} ${lastName || ''}`.trim() || session?.user?.name || 'Cliente Invitado';
     const userEmail = email || session?.user?.email || 'invitado@jbimports.com';
 
-    await db.saveOrder({
+    const orderData = {
       id: currentOrderId,
       userEmail,
       userName,
@@ -41,7 +41,17 @@ export async function POST(request: Request) {
         shippingCost: shipping.cost,
         shippingMethod: shipping.method
       } : undefined
-    });
+    };
+
+    await db.saveOrder(orderData);
+
+    // 3. Send Confirmation Email (New)
+    try {
+      const { mailer } = await import('@/lib/mailer');
+      await mailer.sendTransferOrderReceived(userEmail, userName, orderData);
+    } catch (mailError) {
+      console.error('Failed to send transfer confirmation email:', mailError);
+    }
 
     return NextResponse.json({ 
       success: true, 
