@@ -24,7 +24,7 @@ interface ShippingOption {
   id: string;
   name: string;
   price: number;
-  estimatedDays: number;
+  estimatedDays: string;
   type: 'DOMICILIO' | 'SUCURSAL';
   image: string;
 }
@@ -34,7 +34,7 @@ const ANDREANI_OPTIONS: ShippingOption[] = [
     id: 'andreani-domicilio',
     name: 'Andreani a Domicilio',
     price: 0,
-    estimatedDays: 3,
+    estimatedDays: '3 a 5',
     type: 'DOMICILIO',
     image: '/images/andreani.png'
   },
@@ -42,7 +42,7 @@ const ANDREANI_OPTIONS: ShippingOption[] = [
     id: 'andreani-sucursal',
     name: 'Retiro en Sucursal Andreani',
     price: 0,
-    estimatedDays: 2,
+    estimatedDays: '3 a 5',
     type: 'SUCURSAL',
     image: '/images/andreani.png'
   }
