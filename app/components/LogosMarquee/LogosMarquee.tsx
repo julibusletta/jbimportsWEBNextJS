@@ -11,6 +11,9 @@ const logos = [
   { id: 4, src: '/images/images.webp', alt: 'Sony' },
   { id: 5, src: '/images/logorealme.png', alt: 'Realme' },
   { id: 6, src: '/images/66964.webp', alt: 'ASUS' },
+  { id: 7, src: '/images/starlink_logo.png', alt: 'Starlink' },
+  { id: 8, src: '/images/amazon_logo.png', alt: 'Amazon' },
+  { id: 9, src: '/images/tplink_logo.png', alt: 'TP-LINK' },
 ];
 
 import { useEffect, useState } from 'react';
