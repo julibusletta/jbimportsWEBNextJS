@@ -36,7 +36,7 @@ const ANDREANI_OPTIONS: ShippingOption[] = [
     price: 0,
     estimatedDays: 3,
     type: 'DOMICILIO',
-    image: '/inc/shipping/vendors/entregar.svg'
+    image: '/images/andreani.png'
   },
   {
     id: 'andreani-sucursal',
@@ -44,7 +44,7 @@ const ANDREANI_OPTIONS: ShippingOption[] = [
     price: 0,
     estimatedDays: 2,
     type: 'SUCURSAL',
-    image: '/inc/shipping/vendors/oca.svg' // Using a placeholder if specific SVG is missing, but mapping to the one in the reference
+    image: '/images/andreani.png'
   }
 ];
 
