@@ -140,7 +140,12 @@ function CheckoutContent() {
     setError(null);
 
     const subtotalWithShipping = cartTotal + (selectedRate?.price || 0);
-    const finalTotal = paymentMethod === 'transfer' ? subtotalWithShipping * 0.9 : subtotalWithShipping;
+    let finalTotal = subtotalWithShipping;
+    if (paymentMethod === 'transfer') {
+      finalTotal = subtotalWithShipping * 0.9;
+    } else if (paymentMethod === 'nave_cuotas') {
+      finalTotal = subtotalWithShipping * 1.2;
+    }
 
     const endpoint = paymentMethod.startsWith('nave') ? '/api/checkout/nave' : '/api/checkout/transfer';
 
@@ -210,7 +215,7 @@ function CheckoutContent() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] pt-40 pb-20 w-full flex flex-col items-center">
+    <div className="min-h-screen bg-[#f8fafc] pt-52 pb-40 w-full flex flex-col items-center">
       <div className="w-full max-w-[1200px] px-6">
         
         {/* Stepper UI */}
@@ -322,7 +327,6 @@ function CheckoutContent() {
                     <span className="payment-price-tag">${(cartTotal * 0.9).toLocaleString('es-AR')}</span>
                   </div>
 
-                  {/* 6 Cuotas Sin Interés */}
                   <div 
                     className={`payment-card ${paymentMethod === 'nave_cuotas' ? 'selected' : ''}`}
                     onClick={() => setPaymentMethod('nave_cuotas')}
@@ -331,9 +335,8 @@ function CheckoutContent() {
                     <FaCheckCircle className="payment-icon text-xl" />
                     <div className="payment-info">
                       <span className="payment-name">6 Cuotas Sin Interés</span>
-                      <span className="payment-badge bg-green-500">Mismo Precio</span>
                     </div>
-                    <span className="payment-price-tag">${(cartTotal).toLocaleString('es-AR')}</span>
+                    <span className="payment-price-tag">${(cartTotal * 1.2).toLocaleString('es-AR')}</span>
                   </div>
 
                 </div>
@@ -431,7 +434,7 @@ function CheckoutContent() {
               <div className="final-total-row">
                 <span className="final-total-label">Total Final</span>
                 <span className="final-total-value">
-                  ${(paymentMethod === 'transfer' ? cartTotal * 0.9 : cartTotal).toLocaleString('es-AR')}
+                  ${(paymentMethod === 'transfer' ? cartTotal * 0.9 : (paymentMethod === 'nave_cuotas' ? cartTotal * 1.2 : cartTotal)).toLocaleString('es-AR')}
                 </span>
               </div>
             </div>
@@ -442,7 +445,7 @@ function CheckoutContent() {
                 <FaCreditCard size={24} />
                 <FaLock size={24} />
               </div>
-              <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">Pago Seguro Garantizado</p>
+              <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">Nave Negocios Powered by Banco Galicia</p>
             </div>
           </div>
 
