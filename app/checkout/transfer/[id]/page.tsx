@@ -9,7 +9,11 @@ import {
   FaHome, 
   FaCopy, 
   FaExclamationTriangle,
-  FaFileInvoiceDollar
+  FaFileInvoiceDollar,
+  FaUniversity,
+  FaArrowLeft,
+  FaSpinner,
+  FaCalendarAlt
 } from 'react-icons/fa';
 
 export default function TransferPage() {
@@ -19,6 +23,16 @@ export default function TransferPage() {
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [uploadSuccess, setUploadSuccess] = useState(false);
+  const [copiedField, setCopiedField] = useState<string | null>(null);
+
+  const BANK_DATA = {
+    BANCO: "BANCO GALICIA",
+    TITULAR: "JULIAN BUSLETTA",
+    CBU: "0070695330004003192534",
+    ALIAS: "jbimports.galicia",
+    N_CUENTA: "4003192-5 695-3",
+    CUIT: "20-37991025-5"
+  };
 
   useEffect(() => {
     const fetchOrder = async () => {
@@ -37,8 +51,10 @@ export default function TransferPage() {
     if (id) fetchOrder();
   }, [id]);
 
-  const copyToClipboard = (text: string) => {
+  const copyToClipboard = (text: string, field: string) => {
     navigator.clipboard.writeText(text);
+    setCopiedField(field);
+    setTimeout(() => setCopiedField(null), 2000);
   };
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -66,167 +82,189 @@ export default function TransferPage() {
     }
   };
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center pt-40">Cargando datos de transferencia...</div>;
-  if (!order) return <div className="min-h-screen flex items-center justify-center pt-40 text-red-500 font-bold">Orden no encontrada</div>;
+  if (loading) return (
+    <div className="min-h-screen bg-[#f8fafc] flex items-center justify-center">
+       <div className="flex flex-col items-center gap-6">
+          <FaSpinner className="animate-spin text-blue-600" size={32} />
+          <p className="text-[11px] font-black uppercase tracking-[0.3em] text-slate-400">Validando Operación...</p>
+       </div>
+    </div>
+  );
+
+  if (!order) return (
+    <div className="min-h-screen bg-[#f8fafc] flex items-center justify-center">
+       <div className="bg-white border border-[#f1f5f9] p-12 text-center max-w-md">
+          <FaExclamationTriangle className="text-red-500 mx-auto mb-6" size={40} />
+          <h2 className="text-xl font-black uppercase tracking-tight text-slate-900 mb-4">Orden No Encontrada</h2>
+          <p className="text-slate-500 text-sm font-medium mb-10 leading-relaxed uppercase tracking-wider">La orden solicitada no existe o no tienes permisos para verla.</p>
+          <button onClick={() => router.push('/')} className="px-10 py-4 border border-slate-900 font-black text-[10px] uppercase tracking-[0.4em] hover:bg-slate-900 hover:text-white transition-all">Regresar a Tienda</button>
+       </div>
+    </div>
+  );
 
   const deadline = new Date(order.createdAt || Date.now());
   deadline.setDate(deadline.getDate() + 2);
 
   return (
-    <div className="min-h-screen bg-[#eee] pt-48 pb-12 font-[Montserrat,sans-serif] flex flex-col items-center w-full">
+    <div className="min-h-screen bg-[#f8fafc] pt-44 pb-20 px-4 md:px-10 flex flex-col items-center">
       <style jsx global>{`
-        @keyframes pulse-yellow {
-          0% { transform: scale(1); opacity: 1; }
-          50% { transform: scale(1.05); opacity: 0.9; }
-          100% { transform: scale(1); opacity: 1; }
+        @keyframes pulse-soft {
+          0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.4); }
+          50% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(251, 191, 36, 0); }
+          100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(251, 191, 36, 0); }
         }
-        .animate-pulse-yellow {
-          animation: pulse-yellow 2s infinite ease-in-out;
+        .animate-pulse-soft {
+          animation: pulse-soft 2.5s infinite ease-in-out;
         }
       `}</style>
-      <div className="w-full max-w-[1000px] px-4 lg:px-10 flex flex-col items-center">
+
+      <div className="w-full max-w-5xl flex flex-col gap-10">
         
-        {/* Reservation Header (CompraGamer Style) */}
-        <div className="w-full bg-gradient-to-b from-white to-[#fff6df] rounded-[32px] p-10 mb-8 flex flex-col items-center text-center shadow-sm border border-amber-100">
-          <div className="w-48 h-48 flex items-center justify-center bg-white rounded-full shadow-inner border border-amber-50 mb-6 animate-pulse-yellow">
-             <div className="flex flex-col items-center text-[#fcbb11]">
-                <FaExclamationTriangle size={80} />
-                <span className="text-xs font-black mt-2 tracking-widest uppercase">PENDIENTE</span>
+        {/* Main Status Card */}
+        <div className="bg-white border border-[#f1f5f9] shadow-sm p-10 md:p-16 flex flex-col items-center text-center">
+          
+          <div className="w-32 h-32 bg-white border border-amber-100 rounded-full flex items-center justify-center mb-10 animate-pulse-soft">
+             <div className="flex flex-col items-center text-amber-500">
+                <FaExclamationTriangle size={48} />
+                <span className="text-[9px] font-black mt-3 tracking-[0.2em] uppercase">Pendiente</span>
              </div>
           </div>
           
-          <div className="flex-1 max-w-[800px]">
-            <h1 className="text-2xl md:text-4xl text-gray-800 mb-6 leading-tight font-bold">
-              Tu reserva <b className="text-black uppercase">{order.id}</b> ya fue confirmada. Sólo falta que realices el pago para que podamos avanzar.
+          <div className="max-w-2xl">
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <div className="w-6 h-[1px] bg-amber-200"></div>
+              <span className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-400">Verificación de Reserva</span>
+              <div className="w-6 h-[1px] bg-amber-200"></div>
+            </div>
+            <h1 className="text-2xl md:text-3xl font-black text-slate-900 uppercase tracking-tight leading-snug mb-6">
+              RESERVA <b className="text-blue-600">{order.id.split('-').pop()?.toUpperCase()}</b> CONFIRMADA.<br />
+              <span className="text-slate-500">REALIZA EL PAGO PARA FINALIZAR.</span>
             </h1>
-            <p className="text-gray-600 mb-10 text-lg">
-              Tenés tiempo hasta el <b>{deadline.toLocaleDateString('es-AR')}</b> para abonar.
+            <p className="text-slate-400 text-sm font-medium leading-relaxed uppercase tracking-[0.1em] mb-12">
+              LA RESERVA ESTARÁ ACTIVA HASTA EL <b className="text-slate-900">{deadline.toLocaleDateString('es-AR', { day: 'numeric', month: 'long', year: 'numeric' }).toUpperCase()}</b>.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <label className={`cursor-pointer bg-[#f0320a] hover:bg-[#d62b08] text-white px-10 py-5 rounded-none font-bold flex items-center justify-center gap-2 transition-all shadow-md active:scale-95 ${uploading ? 'opacity-70 pointer-events-none' : ''}`}>
-                <FaUpload />
-                {uploading ? 'SUBIENDO...' : 'SUBIR COMPROBANTE'}
+              <label className={`cursor-pointer px-10 py-5 bg-transparent border border-blue-600 text-blue-600 font-black text-[10px] uppercase tracking-[0.4em] hover:bg-blue-600 hover:text-white transition-all shadow-sm active:scale-95 flex items-center justify-center gap-3 ${uploading ? 'opacity-50 pointer-events-none' : ''}`}>
+                {uploading ? <FaSpinner className="animate-spin" /> : <FaUpload />}
+                <span>{uploading ? 'Procesando...' : 'SUBIR COMPROBANTE DE PAGO'}</span>
                 <input type="file" className="hidden" onChange={handleFileUpload} accept="image/*,application/pdf" />
               </label>
               
               <button 
                 onClick={() => router.push('/')}
-                className="bg-white border-2 border-gray-200 hover:border-[#f0320a] hover:text-[#f0320a] text-gray-700 px-10 py-5 rounded-none font-bold flex items-center justify-center gap-2 transition-all shadow-sm"
+                className="px-10 py-5 bg-transparent border border-slate-900 text-slate-900 font-black text-[10px] uppercase tracking-[0.4em] hover:bg-slate-900 hover:text-white transition-all shadow-sm flex items-center justify-center gap-3"
               >
                 <FaHome /> VOLVER AL INICIO
               </button>
             </div>
+
+            {uploadSuccess && (
+              <div className="mt-10 p-4 bg-emerald-50 border border-emerald-100 text-emerald-600 font-black text-[10px] uppercase tracking-[0.2em] flex items-center justify-center gap-3 animate-in fade-in slide-in-from-top-4">
+                <FaCheckCircle /> Comprobante subido con éxito, validaremos tu pago a la brevedad.
+              </div>
+            )}
           </div>
         </div>
 
-        {/* Status Message for Upload */}
-        {uploadSuccess && (
-          <div className="w-full mb-8 p-4 bg-green-50 border-l-4 border-green-500 text-green-700 rounded-lg flex items-center gap-3 animate-bounce shadow-sm">
-            <FaCheckCircle /> <b>¡Comprobante subido con éxito!</b> Revisaremos tu pago a la brevedad.
-          </div>
-        )}
-
-        {/* Bank Details Container (CompraGamer Style) */}
-        <div className="w-full bg-white rounded-2xl shadow-sm p-8 md:p-12 border border-gray-100">
-          <h2 className="text-xl font-bold mb-10 border-b pb-4 text-gray-800 tracking-tight">Datos para el pago</h2>
-          
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 relative">
-            {/* Vertical Splitter (Desktop) */}
-            <div className="hidden lg:block absolute left-1/2 top-0 bottom-0 w-[1px] bg-gray-200 -translate-x-1/2"></div>
-            
-            {/* Transferencia Column */}
-            <div className="flex flex-col gap-8">
-              <div className="flex items-center gap-3 mb-2">
-                <div className="w-10 h-10 bg-[#f0300a13] rounded-full flex items-center justify-center text-[#f0320a]">
-                  <FaFileInvoiceDollar size={20} />
+        {/* Bank Details - Minimalist Cards Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+           
+           {/* Transfer Core Data */}
+           <div className="bg-white border border-[#f1f5f9] shadow-sm">
+              <div className="bg-[#f8fafc] border-b border-[#f1f5f9] p-8 flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <FaUniversity className="text-blue-600" size={20} />
+                  <h3 className="text-[13px] font-black uppercase tracking-[0.3em] text-slate-900">DATOS BANCARIOS</h3>
                 </div>
-                <h3 className="text-xl font-bold">Transferencia</h3>
+                <span className="px-3 py-1 bg-white border border-[#f1f5f9] text-[9px] font-black tracking-widest text-slate-400 uppercase">GALICIA</span>
               </div>
               
-              <div className="space-y-6 text-sm md:text-base">
-                <div className="flex flex-col">
-                  <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1">Banco</span>
-                  <div className="font-bold text-gray-800">BANCO GALICIA</div>
-                </div>
-                
-                <div className="flex flex-col">
-                  <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1">CBU</span>
-                  <div className="font-bold flex justify-between items-center group bg-gray-50 p-3 border border-gray-100">
-                    <span className="font-mono text-gray-700">0070000000000000000000</span>
-                    <FaCopy className="cursor-pointer text-[#f0320a] hover:scale-110 transition-transform" onClick={() => copyToClipboard('0070000000000000000000')} />
+              <div className="p-10 space-y-10">
+                <div className="space-y-2">
+                  <span className="text-[9px] text-slate-400 font-black uppercase tracking-[0.3em]">CBU / CVU</span>
+                  <div className="flex items-center justify-between group">
+                    <span className="font-mono text-lg font-black tracking-tighter text-slate-900">{BANK_DATA.CBU}</span>
+                    <button 
+                      onClick={() => copyToClipboard(BANK_DATA.CBU, 'cbu')}
+                      className={`p-2 transition-all ${copiedField === 'cbu' ? 'text-emerald-500' : 'text-slate-200 hover:text-blue-600'} cursor-pointer bg-transparent border-0`}
+                    >
+                      {copiedField === 'cbu' ? '¡COPIADO!' : <FaCopy size={16} />}
+                    </button>
                   </div>
                 </div>
 
-                <div className="flex flex-col">
-                  <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1">Alias</span>
-                  <div className="font-bold flex justify-between items-center group bg-gray-50 p-3 border border-gray-100">
-                    <span className="text-gray-700">JBIMPORTS.GALICIA</span>
-                    <FaCopy className="cursor-pointer text-[#f0320a] hover:scale-110 transition-transform" onClick={() => copyToClipboard('JBIMPORTS.GALICIA')} />
+                <div className="space-y-2">
+                  <span className="text-[9px] text-slate-400 font-black uppercase tracking-[0.3em]">ALIAS DE CUENTA</span>
+                  <div className="flex items-center justify-between group">
+                    <span className="text-lg font-black tracking-tight text-slate-900 uppercase">{BANK_DATA.ALIAS}</span>
+                    <button 
+                      onClick={() => copyToClipboard(BANK_DATA.ALIAS, 'alias')}
+                      className={`p-2 transition-all ${copiedField === 'alias' ? 'text-emerald-500' : 'text-slate-200 hover:text-blue-600'} cursor-pointer bg-transparent border-0`}
+                    >
+                      {copiedField === 'alias' ? '¡COPIADO!' : <FaCopy size={16} />}
+                    </button>
                   </div>
                 </div>
 
-                <div className="flex flex-col">
-                  <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1">Titular</span>
-                  <span className="font-bold text-gray-800">JULIAN BUSLETTA</span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-10 pt-4 border-t border-slate-50 mt-4">
+                  <div className="space-y-1">
+                    <span className="text-[9px] text-slate-300 font-black uppercase tracking-[0.3em]">CUIT Titular</span>
+                    <p className="text-[13px] font-black text-slate-900 uppercase tracking-tight">{BANK_DATA.CUIT}</p>
+                  </div>
+                  <div className="space-y-1">
+                    <span className="text-[9px] text-slate-300 font-black uppercase tracking-[0.3em]">Número de Cuenta</span>
+                    <p className="text-[13px] font-black text-slate-900 uppercase tracking-tight">{BANK_DATA.N_CUENTA}</p>
+                  </div>
                 </div>
               </div>
-            </div>
+           </div>
 
-            {/* Depósito Column */}
-            <div className="flex flex-col gap-8 pt-12 lg:pt-0">
-               {/* Horizontal Splitter (Mobile) */}
-               <div className="lg:hidden w-full h-[1px] bg-gray-100 mb-8"></div>
-
-              <div className="flex items-center gap-3 mb-2">
-                <div className="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center text-blue-600">
-                  <FaHome size={20} />
-                </div>
-                <h3 className="text-xl font-bold">Depósito Bancario</h3>
-              </div>
-              
-              <div className="space-y-6 text-sm md:text-base">
-                <div className="flex flex-col">
-                  <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1">Tipo de Cuenta</span>
-                  <span className="font-bold text-gray-800">CAJA DE AHORRO $</span>
-                </div>
-                
-                <div className="flex flex-col">
-                  <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1">Número de Cuenta</span>
-                  <div className="font-bold flex justify-between items-center group">
-                    <span className="text-gray-700">000-000000/0</span>
-                    <FaCopy className="cursor-pointer text-blue-600 hover:scale-110 transition-transform" onClick={() => copyToClipboard('000-000000/0')} />
+           {/* Second Column - Payment Details & Total */}
+           <div className="flex flex-col gap-8">
+              <div className="bg-white border border-[#f1f5f9] shadow-sm flex-1">
+                <div className="bg-[#f8fafc] border-b border-[#f1f5f9] p-8">
+                  <div className="flex items-center gap-4">
+                    <FaFileInvoiceDollar className="text-emerald-500" size={20} />
+                    <h3 className="text-[13px] font-black uppercase tracking-[0.3em] text-slate-900">Monto del Pago</h3>
                   </div>
                 </div>
-
-                <div className="flex flex-col">
-                  <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1">CUIT</span>
-                  <div className="font-bold flex justify-between items-center group">
-                    <span className="text-gray-700">20-00000000-0</span>
-                    <FaCopy className="cursor-pointer text-blue-600 hover:scale-110 transition-transform" onClick={() => copyToClipboard('20-00000000-0')} />
+                <div className="p-10 flex flex-col justify-center h-[calc(100%-80px)]">
+                  <div className="space-y-2 text-right">
+                    <span className="text-[9px] text-slate-300 font-black uppercase tracking-[0.3em]">IMPORTE TOTAL A ABONAR</span>
+                    <p className="text-6xl font-black text-slate-900 tracking-tighter tabular-nums">
+                      ${order.total?.toLocaleString('es-AR')}
+                    </p>
+                    <p className="text-[10px] text-emerald-600 font-black uppercase tracking-widest pt-2">
+                       (Incluye descuento por transferencia)
+                    </p>
                   </div>
                 </div>
+              </div>
 
-                <div className="flex flex-col">
-                  <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1">Importe a abonar</span>
-                  <span className="text-3xl font-black text-[#f0320a] tracking-tighter">${order.total?.toLocaleString()}</span>
+              {/* Advice Box */}
+              <div className="bg-blue-50/50 border border-blue-100 p-8 flex gap-6">
+                <FaInfoCircle className="text-blue-400 shrink-0" size={20} />
+                <div className="space-y-3">
+                  <h4 className="text-[11px] font-black text-blue-800 uppercase tracking-[0.2em] leading-none">IMPORTANTE</h4>
+                  <p className="text-[10px] text-blue-700/70 font-medium uppercase tracking-[0.05em] leading-relaxed">
+                    LAS TRANSFERENCIAS SON INMEDIATAS. SI UTILIZAS UN CAJERO MANUAL, RECUERDA QUE LA ACREDITACIÓN PUEDE DEMORAR HASTA 24HS HÁBILES.
+                  </p>
                 </div>
               </div>
-            </div>
-          </div>
+           </div>
 
-          {/* Important Info Alert */}
-          <div className="mt-16 p-6 rounded-2xl border border-blue-200 bg-blue-50/50 flex gap-4">
-            <FaInfoCircle className="text-blue-500 shrink-0 mt-1" size={24} />
-            <div className="text-sm md:text-base text-gray-700 leading-relaxed font-medium">
-              <h4 className="font-bold text-blue-800 mb-1 leading-snug">IMPORTANTE</h4>
-              <p>
-                Una vez realizado el pago recordá <b>subir el comprobante</b> utilizando el botón superior para que podamos procesar tu envío.
-                Las transferencias suelen acreditarse en el acto, pero los depósitos mediante cajero pueden demorar hasta 24hs hábiles.
-              </p>
-            </div>
-          </div>
         </div>
+
+        {/* Support Section */}
+        <div className="text-center py-10 opacity-40">
+           <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.5em] flex items-center justify-center gap-4">
+             <span className="w-10 h-[1px] bg-slate-200"></span>
+             ¿Necesitas Ayuda? Contacta por WhatsApp
+             <span className="w-10 h-[1px] bg-slate-200"></span>
+           </p>
+        </div>
+
       </div>
     </div>
   );
