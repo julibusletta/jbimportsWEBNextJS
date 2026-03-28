@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef, FormEvent } from 'react';
-import { FaShoppingCart, FaBars, FaTimes, FaSearch, FaUser, FaChevronDown } from 'react-icons/fa';
+import { FaShoppingCart, FaBars, FaTimes, FaSearch, FaUser, FaChevronDown, FaUserCircle, FaShoppingBag, FaFileInvoice, FaHeart, FaSignOutAlt } from 'react-icons/fa';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useSession, signOut } from "next-auth/react";
@@ -192,41 +192,52 @@ export default function Header() {
               </button>
 
               {isUserMenuOpen && (
-                <div className="absolute right-0 top-full mt-2 w-56 bg-white shadow-[0_10px_30px_rgba(0,0,0,0.15)] rounded-lg py-2 z-[200] border border-gray-100 animate-dropdown">
+                <div className="absolute right-0 top-full mt-3 w-64 bg-white shadow-[0_20px_50px_rgba(0,0,0,0.15)] rounded-none py-0 z-[200] border border-slate-100 animate-in fade-in slide-in-from-top-2 duration-300">
                   {session ? (
-                    <>
-                      <div className="px-5 py-3 border-b border-gray-50 mb-1">
-                        <p className="text-gray-400 text-sm font-normal m-0 italic">Conectado como {session.user?.email}</p>
+                    <div className="flex flex-col">
+                      {/* User Badge Info */}
+                      <div className="px-6 py-5 bg-slate-50/50 border-b border-slate-100">
+                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1">Cuenta Activa</p>
+                        <p className="text-[13px] font-black text-slate-900 truncate m-0">{session.user?.email}</p>
                       </div>
+
+                      {/* Menu Links */}
                       {[
-                        { label: 'Mi cuenta', href: '/mi-cuenta' },
-                        { label: 'Mis Compras', href: '/mi-cuenta/compras' },
-                        { label: 'Facturas', href: '/mi-cuenta/facturas' },
-                        { label: 'Favoritos', href: '/mi-cuenta/favoritos' },
+                        { label: 'Mi Perfil', href: '/mi-cuenta', icon: <FaUserCircle size={14} /> },
+                        { label: 'Mis Compras', href: '/mi-cuenta/compras', icon: <FaShoppingBag size={14} /> },
+                        { label: 'Facturas', href: '/mi-cuenta/facturas', icon: <FaFileInvoice size={14} /> },
+                        { label: 'Favoritos', href: '/mi-cuenta/favoritos', icon: <FaHeart size={14} /> },
                       ].map((item) => (
                         <Link
                           key={item.label}
                           href={item.href}
-                          className="block px-5 py-2.5 text-gray-700 hover:text-orange-600 hover:bg-gray-50 text-sm font-medium transition-all no-underline"
+                          className="flex items-center gap-4 px-6 py-4 text-slate-500 hover:text-blue-600 hover:bg-white transition-all no-underline group border-b border-slate-50 last:border-0"
                           onClick={() => setIsUserMenuOpen(false)}
                         >
-                          {item.label}
+                          <span className="text-slate-300 group-hover:text-blue-600 transition-colors">
+                            {item.icon}
+                          </span>
+                          <span className="text-[10px] font-black uppercase tracking-[0.2em]">{item.label}</span>
                         </Link>
                       ))}
-                      <div className="border-t border-gray-50 mt-1 pt-1">
+
+                      {/* Sign Out Action */}
+                      <div className="bg-slate-50 px-2 py-2">
                         <button
                           onClick={() => { signOut(); setIsUserMenuOpen(false); }}
-                          className="w-full text-left px-5 py-2.5 text-gray-700 hover:text-red-500 hover:bg-gray-50 text-sm font-medium transition-all bg-transparent border-0 cursor-pointer"
+                          className="w-full flex items-center gap-4 px-4 py-3 text-slate-400 hover:text-red-500 hover:bg-white transition-all bg-transparent border-0 cursor-pointer group"
                         >
-                          Salir
+                          <FaSignOutAlt size={14} className="group-hover:translate-x-1 transition-transform" />
+                          <span className="text-[10px] font-black uppercase tracking-[0.2em]">Cerrar Sesión</span>
                         </button>
                       </div>
-                    </>
+                    </div>
                   ) : (
-                    <div className="p-4">
+                    <div className="p-6">
+                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4 text-center">Inicia sesión para gestionar tus compras</p>
                       <button
                         onClick={() => { openLogin(); setIsUserMenuOpen(false); }}
-                        className="block w-full text-center bg-blue-600 text-white py-2.5 rounded-lg font-bold text-sm hover:bg-blue-700 transition-colors no-underline border-0 cursor-pointer"
+                        className="block w-full text-center bg-blue-600 text-white py-4 rounded-none font-black text-[10px] uppercase tracking-[0.3em] hover:bg-slate-900 transition-all no-underline border-0 cursor-pointer shadow-lg shadow-blue-200"
                       >
                         INGRESAR
                       </button>
