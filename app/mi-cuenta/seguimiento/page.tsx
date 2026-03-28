@@ -2,7 +2,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { db } from "@/lib/db";
 import { redirect } from "next/navigation";
-import { FaTruck, FaBox, FaCheckCircle, FaMapMarkerAlt, FaCircle } from 'react-icons/fa';
+import { FaTruck, FaBox, FaCheckCircle, FaMapMarkerAlt, FaCircle, FaInfoCircle, FaCalendarAlt } from 'react-icons/fa';
 
 export default async function SeguimientoPage() {
   const session = await getServerSession(authOptions);
@@ -15,7 +15,7 @@ export default async function SeguimientoPage() {
   const activeOrder = userOrders.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())[0];
 
   const orderDate = new Date(activeOrder?.createdAt || Date.now());
-  const formatDate = (date: Date) => date.toLocaleDateString('es-AR', { day: 'numeric', month: 'short', year: 'numeric' });
+  const formatDate = (date: Date) => date.toLocaleDateString('es-AR', { day: 'numeric', month: 'long', year: 'numeric' });
   const estimatedArrival = new Date(orderDate.getTime() + 5 * 24 * 60 * 60 * 1000);
 
   const steps = [
@@ -27,52 +27,58 @@ export default async function SeguimientoPage() {
   ];
 
   return (
-    <div className="animate-in fade-in duration-700">
-      <div className="mb-14 flex flex-col sm:flex-row sm:items-end justify-between gap-6 border-b-2 border-slate-50 pb-10">
-        <div>
-          <h1 className="text-4xl font-black text-slate-900 tracking-tighter uppercase">Seguimiento</h1>
-          <p className="text-slate-500 text-sm mt-3 font-bold uppercase tracking-widest opacity-60">Rastreo en tiempo real de tus envíos activos.</p>
+    <div className="animate-in fade-in duration-500">
+      
+      {/* Page Header */}
+      <div className="mb-12">
+        <div className="flex items-center gap-3 mb-2">
+          <div className="w-8 h-[2px] bg-blue-600"></div>
+          <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em]">Logística de Envíos</span>
         </div>
+        <h1 className="text-3xl font-black text-slate-900 tracking-tight uppercase m-0">Estado de Seguimiento</h1>
+        <p className="text-slate-500 text-[11px] mt-2 font-bold uppercase tracking-[0.1em] opacity-40">Rastreo en tiempo real y detalles del despacho.</p>
       </div>
 
       {activeOrder ? (
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-12 items-start">
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-10 items-start">
+          
           {/* Tracking Status Card */}
           <div className="xl:col-span-2 space-y-10">
-            <div className="bg-white border-2 border-slate-200 rounded-none p-10 relative overflow-hidden shadow-2xl shadow-slate-200/50">
-               <div className="flex items-center gap-6 mb-16 border-b border-slate-50 pb-10">
-                   <div className="w-16 h-16 bg-blue-600 text-white rounded-none flex items-center justify-center shadow-[0_15px_40px_rgba(37,99,235,0.3)] shrink-0">
-                     <FaTruck size={28} />
+            <div className="bg-white border border-[#f1f5f9] p-10 shadow-sm">
+               
+               <div className="flex items-center gap-6 mb-12 pb-8 border-b border-[#f1f5f9]">
+                   <div className="w-14 h-14 bg-[#f8fafc] text-blue-600 rounded-full flex items-center justify-center border border-blue-50">
+                     <FaTruck size={24} />
                    </div>
                    <div>
-                     <h3 className="text-2xl font-black text-slate-900 leading-none tracking-tight uppercase">En Camino</h3>
-                     <p className="text-slate-400 text-[11px] font-black uppercase tracking-[0.2em] mt-3">Llegada estimada: <span className="text-blue-600 font-black ml-1">{formatDate(estimatedArrival)}</span></p>
+                     <h3 className="text-xl font-black text-slate-900 uppercase tracking-tight">Estado: En Preparación</h3>
+                     <p className="text-slate-400 text-[10px] font-bold uppercase tracking-[0.15em] mt-2">Llegada estimada aproximada: <span className="text-blue-600 font-black ml-1 uppercase">{formatDate(estimatedArrival)}</span></p>
                    </div>
                </div>
 
-               {/* Stepper Logic with Flex for Stability */}
-               <div className="relative pl-2">
-                  {/* Vertical Line - Adjusted for new flex layout */}
-                  <div className="absolute left-[13px] top-4 bottom-4 w-0.5 bg-slate-100" />
+               {/* Timeline Stepper - Minimalist */}
+               <div className="relative pl-4 mt-8">
+                  {/* Vertical Line */}
+                  <div className="absolute left-[23px] top-6 bottom-6 w-[1px] bg-[#f1f5f9]" />
                   
-                  <div className="space-y-16">
+                  <div className="space-y-12">
                     {steps.map((step, idx) => (
-                      <div key={idx} className="flex items-start gap-8 relative z-10 group">
+                      <div key={idx} className="flex items-start gap-8 relative z-10">
                         {/* Dot Container */}
                         <div className="shrink-0 flex items-center justify-center pt-1.5">
-                           <div className={`w-7 h-7 rounded-none flex items-center justify-center transition-all duration-500 group-hover:scale-125 ${
-                             step.status === 'completed' ? 'bg-green-500 text-white shadow-lg shadow-green-500/20' : 
-                             step.status === 'current' ? 'bg-blue-600 text-white shadow-[0_10px_30px_rgba(37,99,235,0.4)] ring-4 ring-blue-50' : 
-                             'bg-white border-2 border-slate-200 text-slate-300'
+                           <div className={`w-5 h-5 rounded-full flex items-center justify-center transition-all ${
+                             step.status === 'completed' ? 'bg-emerald-500 text-white' : 
+                             step.status === 'current' ? 'bg-blue-600 text-white ring-8 ring-blue-50' : 
+                             'bg-white border border-slate-200 text-slate-200'
                            }`}>
-                             {step.status === 'completed' ? <FaCheckCircle size={16} /> : <FaCircle size={10} />}
+                             {step.status === 'completed' ? <FaCheckCircle size={10} /> : <FaCircle size={6} />}
                            </div>
                         </div>
                         
-                        <div className="flex-1 flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
-                          <p className={`font-black text-lg tracking-tight ${step.status === 'pending' ? 'text-slate-300' : 'text-slate-900'}`}>{step.label}</p>
-                          <p className={`text-xs font-black uppercase tracking-[0.2em] px-4 py-1.5 rounded-none border-b-2 border-transparent transition-all ${
-                            step.status === 'pending' ? 'text-slate-200' : 'text-slate-400 bg-slate-50 border-slate-200/50 italic opacity-80'
+                        <div className="flex-1 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                          <p className={`font-black text-[13px] uppercase tracking-wider ${step.status === 'pending' ? 'text-slate-300' : 'text-slate-900'}`}>{step.label}</p>
+                          <p className={`text-[10px] font-black uppercase tracking-[0.15em] px-3 py-1 border border-transparent ${
+                            step.status === 'pending' ? 'text-slate-200' : 'text-slate-400 bg-[#f8fafc] border-[#f1f5f9]'
                           }`}>{step.date}</p>
                         </div>
                       </div>
@@ -84,46 +90,71 @@ export default async function SeguimientoPage() {
 
           {/* Details Sidebar */}
           <div className="space-y-8">
-             <div className="bg-white border-2 border-slate-200 rounded-none p-10 shadow-xl shadow-slate-200/40">
-                <div className="mb-10 p-6 bg-slate-900 rounded-none border-l-[12px] border-blue-600 shadow-xl -mx-4">
-                   <p className="text-[10px] font-black text-blue-400 uppercase tracking-[0.4em] mb-2 opacity-60">Nro Guía Oficial</p>
-                   <p className="text-sm font-black text-white uppercase tracking-widest select-all">JB-{activeOrder.id.substring(0, 15).toUpperCase()}</p>
+             <div className="bg-white border border-[#f1f5f9] p-8 shadow-sm">
+                
+                {/* Official Guide Tag */}
+                <div className="mb-10 py-4 px-6 bg-slate-50 border-l-4 border-blue-600">
+                   <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.4em] mb-1 opacity-60">ID de Seguimiento</p>
+                   <p className="text-[12px] font-black text-slate-900 uppercase tracking-widest select-all">JB-{activeOrder.id.substring(0, 8).toUpperCase()}</p>
                 </div>
 
-                <h4 className="text-[11px] font-black text-slate-900 uppercase tracking-[0.4em] mb-10 pb-4 border-b-2 border-slate-100 flex items-center gap-3">
-                   <span className="w-2 h-2 bg-blue-600 rounded-full"></span>
-                   Detalle del Envío
-                </h4>
                 <div className="space-y-10">
-                   <div className="flex gap-5">
-                      <div className="w-10 h-10 bg-slate-50 rounded-none flex items-center justify-center flex-shrink-0">
-                        <FaBox className="text-slate-400" size={18} />
-                      </div>
-                      <div>
-                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5 opacity-60">Producto</p>
-                        <p className="text-lg font-black text-slate-900 leading-tight tracking-tight">Apple iPhone 15 Pro Max 256GB - Titanium</p>
+                   {/* Product Section */}
+                   <div>
+                      <h4 className="text-[11px] font-black text-slate-900 uppercase tracking-[0.4em] mb-4 flex items-center gap-3">
+                         <FaBox className="text-blue-600" size={14} /> Contenido
+                      </h4>
+                      <div className="pl-7">
+                        <p className="text-[12px] font-black text-slate-900 uppercase leading-tight tracking-tight">
+                          {activeOrder.items[0]?.name || 'Producto en proceso'}
+                        </p>
+                        {activeOrder.items.length > 1 && (
+                          <p className="text-[9px] text-slate-400 font-bold mt-1 uppercase tracking-widest">+ {activeOrder.items.length - 1} producto(s) extra</p>
+                        )}
                       </div>
                    </div>
-                   <div className="flex gap-5">
-                      <div className="w-10 h-10 bg-slate-50 rounded-none flex items-center justify-center flex-shrink-0">
-                        <FaMapMarkerAlt className="text-blue-500" size={18} />
+
+                   {/* Delivery Point */}
+                   <div>
+                      <h4 className="text-[11px] font-black text-slate-900 uppercase tracking-[0.4em] mb-4 flex items-center gap-3">
+                         <FaMapMarkerAlt className="text-blue-600" size={14} /> Entrega
+                      </h4>
+                      <div className="pl-7">
+                        <p className="text-[13px] font-black text-slate-900 uppercase tracking-tight">
+                          {(session.user as any).address?.street} {(session.user as any).address?.number}
+                        </p>
+                        <p className="text-[11px] mt-1 text-slate-400 font-bold uppercase tracking-[0.1em]">
+                          {(session.user as any).address?.city}, {(session.user as any).address?.state}
+                        </p>
+                        <p className="text-[11px] mt-2 text-blue-600 font-black">C.P. {(session.user as any).address?.zip}</p>
                       </div>
-                      <div>
-                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5 opacity-60">Punto de Entrega</p>
-                        <p className="text-base font-bold text-slate-900 leading-relaxed italic">{(session.user as any).address?.street} {(session.user as any).address?.number}<br /><span className="text-slate-400 not-italic">{(session.user as any).address?.city}, {(session.user as any).address?.state}</span></p>
-                      </div>
+                   </div>
+                </div>
+
+                <div className="mt-12 pt-8 border-t border-[#f1f5f9]">
+                   <div className="flex items-center gap-3 text-slate-400">
+                      <FaInfoCircle size={12} />
+                      <p className="text-[9px] font-black uppercase tracking-[0.1em] m-0">Actualizado hace unos instantes</p>
                    </div>
                 </div>
              </div>
+
+             <div className="bg-[#f8fafc] border border-[#f1f5f9] p-8 flex items-center gap-6">
+                <FaCalendarAlt size={20} className="text-slate-200" />
+                <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.1em] leading-relaxed">
+                  Recuerda tener tu DNI a mano al recibir o retirar tu compra.
+                </p>
+             </div>
           </div>
+
         </div>
       ) : (
-        <div className="bg-slate-50/50 border-2 border-slate-100 border-dashed rounded-none p-20 text-center">
-            <div className="w-20 h-20 bg-white rounded-none border-2 border-slate-100 flex items-center justify-center text-slate-200 mx-auto mb-6 shadow-sm">
-              <FaTruck size={32} />
+        <div className="bg-[#f8fafc] border border-dashed border-[#e2e8f0] p-24 text-center">
+            <div className="w-16 h-16 bg-white border border-[#f1f5f9] rounded-full flex items-center justify-center text-slate-200 mx-auto mb-8 shadow-sm">
+              <FaTruck size={24} />
             </div>
-            <h3 className="text-slate-900 font-black text-xl mb-4 uppercase tracking-tighter">No tienes envíos activos</h3>
-            <p className="text-slate-400 text-sm max-w-xs mx-auto mb-8 font-bold uppercase tracking-widest opacity-60">Cuando realices una compra, podrás ver el estado del envío en tiempo real desde aquí.</p>
+            <h3 className="text-slate-900 font-black text-xl mb-4 uppercase tracking-tighter">Sin envíos registrados</h3>
+            <p className="text-slate-400 text-[11px] max-w-xs mx-auto mb-8 font-bold uppercase tracking-widest opacity-40">Podrás realizar el seguimiento de tus productos una vez que el pago sea procesado.</p>
         </div>
       )}
     </div>
