@@ -28,7 +28,7 @@ export default async function MiCuentaPage() {
           <p className="text-slate-500 text-sm mt-4 font-bold uppercase tracking-[0.1em] opacity-60">Resumen de perfil, envíos y actividad reciente.</p>
         </div>
         <div className="hidden sm:block">
-          <div className="px-6 py-3 bg-slate-900 text-white rounded-none text-[10px] font-black uppercase tracking-[0.3em] shadow-xl">
+          <div className="px-5 py-2 bg-slate-50 text-slate-500 border border-slate-100 rounded-none text-[9px] font-black uppercase tracking-[0.3em] shadow-sm">
             Sincronizado: {new Date().toLocaleDateString('es-AR')}
           </div>
         </div>
@@ -51,7 +51,7 @@ export default async function MiCuentaPage() {
             ].map((field) => (
               <div key={field.label} className="bg-white p-6 rounded-none border-2 border-slate-100 transition-all hover:border-slate-900 group">
                 <label className="block text-[9px] font-black text-slate-400 uppercase tracking-[0.4em] mb-2 group-hover:text-blue-600 transition-colors">{field.label}</label>
-                <p className="text-slate-900 font-black text-base m-0 tracking-tight uppercase italic">{field.value}</p>
+                <p className="text-slate-900 font-black text-base m-0 tracking-tight uppercase">{field.value}</p>
               </div>
             ))}
           </div>
@@ -66,22 +66,21 @@ export default async function MiCuentaPage() {
             <h2 className="text-[12px] font-black text-slate-900 uppercase tracking-[0.4em]">Logística de Entrega</h2>
           </div>
           {(session.user as any).address ? (
-            <div className="bg-slate-900 text-white p-10 rounded-none border-l-[12px] border-blue-600 shadow-2xl h-[calc(100%-60px)] flex flex-col justify-between relative overflow-hidden group">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 -mr-16 -mt-16 rotate-45 group-hover:scale-110 transition-transform duration-1000"></div>
+            <div className="bg-white text-slate-900 p-8 rounded-none border border-slate-200 shadow-sm h-[calc(100%-60px)] flex flex-col justify-between relative group">
               <div>
-                <p className="text-3xl font-black leading-none tracking-tighter uppercase italic">
+                <p className="text-2xl font-black leading-tight tracking-tighter uppercase">
                   {(session.user as any).address.street} {(session.user as any).address.number}
                 </p>
-                <p className="text-slate-400 text-sm mt-6 font-black uppercase tracking-[0.2em]">
+                <p className="text-slate-500 text-xs mt-4 font-black uppercase tracking-[0.2em]">
                   {(session.user as any).address.city}, {(session.user as any).address.state}
                 </p>
-                <div className="mt-8 inline-block bg-blue-600 text-white px-6 py-2 text-[10px] font-black uppercase tracking-[0.3em] shadow-lg">
+                <div className="mt-8 inline-block bg-blue-600 text-white px-5 py-2 text-[10px] font-black uppercase tracking-[0.3em] shadow-md">
                    C.P. {(session.user as any).address.zip}
                 </div>
               </div>
-              <div className="mt-12 pt-8 border-t border-white/10">
-                <button className="bg-transparent border-0 p-0 text-white font-black text-[10px] uppercase tracking-[0.4em] hover:text-blue-400 cursor-pointer flex items-center gap-3 transition-colors">
-                  <span className="w-6 h-[2px] bg-blue-600 group-hover:w-10 transition-all"></span> Actualizar Domicilio
+              <div className="mt-10 pt-6 border-t border-slate-100">
+                <button className="bg-transparent border-0 p-0 text-slate-900 font-black text-[9px] uppercase tracking-[0.4em] hover:text-blue-600 cursor-pointer flex items-center gap-3 transition-colors">
+                  <span className="w-5 h-[1px] bg-blue-600 group-hover:w-8 transition-all"></span> Actualizar Domicilio
                 </button>
               </div>
             </div>
@@ -104,7 +103,7 @@ export default async function MiCuentaPage() {
            </Link>
         </div>
         {latestOrder ? (
-          <div className="border-4 border-slate-900 shadow-2xl">
+          <div className="border border-slate-200 shadow-sm">
             <OrderCard order={JSON.parse(JSON.stringify(latestOrder))} />
           </div>
         ) : (
