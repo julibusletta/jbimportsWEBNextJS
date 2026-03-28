@@ -30,7 +30,7 @@ export default async function SeguimientoPage() {
     <div className="animate-in fade-in duration-500">
       
       {/* Page Header */}
-      <div className="mb-12">
+      <div className="mb-14">
         <div className="flex items-center gap-3 mb-2">
           <div className="w-8 h-[2px] bg-blue-600"></div>
           <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em]">Logística de Envíos</span>
@@ -40,7 +40,7 @@ export default async function SeguimientoPage() {
       </div>
 
       {activeOrder ? (
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-10 items-start">
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-12 items-start">
           
           {/* Tracking Status Card */}
           <div className="xl:col-span-2 space-y-10">
@@ -63,15 +63,15 @@ export default async function SeguimientoPage() {
                   
                   <div className="space-y-12">
                     {steps.map((step, idx) => (
-                      <div key={idx} className="flex items-start gap-8 relative z-10">
+                      <div key={idx} className="flex items-center gap-8 relative z-10 transition-all">
                         {/* Dot Container */}
-                        <div className="shrink-0 flex items-center justify-center pt-1.5">
-                           <div className={`w-5 h-5 rounded-full flex items-center justify-center transition-all ${
+                        <div className="shrink-0 flex items-center justify-center">
+                           <div className={`w-6 h-6 rounded-full flex items-center justify-center transition-all ${
                              step.status === 'completed' ? 'bg-emerald-500 text-white' : 
-                             step.status === 'current' ? 'bg-blue-600 text-white ring-8 ring-blue-50' : 
+                             step.status === 'current' ? 'bg-blue-600 text-white ring-8 ring-blue-100/30' : 
                              'bg-white border border-slate-200 text-slate-200'
                            }`}>
-                             {step.status === 'completed' ? <FaCheckCircle size={10} /> : <FaCircle size={6} />}
+                             {step.status === 'completed' ? <FaCheckCircle size={12} /> : <FaCircle size={6} />}
                            </div>
                         </div>
                         
@@ -88,45 +88,45 @@ export default async function SeguimientoPage() {
             </div>
           </div>
 
-          {/* Details Sidebar */}
-          <div className="space-y-8">
-             <div className="bg-white border border-[#f1f5f9] p-8 shadow-sm">
+          {/* Details Sidebar - With More Spacing ("Aire") */}
+          <div className="space-y-10">
+             <div className="bg-white border border-[#f1f5f9] p-10 shadow-sm space-y-14">
                 
                 {/* Official Guide Tag */}
-                <div className="mb-10 py-4 px-6 bg-slate-50 border-l-4 border-blue-600">
-                   <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.4em] mb-1 opacity-60">ID de Seguimiento</p>
-                   <p className="text-[12px] font-black text-slate-900 uppercase tracking-widest select-all">JB-{activeOrder.id.substring(0, 8).toUpperCase()}</p>
+                <div className="py-6 px-8 bg-slate-50 border-l-4 border-blue-600">
+                   <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.4em] mb-2 opacity-60">ID de Seguimiento</p>
+                   <p className="text-[14px] font-black text-slate-900 uppercase tracking-widest select-all">JB-{activeOrder.id.substring(0, 8).toUpperCase()}</p>
                 </div>
 
-                <div className="space-y-10">
+                <div className="space-y-16">
                    {/* Product Section */}
-                   <div>
-                      <h4 className="text-[11px] font-black text-slate-900 uppercase tracking-[0.4em] mb-4 flex items-center gap-3">
-                         <FaBox className="text-blue-600" size={14} /> Contenido
+                   <div className="pb-2">
+                      <h4 className="text-[11px] font-black text-slate-900 uppercase tracking-[0.4em] mb-5 flex items-center gap-3">
+                         <FaBox className="text-blue-600" size={14} /> Contenido del Envío
                       </h4>
                       <div className="pl-7">
-                        <p className="text-[12px] font-black text-slate-900 uppercase leading-tight tracking-tight">
+                        <p className="text-[15px] font-black text-slate-900 uppercase leading-relaxed tracking-tight">
                           {activeOrder.items[0]?.name || 'Producto en proceso'}
                         </p>
                         {activeOrder.items.length > 1 && (
-                          <p className="text-[9px] text-slate-400 font-bold mt-1 uppercase tracking-widest">+ {activeOrder.items.length - 1} producto(s) extra</p>
+                          <p className="text-[10px] text-slate-400 font-bold mt-2 uppercase tracking-widest">+ {activeOrder.items.length - 1} producto(s) adicionales</p>
                         )}
                       </div>
                    </div>
 
                    {/* Delivery Point */}
-                   <div>
-                      <h4 className="text-[11px] font-black text-slate-900 uppercase tracking-[0.4em] mb-4 flex items-center gap-3">
-                         <FaMapMarkerAlt className="text-blue-600" size={14} /> Entrega
+                   <div className="pt-2">
+                      <h4 className="text-[11px] font-black text-slate-900 uppercase tracking-[0.4em] mb-5 flex items-center gap-3">
+                         <FaMapMarkerAlt className="text-blue-600" size={14} /> Punto de Entrega
                       </h4>
                       <div className="pl-7">
-                        <p className="text-[13px] font-black text-slate-900 uppercase tracking-tight">
+                        <p className="text-[15px] font-black text-slate-900 uppercase tracking-tight leading-relaxed">
                           {(session.user as any).address?.street} {(session.user as any).address?.number}
                         </p>
-                        <p className="text-[11px] mt-1 text-slate-400 font-bold uppercase tracking-[0.1em]">
+                        <p className="text-[11px] mt-2 text-slate-400 font-bold uppercase tracking-[0.1em]">
                           {(session.user as any).address?.city}, {(session.user as any).address?.state}
                         </p>
-                        <p className="text-[11px] mt-2 text-blue-600 font-black">C.P. {(session.user as any).address?.zip}</p>
+                        <p className="text-[12px] mt-4 text-blue-600 font-black tracking-widest">C.P. {(session.user as any).address?.zip}</p>
                       </div>
                    </div>
                 </div>
@@ -134,15 +134,15 @@ export default async function SeguimientoPage() {
                 <div className="mt-12 pt-8 border-t border-[#f1f5f9]">
                    <div className="flex items-center gap-3 text-slate-400">
                       <FaInfoCircle size={12} />
-                      <p className="text-[9px] font-black uppercase tracking-[0.1em] m-0">Actualizado hace unos instantes</p>
+                      <p className="text-[9px] font-black uppercase tracking-[0.15em] m-0">Sincronizado hace unos instantes</p>
                    </div>
                 </div>
              </div>
 
              <div className="bg-[#f8fafc] border border-[#f1f5f9] p-8 flex items-center gap-6">
                 <FaCalendarAlt size={20} className="text-slate-200" />
-                <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.1em] leading-relaxed">
-                  Recuerda tener tu DNI a mano al recibir o retirar tu compra.
+                <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.15em] leading-relaxed">
+                  Recuerda presentar tu DNI al momento de la entrega o retiro en sucursal.
                 </p>
              </div>
           </div>
@@ -153,8 +153,8 @@ export default async function SeguimientoPage() {
             <div className="w-16 h-16 bg-white border border-[#f1f5f9] rounded-full flex items-center justify-center text-slate-200 mx-auto mb-8 shadow-sm">
               <FaTruck size={24} />
             </div>
-            <h3 className="text-slate-900 font-black text-xl mb-4 uppercase tracking-tighter">Sin envíos registrados</h3>
-            <p className="text-slate-400 text-[11px] max-w-xs mx-auto mb-8 font-bold uppercase tracking-widest opacity-40">Podrás realizar el seguimiento de tus productos una vez que el pago sea procesado.</p>
+            <h3 className="text-slate-900 font-black text-xl mb-4 uppercase tracking-tighter">Sin envíos activos</h3>
+            <p className="text-slate-400 text-[11px] max-w-xs mx-auto mb-8 font-bold uppercase tracking-widest opacity-40">Tu historial de seguimiento aparecerá aquí una vez que el pedido sea despachado.</p>
         </div>
       )}
     </div>

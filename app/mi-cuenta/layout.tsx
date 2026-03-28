@@ -26,7 +26,7 @@ export default function AccountLayout({
   const userEmail = session?.user?.email || '';
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] flex flex-col items-center pt-32 pb-20">
+    <div className="min-h-screen bg-[#f8fafc] flex flex-col items-center pt-44 pb-20">
       <div className="max-w-7xl w-full px-4 sm:px-6 lg:px-8 flex-1">
         <div className="flex flex-col lg:flex-row gap-12">
           
