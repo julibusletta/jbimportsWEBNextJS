@@ -83,31 +83,31 @@ export default function OrderDetailView({ order, onBack, onAction, isPaying }: O
         {/* Main Content Side */}
         <div className="xl:col-span-2 space-y-16">
           {/* Status Section */}
-          <div className="bg-slate-50 border-2 border-slate-200 p-10 rounded-none flex flex-col md:flex-row justify-between items-center gap-8">
+          <div className="bg-white border border-slate-200 p-8 rounded-none flex flex-col md:flex-row justify-between items-center gap-8 shadow-sm">
             <div className="flex items-center gap-8">
-               <div className={`w-20 h-20 rounded-none flex items-center justify-center text-white ${
-                 isApprovedOrShipped ? 'bg-green-600 shadow-lg shadow-green-600/20' : 'bg-orange-500'
+               <div className={`w-16 h-16 rounded-none flex items-center justify-center border-2 ${
+                 isApprovedOrShipped ? 'border-green-600 text-green-600' : 'border-orange-500 text-orange-500'
                }`}>
-                  {isApprovedOrShipped ? <FaTruck size={32} /> : <FaShoppingBag size={32} />}
+                  {isApprovedOrShipped ? <FaTruck size={28} /> : <FaShoppingBag size={28} />}
                </div>
                <div>
-                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] mb-2opacity-60">Estado Actual</p>
-                  <h3 className={`text-2xl font-black uppercase tracking-tight ${isApprovedOrShipped ? 'text-green-600' : 'text-orange-500'}`}>
+                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] mb-1 opacity-60">Estado Actual</p>
+                  <h3 className={`text-xl font-black uppercase tracking-tight ${isApprovedOrShipped ? 'text-green-600' : 'text-orange-500'}`}>
                     {order.status === 'APPROVED' ? 'PAGO APROBADO' : order.status === 'SHIPPED' ? 'PEDIDO ENVIADO' : order.status === 'PENDING_REVIEW' ? 'PAGO EN REVISIÓN' : 'PENDIENTE DE PAGO'}
                   </h3>
                </div>
             </div>
-            <div className="md:text-right border-l-4 md:border-l-0 md:border-r-4 border-slate-200 pl-6 md:pl-0 md:pr-6">
-               <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] mb-2 opacity-60">Fecha de Operación</p>
-               <p className="text-xl font-bold text-slate-900 tracking-tight">
+            <div className="md:text-right md:border-r border-slate-200 md:pr-8 py-2">
+               <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] mb-1 opacity-60">Fecha de Operación</p>
+               <p className="text-lg font-bold text-slate-900 tracking-tight">
                  {new Date(order.createdAt).toLocaleDateString('es-AR', { day: 'numeric', month: 'long', year: 'numeric' })}
                </p>
             </div>
           </div>
 
           {/* Items Section */}
-          <div className="bg-white border-2 border-slate-100 p-1 rounded-none overflow-hidden">
-            <h3 className="text-[12px] font-black text-white bg-slate-900 p-6 uppercase tracking-[0.6em] m-0 mb-4 inline-block w-full">
+          <div className="bg-white border border-slate-200 p-1 rounded-none overflow-hidden shadow-sm">
+            <h3 className="text-[11px] font-black text-slate-900 bg-slate-50 p-6 uppercase tracking-[0.5em] m-0 mb-4 inline-block w-full border-b border-slate-100">
                Ítems en la Orden
             </h3>
             <div className="p-10 space-y-0">
@@ -122,7 +122,7 @@ export default function OrderDetailView({ order, onBack, onAction, isPaying }: O
                       <p className="text-[10px] text-slate-400 font-bold mt-4 uppercase tracking-[0.2em]">P. Unitario: <span className="text-slate-900 font-black ml-1">${item.price.toLocaleString()}</span></p>
                     </div>
                   </div>
-                  <p className="text-3xl font-black text-blue-600 tracking-tighter italic border-b-4 border-blue-500/10 mt-8 sm:mt-0">${(item.price * item.quantity).toLocaleString()}</p>
+                  <p className="text-2xl font-black text-slate-900 tracking-tighter mt-8 sm:mt-0">${(item.price * item.quantity).toLocaleString()}</p>
                 </div>
               ))}
             </div>
@@ -136,11 +136,10 @@ export default function OrderDetailView({ order, onBack, onAction, isPaying }: O
                <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.5em] flex items-center gap-5">
                   <FaMapMarkerAlt className="text-blue-600" size={18} /> Entrega Logística
                </h4>
-               <div className="bg-slate-900 text-white p-12 rounded-none border-l-[16px] border-blue-600 shadow-2xl relative overflow-hidden group">
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-blue-600/5 -mr-16 -mt-16 rounded-none rotate-45 group-hover:scale-150 transition-transform duration-1000"></div>
-                  <p className="text-2xl font-black m-0 leading-tight tracking-tighter uppercase">{order.shippingAddress.street}</p>
-                  <p className="text-xs text-slate-400 m-0 mt-6 font-black uppercase tracking-[0.2em] opacity-80">{order.shippingAddress.city}, {order.shippingAddress.state}</p>
-                  <div className="mt-12 inline-block bg-blue-600 text-white px-8 py-3 font-black text-[12px] uppercase tracking-[0.5em] shadow-lg">
+               <div className="bg-white text-slate-900 p-10 rounded-none border border-slate-200 shadow-sm relative group">
+                  <p className="text-xl font-black m-0 leading-tight tracking-tighter uppercase">{order.shippingAddress.street}</p>
+                  <p className="text-xs text-slate-500 m-0 mt-4 font-black uppercase tracking-[0.2em]">{order.shippingAddress.city}, {order.shippingAddress.state}</p>
+                  <div className="mt-10 inline-block bg-blue-600 text-white px-6 py-2 font-black text-[11px] uppercase tracking-[0.4em] shadow-lg">
                     C.P. {order.shippingAddress.zip}
                   </div>
                </div>
@@ -151,19 +150,19 @@ export default function OrderDetailView({ order, onBack, onAction, isPaying }: O
               <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.5em] flex items-center gap-5">
                 <FaCreditCard className="text-green-600" size={18} /> Resumen de Liquidación
               </h4>
-              <div className="bg-white border-2 border-slate-900 p-12 shadow-xl">
-                 <div className="space-y-8">
+               <div className="bg-white border border-slate-200 p-10 shadow-sm">
+                 <div className="space-y-6">
                     <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-[0.2em]">
                        <span className="text-slate-400">Neto Productos</span>
-                       <span className="text-slate-900 text-base">${subtotal.toLocaleString()}</span>
+                       <span className="text-slate-900 text-base font-bold">${subtotal.toLocaleString()}</span>
                     </div>
                     <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-[0.2em]">
                        <span className="text-slate-400">Logística ({order.shippingAddress?.shippingMethod || 'Standard'})</span>
-                       <span className="text-green-600 text-base">{shippingCost === 0 ? 'SIN CARGO' : `$${shippingCost.toLocaleString()}`}</span>
+                       <span className="text-green-600 text-base font-bold">{shippingCost === 0 ? 'SIN CARGO' : `$${shippingCost.toLocaleString()}`}</span>
                     </div>
-                    <div className="pt-12 mt-12 border-t-4 border-slate-900 flex flex-col items-end">
-                       <span className="text-[11px] font-black text-slate-900 uppercase tracking-[0.4em] mb-4">Total Final</span>
-                       <span className="text-5xl font-black text-blue-600 tracking-tighter leading-none italic">${order.total.toLocaleString()}</span>
+                    <div className="pt-8 mt-8 border-t border-slate-200 flex flex-col items-end">
+                       <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] mb-2">Total Final</span>
+                       <span className="text-4xl font-black text-slate-900 tracking-tighter leading-none">${order.total.toLocaleString()}</span>
                     </div>
                  </div>
               </div>

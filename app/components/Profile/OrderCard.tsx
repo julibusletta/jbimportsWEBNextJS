@@ -93,7 +93,7 @@ export default function OrderCard({ order, onViewDetail }: OrderCardProps) {
   const isApprovedOrShipped = ['APPROVED', 'SHIPPED'].includes(order.status);
 
   return (
-    <div className="flex flex-col gap-0 border-2 border-slate-900 rounded-none overflow-hidden transition-all duration-300 shadow-xl shadow-slate-200/40 hover:bg-slate-50">
+    <div className="flex flex-col gap-0 border border-slate-200 rounded-none overflow-hidden transition-all duration-300 shadow-sm hover:shadow-md hover:border-slate-300 bg-white">
       <div className="p-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 transition-all relative">
         <div className="flex items-center gap-6">
           <div className="w-16 h-16 rounded-none flex items-center justify-center border bg-slate-50 border-slate-100 text-slate-400">
@@ -106,10 +106,10 @@ export default function OrderCard({ order, onViewDetail }: OrderCardProps) {
               </p>
               <span className={`px-3 py-1 rounded-none text-[9px] font-black uppercase tracking-[0.3em] border ${
                 order.status === 'APPROVED' || order.status === 'SHIPPED' 
-                  ? 'bg-green-600 text-white border-green-500 shadow-lg shadow-green-600/20' 
+                  ? 'bg-green-50 text-green-600 border-green-200' 
                   : order.status === 'PENDING_REVIEW'
-                  ? 'bg-blue-600 text-white border-blue-500'
-                  : 'bg-orange-500 text-white border-orange-400'
+                  ? 'bg-blue-50 text-blue-600 border-blue-200'
+                  : 'bg-orange-50 text-orange-500 border-orange-200'
               }`}>
                 {order.status === 'APPROVED' ? 'PAGO APROBADO' : order.status === 'SHIPPED' ? 'ENVIADO' : order.status === 'PENDING_REVIEW' ? 'EN REVISIÓN' : 'PENDIENTE'}
               </span>
@@ -121,18 +121,18 @@ export default function OrderCard({ order, onViewDetail }: OrderCardProps) {
         </div>
 
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between w-full md:w-auto gap-8 sm:gap-14 mt-6 md:mt-0">
-          <div className="text-left md:text-right flex flex-col justify-center border-l-4 md:border-l-0 md:border-r-4 border-blue-600 pl-4 md:pl-0 md:pr-4 py-1">
+          <div className="text-left md:text-right flex flex-col justify-center border-l md:border-l-0 md:border-r border-slate-200 pl-4 md:pl-0 md:pr-4 py-1">
             <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] mb-1 opacity-60">Total abonado</p>
-            <p className="text-2xl font-black tracking-tighter text-slate-900">${order.total.toLocaleString()}</p>
+            <p className="text-xl font-black tracking-tighter text-slate-900">${order.total.toLocaleString()}</p>
           </div>
           
           <div className="flex flex-wrap items-center gap-4">
             {/* View Detail Button */}
             <button 
               onClick={handleViewDetail}
-              className="flex items-center gap-3 px-6 py-4 rounded-none border-2 border-slate-900 bg-slate-50 text-slate-900 hover:bg-slate-900 hover:text-white transition-all font-black text-[10px] uppercase tracking-[0.4em] cursor-pointer shadow-xl active:scale-95"
+              className="flex items-center gap-3 px-5 py-3 rounded-none border border-slate-200 bg-white text-slate-900 hover:bg-slate-50 transition-all font-black text-[9px] uppercase tracking-[0.3em] cursor-pointer shadow-sm active:scale-95"
             >
-              <FaRegEye size={14} />
+              <FaRegEye size={12} />
               <span>Ver Detalle</span>
             </button>
 
@@ -141,9 +141,9 @@ export default function OrderCard({ order, onViewDetail }: OrderCardProps) {
               <button 
                 onClick={handleAction}
                 disabled={isPaying}
-                className="flex items-center gap-3 px-6 py-4 rounded-none transition-all font-black text-[10px] uppercase tracking-[0.4em] cursor-pointer shadow-xl active:scale-95 disabled:opacity-50 bg-blue-600 text-white border-blue-500 hover:bg-blue-700"
+                className="flex items-center gap-3 px-5 py-3 rounded-none transition-all font-black text-[9px] uppercase tracking-[0.3em] cursor-pointer shadow-sm active:scale-95 disabled:opacity-50 bg-blue-600 text-white hover:bg-blue-700"
               >
-                {isPaying ? <FaSpinner className="animate-spin" size={14} /> : order.paymentMethod === 'TRANSFERENCIA' ? <FaUpload size={14} /> : <FaCreditCard size={14} />}
+                {isPaying ? <FaSpinner className="animate-spin" size={12} /> : order.paymentMethod === 'TRANSFERENCIA' ? <FaUpload size={12} /> : <FaCreditCard size={12} />}
                 <span>
                   {isPaying ? 'Procesando...' : 
                    isReview ? 'Comprobante' : 
@@ -155,9 +155,9 @@ export default function OrderCard({ order, onViewDetail }: OrderCardProps) {
             {isApprovedOrShipped && (
               <Link 
                 href={`/mi-cuenta/seguimiento?orderId=${order.id}`}
-                className="flex items-center gap-3 px-6 py-4 rounded-none bg-slate-900 text-white border-2 border-slate-900 hover:bg-slate-800 transition-all font-black text-[10px] uppercase tracking-[0.4em] cursor-pointer shadow-xl active:scale-95 no-underline"
+                className="flex items-center gap-3 px-5 py-3 rounded-none bg-slate-900 text-white hover:bg-slate-800 transition-all font-black text-[9px] uppercase tracking-[0.3em] cursor-pointer shadow-sm active:scale-95 no-underline"
               >
-                <FaTruck size={14} />
+                <FaTruck size={12} />
                 <span>Rastrear</span>
               </Link>
             )}
