@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { FaShoppingBag, FaChevronDown, FaChevronUp, FaRegEye, FaCreditCard, FaTruck, FaSpinner, FaUpload, FaMapMarkerAlt, FaCircle } from 'react-icons/fa';
+import { FaShoppingBag, FaChevronRight, FaRegEye, FaCreditCard, FaTruck, FaSpinner, FaUpload, FaMapMarkerAlt, FaCircle, FaHistory } from 'react-icons/fa';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
@@ -37,7 +37,8 @@ export default function OrderCard({ order, onViewDetail }: OrderCardProps) {
   const router = useRouter();
   const [isPaying, setIsPaying] = useState(false);
 
-  const handleAction = async () => {
+  const handleAction = async (e: React.MouseEvent) => {
+    e.stopPropagation();
     if (order.paymentMethod === 'TRANSFERENCIA') {
       router.push(`/checkout/transfer/${order.id}`);
       return;
@@ -92,62 +93,79 @@ export default function OrderCard({ order, onViewDetail }: OrderCardProps) {
   const isReview = order.status === 'PENDING_REVIEW';
   const isApprovedOrShipped = ['APPROVED', 'SHIPPED'].includes(order.status);
 
+  // Subtle Status Styling
+  const getStatusStyles = (status: string) => {
+    switch (status) {
+      case 'APPROVED':
+      case 'SHIPPED':
+        return 'bg-emerald-50 text-emerald-600 border-emerald-100';
+      case 'PENDING_REVIEW':
+        return 'bg-blue-50 text-blue-500 border-blue-100';
+      case 'CANCELLED':
+        return 'bg-red-50 text-red-400 border-red-100';
+      default:
+        return 'bg-slate-50 text-slate-500 border-slate-100';
+    }
+  };
+
+  const getStatusLabel = (status: string) => {
+    switch (status) {
+      case 'APPROVED': return 'Pago Aprobado';
+      case 'SHIPPED': return 'Pedido Enviado';
+      case 'PENDING_REVIEW': return 'En Revisión';
+      case 'CANCELLED': return 'Cancelado';
+      default: return 'Pendiente de Pago';
+    }
+  };
+
   return (
-    <div className="flex flex-col gap-0 border border-slate-200 rounded-none overflow-hidden transition-all duration-300 shadow-sm hover:shadow-md hover:border-slate-300 bg-white">
-      <div className="p-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 transition-all relative">
+    <div 
+      className="bg-white border border-[#f1f5f9] transition-all hover:bg-[#fcfdff] group cursor-pointer"
+      onClick={handleViewDetail}
+    >
+      <div className="p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+        
+        {/* Order Identification */}
         <div className="flex items-center gap-6">
-          <div className="w-16 h-16 rounded-none flex items-center justify-center border bg-slate-50 border-slate-100 text-slate-400">
-            <FaShoppingBag size={24} />
+          <div className="w-12 h-12 rounded-full border border-[#f1f5f9] bg-[#f8fafc] flex items-center justify-center text-slate-300">
+            <FaShoppingBag size={18} />
           </div>
           <div>
             <div className="flex items-center gap-4">
-              <p className="text-xl font-black tracking-tight uppercase text-slate-900">
-                Pedido #{order.id.substring(0, 8).toUpperCase()}
-              </p>
-              <span className={`px-3 py-1 rounded-none text-[9px] font-black uppercase tracking-[0.3em] border ${
-                order.status === 'APPROVED' || order.status === 'SHIPPED' 
-                  ? 'bg-green-50 text-green-600 border-green-200' 
-                  : order.status === 'PENDING_REVIEW'
-                  ? 'bg-blue-50 text-blue-600 border-blue-200'
-                  : 'bg-orange-50 text-orange-500 border-orange-200'
-              }`}>
-                {order.status === 'APPROVED' ? 'PAGO APROBADO' : order.status === 'SHIPPED' ? 'ENVIADO' : order.status === 'PENDING_REVIEW' ? 'EN REVISIÓN' : 'PENDIENTE'}
+              <span className="text-[11px] font-black tracking-[0.2em] text-slate-900 uppercase">
+                #{order.id.substring(0, 8).toUpperCase()}
+              </span>
+              <span className={`px-4 py-1.5 text-[8px] font-black uppercase tracking-[0.2em] border ${getStatusStyles(order.status)}`}>
+                {getStatusLabel(order.status)}
               </span>
             </div>
-            <p className="text-[11px] font-black uppercase mt-2 tracking-[0.2em] text-slate-400">
+            <p className="text-[9px] font-black uppercase mt-2 tracking-[0.15em] text-slate-400 opacity-60">
               {new Date(order.createdAt).toLocaleDateString('es-AR', { day: 'numeric', month: 'long', year: 'numeric' })}
             </p>
           </div>
         </div>
 
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between w-full md:w-auto gap-8 sm:gap-14 mt-6 md:mt-0">
-          <div className="text-left md:text-right flex flex-col justify-center border-l md:border-l-0 md:border-r border-slate-200 pl-4 md:pl-0 md:pr-4 py-1">
-            <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] mb-1 opacity-60">Total abonado</p>
-            <p className="text-xl font-black tracking-tighter text-slate-900">${order.total.toLocaleString()}</p>
-          </div>
+        {/* Pricing & Actions */}
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center md:justify-end gap-10 w-full md:w-auto">
           
-          <div className="flex flex-wrap items-center gap-4">
-            {/* View Detail Button */}
-            <button 
-              onClick={handleViewDetail}
-              className="flex items-center gap-3 px-5 py-3 rounded-none border border-slate-200 bg-white text-slate-900 hover:bg-slate-50 transition-all font-black text-[9px] uppercase tracking-[0.3em] cursor-pointer shadow-sm active:scale-95"
-            >
-              <FaRegEye size={12} />
-              <span>Ver Detalle</span>
-            </button>
+          <div className="flex flex-col">
+            <span className="text-[10px] font-black text-slate-300 uppercase tracking-[0.3em] mb-1">Monto Total</span>
+            <span className="text-lg font-black tracking-tight text-slate-900">${order.total.toLocaleString('es-AR')}</span>
+          </div>
 
+          <div className="flex items-center gap-3">
             {/* Conditional Action Button */}
             {(isPending || isReview) && (
               <button 
                 onClick={handleAction}
                 disabled={isPaying}
-                className="flex items-center gap-3 px-5 py-3 rounded-none transition-all font-black text-[9px] uppercase tracking-[0.3em] cursor-pointer shadow-sm active:scale-95 disabled:opacity-50 bg-blue-600 text-white hover:bg-blue-700"
+                className="flex items-center gap-3 px-6 py-4 bg-blue-600 text-white font-black text-[9px] uppercase tracking-[0.3em] hover:bg-blue-700 transition-all border-0 shadow-lg shadow-blue-100 disabled:opacity-50 cursor-pointer"
               >
-                {isPaying ? <FaSpinner className="animate-spin" size={12} /> : order.paymentMethod === 'TRANSFERENCIA' ? <FaUpload size={12} /> : <FaCreditCard size={12} />}
+                {isPaying ? <FaSpinner className="animate-spin" size={12} /> : (order.paymentMethod === 'TRANSFERENCIA' ? <FaUpload size={12} /> : <FaCreditCard size={12} />)}
                 <span>
-                  {isPaying ? 'Procesando...' : 
+                  {isPaying ? '...' : 
                    isReview ? 'Comprobante' : 
-                   order.paymentMethod === 'TRANSFERENCIA' ? 'Subir Ticket' : 'Pagar Ahora'}
+                   order.paymentMethod === 'TRANSFERENCIA' ? 'Subir Ticket' : 'Pagar'}
                 </span>
               </button>
             )}
@@ -155,16 +173,21 @@ export default function OrderCard({ order, onViewDetail }: OrderCardProps) {
             {isApprovedOrShipped && (
               <Link 
                 href={`/mi-cuenta/seguimiento?orderId=${order.id}`}
-                className="flex items-center gap-3 px-5 py-3 rounded-none bg-slate-900 text-white hover:bg-slate-800 transition-all font-black text-[9px] uppercase tracking-[0.3em] cursor-pointer shadow-sm active:scale-95 no-underline"
+                onClick={(e) => e.stopPropagation()}
+                className="flex items-center gap-3 px-6 py-4 bg-[#0f172a] text-white font-black text-[9px] uppercase tracking-[0.3em] hover:bg-blue-600 transition-all border-0 no-underline"
               >
                 <FaTruck size={12} />
-                <span>Rastrear</span>
+                <span>Seguir Pedido</span>
               </Link>
             )}
+
+            <div className="w-10 h-10 flex items-center justify-center text-slate-200 group-hover:text-blue-600 transition-all">
+              <FaChevronRight size={14} />
+            </div>
           </div>
+
         </div>
       </div>
     </div>
-
   );
 }

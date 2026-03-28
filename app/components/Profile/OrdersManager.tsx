@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import OrderCard from './OrderCard';
 import OrderDetailView from './OrderDetailView';
-import { FaShoppingBag } from 'react-icons/fa';
+import { FaShoppingBag, FaHistory } from 'react-icons/fa';
 import Link from 'next/link';
 
 interface OrderItem {
@@ -54,6 +54,7 @@ export default function OrdersManager({ orders }: OrdersManagerProps) {
           orderId: order.id,
           items: order.items,
           total: order.total,
+          p_mode: 'NORMAL', // Default logic
           shipping: {
             cost: order.shippingAddress?.shippingCost || 0,
             method: order.shippingAddress?.shippingMethod || 'Estándar',
@@ -97,7 +98,7 @@ export default function OrdersManager({ orders }: OrdersManagerProps) {
   }
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-700">
+    <div className="space-y-4 animate-in fade-in duration-500">
       {orders.length > 0 ? (
         orders.map((order) => (
           <OrderCard 
@@ -110,14 +111,14 @@ export default function OrdersManager({ orders }: OrdersManagerProps) {
           />
         ))
       ) : (
-        <div className="bg-slate-50/50 border-2 border-slate-100 border-dashed rounded-none p-20 text-center">
-          <div className="w-20 h-20 bg-white rounded-none border-2 border-slate-100 flex items-center justify-center text-slate-200 mx-auto mb-6 shadow-sm">
+        <div className="bg-[#f8fafc] border border-dashed border-[#e2e8f0] p-24 text-center">
+          <div className="w-20 h-20 bg-white border border-[#f1f5f9] rounded-full flex items-center justify-center text-slate-200 mx-auto mb-8 shadow-sm">
             <FaShoppingBag size={32} />
           </div>
-          <h3 className="text-slate-900 font-black text-xl mb-4 uppercase tracking-tighter">Aún no realizaste compras</h3>
-          <p className="text-slate-400 text-sm mb-10 max-w-xs mx-auto font-bold uppercase tracking-widest opacity-60">Cuando realices un pedido, aparecerá en esta sección con todos los detalles.</p>
-          <Link href="/" className="inline-block px-12 py-5 bg-slate-900 text-white font-black text-[11px] uppercase tracking-[0.5em] hover:bg-slate-800 transition-all shadow-xl active:scale-95 leading-none no-underline border-0 cursor-pointer">
-            Explorar Tienda
+          <h3 className="text-slate-900 font-black text-xl mb-4 uppercase tracking-tighter">Historial Vacío</h3>
+          <p className="text-slate-400 text-[11px] mb-10 max-w-xs mx-auto font-bold uppercase tracking-widest opacity-40">Aún no has realizado ninguna compra con esta cuenta.</p>
+          <Link href="/" className="inline-block px-12 py-5 bg-[#0f172a] text-white font-black text-[10px] uppercase tracking-[0.5em] hover:bg-blue-600 transition-all no-underline border-0 cursor-pointer">
+            Ver Productos
           </Link>
         </div>
       )}
