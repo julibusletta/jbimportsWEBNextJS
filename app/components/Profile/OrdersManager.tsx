@@ -5,6 +5,7 @@ import OrderCard from './OrderCard';
 import OrderDetailView from './OrderDetailView';
 import { FaShoppingBag, FaHistory } from 'react-icons/fa';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 interface OrderItem {
   name: string;
@@ -36,11 +37,10 @@ interface OrdersManagerProps {
 export default function OrdersManager({ orders }: OrdersManagerProps) {
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [isPaying, setIsPaying] = useState(false);
+  const router = useRouter();
 
   const handleAction = async (order: Order) => {
     if (order.paymentMethod === 'TRANSFERENCIA') {
-      const { useRouter } = require('next/navigation');
-      const router = useRouter();
       router.push(`/checkout/transfer/${order.id}`);
       return;
     }

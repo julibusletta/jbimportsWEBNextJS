@@ -42,7 +42,7 @@ export const mailer = {
       <body>
         <div class="container">
           <div class="header">
-             <h2 style="margin: 0; font-weight: 900; letter-spacing: -1px; color: #1a202c;">JB IMPORTS</h2>
+             <img src="cid:logo" alt="JB Imports" style="max-height: 80px; width: auto; display: block; margin: 0 auto;" />
           </div>
           <div class="content">
             <h1 style="margin-top: 0; color: #1a202c; font-size: 24px; text-align: center;">¡Gracias por tu compra!</h1>
@@ -103,6 +103,11 @@ export const mailer = {
         bcc: process.env.EMAIL_USER,
         subject: `Confirmación de pedido #${orderDetails.id} - JB Imports`,
         html,
+        attachments: [{
+          filename: 'logo.png',
+          path: path.join(process.cwd(), 'public', 'images', 'logotest9.png'),
+          cid: 'logo'
+        }]
       });
       logToFile(`Purchase confirmation sent to ${to} for #${orderDetails.id}`);
     } catch (e: any) {
@@ -142,7 +147,7 @@ export const mailer = {
       <body>
         <div class="wrapper">
           <div class="header">
-            <h2 style="margin: 0; font-weight: 900; letter-spacing: -1px;">JB IMPORTS</h2>
+            <img src="cid:logo" alt="JB Imports" style="max-height: 100px; width: auto; display: block;" />
           </div>
           <div class="body">
             <h1 class="title">Hola ${userName}!</h1>
@@ -239,6 +244,11 @@ export const mailer = {
         to,
         subject: `Pendiente de Pago: Reserva #${orderDetails.id.split('-').pop()} - JB Imports`,
         html,
+        attachments: [{
+          filename: 'logo.png',
+          path: path.join(process.cwd(), 'public', 'images', 'logotest9.png'),
+          cid: 'logo'
+        }]
       });
       logToFile(`Transfer order email sent to ${to} for #${orderDetails.id}`);
     } catch (e: any) {
@@ -249,6 +259,9 @@ export const mailer = {
   async notifyAdminProofUploaded(orderId: string, userName: string) {
     const html = `
       <div style="font-family: sans-serif; padding: 30px; border: 1px solid #eee; max-width: 500px;">
+        <div style="margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 20px;">
+          <img src="cid:logo" alt="JB Imports" style="max-height: 60px; width: auto;" />
+        </div>
         <h2 style="color: #2563eb;">¡Nuevo Comprobante Recibido!</h2>
         <p>Se ha subido un nuevo comprobante para la orden <strong>#${orderId}</strong>.</p>
         <p><strong>Cliente:</strong> ${userName}</p>
@@ -264,6 +277,11 @@ export const mailer = {
         to: "contacto@jbimports.com.ar, ventas@jbimports.com.ar",
         subject: `URGENTE: Comprobante subido - Orden #${orderId}`,
         html,
+        attachments: [{
+          filename: 'logo.png',
+          path: path.join(process.cwd(), 'public', 'images', 'logotest9.png'),
+          cid: 'logo'
+        }]
       });
       logToFile(`Admin notification sent for proof on #${orderId}`);
     } catch (e: any) {

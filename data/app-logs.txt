@@ -34,3 +34,6 @@ Data: {
 --------------------------------------------------
 [2026-03-17T13:25:49.334Z] NAVE WEBHOOK: Email sent successfully to julibusletta@gmail.com
 --------------------------------------------------
+[2026-03-28T02:49:25.022Z] ERROR sending transfer email to germanmcdonalds59@gmail.com
+Data: "Invalid login: 535 Incorrect authentication data"
+--------------------------------------------------
