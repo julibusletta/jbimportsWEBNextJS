@@ -61,7 +61,7 @@ export default async function SeguimientoPage() {
                   {/* Vertical Line */}
                   <div className="absolute left-[23px] top-6 bottom-6 w-[1px] bg-[#f1f5f9]" />
                   
-                  <div className="space-y-12">
+                  <div className="space-y-24">
                     {steps.map((step, idx) => (
                       <div key={idx} className="flex items-center gap-8 relative z-10 transition-all">
                         {/* Dot Container */}
@@ -105,11 +105,11 @@ export default async function SeguimientoPage() {
                          <FaBox className="text-blue-600" size={14} /> Contenido del Envío
                       </h4>
                       <div className="pl-7">
-                        <p className="text-[15px] font-black text-slate-900 uppercase leading-relaxed tracking-tight">
+                        <p className="text-[15px] font-medium text-slate-600 uppercase leading-relaxed tracking-tight">
                           {activeOrder.items[0]?.name || 'Producto en proceso'}
                         </p>
                         {activeOrder.items.length > 1 && (
-                          <p className="text-[10px] text-slate-400 font-bold mt-2 uppercase tracking-widest">+ {activeOrder.items.length - 1} producto(s) adicionales</p>
+                          <p className="text-[10px] text-slate-400 font-medium mt-2 uppercase tracking-widest">+ {activeOrder.items.length - 1} producto(s) adicionales</p>
                         )}
                       </div>
                    </div>
@@ -120,13 +120,13 @@ export default async function SeguimientoPage() {
                          <FaMapMarkerAlt className="text-blue-600" size={14} /> Punto de Entrega
                       </h4>
                       <div className="pl-7">
-                        <p className="text-[15px] font-black text-slate-900 uppercase tracking-tight leading-relaxed">
+                        <p className="text-[15px] font-medium text-slate-600 uppercase tracking-tight leading-relaxed">
                           {(session.user as any).address?.street} {(session.user as any).address?.number}
                         </p>
-                        <p className="text-[11px] mt-2 text-slate-400 font-bold uppercase tracking-[0.1em]">
+                        <p className="text-[11px] mt-2 text-slate-400 font-medium uppercase tracking-[0.1em]">
                           {(session.user as any).address?.city}, {(session.user as any).address?.state}
                         </p>
-                        <p className="text-[12px] mt-4 text-blue-600 font-black tracking-widest">C.P. {(session.user as any).address?.zip}</p>
+                        <p className="text-[12px] mt-4 text-blue-600 font-bold tracking-widest">C.P. {(session.user as any).address?.zip}</p>
                       </div>
                    </div>
                 </div>

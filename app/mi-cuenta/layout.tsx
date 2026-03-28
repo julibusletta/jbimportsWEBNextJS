@@ -51,7 +51,7 @@ export default function AccountLayout({
                     <Link
                       key={item.label}
                       href={item.href}
-                      className={`flex items-center justify-between px-6 py-4 text-[11px] font-black uppercase tracking-[0.2em] transition-all duration-200 group ${
+                      className={`flex items-center justify-between px-6 py-6 text-[13px] font-black uppercase tracking-[0.2em] transition-all duration-200 group ${
                         isActive 
                           ? 'bg-[#f0f7ff] text-blue-600 border-l-4 border-blue-600' 
                           : 'text-slate-400 hover:text-slate-900 hover:bg-slate-50 border-l-4 border-transparent'
