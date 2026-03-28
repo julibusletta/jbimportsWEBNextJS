@@ -42,18 +42,18 @@ export default function ContactoPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-white py-20 px-6">
-      <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen bg-white py-20 px-6 flex flex-col items-center w-full">
+      <div className="w-full max-w-4xl">
         {/* Header */}
-        <header className="mb-20 text-center flex flex-col items-center">
+        <header className="mb-20 text-center flex flex-col items-center w-full">
           <p className="text-[10px] font-black text-blue-600 uppercase tracking-[0.5em] mb-4">Canales Oficiales</p>
           <h1 className="text-4xl md:text-5xl font-black text-slate-900 uppercase tracking-tighter m-0">Contacto</h1>
-          <div className="w-16 h-1.5 bg-slate-900 mt-6"></div>
+          <div className="w-16 h-1.5 bg-slate-900 mt-6 md:mt-8"></div>
         </header>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 w-full">
           {/* Direct Channels */}
-          <section>
+          <section className="flex flex-col">
             <h2 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mb-8">Atención Directa</h2>
             <div className="space-y-6">
               {contactMethods.map((method) => (
@@ -68,8 +68,8 @@ export default function ContactoPage() {
                     {method.icon}
                     <FaChevronRight size={12} className="text-slate-200 group-hover:text-slate-900 transition-colors" />
                   </div>
-                  <h3 className="text-lg font-black text-slate-900 m-0 mb-1">{method.title}</h3>
-                  <p className="text-blue-600 font-bold text-xs mb-4">{method.value}</p>
+                  <h3 className="text-lg font-black text-slate-900 m-0 mb-1 tracking-tight">{method.title}</h3>
+                  <p className="text-blue-600 font-bold text-xs mb-4 tracking-wide">{method.value}</p>
                   <p className="text-slate-500 text-xs leading-relaxed mb-0">{method.description}</p>
                 </a>
               ))}
@@ -78,7 +78,7 @@ export default function ContactoPage() {
 
           {/* Email and Hours */}
           <div className="space-y-12">
-            <section>
+            <section className="flex flex-col">
               <h2 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mb-8">Casillas de Correo</h2>
               <div className="space-y-3">
                 {emailMethods.map((email) => (
@@ -88,40 +88,39 @@ export default function ContactoPage() {
                     </div>
                     <div>
                       <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">{email.title}</p>
-                      <a href={`mailto:${email.value}`} className="text-sm font-bold text-slate-900 no-underline hover:text-blue-600 transition-colors">{email.value}</a>
+                      <a href={`mailto:${email.value}`} className="text-sm font-bold text-slate-900 no-underline hover:text-blue-600 transition-colors tracking-tight">{email.value}</a>
                     </div>
                   </div>
                 ))}
               </div>
             </section>
 
-            <section className="p-8 bg-slate-50 border border-slate-100 text-slate-900">
-              <div className="flex items-center gap-4 mb-6">
+            <section className="p-10 bg-slate-50 border border-slate-100 text-slate-900">
+              <div className="flex items-center gap-4 mb-8">
                 <FaClock className="text-blue-600" size={18} />
                 <h2 className="text-[10px] font-black uppercase tracking-[0.3em] m-0">Horarios de Atención</h2>
               </div>
-              <div className="space-y-5">
+              <div className="space-y-6">
                 <div>
-                  <p className="text-slate-400 text-[9px] font-bold uppercase tracking-widest mb-1">Lunes a Viernes</p>
-                  <p className="text-base font-black tracking-tight">09:00 — 20:00 HS</p>
+                  <p className="text-slate-400 text-[9px] font-bold uppercase tracking-widest mb-2">Lunes a Viernes</p>
+                  <p className="text-[17px] font-black tracking-tight">09:00 — 20:00 HS</p>
                 </div>
                 <div>
-                  <p className="text-slate-400 text-[9px] font-bold uppercase tracking-widest mb-1">Sábados y Domingos</p>
-                  <p className="text-base font-black tracking-tight">11:00 — 18:00 HS</p>
+                  <p className="text-slate-400 text-[9px] font-bold uppercase tracking-widest mb-2">Sábados y Domingos</p>
+                  <p className="text-[17px] font-black tracking-tight">11:00 — 18:00 HS</p>
                 </div>
               </div>
             </section>
           </div>
         </div>
 
-        {/* Footer Note */}
-        <footer className="mt-20 pt-10 border-t border-slate-100">
-          <p className="text-[10px] font-medium text-slate-400 leading-relaxed max-w-xl">
-            JB Imports es una marca registrada de Julian Busletta. 
+        {/* Note Section (Simplified) */}
+        <div className="mt-20 pt-10 border-t border-slate-100 text-center">
+          <p className="text-[10px] font-medium text-slate-400 leading-relaxed mx-auto max-w-2xl px-4">
             Todas nuestras comunicaciones oficiales se realizan a través de los canales listados en esta página. 
             No compartas información sensible fuera de estos medios.
           </p>
-        </footer>
+        </div>
       </div>
 
       <style jsx global>{`
