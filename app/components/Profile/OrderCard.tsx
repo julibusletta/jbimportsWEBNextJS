@@ -153,19 +153,19 @@ export default function OrderCard({ order, onViewDetail }: OrderCardProps) {
             <span className="text-lg font-black tracking-tight text-slate-900">${order.total.toLocaleString('es-AR')}</span>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-4">
             {/* Conditional Action Button */}
             {(isPending || isReview) && (
               <button 
                 onClick={handleAction}
                 disabled={isPaying}
-                className="flex items-center gap-3 px-6 py-4 bg-blue-600 text-white font-black text-[9px] uppercase tracking-[0.3em] hover:bg-blue-700 transition-all border-0 shadow-lg shadow-blue-100 disabled:opacity-50 cursor-pointer"
+                className="flex items-center gap-3 px-8 py-3.5 bg-transparent border border-blue-600 text-blue-600 font-black text-[9px] uppercase tracking-[0.3em] hover:bg-blue-600 hover:text-white transition-all disabled:opacity-50 cursor-pointer"
               >
                 {isPaying ? <FaSpinner className="animate-spin" size={12} /> : (order.paymentMethod === 'TRANSFERENCIA' ? <FaUpload size={12} /> : <FaCreditCard size={12} />)}
                 <span>
                   {isPaying ? '...' : 
-                   isReview ? 'Comprobante' : 
-                   order.paymentMethod === 'TRANSFERENCIA' ? 'Subir Ticket' : 'Pagar'}
+                   isReview ? 'Ver Comprobante' : 
+                   order.paymentMethod === 'TRANSFERENCIA' ? 'Subir comprobante de pago' : 'Pagar Ahora'}
                 </span>
               </button>
             )}
@@ -174,10 +174,10 @@ export default function OrderCard({ order, onViewDetail }: OrderCardProps) {
               <Link 
                 href={`/mi-cuenta/seguimiento?orderId=${order.id}`}
                 onClick={(e) => e.stopPropagation()}
-                className="flex items-center gap-3 px-6 py-4 bg-[#0f172a] text-white font-black text-[9px] uppercase tracking-[0.3em] hover:bg-blue-600 transition-all border-0 no-underline"
+                className="flex items-center gap-3 px-8 py-3.5 bg-transparent border border-slate-900 text-slate-900 font-black text-[9px] uppercase tracking-[0.3em] hover:bg-slate-900 hover:text-white transition-all no-underline"
               >
                 <FaTruck size={12} />
-                <span>Seguir Pedido</span>
+                <span>Seguir Envío</span>
               </Link>
             )}
 

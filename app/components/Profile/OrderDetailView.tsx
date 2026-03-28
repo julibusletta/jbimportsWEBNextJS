@@ -111,18 +111,18 @@ export default function OrderDetailView({ order, onBack, onAction, isPaying }: O
            {isApprovedOrShipped && (
               <Link 
                 href={`/mi-cuenta/seguimiento?orderId=${order.id}`}
-                className="px-8 py-4 bg-[#0f172a] text-white font-black text-[10px] uppercase tracking-[0.4em] hover:bg-blue-600 transition-all no-underline border-0 text-center shadow-lg shadow-slate-100"
+                className="px-8 py-4 bg-transparent border border-slate-900 text-slate-900 font-black text-[10px] uppercase tracking-[0.4em] hover:bg-slate-900 hover:text-white transition-all no-underline text-center"
               >
-                Rastrear Envío
+                Seguir Envío
               </Link>
            )}
            {(isPending || isReview) && (
               <button 
                 onClick={onAction}
                 disabled={isPaying}
-                className="px-8 py-4 bg-blue-600 text-white font-black text-[10px] uppercase tracking-[0.4em] hover:bg-blue-700 transition-all border-0 shadow-lg shadow-blue-100 cursor-pointer disabled:opacity-50"
+                className="px-8 py-4 bg-transparent border border-blue-600 text-blue-600 font-black text-[10px] uppercase tracking-[0.4em] hover:bg-blue-600 hover:text-white transition-all cursor-pointer disabled:opacity-50"
               >
-                {order.paymentMethod === 'TRANSFERENCIA' ? 'Subir Ticket de Pago' : 'Efectuar Pago Ahora'}
+                {order.paymentMethod === 'TRANSFERENCIA' ? 'Subir comprobante de pago' : 'Pagar pedido ahora'}
               </button>
            )}
         </div>
