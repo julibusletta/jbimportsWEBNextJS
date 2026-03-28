@@ -72,7 +72,7 @@ export default function FAQPage() {
 
   return (
     <div className="min-h-screen bg-[#fafafa] pt-28 pb-32 px-4 md:px-0 flex flex-col items-center w-full">
-      <div className="w-full max-w-4xl">
+      <div className="w-full max-w-6xl px-4 md:px-10">
         
         {/* Professional Header Section */}
         <section className="flex items-center gap-6 mb-12 px-2">
@@ -134,7 +134,7 @@ export default function FAQPage() {
               <h2 className="text-2xl font-bold text-slate-900 m-0">Servicio postventa y garantías</h2>
             </div>
             
-            <div className="space-y-6 max-w-3xl">
+            <div className="space-y-6 max-w-5xl">
               <p className="text-slate-600 text-base md:text-lg leading-relaxed m-0">
                 ¿Tu producto presenta alguna falla? No te preocupes. Contamos con un equipo especializado en soporte para ayudarte de forma rápida y profesional.
               </p>
