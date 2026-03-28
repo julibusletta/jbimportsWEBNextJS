@@ -38,11 +38,6 @@ export default function Footer() {
                     </Link>
                   </li>
                   <li className="mb-2.5">
-                    <Link href="/privacidad" className="text-gray-400 text-sm md:text-base no-underline transition-colors hover:text-white">
-                      Política de privacidad
-                    </Link>
-                  </li>
-                  <li className="mb-2.5">
                     <a href="https://buenosaires.gob.ar/gcaba_historico/gobierno/atencion-ciudadana/defensa-al-consumidor" target="_blank" rel="noopener noreferrer" className="text-gray-400 text-sm md:text-base no-underline transition-colors hover:text-white">
                       Defensa al Consumidor
                     </a>
