@@ -42,10 +42,10 @@ export default function ContactoPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-white pt-40 pb-10 px-6 flex flex-col items-center w-full">
-      <div className="w-full max-w-6xl">
+    <div className="bg-white pt-32 pb-0 flex flex-col items-center w-full">
+      <div className="w-full max-w-6xl px-6">
         {/* Header */}
-        <header className="mb-32 text-center flex flex-col items-center w-full">
+        <header className="mb-24 text-center flex flex-col items-center w-full">
           <p className="text-[10px] font-black text-blue-600 uppercase tracking-[0.5em] mb-6">Canales Oficiales</p>
           <h1 className="text-4xl md:text-6xl font-black text-slate-900 uppercase tracking-tighter m-0">Contacto</h1>
           <div className="w-16 h-1.5 bg-slate-900 mt-8 md:mt-10"></div>
@@ -113,14 +113,14 @@ export default function ContactoPage() {
             </section>
           </div>
         </div>
+      </div>
 
-        {/* Note Section (Simplified) */}
-        <div className="py-10 border-t border-slate-100 text-center">
-          <p className="text-[11px] font-medium text-slate-400 leading-relaxed mx-auto max-w-2xl px-4">
-            Todas nuestras comunicaciones oficiales se realizan a través de los canales listados en esta página. 
-            No compartas información sensible fuera de estos medios.
-          </p>
-        </div>
+      {/* Note Section (Full Width) */}
+      <div className="w-full py-10 border-t border-slate-100 text-center bg-white mb-0">
+        <p className="text-[11px] font-medium text-slate-400 leading-relaxed w-full px-6 m-0">
+          Todas nuestras comunicaciones oficiales se realizan a través de los canales listados en esta página. 
+          No compartas información sensible fuera de estos medios.
+        </p>
       </div>
 
       <style jsx global>{`
