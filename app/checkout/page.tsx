@@ -215,7 +215,7 @@ function CheckoutContent() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] pt-52 pb-40 w-full flex flex-col items-center">
+    <div className="min-h-screen bg-[#f8fafc] w-full flex flex-col items-center" style={{ paddingTop: '280px', paddingBottom: '180px' }}>
       <div className="w-full max-w-[1200px] px-6">
         
         {/* Stepper UI */}
