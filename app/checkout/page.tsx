@@ -13,8 +13,12 @@ import {
   FaCreditCard,
   FaSpinner,
   FaShieldAlt,
-  FaStore
+  FaStore,
+  FaMoneyBillWave,
+  FaChevronRight
 } from 'react-icons/fa';
+import ShippingModal from '../components/Checkout/ShippingModal';
+import '../styles/Checkout.css';
 
 interface ShippingOption {
   id: string;
@@ -22,24 +26,43 @@ interface ShippingOption {
   price: number;
   estimatedDays: number;
   type: 'DOMICILIO' | 'SUCURSAL';
+  image: string;
 }
+
+const ANDREANI_OPTIONS: ShippingOption[] = [
+  {
+    id: 'andreani-domicilio',
+    name: 'Andreani a Domicilio',
+    price: 0,
+    estimatedDays: 3,
+    type: 'DOMICILIO',
+    image: '/inc/shipping/vendors/entregar.svg'
+  },
+  {
+    id: 'andreani-sucursal',
+    name: 'Retiro en Sucursal Andreani',
+    price: 0,
+    estimatedDays: 2,
+    type: 'SUCURSAL',
+    image: '/inc/shipping/vendors/oca.svg' // Using a placeholder if specific SVG is missing, but mapping to the one in the reference
+  }
+];
 
 function CheckoutContent() {
   const { cartItems, total: cartTotal } = useCart();
   const { data: session } = useSession();
   const router = useRouter();
   
+  const [currentStep, setCurrentStep] = useState(1);
   const [loading, setLoading] = useState(false);
-  const [shippingRates, setShippingRates] = useState<ShippingOption[]>([]);
   const [selectedRate, setSelectedRate] = useState<ShippingOption | null>(null);
-  const [branches, setBranches] = useState<any[]>([]);
-  const [selectedBranch, setSelectedBranch] = useState<any | null>(null);
-  const [loadingBranches, setLoadingBranches] = useState(false);
+  const [isShippingModalOpen, setIsShippingModalOpen] = useState(false);
   
   const [formData, setFormData] = useState({
     email: '',
     firstName: '',
     lastName: '',
+    dni: '',
     street: '',
     number: '',
     floor: '',
@@ -49,7 +72,7 @@ function CheckoutContent() {
     phone: ''
   });
 
-  const [paymentMethod, setPaymentMethod] = useState<'nave' | 'transfer'>('nave');
+  const [paymentMethod, setPaymentMethod] = useState<'nave' | 'transfer' | 'nave_cuotas'>('nave');
   const [error, setError] = useState<string | null>(null);
 
   // Pre-fill user data from session
@@ -62,6 +85,7 @@ function CheckoutContent() {
         email: u.email || prev.email,
         firstName: names[0] || prev.firstName,
         lastName: names.slice(1).join(' ') || prev.lastName,
+        dni: u.dni || prev.dni,
         street: u.address?.street || prev.street,
         number: u.address?.number || prev.number,
         city: u.address?.city || prev.city,
@@ -72,84 +96,53 @@ function CheckoutContent() {
     }
   }, [session]);
 
-  // Auto-calculate rates when zipCode is 4 digits
-  useEffect(() => {
-    if (formData.zipCode.length === 4) {
-      calculateShipping();
-    }
-  }, [formData.zipCode]);
-
-  // Fetch branches if SUCURSAL is selected
-  useEffect(() => {
-    if (selectedRate?.type === 'SUCURSAL') {
-      fetchBranches();
-    } else {
-      setSelectedBranch(null);
-    }
-  }, [selectedRate]);
-
-  const fetchBranches = async () => {
-    setLoadingBranches(true);
-    try {
-      const resp = await fetch(`/api/shipping/branches?zipCode=${formData.zipCode}`);
-      const data = await resp.json();
-      if (data.success) {
-        setBranches(data.branches);
+  const handleNextStep = () => {
+    if (currentStep === 1) {
+      if (formData.zipCode.length < 4) {
+        setError('Por favor ingresa un código postal válido');
+        return;
       }
-    } catch (err) {
-      console.error('Failed to fetch branches');
-    } finally {
-      setLoadingBranches(false);
+      setError(null);
+      setCurrentStep(2);
+    } else if (currentStep === 2) {
+      if (!selectedRate) {
+        setError('Por favor selecciona un método de envío');
+        return;
+      }
+      if (!formData.street || !formData.firstName) {
+        setIsShippingModalOpen(true);
+        return;
+      }
+      setError(null);
+      setCurrentStep(3);
+    } else if (currentStep === 3) {
+      setCurrentStep(4);
     }
   };
 
-  const calculateShipping = async () => {
-    setLoading(true);
-    try {
-      const response = await fetch('/api/shipping/quote', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          zipCode: formData.zipCode,
-          items: cartItems.map(item => ({
-            weight: item.weight || 0.5,
-            quantity: item.quantity
-          }))
-        })
-      });
-      const data = await response.json();
-      if (data.success) {
-        setShippingRates(data.rates);
-        // Auto-select first option if none selected
-        if (data.rates.length > 0 && !selectedRate) {
-          setSelectedRate(data.rates[0]);
-        }
-      }
-    } catch (err) {
-      console.error('Failed to fetch shipping rates');
-    } finally {
-      setLoading(false);
-    }
+  const handleBackStep = () => {
+    if (currentStep > 1) setCurrentStep(currentStep - 1);
   };
 
-  const handlePayment = async () => {
-    if (!selectedRate) {
-      setError('Por favor selecciona un método de envío');
-      return;
-    }
+  const handleShippingRateSelect = (rate: ShippingOption) => {
+    setSelectedRate(rate);
+    setIsShippingModalOpen(true);
+  };
 
-    if (!formData.email || !formData.street || !formData.firstName) {
-      setError('Por favor completa los campos obligatorios');
-      return;
-    }
+  const handleShippingConfirm = (updatedData: any) => {
+    setFormData(updatedData);
+    setIsShippingModalOpen(false);
+    setCurrentStep(3);
+  };
 
+  const handleFinalPayment = async () => {
     setLoading(true);
     setError(null);
 
-    const subtotalWithShipping = cartTotal + selectedRate.price;
+    const subtotalWithShipping = cartTotal + (selectedRate?.price || 0);
     const finalTotal = paymentMethod === 'transfer' ? subtotalWithShipping * 0.9 : subtotalWithShipping;
 
-    const endpoint = paymentMethod === 'nave' ? '/api/checkout/nave' : '/api/checkout/transfer';
+    const endpoint = paymentMethod.startsWith('nave') ? '/api/checkout/nave' : '/api/checkout/transfer';
 
     try {
       const response = await fetch(endpoint, {
@@ -162,16 +155,17 @@ function CheckoutContent() {
           email: formData.email,
           firstName: formData.firstName,
           lastName: formData.lastName,
+          dni: formData.dni,
+          paymentMode: paymentMethod === 'nave_cuotas' ? 'CUOTAS' : 'NORMAL',
           shipping: {
-            method: selectedRate.name,
-            cost: selectedRate.price,
+            method: selectedRate?.name,
+            cost: 0, // Siempre sin cargo según pedido
             address: {
-              street: selectedBranch ? selectedBranch.direccion : formData.street,
-              number: selectedBranch ? '' : formData.number,
-              city: selectedBranch ? selectedBranch.localidad : formData.city,
-              state: selectedBranch ? selectedBranch.provincia : formData.state,
+              street: formData.street,
+              number: formData.number,
+              city: formData.city,
+              state: formData.state,
               zipCode: formData.zipCode,
-              branchDetail: selectedBranch ? `${selectedBranch.nombre} - ${selectedBranch.direccion}` : null
             }
           }
         }),
@@ -179,7 +173,7 @@ function CheckoutContent() {
 
       const data = await response.json();
       if (data.success) {
-        if (paymentMethod === 'nave' && data.url) {
+        if (paymentMethod.startsWith('nave') && data.url) {
           window.location.href = data.url;
         } else if (paymentMethod === 'transfer') {
           router.push(`/checkout/transfer/${data.orderId}`);
@@ -201,361 +195,266 @@ function CheckoutContent() {
       <div className="min-h-screen flex flex-col items-center justify-center p-4">
         <FaTruck className="text-gray-200 text-6xl mb-4" />
         <h2 className="text-xl font-bold mb-4">Tu carrito está vacío</h2>
-        <button onClick={() => router.push('/')} className="bg-[#0066cc] text-white px-6 py-2 rounded-md">
+        <button onClick={() => router.push('/')} className="bg-[#0066cc] text-white px-6 py-2 rounded-md border-0 cursor-pointer">
           Volver a la tienda
         </button>
       </div>
     );
   }
 
+  const steps = [
+    { id: 1, label: 'Ingresá CP' },
+    { id: 2, label: 'Envío' },
+    { id: 3, label: 'Forma de Pago' },
+    { id: 4, label: 'Pagar' }
+  ];
+
   return (
-    <div className="min-h-screen bg-[#f8fafc] pt-40 pb-8 w-full flex flex-col items-center">
-      <div className="w-full max-w-[1240px] px-4 md:px-10">
-        <div className="flex items-center gap-2 mb-8 text-[#0066cc] cursor-pointer hover:underline" onClick={() => router.back()}>
-          <FaChevronLeft size={12} /> <span className="text-sm font-bold uppercase tracking-wider">Volver al carrito</span>
+    <div className="min-h-screen bg-[#f8fafc] pt-40 pb-20 w-full flex flex-col items-center">
+      <div className="w-full max-w-[1200px] px-6">
+        
+        {/* Stepper UI */}
+        <div className="checkout-stepper">
+          <div className="stepper-progress">
+            <div 
+              className="stepper-progress-bar" 
+              style={{ width: `${((currentStep - 1) / (steps.length - 1)) * 100}%` }}
+            />
+          </div>
+          {steps.map((step) => (
+            <div 
+              key={step.id} 
+              className={`step-item ${currentStep === step.id ? 'active' : ''} ${currentStep > step.id ? 'done' : ''}`}
+            >
+              <div className="step-circle">{step.id}</div>
+              <div className="step-label">{step.label}</div>
+            </div>
+          ))}
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+        <div className="checkout-grid mt-12">
           
-          {/* Main Info Column */}
-          <div className="lg:col-span-7 flex flex-col gap-6">
+          {/* Left Column: Interactive Form */}
+          <div className="checkout-card">
             
-            {/* 1. Contact Info */}
-            <section className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
-              <h2 className="text-lg font-bold mb-6 flex items-center gap-2">
-                <span className="w-8 h-8 rounded-full bg-[#0066cc] text-white flex items-center justify-center text-[14px]">1</span>
-                Datos de Contacto
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="flex flex-col gap-1">
-                  <label className="text-[12px] text-gray-500 font-bold uppercase">Correo Electrónico</label>
-                  <input 
-                    type="email" 
-                    value={formData.email}
-                    onChange={(e) => setFormData({...formData, email: e.target.value})}
-                    placeholder="ejemplo@correo.com"
-                    className="border border-gray-200 p-3 rounded-md outline-none focus:border-[#0066cc] transition-colors"
-                  />
-                </div>
-                <div className="flex flex-col gap-1">
-                  <label className="text-[12px] text-gray-500 font-bold uppercase">Teléfono / WhatsApp</label>
-                  <input 
-                   type="text" 
-                   value={formData.phone}
-                   onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                   placeholder="11 1234 5678"
-                   className="border border-gray-200 p-3 rounded-md outline-none focus:border-[#0066cc] transition-colors"
-                  />
-                </div>
-              </div>
-            </section>
-
-            {/* 2. Shipping Address */}
-            <section className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
-              <h2 className="text-lg font-bold mb-6 flex items-center gap-2">
-                <span className="w-8 h-8 rounded-full bg-[#0066cc] text-white flex items-center justify-center text-[14px]">2</span>
-                Entrega
-              </h2>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                <div className="flex flex-col gap-1">
-                  <label className="text-[12px] text-gray-500 font-bold uppercase">Nombre</label>
+            {/* STEP 1: ZIP CODE */}
+            {currentStep === 1 && (
+              <fieldset className="form-fieldset">
+                <h2 className="checkout-title">Información de Envío</h2>
+                <p className="text-sm font-bold text-slate-500 mb-8 uppercase tracking-widest leading-loose">Ingresá tu Código Postal para continuar</p>
+                <div className="checkout-input-group max-w-xs mx-auto text-center">
                   <input 
                     type="text" 
-                    value={formData.firstName}
-                    onChange={(e) => setFormData({...formData, firstName: e.target.value})}
-                    className="border border-gray-200 p-3 rounded-md outline-none focus:border-[#0066cc]"
-                  />
-                </div>
-                <div className="flex flex-col gap-1">
-                  <label className="text-[12px] text-gray-500 font-bold uppercase">Apellido</label>
-                  <input 
-                    type="text" 
-                    value={formData.lastName}
-                    onChange={(e) => setFormData({...formData, lastName: e.target.value})}
-                    className="border border-gray-200 p-3 rounded-md outline-none focus:border-[#0066cc]"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                <div className="md:col-span-1 flex flex-col gap-1">
-                  <label className="text-[12px] text-gray-500 font-bold uppercase">Código Postal</label>
-                  <input 
-                    type="text" 
+                    className="checkout-input text-center text-2xl tracking-[0.5em]"
                     maxLength={4}
                     value={formData.zipCode}
                     onChange={(e) => setFormData({...formData, zipCode: e.target.value.replace(/\D/g, '')})}
-                    className="border border-gray-200 p-3 rounded-md outline-none focus:border-[#0066cc] font-bold"
+                    placeholder="CP"
                   />
                 </div>
-                <div className="md:col-span-1 flex flex-col gap-1">
-                  <label className="text-[12px] text-gray-500 font-bold uppercase">Provincia</label>
-                  <select 
-                    value={formData.state}
-                    onChange={(e) => setFormData({...formData, state: e.target.value})}
-                    className="border border-gray-200 p-3 rounded-md outline-none focus:border-[#0066cc]"
+                {error && <p className="text-red-500 text-[10px] font-bold text-center mt-2 uppercase">{error}</p>}
+                <button 
+                  onClick={handleNextStep}
+                  className="checkout-btn-next"
+                >
+                  Continuar <FaChevronRight size={12} />
+                </button>
+              </fieldset>
+            )}
+
+            {/* STEP 2: SHIPPING METHODS */}
+            {currentStep === 2 && (
+              <fieldset className="form-fieldset">
+                <h2 className="checkout-title">Método de Envío</h2>
+                <div className="shipping-options-grid mt-8">
+                  {ANDREANI_OPTIONS.map((option) => (
+                    <div 
+                      key={option.id}
+                      onClick={() => handleShippingRateSelect(option)}
+                      className={`shipping-card ${selectedRate?.id === option.id ? 'selected' : ''}`}
+                    >
+                      <img src={option.image} alt={option.name} />
+                      <span className="shipping-name">{option.name}</span>
+                      <span className="shipping-desc">Llega en {option.estimatedDays} días hábiles</span>
+                      <span className="shipping-price">SIN CARGO</span>
+                    </div>
+                  ))}
+                </div>
+                <button 
+                  onClick={handleBackStep}
+                  className="checkout-btn-back"
+                >
+                  ← Cambiar mi CP
+                </button>
+              </fieldset>
+            )}
+
+            {/* STEP 3: PAYMENT METHODS */}
+            {currentStep === 3 && (
+              <fieldset className="form-fieldset">
+                <h2 className="checkout-title">Forma de Pago</h2>
+                <div className="payment-list mt-8">
+                  
+                  {/* Tarjeta 1 Pago */}
+                  <div 
+                    className={`payment-card ${paymentMethod === 'nave' ? 'selected' : ''}`}
+                    onClick={() => setPaymentMethod('nave')}
                   >
-                    <option value="CABA">Capital Federal</option>
-                    <option value="Buenos Aires">Buenos Aires</option>
-                    <option value="Córdoba">Córdoba</option>
-                    <option value="Santa Fe">Santa Fe</option>
-                  </select>
-                </div>
-                <div className="md:col-span-1 flex flex-col gap-1">
-                  <label className="text-[12px] text-gray-500 font-bold uppercase">Ciudad</label>
-                  <input 
-                    type="text" 
-                    value={formData.city}
-                    onChange={(e) => setFormData({...formData, city: e.target.value})}
-                    className="border border-gray-200 p-3 rounded-md outline-none focus:border-[#0066cc]"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div className="md:col-span-2 flex flex-col gap-1">
-                  <label className="text-[12px] text-gray-500 font-bold uppercase">Calle</label>
-                  <input 
-                    type="text" 
-                    value={formData.street}
-                    onChange={(e) => setFormData({...formData, street: e.target.value})}
-                    className="border border-gray-200 p-3 rounded-md outline-none focus:border-[#0066cc]"
-                  />
-                </div>
-                <div className="md:col-span-1 flex flex-col gap-1">
-                  <label className="text-[12px] text-gray-500 font-bold uppercase">Número</label>
-                  <input 
-                    type="text" 
-                    value={formData.number}
-                    onChange={(e) => setFormData({...formData, number: e.target.value})}
-                    className="border border-gray-200 p-3 rounded-md outline-none focus:border-[#0066cc]"
-                  />
-                </div>
-                <div className="md:col-span-1 flex flex-col gap-1">
-                  <label className="text-[12px] text-gray-500 font-bold uppercase">Piso/Depto (Opcional)</label>
-                  <input 
-                    type="text" 
-                    value={formData.floor}
-                    onChange={(e) => setFormData({...formData, floor: e.target.value})}
-                    className="border border-gray-200 p-3 rounded-md outline-none focus:border-[#0066cc]"
-                  />
-                </div>
-              </div>
-            </section>
-
-            {/* 3. Shipping Options */}
-            <section className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
-              <h3 className="text-[14px] font-bold text-gray-700 mb-4 flex items-center gap-2">
-                <FaTruck className="text-[#0066cc]" /> Opciones de Envío (Andreani)
-              </h3>
-              
-              {loading ? (
-                <div className="flex items-center gap-3 text-gray-400 text-sm italic py-4">
-                  <FaSpinner className="animate-spin" /> Consultando tarifas...
-                </div>
-              ) : shippingRates.length > 0 ? (
-                <div className="flex flex-col gap-3">
-                  {shippingRates.map((rate) => (
-                    <div 
-                      key={rate.id}
-                      onClick={() => setSelectedRate(rate)}
-                      className={`flex items-center justify-between p-4 border rounded-lg cursor-pointer transition-all ${selectedRate?.id === rate.id ? 'border-[#0066cc] bg-blue-50/30 ring-1 ring-[#0066cc]' : 'border-gray-100 hover:border-blue-200'}`}
-                    >
-                      <div className="flex items-center gap-4">
-                        <div className={`w-5 h-5 rounded-full border flex items-center justify-center ${selectedRate?.id === rate.id ? 'border-[#0066cc] bg-[#0066cc]' : 'border-gray-300'}`}>
-                          {selectedRate?.id === rate.id && <div className="w-2 h-2 rounded-full bg-white" />}
-                        </div>
-                        <div className="flex flex-col">
-                          <span className="font-bold text-gray-800 text-[15px]">{rate.name}</span>
-                          <span className="text-[12px] text-gray-500">Llega en {rate.estimatedDays} días hábiles aprox.</span>
-                        </div>
-                      </div>
-                      <span className="font-bold text-[#0066cc]">
-                        {rate.price === 0 ? 'SIN CARGO' : `$${rate.price.toLocaleString()}`}
-                      </span>
+                    <div className="payment-radio" />
+                    <FaCreditCard className="payment-icon text-xl" />
+                    <div className="payment-info">
+                      <span className="payment-name">Tarjeta Crédito / Débito (1 Pago)</span>
                     </div>
-                  ))}
-                </div>
-              ) : formData.zipCode.length === 4 ? (
-                <p className="text-gray-400 text-sm italic">No se encontraron métodos de envío para este CP.</p>
-              ) : (
-                <p className="text-gray-400 text-sm italic">Ingresa tu código postal para ver opciones.</p>
-              )}
-
-              {/* Branch Selection UI */}
-              {selectedRate?.type === 'SUCURSAL' && (
-                <div className="mt-8 pt-6 border-t border-gray-100">
-                  <h4 className="text-[14px] font-bold text-gray-700 mb-4 flex items-center gap-2">
-                    <FaStore className="text-[#0066cc]" /> Selecciona una Sucursal Andreani
-                  </h4>
-
-                  {loadingBranches ? (
-                     <div className="flex items-center gap-2 text-gray-400 text-sm italic">
-                       <FaSpinner className="animate-spin" /> Buscando sucursales...
-                     </div>
-                  ) : branches.length > 0 ? (
-                    <div className="grid grid-cols-1 gap-3">
-                      {branches.map((branch) => (
-                        <div 
-                          key={branch.id || branch.numero}
-                          onClick={() => setSelectedBranch(branch)}
-                          className={`p-4 border rounded-lg cursor-pointer transition-all ${selectedBranch?.numero === branch.numero ? 'border-[#0066cc] bg-blue-50/20 ring-1 ring-[#0066cc]' : 'border-gray-100 hover:border-blue-200'}`}
-                        >
-                          <div className="flex justify-between items-start">
-                            <div className="flex flex-col">
-                              <span className="font-bold text-gray-800 text-[14px]">{branch.nombre}</span>
-                              <span className="text-[12px] text-gray-500 mt-1">{branch.direccion}, {branch.localidad}</span>
-                              <span className="text-[10px] text-gray-400 mt-1 uppercase font-bold">{branch.provincia}</span>
-                            </div>
-                            {selectedBranch?.numero === branch.numero && <FaCheckCircle className="text-[#0066cc]" />}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <p className="text-amber-600 text-[13px] bg-amber-50 p-3 rounded-md">No se encontraron sucursales para este código postal.</p>
-                  )}
-                </div>
-              )}
-            </section>
-          </div>
-
-          {/* Sidebar Summary */}
-          <div className="lg:col-span-5">
-            <div className="sticky top-[140px] flex flex-col gap-6">
-              
-              <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-md">
-                <div className="flex justify-between items-center mb-6 pb-2 border-b">
-                   <h2 className="text-lg font-bold">Resumen de Compra</h2>
-                   <span className="text-[10px] text-gray-300 font-mono">V2.1</span>
-                </div>
-                
-                {/* 4. Payment Method (Moved here for better visibility) */}
-                <div className="mb-8 p-0 bg-white border border-gray-200 shadow-sm rounded-none overflow-hidden">
-                  <div className="p-4 bg-gray-50 border-b border-gray-100">
-                    <h3 className="text-[12px] font-black text-gray-800 uppercase tracking-[0.15em]">Selecciona Método de Pago</h3>
+                    <span className="payment-price-tag">${(cartTotal).toLocaleString('es-AR')}</span>
                   </div>
-                  <div className="flex flex-col">
-                    <div 
-                      onClick={() => setPaymentMethod('nave')}
-                      className={`flex items-center justify-between p-6 cursor-pointer transition-all border-b border-gray-100 last:border-0 ${paymentMethod === 'nave' ? 'bg-blue-50/40 ring-inset ring-2 ring-[#0066cc]' : 'hover:bg-gray-50'}`}
-                    >
-                      <div className="flex items-center gap-4">
-                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${paymentMethod === 'nave' ? 'border-[#0066cc]' : 'border-gray-300'}`}>
-                          {paymentMethod === 'nave' && <div className="w-2.5 h-2.5 rounded-full bg-[#0066cc]" />}
-                        </div>
-                        <span className="font-bold text-gray-800 text-[14px]">Tarjetas de crédito y/o débito. QR</span>
-                      </div>
-                    </div>
 
-                    <div 
-                      onClick={() => setPaymentMethod('transfer')}
-                      className={`flex items-center justify-between p-6 cursor-pointer transition-all ${paymentMethod === 'transfer' ? 'bg-blue-50/40 ring-inset ring-2 ring-[#0066cc]' : 'hover:bg-gray-50'}`}
-                    >
-                      <div className="flex items-center gap-4">
-                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${paymentMethod === 'transfer' ? 'border-[#0066cc]' : 'border-gray-300'}`}>
-                          {paymentMethod === 'transfer' && <div className="w-2.5 h-2.5 rounded-full bg-[#0066cc]" />}
-                        </div>
-                        <span className="font-bold text-gray-800 text-[14px]">
-                          Transferencia <span className="text-red-600 ml-1">(10% OFF)</span>
-                        </span>
-                      </div>
+                  {/* Transferencia */}
+                  <div 
+                    className={`payment-card ${paymentMethod === 'transfer' ? 'selected' : ''}`}
+                    onClick={() => setPaymentMethod('transfer')}
+                  >
+                    <div className="payment-radio" />
+                    <FaMoneyBillWave className="payment-icon text-xl" />
+                    <div className="payment-info">
+                      <span className="payment-name">Transferencia Bancaria</span>
+                      <span className="payment-badge">10% OFF</span>
                     </div>
+                    <span className="payment-price-tag">${(cartTotal * 0.9).toLocaleString('es-AR')}</span>
                   </div>
-                </div>
-                
-                <div className="flex flex-col gap-4 mb-6 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
-                  {cartItems.map((item) => (
-                    <div key={item.id} className="flex gap-4">
-                      <div className="w-16 h-16 bg-gray-50 rounded-md p-1 border flex items-center justify-center flex-shrink-0">
-                        <img src={item.image} alt={item.name} className="max-h-full object-contain" />
-                      </div>
-                      <div className="flex-1">
-                        <h4 className="text-[13px] font-medium text-gray-800 line-clamp-2">{item.name}</h4>
-                        <div className="flex justify-between items-center mt-1">
-                          <span className="text-[12px] text-gray-500">x{item.quantity}</span>
-                          <span className="text-[13px] font-bold text-gray-800">${(item.price * item.quantity).toLocaleString()}</span>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
 
-                <div className="space-y-3 py-4 border-t border-b border-gray-50 mb-6">
-                  <div className="flex justify-between text-gray-600">
-                    <span>Subtotal</span>
-                    <span>${cartTotal.toLocaleString()}</span>
-                  </div>
-                  <div className="flex justify-between text-gray-600">
-                    <span>Envío</span>
-                    <span className="font-bold text-[#0066cc]">
-                      {selectedRate 
-                        ? (selectedRate.price === 0 ? 'SIN CARGO' : `$${selectedRate.price.toLocaleString()}`) 
-                        : <span className="text-gray-300 italic text-sm font-normal">A calcular</span>
-                      }
-                    </span>
-                  </div>
-                  {paymentMethod === 'transfer' && (
-                    <div className="flex justify-between text-red-600 font-bold text-sm">
-                      <span>Descuento Transferencia (10%)</span>
-                      <span>-${((cartTotal + (selectedRate?.price || 0)) * 0.1).toLocaleString()}</span>
+                  {/* 6 Cuotas Sin Interés */}
+                  <div 
+                    className={`payment-card ${paymentMethod === 'nave_cuotas' ? 'selected' : ''}`}
+                    onClick={() => setPaymentMethod('nave_cuotas')}
+                  >
+                    <div className="payment-radio" />
+                    <FaCheckCircle className="payment-icon text-xl" />
+                    <div className="payment-info">
+                      <span className="payment-name">6 Cuotas Sin Interés</span>
+                      <span className="payment-badge bg-green-500">Mismo Precio</span>
                     </div>
-                  )}
-                  <div className="flex justify-between text-[18px] font-bold text-gray-900 pt-2">
-                    <span>Total Final</span>
-                    <span>
-                      ${(
-                        (cartTotal + (selectedRate?.price || 0)) * 
-                        (paymentMethod === 'transfer' ? 0.9 : 1)
-                      ).toLocaleString()}
-                    </span>
+                    <span className="payment-price-tag">${(cartTotal).toLocaleString('es-AR')}</span>
+                  </div>
+
+                </div>
+                <button 
+                  onClick={handleNextStep}
+                  className="checkout-btn-next mt-10"
+                >
+                  Continuar al Resumen <FaChevronRight size={12} />
+                </button>
+                <button 
+                  onClick={handleBackStep}
+                  className="checkout-btn-back"
+                >
+                  ← Cambiar método de envío
+                </button>
+              </fieldset>
+            )}
+
+            {/* STEP 4: FINAL SUMMARY & PAY */}
+            {currentStep === 4 && (
+              <fieldset className="form-fieldset">
+                <h2 className="checkout-title">Confirmar Pedido</h2>
+                <div className="space-y-6 bg-slate-50 p-6 border border-slate-100 mb-8">
+                  <div>
+                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-2">Destinatario</label>
+                    <p className="font-bold text-slate-900 uppercase">{formData.firstName} {formData.lastName}</p>
+                    <p className="text-xs text-slate-500 mt-1">DNI: {formData.dni}</p>
+                  </div>
+                  <div>
+                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-2">Domicilio</label>
+                    <p className="font-bold text-slate-900 uppercase">{formData.street} {formData.number} {formData.floor && `, ${formData.floor}`}</p>
+                    <p className="text-xs text-slate-500 mt-1">{formData.city}, {formData.state} ({formData.zipCode})</p>
+                  </div>
+                  <div>
+                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-2">Método de Pago</label>
+                    <p className="font-bold text-slate-900 uppercase">
+                      {paymentMethod === 'nave' ? 'Tarjeta (1 Pago)' : paymentMethod === 'transfer' ? 'Transferencia Bancaria' : '6 Cuotas Sin Interés'}
+                    </p>
                   </div>
                 </div>
 
-                {error && (
-                  <div className="p-3 bg-red-50 text-red-600 text-[13px] rounded-md mb-4 flex items-center gap-2">
-                    <span className="font-bold">Error:</span> {error}
-                  </div>
-                )}
+                {error && <div className="p-4 bg-red-50 text-red-600 text-xs font-bold uppercase mb-6 border-l-4 border-red-600">{error}</div>}
 
                 <button 
-                  onClick={handlePayment}
-                  disabled={loading || !selectedRate}
-                  className={`w-full py-4 rounded-xl font-bold flex items-center justify-center gap-3 shadow-lg transition-all ${loading || !selectedRate ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'bg-[#000] text-[#fff] hover:bg-gray-900 hover:scale-[1.02]'}`}
+                  onClick={handleFinalPayment}
+                  disabled={loading}
+                  className="checkout-btn-next !bg-blue-600"
                 >
-                  {loading ? <FaSpinner className="animate-spin" /> : <>
-                    <FaLock /> 
-                    <span>{paymentMethod === 'nave' ? 'PAGAR CON NAVE' : 'CONFIRMAR Y VER DATOS BANCARIOS'}</span>
-                  </>}
+                  {loading ? <FaSpinner className="animate-spin" /> : <>Finalizar Pedido <FaLock size={12} /></>}
                 </button>
-                
-                <div className="mt-4 flex flex-col items-center gap-2">
-                  <img src="/images/nave.jpg" alt="Nave" className="h-[20px] grayscale opacity-50" />
-                  <p className="text-[11px] text-gray-400">Pago procesado por Galicia Negocios</p>
-                </div>
-              </div>
+                <button 
+                  onClick={handleBackStep}
+                  className="checkout-btn-back"
+                >
+                  ← Cambiar forma de pago
+                </button>
+              </fieldset>
+            )}
 
-              {/* Security features badge */}
-              <div className="flex justify-center gap-8 py-2">
-                <div className="flex flex-col items-center gap-1">
-                  <FaShieldAlt className="text-green-500 text-2xl" />
-                  <span className="text-[10px] text-gray-400 font-bold uppercase">Pago Seguro</span>
+          </div>
+
+          {/* Right Column: Order Summary Sidecard */}
+          <div className="checkout-card lg:sticky lg:top-[160px]">
+            <h2 className="checkout-title">Resumen de Compra</h2>
+            
+            <div className="max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+              {cartItems.map((item) => (
+                <div key={item.id} className="summary-row">
+                  <img src={item.image} alt={item.name} className="summary-img" />
+                  <div className="summary-details">
+                    <h4 className="summary-name uppercase tracking-tight">{item.name}</h4>
+                    <div className="summary-meta">Cantidad: {item.quantity}</div>
+                  </div>
+                  <div className="summary-price">${(item.price * item.quantity).toLocaleString('es-AR')}</div>
                 </div>
-                <div className="flex flex-col items-center gap-1">
-                  <FaTruck className="text-blue-500 text-2xl" />
-                  <span className="text-[10px] text-gray-400 font-bold uppercase">Envío Andreani</span>
-                </div>
-                <div className="flex flex-col items-center gap-1">
-                  <FaCreditCard className="text-purple-500 text-2xl" />
-                  <span className="text-[10px] text-gray-400 font-bold uppercase">Cuotas Sin Interés</span>
-                </div>
+              ))}
+            </div>
+
+            <div className="summary-totals">
+              <div className="total-row">
+                <span className="total-label">Subtotal Productos</span>
+                <span className="total-value">${cartTotal.toLocaleString('es-AR')}</span>
               </div>
+              <div className="total-row">
+                <span className="total-label">Costo de Envío</span>
+                <span className="total-value text-green-600">SIN CARGO</span>
+              </div>
+              {paymentMethod === 'transfer' && (
+                <div className="total-row">
+                  <span className="total-label text-red-600">Descuento Transferencia (10%)</span>
+                  <span className="total-value text-red-600">-${(cartTotal * 0.1).toLocaleString('es-AR')}</span>
+                </div>
+              )}
+              
+              <div className="final-total-row">
+                <span className="final-total-label">Total Final</span>
+                <span className="final-total-value">
+                  ${(paymentMethod === 'transfer' ? cartTotal * 0.9 : cartTotal).toLocaleString('es-AR')}
+                </span>
+              </div>
+            </div>
+
+            <div className="mt-8 pt-8 border-t border-slate-100 flex flex-col items-center gap-4">
+              <div className="flex gap-4 grayscale opacity-40">
+                <FaShieldAlt size={24} />
+                <FaCreditCard size={24} />
+                <FaLock size={24} />
+              </div>
+              <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">Pago Seguro Garantizado</p>
             </div>
           </div>
 
         </div>
       </div>
+
+      <ShippingModal 
+        isOpen={isShippingModalOpen}
+        onClose={() => setIsShippingModalOpen(false)}
+        initialData={formData}
+        onConfirm={handleShippingConfirm}
+      />
     </div>
   );
 }

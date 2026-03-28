@@ -29,7 +29,7 @@ export async function POST(request: Request) {
   
   try {
     const body = await request.json();
-    const { items, total, orderId, shipping, email, firstName, lastName } = body;
+    const { items, total, orderId, shipping, email, firstName, lastName, dni, paymentMode } = body;
     currentOrderId = orderId || `JB-${Date.now()}`;
 
     // 1. Log Entry
@@ -130,6 +130,8 @@ export async function POST(request: Request) {
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       navePaymentId: checkoutData.id,
+      paymentMode: paymentMode || 'NORMAL',
+      dni: dni || '',
       shippingAddress: shipping ? {
         street: `${shipping.address.street} ${shipping.address.number}`,
         city: shipping.address.city,
