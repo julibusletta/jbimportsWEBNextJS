@@ -116,7 +116,7 @@ export default function ContactoPage() {
       </div>
 
       {/* Note Section (Full Width) */}
-      <div className="w-full py-10 border-t border-slate-100 text-center bg-white mb-0">
+      <div className="w-full py-10 border-t border-slate-100 text-center bg-white mb-10">
         <p className="text-[11px] font-medium text-slate-400 leading-relaxed w-full px-6 m-0">
           Todas nuestras comunicaciones oficiales se realizan a través de los canales listados en esta página. 
           No compartas información sensible fuera de estos medios.
