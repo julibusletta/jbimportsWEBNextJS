@@ -67,12 +67,9 @@ export default function TerminosYCondiciones() {
                     <section className="terms-section">
                         <h2><span>06.</span> Envíos y Entregas</h2>
                         <p>
-                            Realizamos envíos a todo el país. Los plazos de entrega son estimativos y pueden variar según la ubicación y la logística:
+                            Realizamos envíos a todo el país exclusivamente a través de <strong>Andreani</strong>, garantizando el máximo profesionalismo y seguridad en cada entrega. 
+                            El plazo de entrega estimado para cualquier destino y tipo de envío es de <strong>3 a 5 días hábiles</strong>.
                         </p>
-                        <ul>
-                            <li>CABA y GBA: 24 a 48 horas hábiles.</li>
-                            <li>Interior del país: 3 a 7 días hábiles.</li>
-                        </ul>
                         <p>El costo del envío será informado durante el proceso de compra.</p>
                     </section>
 

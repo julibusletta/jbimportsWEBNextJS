@@ -27,11 +27,7 @@ export default function Footer() {
                       Formas de pago
                     </Link>
                   </li>
-                  <li className="mb-2.5">
-                    <Link href="/envios" className="text-gray-400 text-sm md:text-base no-underline transition-colors hover:text-white">
-                      Envíos
-                    </Link>
-                  </li>
+
                   <li className="mb-2.5">
                     <Link href="/terminos" className="text-gray-400 text-sm md:text-base no-underline transition-colors hover:text-white">
                       Términos y Condiciones
