@@ -1,6 +1,6 @@
-// import { mockProductsData } from './mockProducts';
-
-// Interfaz para el producto (debe coincidir con el modelo de MongoDB)
+/** 
+ * Interfaz para el producto (debe coincidir con el modelo de MongoDB)
+ */
 export interface Product {
     _id?: string;
     id: string;
@@ -56,43 +56,21 @@ export const getAllPromotionProducts = async (): Promise<Product[]> => {
  * Obtiene productos por sección (Bombas o Nuevas)
  */
 export const getProductsBySection = async (section: 'bombas' | 'nuevas'): Promise<Product[]> => {
-    // Client-side execution
-    if (typeof window !== 'undefined') {
-        try {
-            const res = await fetch('/api/products');
-            const all: any[] = await res.json();
-            
-            if (section === 'bombas') {
-                return all.filter(p => 
-                    p.badge?.toLowerCase().includes('bomba') || 
-                    p.price > 1000000
-                ).slice(0, 10);
-            }
-            // Sort by creation date if available, or just take the last 10
-            return all.slice().reverse().slice(0, 10); 
-        } catch (error) {
-            console.error('Error fetching products by section (client):', error);
-            return [];
-        }
-    }
-
-    // Server-side execution
     try {
-        const dbConnect = (await import('../mongodb')).default;
-        const ProductModel = (await import('../../models/Product')).default;
-        await dbConnect();
+        const res = await fetch(`${getBaseUrl()}/api/products`);
+        if (!res.ok) return [];
+        const all: any[] = await res.json();
         
         if (section === 'bombas') {
-            return await ProductModel.find({ 
-                $or: [
-                    { badge: /bomba/i },
-                    { price: { $gt: 1000000 } }
-                ]
-            }).sort({ createdAt: -1 }).limit(10).lean() as unknown as Product[];
+            return all.filter(p => 
+                p.badge?.toLowerCase().includes('bomba') || 
+                p.price > 1000000
+            ).slice(0, 10);
         }
-        return await ProductModel.find({}).sort({ createdAt: -1 }).limit(10).lean() as unknown as Product[];
+        // Ordenar por fecha de creación (si está disponible) o simplemente los últimos 10
+        return all.slice().reverse().slice(0, 10); 
     } catch (error) {
-        console.error('Error fetching products by section (server):', error);
+        console.error(`Error fetching products by section: ${section}:`, error);
         return [];
     }
 };
