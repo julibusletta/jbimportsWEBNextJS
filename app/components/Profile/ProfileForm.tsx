@@ -22,47 +22,47 @@ export default function ProfileForm({ user }: ProfileFormProps) {
   };
 
   // Input styling based on reference
-  const inputClass = "w-full border-0 border-b border-gray-300 px-2 py-2 text-sm focus:outline-none focus:border-blue-500 bg-transparent transition-colors font-sans text-gray-700";
-  const labelClass = "block text-[11px] text-gray-400 font-medium mb-1 uppercase tracking-tight";
-  const sectionTitleClass = "text-xl font-normal text-gray-500 mb-2 font-sans";
-  const sectionSubTitleClass = "text-[10px] text-gray-400 mb-6 block";
-  const boxClass = "bg-white border border-gray-100 p-6 min-h-[350px] shadow-sm flex flex-col";
+  const inputClass = "w-full border-0 border-b border-gray-300 px-2 py-3 text-[15px] focus:outline-none focus:border-blue-500 bg-transparent transition-colors font-sans text-gray-700";
+  const labelClass = "block text-[12px] text-gray-400 font-medium mb-2 uppercase tracking-tight";
+  const sectionTitleClass = "text-2xl font-normal text-gray-500 mb-2 font-sans";
+  const sectionSubTitleClass = "text-[11px] text-gray-400 mb-10 block";
+  const boxClass = "bg-white border border-gray-100 p-10 min-h-[400px] shadow-sm flex flex-col";
 
   return (
     <div className="w-full max-w-7xl mx-auto animate-in fade-in duration-700">
       <h1 className="text-4xl font-light text-gray-600 mb-10 uppercase tracking-tight border-b border-gray-100 pb-4 text-center md:text-left">Mi Cuenta</h1>
       
-      <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-3 gap-10">
         
         {/* Col 1: Datos Personales */}
         <div className={boxClass}>
           <h2 className={sectionTitleClass}>Datos Personales</h2>
           <span className={sectionSubTitleClass}>* Todos los campos son obligatorios</span>
           
-          <div className="grid grid-cols-12 gap-4">
-            <div className="col-span-4 mb-4">
+          <div className="grid grid-cols-12 gap-x-6 gap-y-10">
+            <div className="col-span-4">
               <label className={labelClass}>*ID cliente:</label>
               <input type="text" value={user.id ? user.id.slice(0, 6) : '565930'} disabled className={`${inputClass} bg-gray-50 cursor-not-allowed`} title="ID de cliente asignado automáticamente" />
             </div>
-            <div className="col-span-8 mb-4">
+            <div className="col-span-8">
               <label className={labelClass}>*Email:</label>
               <input type="email" value={user.email} disabled className={`${inputClass} bg-gray-50 cursor-not-allowed`} title="El email no puede modificarse" />
             </div>
             
-            <div className="col-span-7 mb-4">
+            <div className="col-span-12">
               <label className={labelClass}>*Nombre y Apellido</label>
               <input type="text" defaultValue={user.name} required className={inputClass} />
             </div>
-            <div className="col-span-5 mb-4">
+            <div className="col-span-12">
               <label className={labelClass}>*D.N.I:</label>
               <input type="text" defaultValue={user.dni} required className={inputClass} />
             </div>
             
-            <div className="col-span-4 mb-4">
+            <div className="col-span-4">
               <label className={labelClass}>*C. Area:</label>
               <input type="text" defaultValue="011" required className={inputClass} />
             </div>
-            <div className="col-span-8 mb-4">
+            <div className="col-span-8">
               <label className={labelClass}>*Tel de contacto:</label>
               <input type="text" defaultValue={user.phone || '1123456789'} required className={inputClass} />
             </div>
@@ -74,12 +74,12 @@ export default function ProfileForm({ user }: ProfileFormProps) {
           <h2 className={sectionTitleClass}>Domicilio de Facturación</h2>
           <span className={sectionSubTitleClass}>* Todos los campos son obligatorios</span>
           
-          <div className="space-y-4">
+          <div className="space-y-10">
             <div>
               <label className={labelClass}>*Dirección fiscal:</label>
               <input type="text" defaultValue={user.address?.street} required className={inputClass} />
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-8">
               <div>
                 <label className={labelClass}>*Piso / Depto:</label>
                 <input type="text" defaultValue={user.address?.apartment || '0'} required className={inputClass} />
@@ -89,7 +89,7 @@ export default function ProfileForm({ user }: ProfileFormProps) {
                 <input type="text" defaultValue={user.address?.zip} required className={inputClass} />
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-8">
               <div>
                 <label className={labelClass}>*Localidad:</label>
                 <input type="text" defaultValue={user.address?.city} required className={inputClass} />
@@ -132,7 +132,7 @@ export default function ProfileForm({ user }: ProfileFormProps) {
           <h2 className={sectionTitleClass}>Condición Fiscal</h2>
           <span className={sectionSubTitleClass}>Seleccione el tipo de Factura deseada</span>
           
-          <div className="space-y-3 mb-6">
+          <div className="space-y-6 mb-10">
             {[
               { id: 'ConFinal', label: 'Consumidor Final' },
               { id: 'RespInscripto', label: 'Responsable Inscripto' },
@@ -155,7 +155,7 @@ export default function ProfileForm({ user }: ProfileFormProps) {
             ))}
           </div>
 
-          <div className="mt-auto pt-4 border-t border-gray-50 grid grid-cols-2 gap-4">
+          <div className="mt-auto pt-8 border-t border-gray-100 grid grid-cols-2 gap-8">
             {fiscalType === 'ConFinal' ? (
               <>
                 <div className="animate-in slide-in-from-left-1 duration-300">
