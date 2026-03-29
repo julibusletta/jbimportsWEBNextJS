@@ -143,7 +143,7 @@ export default function OrdersManager({ orders }: OrdersManagerProps) {
                     <button
                       onClick={() => handlePaymentAction(order)}
                       disabled={!isClickableStatus || isPaying}
-                      className="px-4 py-1.5 text-[11px] font-bold text-white uppercase rounded transition-all border-0 cursor-pointer shadow-sm active:transform active:translate-y-px"
+                      className="px-6 py-2.5 text-[11px] font-bold text-white uppercase rounded-md transition-all border-0 cursor-pointer shadow-sm active:transform active:translate-y-px"
                       style={{ backgroundColor: statusColor, cursor: isClickableStatus ? 'pointer' : 'default' }}
                     >
                       {isPaying && isClickableStatus ? '...' : getStatusLabel(order.status)}
@@ -159,14 +159,14 @@ export default function OrdersManager({ orders }: OrdersManagerProps) {
                   <td className="py-10 px-4 text-center">
                     <button
                       onClick={() => setSelectedOrder(order)}
-                      className="px-4 py-1.5 text-[11px] font-bold text-white uppercase rounded transition-all bg-[#405D99] border-0 cursor-pointer shadow-sm hover:brightness-110 active:transform active:translate-y-px"
+                      className="px-6 py-2.5 text-[11px] font-bold text-white uppercase rounded-md transition-all bg-[#405D99] border-0 cursor-pointer shadow-sm hover:brightness-110 active:transform active:translate-y-px"
                     >
                       Ver pedido
                     </button>
                   </td>
                   <td className="py-10 px-4 text-center">
-                    <div className="flex justify-center items-center min-h-[40px]">
-                      <img src="/images/andreani.png" alt="Andreani" className="h-10 w-auto object-contain" />
+                    <div className="flex justify-center items-center min-h-[50px]">
+                      <img src="/images/andreani.png" alt="Andreani" className="h-14 w-auto object-contain" />
                     </div>
                   </td>
                   <td className="py-10 px-4 text-left">

@@ -268,10 +268,10 @@ export default function Header() {
                       {item.label}
                     </Link>
                   ))}
-                  <div className="">
+                  <div className="mt-1 pt-1 border-t border-gray-50">
                     <button
                       onClick={() => signOut()}
-                      className="w-full flex items-center text-gray-700 px-4 py-2.5 text-sm font-medium hover:bg-gray-50 rounded-md transition-all bg-transparent border-0 cursor-pointer text-left"
+                      className="w-full flex items-center justify-end text-red-500 px-4 py-2.5 text-sm font-bold hover:bg-red-50 rounded-md transition-all bg-transparent border-0 cursor-pointer text-right"
                     >
                       Salir
                     </button>
