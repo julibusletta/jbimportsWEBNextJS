@@ -25,6 +25,7 @@ interface Order {
     shippingMethod?: string;
   };
   paymentMethod?: 'NAVE' | 'TRANSFERENCIA';
+  trackingCode?: string;
 }
 
 interface OrdersManagerProps {
@@ -149,7 +150,11 @@ export default function OrdersManager({ orders }: OrdersManagerProps) {
                     </button>
                   </td>
                   <td className="py-6 px-2 text-center">
-                    <FaCheckCircle style={{ color: statusColor }} size={24} className="inline-block" />
+                    {order.status === 'APPROVED' || order.status === 'SHIPPED' || order.status === 'DELIVERED' ? (
+                      <FaCheckCircle style={{ color: statusColor }} size={24} className="inline-block" />
+                    ) : (
+                      <span className="font-bold text-[11px] uppercase" style={{ color: '#FFB400' }}>PENDIENTE</span>
+                    )}
                   </td>
                   <td className="py-6 px-2 text-center">
                     <button
@@ -160,13 +165,23 @@ export default function OrdersManager({ orders }: OrdersManagerProps) {
                     </button>
                   </td>
                   <td className="py-6 px-2 text-center">
-                    <img src="/images/andreani.png" alt="Andreani" className="h-6 w-auto mx-auto object-contain" />
+                    <div className="flex justify-center items-center min-h-[40px]">
+                      <img src="/images/andreani.png" alt="Andreani" className="h-10 w-auto object-contain" />
+                    </div>
                   </td>
                   <td className="py-6 px-2 text-left">
-                    {order.status === 'SHIPPED' && (
-                      <button className="p-2 text-[#405D99] hover:text-blue-700 transition-colors p-0 bg-transparent border-0 cursor-pointer">
-                        <FaExternalLinkAlt size={14} />
-                      </button>
+                    {order.trackingCode ? (
+                      <a 
+                        href={`https://pago.andreani.com/seguimiento/${order.trackingCode}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 text-[#405D99] hover:text-blue-700 transition-colors no-underline font-bold text-xs"
+                      >
+                        {order.trackingCode}
+                        <FaExternalLinkAlt size={12} />
+                      </a>
+                    ) : (
+                      <span className="text-gray-300 italic text-[10px]">Sin seguimiento</span>
                     )}
                   </td>
                 </tr>

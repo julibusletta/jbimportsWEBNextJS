@@ -30,6 +30,7 @@ const OrderSchema = new Schema({
     shippingCost: Number,
     shippingMethod: String,
   },
+  trackingCode: String,
 }, { timestamps: true });
 
 export default mongoose.models.Order || mongoose.model('Order', OrderSchema);
