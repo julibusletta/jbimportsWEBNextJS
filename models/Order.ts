@@ -31,6 +31,7 @@ const OrderSchema = new Schema({
     shippingMethod: String,
   },
   trackingCode: String,
+  invoiceUrl: String,
 }, { timestamps: true });
 
 export default mongoose.models.Order || mongoose.model('Order', OrderSchema);

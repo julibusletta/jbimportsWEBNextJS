@@ -25,6 +25,7 @@ interface Order {
   paymentMethod?: string;
   proofUrl?: string;
   proofUploadedAt?: string;
+  invoiceUrl?: string;
 }
 
 export default function OrdersPage() {
@@ -33,6 +34,7 @@ export default function OrdersPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('todos');
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const [isUploadingInvoice, setIsUploadingInvoice] = useState(false);
 
   useEffect(() => {
     fetchOrders();
@@ -68,6 +70,51 @@ export default function OrdersPage() {
       }
     } catch (err) {
       console.error('Error updating order status:', err);
+    }
+  };
+
+  const handleInvoiceUpload = async (e: React.ChangeEvent<HTMLInputElement>, orderId: string) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.type !== 'application/pdf') {
+      alert('Por favor, subí solo archivos PDF.');
+      return;
+    }
+
+    try {
+      setIsUploadingInvoice(true);
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('orderId', orderId);
+
+      const resp = await fetch('/api/admin/orders/upload-invoice', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await resp.json();
+      if (data.success) {
+        alert('Factura subida correctamente');
+        fetchOrders();
+        // Update local state if needed
+        if (selectedOrder && selectedOrder.id === orderId) {
+          // We'd need to fetch the updated order or just mock the update
+          const updatedResp = await fetch('/api/admin/orders');
+          const updatedData = await updatedResp.json();
+          if (updatedData.success) {
+            const upOrder = updatedData.orders.find((o: any) => o.id === orderId);
+            if (upOrder) setSelectedOrder(upOrder);
+          }
+        }
+      } else {
+        alert('Error: ' + data.message);
+      }
+    } catch (err) {
+      console.error('Error uploading invoice:', err);
+      alert('Error crítico al subir la factura');
+    } finally {
+      setIsUploadingInvoice(false);
     }
   };
 
@@ -170,32 +217,75 @@ export default function OrdersPage() {
                        </section>
                     </div>
 
-                    {/* Proof Visibility Side */}
-                    <div className="flex flex-col h-full min-h-[400px]">
-                       <h4 className="text-[10px] font-black text-[#058c8c] uppercase tracking-[0.3em] mb-4">Comprobante de Pago</h4>
-                       <div className="flex-1 bg-gray-100 rounded-lg border-2 border-dashed border-gray-200 flex items-center justify-center overflow-hidden relative group">
-                          {selectedOrder.proofUrl ? (
-                             <>
-                                <img 
-                                  src={selectedOrder.proofUrl} 
-                                  className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105" 
-                                  alt="Comprobante" 
-                                />
-                                <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                   <a href={selectedOrder.proofUrl} target="_blank" className="px-6 py-3 bg-white text-gray-900 font-black text-[10px] uppercase tracking-widest rounded shadow-xl">Ver Tamaño Real</a>
-                                </div>
-                             </>
-                          ) : (
-                             <div className="text-center p-10">
-                                <FaFileInvoiceDollar className="mx-auto text-gray-300 mb-4" size={48} />
-                                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest leading-relaxed">Sin comprobante adjunto hasta el momento.</p>
-                             </div>
-                          )}
-                       </div>
-                       {selectedOrder.proofUploadedAt && (
-                         <p className="text-[9px] text-gray-400 font-bold uppercase text-right mt-3 tracking-widest">Recibido: {new Date(selectedOrder.proofUploadedAt).toLocaleString('es-AR')}</p>
-                       )}
-                    </div>
+                     <div className="flex flex-col gap-8">
+                        <section>
+                           <h4 className="text-[10px] font-black text-[#058c8c] uppercase tracking-[0.3em] mb-4">Comprobante de Pago</h4>
+                           <div className="h-64 bg-gray-100 rounded-lg border-2 border-dashed border-gray-200 flex items-center justify-center overflow-hidden relative group">
+                              {selectedOrder.proofUrl ? (
+                                 <>
+                                    <img 
+                                      src={selectedOrder.proofUrl} 
+                                      className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105" 
+                                      alt="Comprobante" 
+                                    />
+                                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                       <a href={selectedOrder.proofUrl} target="_blank" className="px-6 py-3 bg-white text-gray-900 font-black text-[10px] uppercase tracking-widest rounded shadow-xl">Ver Tamaño Real</a>
+                                    </div>
+                                 </>
+                              ) : (
+                                 <div className="text-center p-10">
+                                    <FaFileInvoiceDollar className="mx-auto text-gray-300 mb-4" size={48} />
+                                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest leading-relaxed">Sin comprobante adjunto hasta el momento.</p>
+                                 </div>
+                              )}
+                           </div>
+                           {selectedOrder.proofUploadedAt && (
+                             <p className="text-[9px] text-gray-400 font-bold uppercase text-right mt-3 tracking-widest">Recibido: {new Date(selectedOrder.proofUploadedAt).toLocaleString('es-AR')}</p>
+                           )}
+                        </section>
+
+                        <section className="bg-[#058c8c]/5 p-6 rounded-xl border border-[#058c8c]/10">
+                           <h4 className="text-[10px] font-black text-[#058c8c] uppercase tracking-[0.3em] mb-4">Facturación Oficial</h4>
+                           {selectedOrder.invoiceUrl ? (
+                              <div className="flex flex-col gap-4">
+                                 <div className="flex items-center gap-4 bg-white p-4 rounded border border-[#058c8c]/20">
+                                    <div className="w-10 h-10 bg-[#058c8c] text-white rounded flex items-center justify-center">
+                                       <FaFileInvoiceDollar size={20} />
+                                    </div>
+                                    <div className="flex-1">
+                                       <p className="text-[11px] font-black text-gray-900 uppercase">Factura Adjunta</p>
+                                       <a href={selectedOrder.invoiceUrl} target="_blank" className="text-[10px] text-[#058c8c] font-bold uppercase underline">Ver / Descargar PDF</a>
+                                    </div>
+                                 </div>
+                                 <label className="text-[9px] font-bold text-gray-400 uppercase cursor-pointer hover:text-[#058c8c] flex items-center gap-2">
+                                    <input 
+                                      type="file" 
+                                      accept=".pdf" 
+                                      className="hidden" 
+                                      onChange={(e) => handleInvoiceUpload(e, selectedOrder.id)}
+                                      disabled={isUploadingInvoice}
+                                    />
+                                    {isUploadingInvoice ? 'Subiendo...' : 'Actualizar Factura (PDF)'}
+                                 </label>
+                              </div>
+                           ) : (
+                              <div className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-[#058c8c]/20 rounded-lg group hover:border-[#058c8c]/50 transition-colors">
+                                 <FaFileInvoiceDollar className="text-[#058c8c]/30 mb-4" size={32} />
+                                 <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest text-center mb-4">No se ha subido factura aún para este pedido.</p>
+                                 <label className="px-6 py-2.5 bg-[#058c8c] text-white rounded font-black text-[9px] uppercase tracking-widest cursor-pointer hover:bg-[#067474] shadow-lg shadow-[#058c8c]/20 transition">
+                                    <input 
+                                      type="file" 
+                                      accept=".pdf" 
+                                      className="hidden" 
+                                      onChange={(e) => handleInvoiceUpload(e, selectedOrder.id)}
+                                      disabled={isUploadingInvoice}
+                                    />
+                                    {isUploadingInvoice ? 'Subiendo...' : 'Subir Factura PDF'}
+                                 </label>
+                              </div>
+                           )}
+                        </section>
+                     </div>
 
                  </div>
               </div>
