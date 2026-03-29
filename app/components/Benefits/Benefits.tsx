@@ -38,16 +38,8 @@ export default function Benefits() {
     {
       icon: <FaCreditCard size={32} />,
       title: "Hasta 6 cuotas sin interés",
-      subtitle: <p>abonando desde <strong>MODO</strong> con</p>,
-      logos: (
-        <div className="payment-logos">
-          <span>ICBC</span>
-          <span className="divider"></span>
-          <span>Supervielle</span>
-          <span className="divider"></span>
-          <span>YOY</span>
-        </div>
-      )
+      subtitle: <p>Abonando con tarjeta de credito de cualquier banco</p>,
+      logos: null
     },
     {
       icon: <FaTruck size={32} />,
@@ -57,7 +49,7 @@ export default function Benefits() {
     {
       icon: <FaShieldAlt size={32} />,
       title: "Garantía oficial",
-      subtitle: <p>de hasta 36 meses en todos los productos.</p>
+      subtitle: <p>de hasta 12 meses en productos seleccionados.</p>
     }
   ];
 
