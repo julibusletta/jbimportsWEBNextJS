@@ -250,33 +250,30 @@ export default function Header() {
                   <FaChevronDown size={10} className="transition-transform duration-200 group-hover:rotate-180 opacity-70" />
                 </button>
                 <div className="dropdown-content absolute bg-white min-w-[220px] shadow-[0_10px_30px_rgba(0,0,0,0.1)] rounded-lg top-[calc(100%-8px)] right-0 p-3 hidden group-hover:block transition-all z-[1100] border border-gray-100">
-                  <div className="px-4 py-3 border-b border-gray-50 mb-2">
-                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest m-0">Hola,</p>
-                    <p className="text-sm font-bold text-gray-900 truncate m-0">{session.user?.name || session.user?.email}</p>
+                  <div className="px-4 py-3 border-b border-gray-50 mb-1">
+                    <p className="text-sm text-gray-400 m-0">Hola {session.user?.name?.split(' ')[0] || session.user?.email?.split('@')[0]}</p>
                   </div>
                   {[
-                    { label: 'Mi cuenta', href: '/mi-cuenta', icon: <FaUserCircle size={14} /> },
-                    { label: 'Mis Compras', href: '/mi-cuenta/compras', icon: <FaShoppingBag size={14} /> },
-                    { label: 'Facturas', href: '/mi-cuenta/facturas', icon: <FaFileInvoice size={14} /> },
-                    { label: 'Seguimiento', href: '/mi-cuenta/seguimiento', icon: <FaTruck size={14} /> },
-                    { label: 'Preguntas frecuentes', href: '/preguntas', icon: <FaQuestionCircle size={14} /> },
+                    { label: 'Mi cuenta', href: '/mi-cuenta' },
+                    { label: 'Mis Compras', href: '/mi-cuenta/compras' },
+                    { label: 'Facturas', href: '/mi-cuenta/facturas' },
+                    { label: 'Preguntas', href: '/preguntas' },
+                    { label: 'Favoritos', href: '/mi-cuenta/favoritos' },
                   ].map((item) => (
                     <Link
                       key={item.label}
                       href={item.href}
-                      className="flex items-center gap-3 text-gray-700 px-4 py-3 text-sm font-medium hover:bg-gray-50 rounded-md transition-all no-underline"
+                      className="flex items-center text-gray-700 px-4 py-2.5 text-sm font-medium hover:bg-gray-50 rounded-md transition-all no-underline"
                     >
-                      <span className="text-gray-400">{item.icon}</span>
                       {item.label}
                     </Link>
                   ))}
-                  <div className="mt-2 pt-2 border-t border-gray-50">
+                  <div className="">
                     <button
                       onClick={() => signOut()}
-                      className="w-full flex items-center gap-3 px-4 py-3 text-red-500 hover:bg-red-50 rounded-md transition-all bg-transparent border-0 cursor-pointer text-sm font-bold text-left"
+                      className="w-full flex items-center text-gray-700 px-4 py-2.5 text-sm font-medium hover:bg-gray-50 rounded-md transition-all bg-transparent border-0 cursor-pointer text-left"
                     >
-                      <FaSignOutAlt size={14} />
-                      SALIR
+                      Salir
                     </button>
                   </div>
                 </div>
