@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef, FormEvent } from 'react';
-import { FaShoppingCart, FaBars, FaTimes, FaSearch, FaUser, FaChevronDown, FaUserCircle, FaShoppingBag, FaFileInvoice, FaHeart, FaSignOutAlt } from 'react-icons/fa';
+import { FaShoppingCart, FaBars, FaTimes, FaSearch, FaUser, FaChevronDown, FaUserCircle, FaShoppingBag, FaFileInvoice, FaHeart, FaSignOutAlt, FaTruck, FaQuestionCircle } from 'react-icons/fa';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useSession, signOut } from "next-auth/react";
@@ -172,80 +172,7 @@ export default function Header() {
               <FaSearch size={22} />
             </button>
 
-            {/* User Icon & Dropdown */}
-            <div className="relative user-menu-container" ref={userMenuRef}>
-              <button
-                onMouseEnter={() => !isMenuOpen && setIsUserMenuOpen(true)}
-                onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                className="text-gray-700 hover:text-orange-600 transition-colors bg-transparent border-0 p-0 flex items-center gap-2 cursor-pointer"
-                aria-label="Usuario"
-              >
-                {session?.user?.image ? (
-                  <img src={session.user.image} alt="Avatar" className="w-6 h-6 rounded-full" />
-                ) : (
-                  <FaUser size={22} />
-                )}
-                <span className="hidden lg:inline text-sm font-medium uppercase">
-                  {session ? `Hola, ${session.user?.name?.split(' ')[0]}` : 'MI CUENTA'}
-                </span>
-                <FaChevronDown size={10} className={`transition-transform duration-200 ${isUserMenuOpen ? 'rotate-180' : ''}`} />
-              </button>
 
-              {isUserMenuOpen && (
-                <div className="absolute right-0 top-full mt-3 w-64 bg-white shadow-[0_20px_50px_rgba(0,0,0,0.15)] rounded-none py-0 z-[200] border border-slate-100 animate-in fade-in slide-in-from-top-2 duration-300">
-                  {session ? (
-                    <div className="flex flex-col">
-                      {/* User Badge Info */}
-                      <div className="px-6 py-5 bg-slate-50/50 border-b border-slate-100">
-                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1">Cuenta Activa</p>
-                        <p className="text-[13px] font-black text-slate-900 truncate m-0">{session.user?.email}</p>
-                      </div>
-
-                      {/* Menu Links */}
-                      {[
-                        { label: 'Mi Perfil', href: '/mi-cuenta', icon: <FaUserCircle size={14} /> },
-                        { label: 'Mis Compras', href: '/mi-cuenta/compras', icon: <FaShoppingBag size={14} /> },
-                        { label: 'Facturas', href: '/mi-cuenta/facturas', icon: <FaFileInvoice size={14} /> },
-                        { label: 'Favoritos', href: '/mi-cuenta/favoritos', icon: <FaHeart size={14} /> },
-                      ].map((item) => (
-                        <Link
-                          key={item.label}
-                          href={item.href}
-                          className="flex items-center gap-4 px-6 py-4 text-slate-500 hover:text-blue-600 hover:bg-white transition-all no-underline group border-b border-slate-50 last:border-0"
-                          onClick={() => setIsUserMenuOpen(false)}
-                        >
-                          <span className="text-slate-300 group-hover:text-blue-600 transition-colors">
-                            {item.icon}
-                          </span>
-                          <span className="text-[10px] font-black uppercase tracking-[0.2em]">{item.label}</span>
-                        </Link>
-                      ))}
-
-                      {/* Sign Out Action */}
-                      <div className="bg-slate-50 px-2 py-2">
-                        <button
-                          onClick={() => { signOut(); setIsUserMenuOpen(false); }}
-                          className="w-full flex items-center gap-4 px-4 py-3 text-slate-400 hover:text-red-500 hover:bg-white transition-all bg-transparent border-0 cursor-pointer group"
-                        >
-                          <FaSignOutAlt size={14} className="group-hover:translate-x-1 transition-transform" />
-                          <span className="text-[10px] font-black uppercase tracking-[0.2em]">Cerrar Sesión</span>
-                        </button>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="p-6">
-                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4 text-center">Inicia sesión para gestionar tus compras</p>
-                      <button
-                        onClick={() => { openLogin(); setIsUserMenuOpen(false); }}
-                        className="block w-full text-center bg-blue-600 text-white py-4 rounded-none font-black text-[10px] uppercase tracking-[0.3em] hover:bg-slate-900 transition-all no-underline border-0 cursor-pointer shadow-lg shadow-blue-200"
-                      >
-                        INGRESAR
-                      </button>
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
 
             {/* Cart */}
             <Link href="/cart" className="cart-icon relative flex items-center text-gray-700 hover:text-orange-600 cursor-pointer transition-colors">
@@ -309,6 +236,60 @@ export default function Header() {
               OFERTAS! 🔥
             </button>
           </Link>
+
+          {/* Separator and My Account */}
+          <div className="h-6 w-[1px] bg-gray-700 mx-2 hidden md:block"></div>
+          
+          <div className="dropdown relative inline-block group h-full flex items-center">
+            {session ? (
+              <>
+                <button
+                  className="text-white font-medium text-base py-1.5 px-4 rounded transition-all flex items-center gap-2 hover:bg-gray-800 bg-transparent border-0 cursor-pointer uppercase"
+                >
+                  MI CUENTA
+                  <FaChevronDown size={10} className="transition-transform duration-200 group-hover:rotate-180 opacity-70" />
+                </button>
+                <div className="dropdown-content absolute bg-white min-w-[220px] shadow-[0_10px_30px_rgba(0,0,0,0.1)] rounded-lg top-full right-0 p-3 hidden group-hover:block transition-all z-[1100] border border-gray-100">
+                  <div className="px-4 py-3 border-b border-gray-50 mb-2">
+                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest m-0">Hola,</p>
+                    <p className="text-sm font-bold text-gray-900 truncate m-0">{session.user?.name || session.user?.email}</p>
+                  </div>
+                  {[
+                    { label: 'Mi cuenta', href: '/mi-cuenta', icon: <FaUserCircle size={14} /> },
+                    { label: 'Mis Compras', href: '/mi-cuenta/compras', icon: <FaShoppingBag size={14} /> },
+                    { label: 'Facturas', href: '/mi-cuenta/facturas', icon: <FaFileInvoice size={14} /> },
+                    { label: 'Seguimiento', href: '/mi-cuenta/seguimiento', icon: <FaTruck size={14} /> },
+                    { label: 'Preguntas frecuentes', href: '/preguntas', icon: <FaQuestionCircle size={14} /> },
+                  ].map((item) => (
+                    <Link
+                      key={item.label}
+                      href={item.href}
+                      className="flex items-center gap-3 text-gray-700 px-4 py-3 text-sm font-medium hover:bg-gray-50 rounded-md transition-all no-underline"
+                    >
+                      <span className="text-gray-400">{item.icon}</span>
+                      {item.label}
+                    </Link>
+                  ))}
+                  <div className="mt-2 pt-2 border-t border-gray-50">
+                    <button
+                      onClick={() => signOut()}
+                      className="w-full flex items-center gap-3 px-4 py-3 text-red-500 hover:bg-red-50 rounded-md transition-all bg-transparent border-0 cursor-pointer text-sm font-bold text-left"
+                    >
+                      <FaSignOutAlt size={14} />
+                      SALIR
+                    </button>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <button
+                onClick={() => openLogin()}
+                className="text-white font-medium text-base py-1.5 px-4 rounded transition-all flex items-center gap-2 hover:bg-gray-800 bg-transparent border-0 cursor-pointer uppercase"
+              >
+                MI CUENTA
+              </button>
+            )}
+          </div>
         </div>
       </nav>
 
@@ -316,10 +297,62 @@ export default function Header() {
       <div 
         id="main-nav" 
         className={`md:hidden absolute top-full left-0 w-full bg-white z-[900] shadow-xl overflow-hidden transition-all duration-300 ease-in-out ${
-          isMenuOpen ? 'max-h-[85vh] opacity-100' : 'max-h-0 opacity-0 pointer-events-none'
+          isMenuOpen ? 'max-h-[90vh] opacity-100' : 'max-h-0 opacity-0 pointer-events-none'
         }`}
       >
-        <nav className="mobile-dropdown-nav flex flex-col overflow-y-auto">
+        <nav className="mobile-dropdown-nav flex flex-col overflow-y-auto max-h-[80vh]">
+          {/* Mobile Account Section */}
+          <div className="mobile-menu-item border-b border-gray-100 bg-gray-50">
+            {session ? (
+              <div className="flex flex-col">
+                <div className="flex items-center justify-between px-6 py-4">
+                  <span className="text-black text-sm font-black uppercase">MI CUENTA</span>
+                  <button 
+                    onClick={() => toggleDropdown('mobile-account')}
+                    className="p-2 text-gray-400 bg-transparent border-0 cursor-pointer"
+                  >
+                    <FaChevronDown className={`transition-transform duration-300 ${openDropdown === 'mobile-account' ? 'rotate-180' : ''}`} size={16} />
+                  </button>
+                </div>
+                {openDropdown === 'mobile-account' && (
+                  <div className="bg-white px-2 pb-4">
+                    {[
+                      { label: 'Mi cuenta', href: '/mi-cuenta', icon: <FaUserCircle /> },
+                      { label: 'Mis Compras', href: '/mi-cuenta/compras', icon: <FaShoppingBag /> },
+                      { label: 'Facturas', href: '/mi-cuenta/facturas', icon: <FaFileInvoice /> },
+                      { label: 'Seguimiento', href: '/mi-cuenta/seguimiento', icon: <FaTruck /> },
+                      { label: 'Preguntas frecuentes', href: '/preguntas', icon: <FaQuestionCircle /> },
+                    ].map((item) => (
+                      <Link
+                        key={item.label}
+                        href={item.href}
+                        className="flex items-center gap-4 px-6 py-4 text-gray-600 text-xs font-bold uppercase no-underline hover:text-blue-600"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        <span className="text-gray-300">{item.icon}</span>
+                        {item.label}
+                      </Link>
+                    ))}
+                    <button
+                      onClick={() => { signOut(); setIsMenuOpen(false); }}
+                      className="w-full flex items-center gap-4 px-6 py-4 text-red-500 text-xs font-bold uppercase no-underline bg-transparent border-0 cursor-pointer text-left"
+                    >
+                      <FaSignOutAlt />
+                      SALIR
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <button
+                onClick={() => { openLogin(); setIsMenuOpen(false); }}
+                className="w-full text-left px-6 py-4 text-black text-sm font-black uppercase bg-transparent border-0 cursor-pointer"
+              >
+                INGRESAR / MI CUENTA
+              </button>
+            )}
+          </div>
+
           {navLinks.map((link) => (
             <div key={link.label} className="mobile-menu-item border-b border-gray-100">
               <div className="flex items-center justify-between px-6 py-4">
