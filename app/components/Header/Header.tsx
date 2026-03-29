@@ -211,7 +211,7 @@ export default function Header() {
             <div key={link.label} className="dropdown relative inline-block group">
               <Link
                 href={link.href}
-                className={`text-white font-medium text-base py-1.5 px-4 rounded transition-all flex items-center gap-2 ${activeLink === link.id ? 'font-bold' : 'hover:bg-gray-800'}`}
+                className={`text-white font-medium text-[13px] py-2 px-4 rounded transition-all flex items-center gap-2 ${activeLink === link.id ? 'font-bold' : 'hover:bg-gray-800'}`}
               >
                 {link.label}
                 {link.submenu && <FaChevronDown size={10} className="transition-transform duration-200 group-hover:rotate-180 opacity-70" />}
@@ -244,12 +244,12 @@ export default function Header() {
             {session ? (
               <>
                 <button
-                  className="text-white font-medium text-base py-1.5 px-4 rounded transition-all flex items-center gap-2 hover:bg-gray-800 bg-transparent border-0 cursor-pointer uppercase"
+                  className="text-white font-medium text-[13px] py-2 px-4 rounded transition-all flex items-center gap-2 hover:bg-gray-800 bg-transparent border-0 cursor-pointer uppercase tracking-normal"
                 >
                   MI CUENTA
                   <FaChevronDown size={10} className="transition-transform duration-200 group-hover:rotate-180 opacity-70" />
                 </button>
-                <div className="dropdown-content absolute bg-white min-w-[220px] shadow-[0_10px_30px_rgba(0,0,0,0.1)] rounded-lg top-full right-0 p-3 hidden group-hover:block transition-all z-[1100] border border-gray-100">
+                <div className="dropdown-content absolute bg-white min-w-[220px] shadow-[0_10px_30px_rgba(0,0,0,0.1)] rounded-lg top-[calc(100%-8px)] right-0 p-3 hidden group-hover:block transition-all z-[1100] border border-gray-100">
                   <div className="px-4 py-3 border-b border-gray-50 mb-2">
                     <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest m-0">Hola,</p>
                     <p className="text-sm font-bold text-gray-900 truncate m-0">{session.user?.name || session.user?.email}</p>
@@ -284,7 +284,7 @@ export default function Header() {
             ) : (
               <button
                 onClick={() => openLogin()}
-                className="text-white font-medium text-base py-1.5 px-4 rounded transition-all flex items-center gap-2 hover:bg-gray-800 bg-transparent border-0 cursor-pointer uppercase"
+                className="text-white font-medium text-[13px] py-2 px-4 rounded transition-all flex items-center gap-2 hover:bg-gray-800 bg-transparent border-0 cursor-pointer uppercase tracking-normal"
               >
                 MI CUENTA
               </button>
