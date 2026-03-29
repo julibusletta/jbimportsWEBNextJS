@@ -12,7 +12,11 @@ export default async function FacturasPage() {
   }
 
   const userOrders = await db.getOrdersByEmail(session.user.email);
-  const sortedOrders = userOrders.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  const invoiceOrders = userOrders.filter((order: any) => 
+    (order.status === 'APPROVED' || order.status === 'SHIPPED' || order.status === 'DELIVERED') && 
+    order.invoiceUrl
+  );
+  const sortedOrders = invoiceOrders.sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
   return (
     <div className="animate-in fade-in duration-700">
