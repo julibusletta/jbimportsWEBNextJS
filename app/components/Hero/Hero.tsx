@@ -6,7 +6,7 @@ import '../../styles/Hero.css';
 
 const heroSlides = [
   {
-    image: '/images/test slider1.png',
+    image: '/images/bannerof1.png',
     alt: 'iPhone Premium',
   },
   {
