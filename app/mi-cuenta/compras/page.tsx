@@ -21,13 +21,10 @@ export default async function MisComprasPage() {
       <Suspense fallback={null}>
         <StatusChecker />
       </Suspense>
-      <div className="mb-10 flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-slate-200 pb-8">
+      <div className="mb-10 flex flex-col sm:flex-row sm:items-end justify-between gap-4 py-8">
         <div>
-          <h1 className="text-4xl font-black text-slate-900 tracking-tighter uppercase m-0">Mis Compras</h1>
-          <p className="text-slate-500 text-sm mt-3 font-bold uppercase tracking-widest opacity-60">Historial detallado de todas tus órdenes.</p>
-        </div>
-        <div className="text-slate-400 text-[10px] font-black uppercase tracking-[0.4em]">
-          {userOrders.length} {userOrders.length === 1 ? 'Pedido' : 'Pedidos'} en total
+          <h1 className="text-4xl font-light text-slate-500 tracking-tight uppercase m-0 border-b border-gray-100 pb-4">ESTADO DE LA COMPRA</h1>
+          <p className="text-blue-500 text-sm mt-3 font-normal uppercase tracking-tight">Mis compras</p>
         </div>
       </div>
 
