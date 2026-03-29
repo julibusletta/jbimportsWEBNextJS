@@ -113,14 +113,14 @@ export default function OrdersManager({ orders }: OrdersManagerProps) {
         <table className="w-full border-collapse">
           <thead>
             <tr className="border-b border-gray-100">
-              <th className="py-4 px-2 text-center text-sm font-bold text-gray-700 uppercase tracking-tight">N° Compra</th>
-              <th className="py-4 px-2 text-center text-sm font-bold text-gray-700 uppercase tracking-tight">Fecha</th>
-              <th className="py-4 px-2 text-right text-sm font-bold text-gray-700 uppercase tracking-tight">Total</th>
-              <th className="py-4 px-2 text-center text-sm font-bold text-gray-700 uppercase tracking-tight">Estado</th>
-              <th className="py-4 px-2 text-center text-sm font-bold text-gray-700 uppercase tracking-tight">Pago</th>
-              <th className="py-4 px-2 text-center text-sm font-bold text-gray-700 uppercase tracking-tight">Detalle</th>
-              <th className="py-4 px-2 text-center text-sm font-bold text-gray-700 uppercase tracking-tight">Correo</th>
-              <th className="py-4 px-2 text-left text-sm font-bold text-gray-700 uppercase tracking-tight">Seguimiento</th>
+              <th className="py-8 px-4 text-center text-sm font-bold text-gray-700 uppercase tracking-tight">N° Compra</th>
+              <th className="py-8 px-4 text-center text-sm font-bold text-gray-700 uppercase tracking-tight">Fecha</th>
+              <th className="py-8 px-4 text-right text-sm font-bold text-gray-700 uppercase tracking-tight">Total</th>
+              <th className="py-8 px-4 text-center text-sm font-bold text-gray-700 uppercase tracking-tight">Estado</th>
+              <th className="py-8 px-4 text-center text-sm font-bold text-gray-700 uppercase tracking-tight">Pago</th>
+              <th className="py-8 px-4 text-center text-sm font-bold text-gray-700 uppercase tracking-tight">Detalle</th>
+              <th className="py-8 px-4 text-center text-sm font-bold text-gray-700 uppercase tracking-tight">Correo</th>
+              <th className="py-8 px-4 text-left text-sm font-bold text-gray-700 uppercase tracking-tight">Seguimiento</th>
             </tr>
           </thead>
           <tbody>
@@ -130,16 +130,16 @@ export default function OrdersManager({ orders }: OrdersManagerProps) {
               
               return (
                 <tr key={order.id} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
-                  <td className="py-6 px-2 text-center text-sm text-gray-600 font-medium">
+                  <td className="py-10 px-4 text-center text-sm text-gray-600 font-medium">
                     {order.id.slice(0, 8).toUpperCase()}
                   </td>
-                  <td className="py-6 px-2 text-center text-sm text-gray-600">
+                  <td className="py-10 px-4 text-center text-sm text-gray-600">
                     {new Date(order.createdAt).toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit', year: '2-digit' })}
                   </td>
-                  <td className="py-6 px-2 text-right text-sm text-gray-800 font-bold">
+                  <td className="py-10 px-4 text-right text-sm text-gray-800 font-bold">
                     ${order.total.toLocaleString('es-AR')}
                   </td>
-                  <td className="py-6 px-2 text-center">
+                  <td className="py-10 px-4 text-center">
                     <button
                       onClick={() => handlePaymentAction(order)}
                       disabled={!isClickableStatus || isPaying}
@@ -149,14 +149,14 @@ export default function OrdersManager({ orders }: OrdersManagerProps) {
                       {isPaying && isClickableStatus ? '...' : getStatusLabel(order.status)}
                     </button>
                   </td>
-                  <td className="py-6 px-2 text-center">
+                  <td className="py-10 px-4 text-center">
                     {order.status === 'APPROVED' || order.status === 'SHIPPED' || order.status === 'DELIVERED' ? (
                       <FaCheckCircle style={{ color: statusColor }} size={24} className="inline-block" />
                     ) : (
                       <span className="font-bold text-[11px] uppercase" style={{ color: '#FFB400' }}>PENDIENTE</span>
                     )}
                   </td>
-                  <td className="py-6 px-2 text-center">
+                  <td className="py-10 px-4 text-center">
                     <button
                       onClick={() => setSelectedOrder(order)}
                       className="px-4 py-1.5 text-[11px] font-bold text-white uppercase rounded transition-all bg-[#405D99] border-0 cursor-pointer shadow-sm hover:brightness-110 active:transform active:translate-y-px"
@@ -164,12 +164,12 @@ export default function OrdersManager({ orders }: OrdersManagerProps) {
                       Ver pedido
                     </button>
                   </td>
-                  <td className="py-6 px-2 text-center">
+                  <td className="py-10 px-4 text-center">
                     <div className="flex justify-center items-center min-h-[40px]">
                       <img src="/images/andreani.png" alt="Andreani" className="h-10 w-auto object-contain" />
                     </div>
                   </td>
-                  <td className="py-6 px-2 text-left">
+                  <td className="py-10 px-4 text-left">
                     {order.trackingCode ? (
                       <a 
                         href={`https://pago.andreani.com/seguimiento/${order.trackingCode}`}
