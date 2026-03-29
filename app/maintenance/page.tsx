@@ -52,7 +52,7 @@ export default function MaintenancePage() {
         {/* Contact Actions */}
         <div className="flex flex-wrap items-center justify-center gap-6 pt-8 w-full px-4">
           <a 
-            href="https://wa.me/5491131070621" 
+            href="https://wa.me/5491151457720" 
             target="_blank"
             rel="noopener noreferrer"
             className="px-8 py-4 md:px-10 md:py-5 bg-white/5 border border-white/10 text-white font-black rounded-none flex items-center gap-3 hover:bg-white/10 hover:scale-[1.05] transition-all shadow-xl active:scale-95 text-sm md:text-base"
