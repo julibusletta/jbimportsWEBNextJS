@@ -211,7 +211,7 @@ export default function Header() {
             <div key={link.label} className="dropdown relative inline-block group">
               <Link
                 href={link.href}
-                className={`text-white font-medium text-[13px] py-2 px-4 rounded transition-all flex items-center gap-2 ${activeLink === link.id ? 'font-bold' : 'hover:bg-gray-800'}`}
+                className={`text-white font-medium text-[13px] py-1.5 px-4 rounded transition-all flex items-center gap-2 leading-none ${activeLink === link.id ? 'font-bold' : 'hover:bg-gray-800'}`}
               >
                 {link.label}
                 {link.submenu && <FaChevronDown size={10} className="transition-transform duration-200 group-hover:rotate-180 opacity-70" />}
@@ -240,11 +240,11 @@ export default function Header() {
           {/* Separator and My Account */}
           <div className="h-6 w-[1px] bg-gray-700 mx-2 hidden md:block"></div>
           
-          <div className="dropdown relative inline-block group h-full flex items-center">
+          <div className="dropdown relative inline-block group">
             {session ? (
               <>
                 <button
-                  className="text-white font-medium text-[13px] py-2 px-4 rounded transition-all flex items-center gap-2 hover:bg-gray-800 bg-transparent border-0 cursor-pointer uppercase tracking-normal"
+                  className="text-white font-medium text-[13px] py-1.5 px-4 rounded transition-all flex items-center gap-2 hover:bg-gray-800 bg-transparent border-0 cursor-pointer uppercase tracking-normal leading-none"
                 >
                   MI CUENTA
                   <FaChevronDown size={10} className="transition-transform duration-200 group-hover:rotate-180 opacity-70" />
@@ -284,7 +284,7 @@ export default function Header() {
             ) : (
               <button
                 onClick={() => openLogin()}
-                className="text-white font-medium text-[13px] py-2 px-4 rounded transition-all flex items-center gap-2 hover:bg-gray-800 bg-transparent border-0 cursor-pointer uppercase tracking-normal"
+                className="text-white font-medium text-[13px] py-1.5 px-4 rounded transition-all flex items-center gap-2 hover:bg-gray-800 bg-transparent border-0 cursor-pointer uppercase tracking-normal leading-none"
               >
                 MI CUENTA
               </button>
