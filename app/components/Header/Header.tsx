@@ -89,7 +89,15 @@ export default function Header() {
         { label: 'AMAZON', href: '/category/amazon' },
       ],
     },
-    { label: 'NOTEBOOKS', href: '/category/notebooks', id: 'notebooks' },
+    {
+      label: 'NOTEBOOKS Y TABLETS',
+      href: '/category/notebooks-y-tablets',
+      id: 'notebooks-tablets',
+      submenu: [
+        { label: 'NOTEBOOKS', href: '/category/notebooks' },
+        { label: 'TABLETS', href: '/category/tablets' },
+      ],
+    },
     { label: 'ACCESORIOS STARLINK', href: '/category/accesorios-starlink', id: 'starlink' },
   ];
 
