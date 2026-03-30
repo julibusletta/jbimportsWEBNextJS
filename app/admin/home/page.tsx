@@ -1,13 +1,17 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { FaSave, FaPlus, FaTrash, FaImage, FaList, FaArrowsAltV, FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
+import { FaSave, FaPlus, FaTrash, FaImage, FaList, FaArrowsAltV, FaCheckCircle, FaTimesCircle, FaTrophy } from 'react-icons/fa';
 import Link from 'next/link';
 
 export default function HomeAdminPage() {
-  const [activeTab, setActiveTab] = useState<'slider' | 'carousels'>('slider');
+  const [activeTab, setActiveTab] = useState<'slider' | 'carousels' | 'offers'>('slider');
   const [heroSlides, setHeroSlides] = useState<any[]>([]);
   const [productCarousels, setProductCarousels] = useState<any[]>([]);
+  const [weeklyOffers, setWeeklyOffers] = useState<any[]>([
+    { productId: '', title: '', subtitle: '', link: '', active: true },
+    { productId: '', title: '', subtitle: '', link: '', active: true }
+  ]);
   const [loading, setLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [message, setMessage] = useState('');
@@ -23,6 +27,9 @@ export default function HomeAdminPage() {
       const data = await res.json();
       setHeroSlides(data.heroSlides || []);
       setProductCarousels(data.productCarousels || []);
+      if (data.weeklyOffers && data.weeklyOffers.length > 0) {
+        setWeeklyOffers(data.weeklyOffers);
+      }
       setLoading(false);
     } catch (error) {
       console.error('Error fetching home settings:', error);
@@ -37,7 +44,7 @@ export default function HomeAdminPage() {
       const res = await fetch('/api/admin/home-settings', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ heroSlides, productCarousels })
+        body: JSON.stringify({ heroSlides, productCarousels, weeklyOffers })
       });
       const result = await res.json();
       if (result.success) {
@@ -79,6 +86,12 @@ export default function HomeAdminPage() {
     const updated = [...productCarousels];
     updated[index][field] = value;
     setProductCarousels(updated);
+  };
+
+  const updateOffer = (index: number, field: string, value: any) => {
+    const updated = [...weeklyOffers];
+    updated[index][field] = value;
+    setWeeklyOffers(updated);
   };
 
   if (loading) return <div className="p-10 text-center animate-pulse font-bold text-gray-400">Cargando configuración de la Home...</div>;
@@ -123,6 +136,12 @@ export default function HomeAdminPage() {
           className={`flex items-center gap-2 px-6 py-2.5 rounded-lg text-xs font-black uppercase tracking-wider transition-all ${activeTab === 'carousels' ? 'bg-[#058c8c] text-white shadow-md' : 'text-gray-400 hover:bg-gray-50'}`}
         >
           <FaList /> Carruseles de Productos
+        </button>
+        <button
+          onClick={() => setActiveTab('offers')}
+          className={`flex items-center gap-2 px-6 py-2.5 rounded-lg text-xs font-black uppercase tracking-wider transition-all ${activeTab === 'offers' ? 'bg-[#058c8c] text-white shadow-md' : 'text-gray-400 hover:bg-gray-50'}`}
+        >
+          <FaTrophy /> Ofertas Semanales
         </button>
       </div>
 
@@ -278,6 +297,92 @@ export default function HomeAdminPage() {
                   <h4 className="text-xs font-bold text-blue-800 mb-1">Orden de aparición</h4>
                   <p className="text-[10px] text-blue-600 leading-relaxed font-medium">Las secciones se mostrarán en la Home en el mismo orden que aparecen en esta lista. Asegúrate de que las categorías correspondan con lo definido en el mapeo de la API.</p>
                </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'offers' && (
+          <div className="space-y-8 animate-fadeIn">
+            <div className="flex justify-between items-center border-b border-gray-100 pb-4 mb-6">
+              <h3 className="font-black text-gray-900 uppercase tracking-widest text-sm">Gestionar Ofertas Semanales (Banners)</h3>
+            </div>
+            
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              {weeklyOffers.map((offer, idx) => (
+                <div key={idx} className={`p-8 rounded-2xl border-2 ${idx === 0 ? 'bg-blue-50/30 border-blue-100' : 'bg-green-50/30 border-green-100'}`}>
+                  <div className="flex items-center justify-between mb-6">
+                    <span className={`px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${idx === 0 ? 'bg-blue-600 text-white' : 'bg-green-600 text-white'}`}>
+                      Banner {idx + 1}
+                    </span>
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input 
+                        type="checkbox" 
+                        checked={offer.active}
+                        onChange={(e) => updateOffer(idx, 'active', e.target.checked)}
+                        className="w-4 h-4 rounded text-[#058c8c]"
+                      />
+                      <span className="text-[10px] font-bold text-gray-600 uppercase">Activo</span>
+                    </label>
+                  </div>
+
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-[9px] font-black text-gray-400 uppercase mb-1.5 px-1">ID del Producto (Base para Precio/Link)</label>
+                      <input 
+                        type="text" 
+                        value={offer.productId}
+                        onChange={(e) => updateOffer(idx, 'productId', e.target.value)}
+                        className="w-full px-4 py-2.5 text-xs bg-white border border-gray-200 rounded-xl outline-none font-bold"
+                        placeholder="Ej: 378"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[9px] font-black text-gray-400 uppercase mb-1.5 px-1">Título Personalizado</label>
+                      <input 
+                        type="text" 
+                        value={offer.title}
+                        onChange={(e) => updateOffer(idx, 'title', e.target.value)}
+                        className="w-full px-4 py-2.5 text-xs bg-white border border-gray-200 rounded-xl outline-none font-bold"
+                        placeholder="Ej: JBL CHARGE 6"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[9px] font-black text-gray-400 uppercase mb-1.5 px-1">Subtítulo / Promo Detalle</label>
+                      <input 
+                        type="text" 
+                        value={offer.subtitle}
+                        onChange={(e) => updateOffer(idx, 'subtitle', e.target.value)}
+                        className="w-full px-4 py-2.5 text-xs bg-white border border-gray-200 rounded-xl outline-none"
+                        placeholder="Ej: * 10% de descuento abonando por transferencia"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[9px] font-black text-gray-400 uppercase mb-1.5 px-1">Link de Destino</label>
+                      <input 
+                        type="text" 
+                        value={offer.link}
+                        onChange={(e) => updateOffer(idx, 'link', e.target.value)}
+                        className="w-full px-4 py-2.5 text-xs bg-white border border-gray-200 rounded-xl outline-none text-gray-500"
+                        placeholder="Ej: /product/378"
+                      />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            
+            <div className="p-4 bg-orange-50 rounded-xl border border-orange-100 flex items-start gap-4">
+              <div className="w-10 h-10 bg-orange-100 text-orange-600 rounded-lg flex items-center justify-center shrink-0">
+                <FaTrophy />
+              </div>
+              <div>
+                <h4 className="text-xs font-bold text-orange-800 mb-1">Información Importante</h4>
+                <p className="text-[10px] text-orange-600 leading-relaxed font-medium">
+                  Los banners de ofertas semanales están optimizados para productos específicos. 
+                  El Banner 1 tiene fondo azul y el Banner 2 fondo verde para conservar el diseño actual.
+                  Si dejas el campo de "Link" vacío, el sistema usará /product/[ID] automáticamente.
+                </p>
+              </div>
             </div>
           </div>
         )}

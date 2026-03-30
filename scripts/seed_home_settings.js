@@ -68,6 +68,11 @@ const initialCarousels = [
   { title: "NUEVAS LLEGADAS", type: 'section', value: 'nuevas', order: 1, active: true }
 ];
 
+const initialWeeklyOffers = [
+  { productId: "378", title: "JBL CHARGE 6", subtitle: "* 10% de descuento abonando por transferencia", link: "/product/378", active: true },
+  { productId: "1339", title: "XIAOMI SMART", subtitle: "ROBOT S40C", link: "/product/1339", active: true }
+];
+
 async function seed() {
   try {
     console.log('Conectando a MongoDB...');
@@ -80,6 +85,7 @@ async function seed() {
     await HomeSettings.create({
       heroSlides: initialSlides,
       productCarousels: initialCarousels,
+      weeklyOffers: initialWeeklyOffers,
       updatedAt: new Date()
     });
 

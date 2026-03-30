@@ -23,6 +23,14 @@ const ProductCarouselSchema = new mongoose.Schema({
 const HomeSettingsSchema = new mongoose.Schema({
   heroSlides: [HeroSlideSchema],
   productCarousels: [ProductCarouselSchema],
+  weeklyOffers: [{
+    productId: String,
+    title: String,
+    subtitle: String,
+    link: String,
+    image: String,
+    active: { type: Boolean, default: true }
+  }],
   updatedAt: { type: Date, default: Date.now }
 });
 
