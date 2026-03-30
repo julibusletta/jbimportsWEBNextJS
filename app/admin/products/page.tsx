@@ -7,6 +7,14 @@ import { Spec } from '@/lib/api/productSpecifications';
 import Link from 'next/link';
 import { FaUpload, FaSave, FaInfoCircle, FaSearch, FaTable, FaThList, FaTimesCircle, FaTags, FaBoxOpen, FaCogs, FaGlobe, FaPlus, FaTrash, FaExclamationTriangle } from 'react-icons/fa';
 
+const CATEGORIES = [
+  'celulares', 'samsung', 'xiaomi', 'motorola', 'realme', 'iphone',
+  'apple', 'macbook', 'watch', 'ipad', 'airpods',
+  'jbl', 'parlantes', 'auriculares', 'sounds-bars',
+  'smart-home', 'amazon', 'google', 'xiaomi-home', 'aspiradoras-robot', 'camaras-seguridad',
+  'smart-watches', 'xiaomi-watches', 'notebooks', 'accesorios-starlink', 'general'
+];
+
 export default function ProductsPage() {
   const [products, setProducts] = useState<{ [key: string]: Product[] }>({});
   const [specifications, setSpecifications] = useState<Record<string, Spec[]>>({});
@@ -349,6 +357,7 @@ export default function ProductsPage() {
                       <th className="px-6 py-4 w-16">ID</th>
                       <th className="px-6 py-4">Producto</th>
                       <th className="px-6 py-4 w-40">Precio</th>
+                      <th className="px-6 py-4 w-28">Categoría</th>
                       <th className="px-6 py-4 w-28">Stock</th>
                       <th className="px-6 py-4 w-28 text-center">Estado</th>
                     </tr>
@@ -380,6 +389,11 @@ export default function ProductsPage() {
                               {p.name}
                             </span>
                           </div>
+                        </td>
+                        <td className="px-6 py-4">
+                          <span className="text-[10px] font-bold text-gray-500 bg-gray-100 px-2 py-1 rounded uppercase tracking-wider">
+                            {p.category}
+                          </span>
                         </td>
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-2">
@@ -559,12 +573,18 @@ export default function ProductsPage() {
                             </div>
                             <div>
                               <label className="block text-[9px] font-black text-gray-400 uppercase mb-2">Categoría</label>
-                              <input
-                                type="text"
+                              <select
                                 value={p.category}
                                 onChange={(e) => handleProductChange(p.id, p.category, 'category', e.target.value)}
-                                className="w-full px-4 py-3 bg-gray-50 border border-[#e1e3e5] rounded outline-none text-sm font-bold text-gray-600"
-                              />
+                                className="w-full px-4 py-3 bg-gray-50 border border-[#e1e3e5] rounded outline-none text-sm font-bold text-gray-600 focus:border-[#058c8c] focus:bg-white transition appearance-none"
+                              >
+                                {CATEGORIES.map(cat => (
+                                  <option key={cat} value={cat}>{cat.charAt(0).toUpperCase() + cat.slice(1)}</option>
+                                ))}
+                                {!CATEGORIES.includes(p.category) && (
+                                  <option value={p.category}>{p.category}</option>
+                                )}
+                              </select>
                             </div>
                           </div>
                           <div>

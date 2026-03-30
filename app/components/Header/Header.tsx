@@ -71,6 +71,15 @@ export default function Header() {
       ],
     },
     {
+      label: 'SMARTWATCH',
+      href: '/category/smart-watches',
+      id: 'smartwatch',
+      submenu: [
+        { label: 'XIAOMI', href: '/category/xiaomi-watches' },
+        { label: 'APPLE', href: '/category/watch' },
+      ],
+    },
+    {
       label: 'SMART HOME',
       href: '/category/smart-home',
       id: 'smart-home',
