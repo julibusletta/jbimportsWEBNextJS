@@ -31,6 +31,11 @@ const orbitron = Orbitron({
 export const metadata: Metadata = {
   title: "JBimports - Tecnología a un solo clic",
   description: "Los mejores productos de tecnología al mejor precio",
+  icons: {
+    icon: "/images/logojbimports.webp",
+    shortcut: "/images/logojbimports.webp",
+    apple: "/images/logojbimports.webp",
+  },
 };
 
 export default function RootLayout({
