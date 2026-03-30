@@ -14,6 +14,7 @@ export default function HomeAdminPage() {
   ]);
   const [loading, setLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+  const [isUploading, setIsUploading] = useState<number | null>(null);
   const [message, setMessage] = useState('');
 
   useEffect(() => {
@@ -34,6 +35,32 @@ export default function HomeAdminPage() {
     } catch (error) {
       console.error('Error fetching home settings:', error);
       setLoading(false);
+    }
+  };
+
+  const handleImageUpload = async (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsUploading(index);
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const res = await fetch('/api/admin/upload-banner', {
+        method: 'POST',
+        body: formData,
+      });
+      const data = await res.json();
+      if (data.success) {
+        updateSlide(index, 'image', data.url);
+      } else {
+        alert('Error al subir la imagen: ' + data.message);
+      }
+    } catch (error) {
+      alert('Error de conexión al subir la imagen');
+    } finally {
+      setIsUploading(null);
     }
   };
 
@@ -167,13 +194,30 @@ export default function HomeAdminPage() {
                       <div className="aspect-video bg-white rounded border border-gray-200 overflow-hidden flex items-center justify-center p-2 mb-3">
                          {slide.image ? <img src={slide.image} className="w-full h-full object-contain" alt="" /> : <FaImage size={30} className="text-gray-200" />}
                       </div>
-                      <label className="block text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1.5 px-1">URL de Imagen</label>
+                      <div className="flex justify-between items-end mb-1.5 px-1">
+                        <label className="block text-[9px] font-black text-gray-400 uppercase tracking-widest">URL de Imagen</label>
+                        <div className="relative">
+                          <input 
+                            type="file" 
+                            id={`file-upload-${idx}`}
+                            className="hidden" 
+                            onChange={(e) => handleImageUpload(idx, e)}
+                            accept="image/*"
+                          />
+                          <label 
+                            htmlFor={`file-upload-${idx}`}
+                            className={`text-[8px] font-black uppercase tracking-widest cursor-pointer hover:text-[#058c8c] transition-colors ${isUploading === idx ? 'animate-pulse text-amber-500' : 'text-blue-500'}`}
+                          >
+                            {isUploading === idx ? 'Subiendo...' : '📂 Subir Archivo'}
+                          </label>
+                        </div>
+                      </div>
                       <input 
                         type="text" 
                         value={slide.image} 
                         onChange={(e) => updateSlide(idx, 'image', e.target.value)}
                         placeholder="/images/banner1.png"
-                        className="w-full px-3 py-2 text-xs bg-white border border-gray-200 rounded outline-none"
+                        className="w-full px-3 py-2 text-xs bg-white border border-gray-200 rounded outline-none font-medium text-gray-600"
                       />
                     </div>
                     <div className="md:col-span-2 space-y-4">
