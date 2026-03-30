@@ -9,8 +9,8 @@ export default function HomeAdminPage() {
   const [heroSlides, setHeroSlides] = useState<any[]>([]);
   const [productCarousels, setProductCarousels] = useState<any[]>([]);
   const [weeklyOffers, setWeeklyOffers] = useState<any[]>([
-    { productId: '', title: '', subtitle: '', link: '', active: true },
-    { productId: '', title: '', subtitle: '', link: '', active: true }
+    { productId: '', title: '', subtitle: '', link: '', image: '', active: true },
+    { productId: '', title: '', subtitle: '', link: '', image: '', active: true }
   ]);
   const [loading, setLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -409,6 +409,53 @@ export default function HomeAdminPage() {
                         className="w-full px-4 py-2.5 text-xs bg-white border border-gray-200 rounded-xl outline-none text-gray-500"
                         placeholder="Ej: /product/378"
                       />
+                    </div>
+                    <div>
+                      <label className="block text-[9px] font-black text-gray-400 uppercase mb-1.5 px-1">Enlace de la Imagen (O subir imagen)</label>
+                      <div className="flex gap-2">
+                        <input 
+                          type="text" 
+                          value={offer.image || ''}
+                          onChange={(e) => updateOffer(idx, 'image', e.target.value)}
+                          className="w-full px-4 py-2 text-xs bg-white border border-gray-200 rounded-xl outline-none"
+                          placeholder="/images/productos/mi-oferta.png"
+                        />
+                        <div className="relative shrink-0 flex items-center">
+                          <input 
+                            type="file" 
+                            id={`offer-upload-${idx}`}
+                            className="hidden" 
+                            onChange={async (e) => {
+                               const file = e.target.files?.[0];
+                               if (!file) return;
+                               setIsUploading(100 + idx);
+                               const formData = new FormData();
+                               formData.append('file', file);
+                               try {
+                                 const res = await fetch('/api/admin/upload-banner', { method: 'POST', body: formData });
+                                 const data = await res.json();
+                                 if (data.success) {
+                                   updateOffer(idx, 'image', data.url);
+                                 } else {
+                                   alert('Error al subir: ' + data.message);
+                                 }
+                               } catch (err) { alert('Error de red'); } finally { setIsUploading(null); }
+                            }}
+                            accept="image/*"
+                          />
+                          <label 
+                            htmlFor={`offer-upload-${idx}`}
+                            className="px-3 py-2 bg-gray-100 border border-gray-200 rounded-xl text-xs font-bold cursor-pointer hover:bg-gray-200 whitespace-nowrap"
+                          >
+                             {isUploading === 100 + idx ? 'Subiendo...' : '📁 Subir'}
+                          </label>
+                        </div>
+                      </div>
+                      {offer.image && (
+                        <div className="mt-4 w-full max-w-[150px] aspect-[4/3] bg-gray-50 border border-gray-100 rounded-lg flex items-center justify-center p-2">
+                          <img src={offer.image} alt="Preview" className="max-w-full max-h-full object-contain drop-shadow" />
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>

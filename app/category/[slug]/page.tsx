@@ -126,7 +126,7 @@ export default function CategoryPage() {
   }
 
   // Extract brand names from products for filter
-  const knownBrands = ['Asus', 'MSI', 'Gigabyte', 'HP', 'NVIDIA', 'AMD', 'Corsair', 'Kingston'];
+  const knownBrands = ['Apple', 'Samsung', 'Xiaomi', 'Motorola', 'Realme', 'JBL', 'Amazon', 'Starlink', 'Asus', 'MSI', 'Gigabyte', 'HP', 'NVIDIA', 'AMD', 'Corsair', 'Kingston'];
   const availableBrands = knownBrands.map(brand => ({
     name: brand,
     count: products.filter(p => p.name.toLowerCase().includes(brand.toLowerCase())).length,
@@ -552,30 +552,20 @@ export default function CategoryPage() {
                 Marcas
                 {showBrandsFilter ? <FaChevronUp size={11} /> : <FaChevronDown size={11} />}
               </button>
-              {showBrandsFilter && (
+              {showBrandsFilter && availableBrands.length > 0 && (
                 <div style={{ padding: '10px 12px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                  {availableBrands.length > 0 ? (
-                    availableBrands.map(brand => (
-                      <label key={brand.name} style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '13px', color: '#333' }}>
-                        <input
-                          type="checkbox"
-                          checked={selectedBrands.includes(brand.name)}
-                          onChange={() => toggleBrand(brand.name)}
-                          style={{ cursor: 'pointer' }}
-                        />
-                        <span>{brand.name}</span>
-                        <span style={{ color: '#aaa', fontSize: '12px' }}>({brand.count})</span>
-                      </label>
-                    ))
-                  ) : (
-                    ['Asus', 'HP'].map(brand => (
-                      <label key={brand} style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '13px', color: '#333' }}>
-                        <input type="radio" name="brand" style={{ cursor: 'pointer' }} />
-                        <span>{brand}</span>
-                        <span style={{ color: '#aaa', fontSize: '12px' }}>({Math.floor(Math.random() * 20 + 5)})</span>
-                      </label>
-                    ))
-                  )}
+                  {availableBrands.map(brand => (
+                    <label key={brand.name} style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '13px', color: '#333' }}>
+                      <input
+                        type="checkbox"
+                        checked={selectedBrands.includes(brand.name)}
+                        onChange={() => toggleBrand(brand.name)}
+                        style={{ cursor: 'pointer' }}
+                      />
+                      <span>{brand.name}</span>
+                      <span style={{ color: '#aaa', fontSize: '12px' }}>({brand.count})</span>
+                    </label>
+                  ))}
                 </div>
               )}
             </div>

@@ -55,7 +55,9 @@ const PromoBanners = () => {
                             <Link key={idx} href={linkHref} className={cardClass}>
                                 {isFirst ? (
                                     <>
-                                        <div className="tb-image-col"></div>
+                                        <div className="tb-image-col">
+                                            {offer.image && <img src={offer.image} alt={offer.title} className="w-full h-auto object-contain max-h-[250px] drop-shadow-xl" />}
+                                        </div>
                                         <div className="tb-text-col tb-text-light">
                                             <h2 className="tb-title -mb-1 lowercase">{offer.title}</h2>
                                             <div className="text-3xl md:text-4xl font-black text-white uppercase italic">OFERTA</div>
@@ -107,7 +109,9 @@ const PromoBanners = () => {
                                             </div>
                                             <div className="tb-btn tb-btn-green">COMPRAR</div>
                                         </div>
-                                        <div className="tb-image-col"></div>
+                                        <div className="tb-image-col">
+                                            {offer.image && <img src={offer.image} alt={offer.title} className="w-full h-auto object-contain max-h-[250px] drop-shadow-xl" />}
+                                        </div>
                                     </>
                                 )}
                             </Link>
