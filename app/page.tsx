@@ -11,13 +11,13 @@ export default function Home() {
       <Benefits />
       <ProductCarouselSection 
         title="BOMBAS EN JB IMPORTS"
-        section="bombas"
+        value="bombas"
       />
       <Categories />
       <PromoBanners />
       <ProductCarouselSection 
         title="NUEVAS LLEGADAS"
-        section="nuevas"
+        value="nuevas"
       />
     </main>
   );
