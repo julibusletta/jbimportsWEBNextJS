@@ -4,38 +4,52 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import '../../styles/Hero.css';
 
-const heroSlides = [
-  {
-    image: '/images/bannerof1.png',
-    alt: 'iPhone Premium',
-  },
-  {
-    image: '/images/DC_20260306150520_9z1vjiMY.jpg',
-    alt: 'Tecnología',
-  },
-  {
-    image: '/images/slider-user-tech.png',
-    alt: 'Promoción 6 Cuotas Sin Interés',
-    isCustom: true,
-    title1: 'HASTA 6 CUOTAS',
-    title2: 'SIN INTERÉS',
-    subtitle: 'LA TECNOLOGÍA QUE NECESITAS EN UN SOLO LUGAR',
-    showShippingIcon: false,
-  },
-  {
-    image: '/images/slider5.png',
-    alt: 'Crecimiento Corporativo',
-  },
-  {
-    image: '/images/JBLBoombox3Lifestyle01904x560px-(5014).webp',
-    alt: 'Audio Premium',
-  },
-];
-
 export default function Hero() {
+  const [heroSlides, setHeroSlides] = useState<any[]>([
+    {
+      image: '/images/bannerof1.png',
+      alt: 'iPhone Premium',
+    },
+    {
+      image: '/images/DC_20260306150520_9z1vjiMY.jpg',
+      alt: 'Tecnología',
+    },
+    {
+      image: '/images/slider-user-tech.png',
+      alt: 'Promoción 6 Cuotas Sin Interés',
+      isCustom: true,
+      title1: 'HASTA 6 CUOTAS',
+      title2: 'SIN INTERÉS',
+      subtitle: 'LA TECNOLOGÍA QUE NECESITAS EN UN SOLO LUGAR',
+      showShippingIcon: false,
+    },
+    {
+      image: '/images/slider5.png',
+      alt: 'Crecimiento Corporativo',
+    },
+    {
+      image: '/images/JBLBoombox3Lifestyle01904x560px-(5014).webp',
+      alt: 'Audio Premium',
+    },
+  ]);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [displayText, setDisplayText] = useState('');
   const [isTyping, setIsTyping] = useState(true);
+
+  useEffect(() => {
+    const fetchSlides = async () => {
+      try {
+        const res = await fetch('/api/home-settings');
+        const data = await res.json();
+        if (data.heroSlides && data.heroSlides.length > 0) {
+          setHeroSlides(data.heroSlides);
+        }
+      } catch (err) {
+        console.error('Error fetching hero slides:', err);
+      }
+    };
+    fetchSlides();
+  }, []);
 
   const fullText = 'JB imports  Tecnologia a un solo clic';
   const bluePart = 'JB imports';

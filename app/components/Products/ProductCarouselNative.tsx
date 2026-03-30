@@ -9,10 +9,11 @@ import '../../styles/ProductCarousel.css';
 
 interface ProductCarouselSectionProps {
   title: string;
-  section: 'bombas' | 'nuevas';
+  type?: 'section' | 'category';
+  value: string;
 }
 
-export function ProductCarouselSection({ title, section }: ProductCarouselSectionProps) {
+export function ProductCarouselSection({ title, type = 'section', value }: ProductCarouselSectionProps) {
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [addedProductId, setAddedProductId] = useState<string | null>(null);
@@ -23,16 +24,24 @@ export function ProductCarouselSection({ title, section }: ProductCarouselSectio
     const fetchProducts = async () => {
       try {
         setLoading(true);
-        const data = await getProductsBySection(section);
+        let data: any[] = [];
+        if (type === 'section') {
+           // We can still use the section logic or fallback to a category search if it's not a standard section
+           data = await getProductsBySection(value as any);
+        } else {
+           // Direct category fetch
+           const res = await fetch(`/api/products?category=${value}`);
+           if (res.ok) data = await res.json();
+        }
         setProducts(data);
       } catch (error) {
-        console.error(`Error fetching ${section} products:`, error);
+        console.error(`Error fetching products for ${value}:`, error);
       } finally {
         setLoading(false);
       }
     };
     fetchProducts();
-  }, [section]);
+  }, [type, value]);
 
   const handleScroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
@@ -86,7 +95,7 @@ export function ProductCarouselSection({ title, section }: ProductCarouselSectio
     setTimeout(() => setAddedProductId(null), 2000);
   };
 
-  const sectionId = section === 'bombas' ? 'bombas' : 'nuevas-llegadas';
+  const sectionId = value.toLowerCase().replace(/\s+/g, '-');
 
   return (
     <section id={sectionId} className="categories-section visible native-v22-marker" style={{ opacity: 1, transform: 'none', padding: '40px 0' }}>
@@ -129,7 +138,7 @@ export function ProductCarouselSection({ title, section }: ProductCarouselSectio
 
                 return (
                   <div 
-                    key={`${section}-${product.id}-${index}`} 
+                    key={`${value}-${product.id}-${index}`} 
                     className="flex-none snap-start"
                     style={{ 
                       width: 'var(--item-width)', 
@@ -183,10 +192,39 @@ export function ProductCarouselSection({ title, section }: ProductCarouselSectio
 }
 
 export default function ProductCarousel() {
+  const [carousels, setCarousels] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const res = await fetch('/api/home-settings');
+        const data = await res.json();
+        if (data.productCarousels && data.productCarousels.length > 0) {
+          setCarousels(data.productCarousels.filter((c: any) => c.active));
+        } else {
+          // Fallback
+          setCarousels([
+            { title: "BOMBAS EN JB IMPORTS", type: 'section', value: 'bombas' },
+            { title: "NUEVAS LLEGADAS", type: 'section', value: 'nuevas' }
+          ]);
+        }
+      } catch (err) {
+        console.error('Error fetching home carousels:', err);
+      }
+    };
+    fetchSettings();
+  }, []);
+
   return (
     <>
-      <ProductCarouselSection title="BOMBAS EN JB IMPORTS" section="bombas" />
-      <ProductCarouselSection title="NUEVAS LLEGADAS" section="nuevas" />
+      {carousels.map((carousel, idx) => (
+        <ProductCarouselSection 
+          key={`${carousel.value}-${idx}`}
+          title={carousel.title} 
+          type={carousel.type}
+          value={carousel.value} 
+        />
+      ))}
     </>
   );
 }

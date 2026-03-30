@@ -14,7 +14,8 @@ import {
   FaChartLine,
   FaUsers,
   FaTrophy,
-  FaSearch
+  FaSearch,
+  FaImage
 } from 'react-icons/fa';
 import '../styles/AdminV2.css';
 
@@ -46,6 +47,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       label: 'Usuarios',
       items: [
         { label: 'Clientes', href: '/admin/customers', icon: <FaUsers /> },
+      ]
+    },
+    {
+      label: 'Sitio Web',
+      items: [
+        { label: 'Inicio / Sliders', href: '/admin/home', icon: <FaImage /> },
       ]
     },
     {
