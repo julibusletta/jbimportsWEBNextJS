@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
 export interface CartItem {
   id: string;
@@ -25,6 +25,36 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 export function CartProvider({ children }: { children: ReactNode }) {
   const [cartCount, setCartCount] = useState(0);
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [isInitialized, setIsInitialized] = useState(false);
+
+  // Load from localStorage on mount
+  useEffect(() => {
+    try {
+      const savedCart = localStorage.getItem('jbimports_cart');
+      if (savedCart) {
+        const parsed = JSON.parse(savedCart);
+        if (Array.isArray(parsed)) {
+          setCartItems(parsed);
+          setCartCount(parsed.reduce((acc, item) => acc + (item.quantity || 1), 0));
+        }
+      }
+    } catch (e) {
+      console.warn('Failed to load cart from localStorage', e);
+    } finally {
+      setIsInitialized(true);
+    }
+  }, []);
+
+  // Save to localStorage whenever cartItems changes
+  useEffect(() => {
+    if (isInitialized) {
+      try {
+        localStorage.setItem('jbimports_cart', JSON.stringify(cartItems));
+      } catch (e) {
+        console.warn('Failed to save cart to localStorage', e);
+      }
+    }
+  }, [cartItems, isInitialized]);
 
   const addToCart = (item: CartItem) => {
     setCartCount((prev) => prev + item.quantity);
