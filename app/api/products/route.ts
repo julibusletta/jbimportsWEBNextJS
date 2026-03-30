@@ -9,7 +9,7 @@ export async function GET(request: Request) {
     
     await dbConnect();
     
-    let query = {};
+    let query: any = {};
     
     // Category mapping for parent categories
     const categoryMapping: { [key: string]: string[] } = {
@@ -37,6 +37,9 @@ export async function GET(request: Request) {
       const cleanCategory = category.trim();
       query = { category: { $regex: cleanCategory, $options: 'i' } };
     }
+    
+    // Always hide unpublished products from the frontend unless it's explicitly stated
+    query.published = { $ne: false };
     
     const products = await ProductModel.find(query).lean();
     return NextResponse.json(products);

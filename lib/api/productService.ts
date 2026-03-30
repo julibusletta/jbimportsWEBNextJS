@@ -19,6 +19,7 @@ export interface Product {
     discountBase?: boolean;
     badge?: string;
     stock: number; // Required for detail page
+    published?: boolean;
     specifications?: { label: string, value: string }[];
     properties?: {
         weight?: string;

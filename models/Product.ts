@@ -11,6 +11,7 @@ const ProductSchema = new Schema({
   category: { type: String, required: true }, // Slug of the category
   description: { type: String },
   stock: { type: Number, default: 0 },
+  published: { type: Boolean, default: true },
   badge: { type: String },
   specifications: [{
     label: { type: String },

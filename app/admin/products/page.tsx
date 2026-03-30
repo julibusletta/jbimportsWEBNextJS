@@ -359,6 +359,7 @@ export default function ProductsPage() {
                       <th className="px-6 py-4 w-40">Precio</th>
                       <th className="px-6 py-4 w-28">Categoría</th>
                       <th className="px-6 py-4 w-28">Stock</th>
+                      <th className="px-6 py-4 w-24 text-center border-l bg-gray-100 border-[#e1e3e5]">Publicado</th>
                       <th className="px-6 py-4 w-28 text-center">Estado</th>
                     </tr>
                   </thead>
@@ -413,6 +414,17 @@ export default function ProductsPage() {
                               onChange={(e) => handleStockChange(category, p.id, Number(e.target.value))}
                               className={`w-16 bg-transparent border-b border-transparent hover:border-[#e1e3e5] focus:border-[#058c8c] focus:outline-none text-xs font-bold transition-all px-1 ${p.stock <= 5 ? 'text-red-500' : 'text-gray-900'}`}
                             />
+                        </td>
+                        <td className="px-6 py-4 text-center border-l bg-gray-50 border-[#e1e3e5]">
+                           <label className="relative inline-flex items-center cursor-pointer">
+                             <input 
+                               type="checkbox" 
+                               className="sr-only peer" 
+                               checked={p.published !== false}
+                               onChange={(e) => handleProductChange(p.id, category, 'published', e.target.checked)}
+                             />
+                             <div className="w-9 h-5 bg-gray-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#058c8c]"></div>
+                           </label>
                         </td>
                         <td className="px-6 py-4 text-center">
                            <span className={`px-2 py-1 rounded text-[9px] font-black uppercase tracking-tighter ${p.stock > 0 ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-600'}`}>

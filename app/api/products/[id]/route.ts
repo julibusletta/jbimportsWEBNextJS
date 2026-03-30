@@ -11,7 +11,7 @@ export async function GET(
     await dbConnect();
     const product = await ProductModel.findOne({ id }).lean();
     
-    if (!product) {
+    if (!product || product.published === false) {
       return NextResponse.json({ error: 'Product not found' }, { status: 404 });
     }
     
