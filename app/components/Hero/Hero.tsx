@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import '../../styles/Hero.css';
 
 export default function Hero() {
@@ -124,34 +125,48 @@ export default function Hero() {
               height: '100%'
             }}
           >
-            {heroSlides.map((slide, index) => (
-              <div
-                key={index}
-                className={`slider-slide ${index === currentSlide ? 'active' : ''}`}
-                style={{ width: `${100 / heroSlides.length}%`, height: '100%', position: 'relative' }}
-              >
-                <img
-                  src={slide.image}
-                  alt={slide.alt}
-                />
-                {slide.isCustom && (
-                  <div className="slide-custom-overlay">
-                    <div className="promo-text-container">
-                      <div className="promo-badge">
-                        <span className="promo-title-1">{slide.title1}</span>
-                        <span className="promo-title-2">{slide.title2}</span>
-                      </div>
-                      <div className="promo-shipping">
-                        {slide.showShippingIcon !== false && (
-                          <img src="/images/andreani.png" alt="Envío" className="shipping-icon" />
-                        )}
-                        <span className="shipping-text text-center">{slide.subtitle}</span>
+            {heroSlides.map((slide, index) => {
+              const SlideContent = (
+                <>
+                  <img
+                    src={slide.image}
+                    alt={slide.alt}
+                  />
+                  {slide.isCustom && (
+                    <div className="slide-custom-overlay">
+                      <div className="promo-text-container">
+                        <div className="promo-badge">
+                          <span className="promo-title-1">{slide.title1}</span>
+                          <span className="promo-title-2">{slide.title2}</span>
+                        </div>
+                        <div className="promo-shipping">
+                          {slide.showShippingIcon !== false && (
+                            <img src="/images/andreani.png" alt="Envío" className="shipping-icon" />
+                          )}
+                          <span className="shipping-text text-center">{slide.subtitle}</span>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                )}
-              </div>
-            ))}
+                  )}
+                </>
+              );
+
+              return (
+                <div
+                  key={index}
+                  className={`slider-slide ${index === currentSlide ? 'active' : ''}`}
+                  style={{ width: `${100 / heroSlides.length}%`, height: '100%', position: 'relative' }}
+                >
+                  {slide.link ? (
+                    <Link href={slide.link} className="block w-full h-full">
+                      {SlideContent}
+                    </Link>
+                  ) : (
+                    SlideContent
+                  )}
+                </div>
+              );
+            })}
           </div>
 
           {/* Slider Dots */}
