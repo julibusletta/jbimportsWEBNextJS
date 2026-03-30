@@ -20,14 +20,22 @@ export async function POST(request: Request) {
       const productsArray = Object.values(data).flat();
       await db.saveProducts(productsArray);
 
-      // Backup to JSON
-      await fs.writeFile(PRODUCTS_PATH, JSON.stringify(data, null, 2), 'utf8');
+      // Backup to JSON (Will fail silently on Vercel due to read-only FS, but DB saves it)
+      try {
+        await fs.writeFile(PRODUCTS_PATH, JSON.stringify(data, null, 2), 'utf8');
+      } catch (e) {
+        console.warn('Could not save to products.json (read-only FS):', e);
+      }
       
-      return NextResponse.json({ success: true, message: 'Productos guardados correctamente en DB y JSON' });
+      return NextResponse.json({ success: true, message: 'Productos guardados correctamente en DB' });
     }
 
     if (action === 'save_specs') {
-      await fs.writeFile(SPECS_PATH, JSON.stringify(data, null, 2), 'utf8');
+      try {
+        await fs.writeFile(SPECS_PATH, JSON.stringify(data, null, 2), 'utf8');
+      } catch (e) {
+        console.warn('Could not save to specs (read-only FS):', e);
+      }
       return NextResponse.json({ success: true, message: 'Especificaciones guardadas correctamente' });
     }
 
@@ -39,11 +47,20 @@ export async function POST(request: Request) {
         await db.saveProducts(products);
         
         // Convert array back to categoried object for JSON backup if possible
-        // Or just save the array. For now, let's keep it simple.
-        await fs.writeFile(PRODUCTS_PATH, JSON.stringify(products, null, 2), 'utf8');
+        try {
+          await fs.writeFile(PRODUCTS_PATH, JSON.stringify(products, null, 2), 'utf8');
+        } catch (e) {
+          console.warn('Could not save to products.json (read-only FS):', e);
+        }
       }
       
-      if (specifications) await fs.writeFile(SPECS_PATH, JSON.stringify(specifications, null, 2), 'utf8');
+      if (specifications) {
+         try {
+           await fs.writeFile(SPECS_PATH, JSON.stringify(specifications, null, 2), 'utf8');
+         } catch (e) {
+           console.warn('Could not save to specifications.json (read-only FS):', e);
+         }
+      }
 
       return NextResponse.json({ success: true, message: 'Importación completada en MongoDB' });
     }
