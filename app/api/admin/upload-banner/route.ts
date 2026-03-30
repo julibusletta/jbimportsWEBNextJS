@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { writeFile, mkdir } from 'fs/promises';
-import { join } from 'path';
 import { v4 as uuidv4 } from 'uuid';
 import sharp from 'sharp';
+import { put } from '@vercel/blob';
 
 export async function POST(req: NextRequest) {
   try {
@@ -16,33 +15,32 @@ export async function POST(req: NextRequest) {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    // Ensure dedicated banner upload directory exists
-    const uploadDir = join(process.cwd(), 'public', 'uploads', 'banners');
-    try {
-      await mkdir(uploadDir, { recursive: true });
-    } catch (e) {
-      // Already exists
-    }
-
     // Generate unique filename with .webp extension
-    const filename = `banner-${uuidv4().substring(0, 8)}.webp`;
-    const path = join(uploadDir, filename);
-
+    const filename = `banners/banner-${uuidv4().substring(0, 8)}.webp`;
+    
     // Process image with Sharp: Resize to max 1920 width, optimize and convert to webp
     console.log(`Procesando imagen: ${file.name}`);
-    await sharp(buffer)
+    const optimizedBuffer = await sharp(buffer)
       .resize(1920, null, { withoutEnlargement: true }) // No agrandar si es pequeña
       .webp({ quality: 80 })
-      .toFile(path);
+      .toBuffer();
 
-    console.log(`Banner optimizado y guardado en: ${path}`);
+    console.log(`Subiendo banner optimizado a Vercel Blob...`);
+    
+    // Upload exactly to Vercel Blob
+    const blob = await put(filename, optimizedBuffer, {
+      access: 'public',
+      contentType: 'image/webp'
+    });
 
-    // Publicly accessible URL (relative)
-    const relativePath = `/uploads/banners/${filename}`;
+    console.log(`Banner guardado exitosamente en Vercel Blob: ${blob.url}`);
+
+    // Publicly accessible URL (provided explicitly by Blob)
+    const blobUrl = blob.url;
 
     return NextResponse.json({ 
       success: true, 
-      url: relativePath 
+      url: blobUrl 
     });
   } catch (error: any) {
     console.error('Error en upload-banner (sharp):', error);

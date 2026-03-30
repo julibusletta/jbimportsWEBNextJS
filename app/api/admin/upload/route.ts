@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { writeFile, mkdir } from 'fs/promises';
-import { join } from 'path';
 import { v4 as uuidv4 } from 'uuid';
+import { put } from '@vercel/blob';
 
 export async function POST(req: NextRequest) {
   try {
@@ -15,27 +14,22 @@ export async function POST(req: NextRequest) {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    // Ensure upload directory exists
-    const uploadDir = join(process.cwd(), 'public', 'uploads', 'products');
-    try {
-      await mkdir(uploadDir, { recursive: true });
-    } catch (e) {
-      // Already exists
-    }
-
     // Generate unique filename
     const extension = file.name.split('.').pop();
-    const filename = `${uuidv4()}.${extension}`;
-    const path = join(uploadDir, filename);
+    const filename = `products/${uuidv4()}.${extension}`;
 
-    await writeFile(path, buffer);
-    console.log(`Archivo guardado en: ${path}`);
+    console.log(`Subiendo imagen de producto a Vercel Blob: ${filename}`);
 
-    const relativePath = `/uploads/products/${filename}`;
+    const blob = await put(filename, buffer, {
+      access: 'public',
+      contentType: file.type || 'image/jpeg'
+    });
+
+    console.log(`Archivo guardado exitosamente en Vercel Blob: ${blob.url}`);
 
     return NextResponse.json({ 
       success: true, 
-      url: relativePath 
+      url: blob.url 
     });
   } catch (error: any) {
     console.error('Error en upload:', error);
