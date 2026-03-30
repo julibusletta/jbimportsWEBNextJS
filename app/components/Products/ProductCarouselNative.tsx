@@ -168,10 +168,11 @@ export function ProductCarouselSection({ title, type = 'section', value }: Produ
                               <span className="text-[16px] sm:text-[20px] font-black text-gray-900">${product.price?.toLocaleString('es-AR')}</span>
                             </div>
                             <button 
-                              onClick={(e) => handleAddToCart(e, product)} 
-                              className={`w-full py-2.5 rounded-xl text-[10px] sm:text-xs font-bold transition-all border-none cursor-pointer ${addedProductId === product.id ? 'bg-green-500 text-white' : 'bg-gray-900 text-white hover:bg-black'}`}
+                              onClick={product.stock > 0 ? (e) => handleAddToCart(e, product) : undefined} 
+                              disabled={product.stock <= 0}
+                              className={`w-full py-2.5 rounded-xl text-[10px] sm:text-xs font-bold transition-all border-none ${product.stock <= 0 ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : (addedProductId === product.id ? 'bg-green-500 text-white cursor-pointer' : 'bg-gray-900 text-white hover:bg-black cursor-pointer')}`}
                             >
-                              {addedProductId === product.id ? '✓ AGREGADO' : 'AGREGAR AL CARRITO'}
+                              {product.stock <= 0 ? 'SIN STOCK' : (addedProductId === product.id ? '✓ AGREGADO' : 'AGREGAR AL CARRITO')}
                             </button>
                           </div>
                         </div>

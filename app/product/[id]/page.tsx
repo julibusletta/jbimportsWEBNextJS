@@ -262,19 +262,21 @@ export default function ProductDetailsPage() {
                 
                 {/* Call to Actions */}
                 <button 
-                  onClick={handleComprarAhora}
-                  className="flex-1 bg-[#0066cc] text-white font-bold text-[13px] uppercase rounded-md tracking-wide hover:bg-[#0052a3] shadow-sm transition-colors cursor-pointer"
+                  onClick={product.stock > 0 ? handleComprarAhora : undefined}
+                  disabled={product.stock <= 0}
+                  className={`flex-1 font-bold text-[13px] uppercase rounded-md tracking-wide shadow-sm transition-colors ${product.stock <= 0 ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-[#0066cc] text-white hover:bg-[#0052a3] cursor-pointer'}`}
                 >
-                  COMPRAR AHORA
+                  {product.stock <= 0 ? 'SIN STOCK' : 'COMPRAR AHORA'}
                 </button>
               </div>
 
               {/* HERE ARE THE RECUADROS CELESTES! */}
               <button 
-                onClick={handleAddToCart}
-                className="w-full h-[46px] bg-[#e6f0ff] border border-[#b3d4ff] text-[#0066cc] font-bold text-[13px] uppercase rounded-md tracking-wide hover:bg-[#d6e8ff] transition-colors cursor-pointer"
+                onClick={product.stock > 0 ? handleAddToCart : undefined}
+                disabled={product.stock <= 0}
+                className={`w-full h-[46px] font-bold text-[13px] uppercase rounded-md tracking-wide transition-colors ${product.stock <= 0 ? 'bg-gray-100 border border-gray-300 text-gray-400 cursor-not-allowed' : 'bg-[#e6f0ff] border border-[#b3d4ff] text-[#0066cc] hover:bg-[#d6e8ff] cursor-pointer'}`}
               >
-                AGREGAR AL CARRITO
+                {product.stock <= 0 ? 'PRODUCTO AGOTADO' : 'AGREGAR AL CARRITO'}
               </button>
             </div>
 

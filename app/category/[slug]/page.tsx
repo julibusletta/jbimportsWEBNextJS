@@ -381,16 +381,17 @@ export default function CategoryPage() {
             </Link>
 
             <button
-              onClick={onAddToCart}
+              onClick={product.stock > 0 ? onAddToCart : undefined}
+              disabled={product.stock <= 0}
               style={{
-                background: isAdded ? '#28a745' : '#1a1a2e',
+                background: product.stock <= 0 ? '#cccccc' : (isAdded ? '#28a745' : '#1a1a2e'),
                 border: 'none',
                 borderRadius: '3px',
                 color: '#fff',
                 fontSize: '12px',
                 fontWeight: 600,
                 padding: '7px 10px',
-                cursor: 'pointer',
+                cursor: product.stock <= 0 ? 'not-allowed' : 'pointer',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -398,14 +399,14 @@ export default function CategoryPage() {
                 transition: 'background 0.2s',
               }}
               onMouseEnter={e => {
-                if (!isAdded) (e.currentTarget as HTMLElement).style.background = '#2c2c4e';
+                if (!isAdded && product.stock > 0) (e.currentTarget as HTMLElement).style.background = '#2c2c4e';
               }}
               onMouseLeave={e => {
-                if (!isAdded) (e.currentTarget as HTMLElement).style.background = '#1a1a2e';
+                if (!isAdded && product.stock > 0) (e.currentTarget as HTMLElement).style.background = '#1a1a2e';
               }}
             >
-              <FaShoppingCart size={12} />
-              {isAdded ? '¡AGREGADO!' : 'AGREGAR AL CARRITO'}
+              {product.stock > 0 && <FaShoppingCart size={12} />}
+              {product.stock <= 0 ? 'SIN STOCK' : (isAdded ? '¡AGREGADO!' : 'AGREGAR AL CARRITO')}
             </button>
           </div>
         </div>
