@@ -16,6 +16,7 @@ export function ProductCarouselSection({ title, section }: ProductCarouselSectio
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [addedProductId, setAddedProductId] = useState<string | null>(null);
+  const [isPaused, setIsPaused] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -35,14 +36,42 @@ export function ProductCarouselSection({ title, section }: ProductCarouselSectio
 
   const handleScroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
-      const containerWidth = scrollRef.current.clientWidth;
-      const scrollAmount = containerWidth;
+      const children = scrollRef.current.children;
+      if (children.length === 0) return;
+      
+      const itemWidth = (children[0] as HTMLElement).offsetWidth;
+      const scrollAmount = itemWidth;
+      
       scrollRef.current.scrollBy({
         left: direction === 'left' ? -scrollAmount : scrollAmount,
         behavior: 'smooth',
       });
     }
   };
+
+  // Auto-scroll Effect
+  useEffect(() => {
+    if (loading || products.length === 0 || isPaused) return;
+
+    const interval = setInterval(() => {
+      if (scrollRef.current) {
+        const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+        const children = scrollRef.current.children;
+        if (children.length === 0) return;
+        
+        const itemWidth = (children[0] as HTMLElement).offsetWidth;
+
+        // If at the end, reset to start. Use a small buffer (5px) for safety.
+        if (scrollLeft + clientWidth >= scrollWidth - 5) {
+          scrollRef.current.scrollTo({ left: 0, behavior: 'smooth' });
+        } else {
+          scrollRef.current.scrollBy({ left: itemWidth, behavior: 'smooth' });
+        }
+      }
+    }, 4000); // 4 seconds interval for a good pace
+
+    return () => clearInterval(interval);
+  }, [loading, products, isPaused]);
 
   const handleAddToCart = (e: React.MouseEvent, product: any) => {
     e.preventDefault();
@@ -84,6 +113,8 @@ export function ProductCarouselSection({ title, section }: ProductCarouselSectio
             <div 
               ref={scrollRef}
               className="flex overflow-x-auto snap-x snap-mandatory no-scrollbar"
+              onMouseEnter={() => setIsPaused(true)}
+              onMouseLeave={() => setIsPaused(false)}
               style={{ 
                 msOverflowStyle: 'none', 
                 scrollbarWidth: 'none', 
