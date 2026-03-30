@@ -1,7 +1,7 @@
 'use client';
 
 import { useParams, useRouter } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { getProductById, getProductsByCategory, Product } from '@/lib/api/productService';
 import { getSpecsByProductId, Spec } from '@/lib/api/productSpecifications';
 import { useCart } from '@/app/context/CartContext';
@@ -21,6 +21,8 @@ export default function ProductDetailsPage() {
   const [specs, setSpecs] = useState<Spec[]>([]);
   const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
   const [mainImage, setMainImage] = useState<string>('');
+  const [isPaused, setIsPaused] = useState(false);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const loadData = async () => {
@@ -35,9 +37,9 @@ export default function ProductDetailsPage() {
           const foundSpecs = getSpecsByProductId(id);
           setSpecs(foundSpecs);
 
-          // Get related products from the same category
+          // Get related products from the same category - Get more for the carousel
           const products = await getProductsByCategory(foundProduct.category);
-          const related = products.filter((p: Product) => p.id !== id).slice(0, 4);
+          const related = products.filter((p: Product) => p.id !== id).slice(0, 10);
           setRelatedProducts(related);
         }
       } catch (error) {
@@ -49,6 +51,30 @@ export default function ProductDetailsPage() {
 
     loadData();
   }, [id]);
+
+  // Auto-rotate related products - Only start when not paused
+  useEffect(() => {
+    if (loading || relatedProducts.length < 2 || isPaused) return;
+
+    const interval = setInterval(() => {
+      if (scrollRef.current) {
+        const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+        const children = scrollRef.current.children;
+        if (children.length === 0) return;
+        
+        const itemWidth = (children[0] as HTMLElement).offsetWidth;
+
+        // Looping logic
+        if (scrollLeft + clientWidth >= scrollWidth - 5) {
+          scrollRef.current.scrollTo({ left: 0, behavior: 'smooth' });
+        } else {
+          scrollRef.current.scrollBy({ left: itemWidth, behavior: 'smooth' });
+        }
+      }
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, [loading, relatedProducts, isPaused]);
 
   // Handle SEO
   useEffect(() => {
@@ -372,33 +398,57 @@ export default function ProductDetailsPage() {
               </h2>
             </div>
             
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-              {relatedProducts.map(rp => (
-                <div key={rp.id} className="border border-[#e0e0e0] rounded-sm p-4 hover:shadow-lg transition-shadow bg-white flex flex-col items-center text-center relative">
-                  {(rp.discount && rp.discount > 0) && (
-                    <div className="absolute top-2 left-2 bg-[#e60000] text-white text-[9px] font-black w-10 h-10 rounded-full z-10 flex flex-col items-center justify-center shadow-md border-2 border-white leading-none p-0.5">
-                      <span>{Math.round(rp.discount)}%</span>
-                      <span className="text-[6px] font-bold">OFF</span>
+            <div className="relative w-full overflow-hidden">
+              <div 
+                ref={scrollRef}
+                className="flex overflow-x-auto snap-x snap-mandatory no-scrollbar"
+                onMouseEnter={() => setIsPaused(true)}
+                onMouseLeave={() => setIsPaused(false)}
+                style={{ 
+                  msOverflowStyle: 'none', 
+                  scrollbarWidth: 'none', 
+                  scrollBehavior: 'smooth',
+                  WebkitOverflowScrolling: 'touch',
+                  gap: '0'
+                }}
+              >
+                {relatedProducts.map(rp => (
+                  <div 
+                    key={rp.id} 
+                    className="flex-none snap-start p-2"
+                    style={{ width: 'var(--rel-item-width)' }}
+                  >
+                    <style dangerouslySetInnerHTML={{ __html: `
+                      :root { --rel-item-width: 25%; }
+                      @media (max-width: 768px) { :root { --rel-item-width: 50%; } }
+                    `}} />
+                    <div className="border border-[#e0e0e0] rounded-sm p-4 hover:shadow-lg transition-shadow bg-white flex flex-col items-center text-center relative h-full">
+                      {(rp.discount && rp.discount > 0) && (
+                        <div className="absolute top-2 left-2 bg-[#e60000] text-white text-[9px] font-black w-10 h-10 rounded-full z-10 flex flex-col items-center justify-center shadow-md border-2 border-white leading-none p-0.5">
+                          <span>{Math.round(rp.discount)}%</span>
+                          <span className="text-[6px] font-bold">OFF</span>
+                        </div>
+                      )}
+                      <Link href={`/product/${rp.id}`} className="block w-full">
+                        <div className="h-[150px] w-full flex items-center justify-center mb-4">
+                          <img src={rp.image} alt={rp.name} className="max-h-full object-contain" />
+                        </div>
+                      </Link>
+                      <Link href={`/product/${rp.id}`} className="text-[13px] text-[#555] h-[40px] overflow-hidden hover:text-[#0066cc] transition mb-3 line-clamp-2">
+                        {rp.name}
+                      </Link>
+                      <div className="w-full flex justify-center mb-3">
+                        <span className="bg-[#4caf50] text-white text-[11px] font-bold px-3 py-1 rounded-sm">
+                          Envío rápido
+                        </span>
+                      </div>
+                      <div className="text-[20px] font-bold text-[#333] mb-4 mt-auto">
+                        ${rp.price.toLocaleString()} <FaInfoCircle className="inline text-[12px] text-gray-400" />
+                      </div>
                     </div>
-                  )}
-                  <Link href={`/product/${rp.id}`} className="block w-full">
-                    <div className="h-[150px] w-full flex items-center justify-center mb-4">
-                      <img src={rp.image} alt={rp.name} className="max-h-full object-contain" />
-                    </div>
-                  </Link>
-                  <Link href={`/product/${rp.id}`} className="text-[13px] text-[#555] h-[40px] overflow-hidden hover:text-[#0066cc] transition mb-3">
-                    {rp.name}
-                  </Link>
-                  <div className="w-full flex justify-center mb-3">
-                    <span className="bg-[#4caf50] text-white text-[11px] font-bold px-3 py-1 rounded-sm">
-                      Envío rápido
-                    </span>
                   </div>
-                  <div className="text-[20px] font-bold text-[#333] mb-4">
-                    ${rp.price.toLocaleString()} <FaInfoCircle className="inline text-[12px] text-gray-400" />
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
         )}
