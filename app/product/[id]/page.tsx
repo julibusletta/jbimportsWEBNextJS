@@ -371,36 +371,35 @@ export default function ProductDetailsPage() {
           </div>
         </div>
 
-        {/* Especificación Section */}
         <div className="mt-[60px]">
-          <div className="border-b-2 border-[#e0e0e0] mb-6 flex">
-            <h2 className="text-[22px] font-normal text-[#333] pb-2 border-b-2 border-[#0066cc] -mb-[2px] pr-8">
+          <div className="border-b-2 border-[#eee] mb-8 flex relative">
+            <h2 className="text-[24px] font-medium text-[#333] pb-3 border-b-[3px] border-[#0066cc] -mb-[2px] pr-12 z-10 transition-all">
               Especificación
             </h2>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-y-3 gap-x-12 text-[14px] text-[#444]">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-y-5 gap-x-16 text-[15px] text-[#444]">
             {/* Custom Specifications from DB */}
             {product.specifications && product.specifications.length > 0 ? (
               product.specifications.map((s, idx) => (
-                <div key={idx} className="flex font-sans border-b border-gray-50 pb-1">
-                  <strong className="w-[160px] text-[#333]">{s.label} :</strong> 
-                  <span className="flex-1">{s.value}</span>
+                <div key={idx} className="flex font-sans items-start">
+                  <strong className="w-[180px] shrink-0 text-[#333] font-bold">{s.label} :</strong> 
+                  <span className="flex-1 text-[#666] font-medium">{s.value}</span>
                 </div>
               ))
             ) : specs.length > 0 ? (
               specs.map((s, idx) => (
-                <div key={idx} className="flex font-sans border-b border-gray-50 pb-1">
-                  <strong className="w-[160px] text-[#333]">{s.label} :</strong> 
-                  <span className="flex-1">{s.value}</span>
+                <div key={idx} className="flex font-sans items-start">
+                  <strong className="w-[180px] shrink-0 text-[#333] font-bold">{s.label} :</strong> 
+                  <span className="flex-1 text-[#666] font-medium">{s.value}</span>
                 </div>
               ))
             ) : (
               <>
-                <div className="flex font-sans"><strong className="w-[160px] text-[#333]">Marca :</strong> <span>{product.name.split(' ')[0]}</span></div>
-                <div className="flex font-sans"><strong className="w-[160px] text-[#333]">Modelo :</strong> <span>{product.name.split(' ').slice(1, 3).join(' ')}</span></div>
-                <div className="flex font-sans"><strong className="w-[160px] text-[#333]">ID :</strong> <span>{product.id}</span></div>
-                <div className="flex font-sans"><strong className="w-[160px] text-[#333]">Categoría :</strong> <span className="capitalize">{product.category.replace('-', ' ')}</span></div>
+                <div className="flex font-sans items-start"><strong className="w-[180px] shrink-0 text-[#333] font-bold">Marca :</strong> <span className="text-[#666] font-medium uppercase">{product.name.split(' ')[0]}</span></div>
+                <div className="flex font-sans items-start"><strong className="w-[180px] shrink-0 text-[#333] font-bold">Modelo :</strong> <span className="text-[#666] font-medium">{product.name.split(' ').slice(1, 3).join(' ')}</span></div>
+                <div className="flex font-sans items-start"><strong className="w-[180px] shrink-0 text-[#333] font-bold">ID :</strong> <span className="text-[#666] font-medium">{product.id}</span></div>
+                <div className="flex font-sans items-start"><strong className="w-[180px] shrink-0 text-[#333] font-bold">Categoría :</strong> <span className="text-[#666] font-medium capitalize">{product.category.replace('-', ' ')}</span></div>
               </>
             )}
 
@@ -408,21 +407,21 @@ export default function ProductDetailsPage() {
             {product.properties && (
               <>
                 {product.properties.weight && (
-                  <div className="flex font-sans border-b border-gray-50 pb-1">
-                    <strong className="w-[160px] text-[#333]">Peso :</strong> 
-                    <span>{product.properties.weight}</span>
+                  <div className="flex font-sans items-start">
+                    <strong className="w-[180px] shrink-0 text-[#333] font-bold">Peso :</strong> 
+                    <span className="text-[#666] font-medium">{product.properties.weight}</span>
                   </div>
                 )}
                 {product.properties.dimensions && (
-                  <div className="flex font-sans border-b border-gray-50 pb-1">
-                    <strong className="w-[160px] text-[#333]">Dimensiones :</strong> 
-                    <span>{product.properties.dimensions}</span>
+                  <div className="flex font-sans items-start">
+                    <strong className="w-[180px] shrink-0 text-[#333] font-bold">Dimensiones :</strong> 
+                    <span className="text-[#666] font-medium">{product.properties.dimensions}</span>
                   </div>
                 )}
                 {product.properties.color && (
-                  <div className="flex font-sans border-b border-gray-50 pb-1">
-                    <strong className="w-[160px] text-[#333]">Color :</strong> 
-                    <span>{product.properties.color}</span>
+                  <div className="flex font-sans items-start">
+                    <strong className="w-[180px] shrink-0 text-[#333] font-bold">Color :</strong> 
+                    <span className="text-[#666] font-medium">{product.properties.color}</span>
                   </div>
                 )}
               </>
