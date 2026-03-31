@@ -49,6 +49,7 @@ async function testNave() {
             currency: "ARS",
             value: "100.00"
           },
+          installments: [1],
           products: [
             {
               name: "Test Item",
