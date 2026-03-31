@@ -287,5 +287,58 @@ export const mailer = {
     } catch (e: any) {
       logToFile(`ERROR sending admin notification`, e.message);
     }
+  },
+
+  async notifyAdminFavoriteAdded(userName: string, userEmail: string, product: { id: string, name: string }) {
+    const html = `
+      <div style="font-family: 'Segoe UI', Tahoma, sans-serif; padding: 40px; background-color: #f9fafb; border-radius: 12px; border: 1px solid #e5e7eb; max-width: 550px; margin: 20px auto;">
+        <div style="text-align: center; margin-bottom: 30px;">
+           <h2 style="color: #111827; font-size: 22px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">¡Producto Favorito! ⭐</h2>
+           <div style="height: 4px; width: 40px; background: #0066cc; margin: 0 auto;"></div>
+        </div>
+        
+        <p style="color: #4b5563; font-size: 15px; text-align: center; margin-bottom: 30px;">Un cliente ha marcado un producto con estrella. Esto indica un fuerte interés de compra.</p>
+        
+        <div style="background: white; padding: 25px; border-radius: 10px; border: 1px solid #f3f4f6; margin-bottom: 30px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+          <div style="margin-bottom: 20px;">
+            <div style="font-size: 11px; color: #9ca3af; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">Producto</div>
+            <div style="font-size: 16px; color: #111827; font-weight: 700;">${product.name}</div>
+            <div style="font-size: 12px; color: #6b7280;">ID: ${product.id}</div>
+          </div>
+          
+          <div style="border-top: 1px solid #f3f4f6; padding-top: 15px;">
+            <div style="font-size: 11px; color: #9ca3af; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">Interesado</div>
+            <div style="font-size: 15px; color: #111827; font-weight: 600;">${userName}</div>
+            <div style="font-size: 13px; color: #0066cc;">${userEmail}</div>
+          </div>
+        </div>
+        
+        <div style="text-align: center;">
+          <a href="${process.env.NEXTAUTH_URL}/admin/products" style="display: inline-block; background: #111827; color: white; padding: 12px 24px; text-decoration: none; font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; border-radius: 6px;">Ver Catálogo</a>
+        </div>
+        
+        <div style="margin-top: 35px; text-align: center; color: #9ca3af; font-size: 11px;">
+           JB Imports Dashboard • Notificaciones Automáticas
+        </div>
+      </div>
+    `;
+
+    try {
+      await transporter.sendMail({
+        from: `"Favoritos JB" <${process.env.EMAIL_USER}>`,
+        to: "contacto@jbimports.com.ar, ventas@jbimports.com.ar",
+        subject: `Interés: ${userName} marcó un favorito ⭐`,
+        html,
+        attachments: [{
+          filename: 'logo.png',
+          path: path.join(process.cwd(), 'public', 'images', 'logotest9.png'),
+          cid: 'logo'
+        }]
+      });
+      logToFile(`Admin favorite notification sent for ${product.name}`);
+    } catch (e: any) {
+      logToFile(`ERROR sending admin favorite notification`, e.message);
+    }
   }
 };
+

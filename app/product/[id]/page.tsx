@@ -6,14 +6,16 @@ import { getProductById, getProductsByCategory, Product } from '@/lib/api/produc
 import { getSpecsByProductId, Spec } from '@/lib/api/productSpecifications';
 import { useCart } from '@/app/context/CartContext';
 import Link from 'next/link';
-import { FaRegCommentDots, FaTruck, FaShieldAlt, FaCreditCard, FaRegHeart, FaInfoCircle } from 'react-icons/fa';
+import { FaRegCommentDots, FaTruck, FaShieldAlt, FaCreditCard, FaRegHeart, FaInfoCircle, FaStar, FaRegStar } from 'react-icons/fa';
 import ShippingCalculator from '@/app/components/Shipping/ShippingCalculator';
+import { useSession } from 'next-auth/react';
 
 export default function ProductDetailsPage() {
   const params = useParams();
   const router = useRouter();
   const id = params?.id as string;
   const { addToCart } = useCart();
+  const { data: session } = useSession();
 
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
@@ -22,6 +24,7 @@ export default function ProductDetailsPage() {
   const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
   const [mainImage, setMainImage] = useState<string>('');
   const [isPaused, setIsPaused] = useState(false);
+  const [userFavorites, setUserFavorites] = useState<string[]>([]);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -42,6 +45,15 @@ export default function ProductDetailsPage() {
           const related = products.filter((p: Product) => p.id !== id).slice(0, 10);
           setRelatedProducts(related);
         }
+
+        // Load favorites
+        if (session?.user?.email) {
+          const favRes = await fetch('/api/user/favorites');
+          const favData = await favRes.json();
+          if (favData.success) {
+            setUserFavorites(favData.favorites.map((f: any) => f.id));
+          }
+        }
       } catch (error) {
         console.error('Error loading product:', error);
       } finally {
@@ -50,7 +62,33 @@ export default function ProductDetailsPage() {
     };
 
     loadData();
-  }, [id]);
+  }, [id, session]);
+
+  const toggleFavorite = async (e: React.MouseEvent, productId: string, productName: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (!session) {
+      alert('Inicia sesión para guardar favoritos');
+      return;
+    }
+
+    try {
+      const res = await fetch('/api/user/favorites', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ productId, productName }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setUserFavorites(prev => 
+          data.isFavorite ? [...prev, productId] : prev.filter(id => id !== productId)
+        );
+      }
+    } catch (error) {
+      console.error('Error toggling favorite:', error);
+    }
+  };
 
   // Auto-rotate related products - Only start when not paused
   useEffect(() => {
@@ -141,8 +179,8 @@ export default function ProductDetailsPage() {
   const cuotasPrice = Math.round(product.price * 1.4); 
   const sinImpuestos = Math.round(product.price * 0.79);
   
-  // Deduplicate images and limit to 4
-  const allImages = Array.from(new Set([product.image, ...(product.images || [])].filter(Boolean))).slice(0, 4);
+  // Deduplicate images and limit to 8
+  const allImages = Array.from(new Set([product.image, ...(product.images || [])].filter(Boolean))).slice(0, 8);
 
   return (
     <div className="bg-white flex flex-col items-center min-h-screen pt-8">
@@ -181,7 +219,7 @@ export default function ProductDetailsPage() {
             </div>
             
             {/* Thumbnails */}
-            <div className="flex gap-4 mt-6 justify-center">
+            <div className="flex flex-wrap gap-4 mt-6 justify-center">
               {allImages.map((img, idx) => (
                 <div 
                   key={idx}
@@ -230,7 +268,18 @@ export default function ProductDetailsPage() {
                   Precio 12 cuotas <FaInfoCircle className="text-gray-400" />
                 </div>
               </div>
-              <FaRegHeart className="text-[24px] text-[#0066cc] cursor-pointer" />
+              <button
+                onClick={(e) => toggleFavorite(e, product.id, product.name)}
+                className="flex items-center justify-center transition-all hover:scale-110 active:scale-95"
+                style={{ 
+                  background: 'none', 
+                  border: 'none', 
+                  cursor: 'pointer',
+                  color: userFavorites.includes(product.id) ? '#ffc107' : '#0066cc'
+                }}
+              >
+                {userFavorites.includes(product.id) ? <FaStar size={28} /> : <FaRegStar size={28} />}
+              </button>
             </div>
 
             <div className="text-[11px] text-[#888] mb-6">

@@ -2,8 +2,9 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { FaChevronLeft, FaChevronRight, FaStar, FaRegStar } from 'react-icons/fa';
 import { getProductsBySection } from '@/lib/api/productService';
+import { useSession } from 'next-auth/react';
 import '../../styles/Categories.css';
 import '../../styles/ProductCarousel.css';
 
@@ -18,6 +19,8 @@ export function ProductCarouselSection({ title, type = 'section', value }: Produ
   const [loading, setLoading] = useState(true);
   const [addedProductId, setAddedProductId] = useState<string | null>(null);
   const [isPaused, setIsPaused] = useState(false);
+  const [userFavorites, setUserFavorites] = useState<string[]>([]);
+  const { data: session } = useSession();
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -34,6 +37,15 @@ export function ProductCarouselSection({ title, type = 'section', value }: Produ
            if (res.ok) data = await res.json();
         }
         setProducts(data);
+
+        // Fetch favorites
+        if (session?.user?.email) {
+          const favRes = await fetch('/api/user/favorites');
+          const favData = await favRes.json();
+          if (favData.success) {
+            setUserFavorites(favData.favorites.map((f: any) => f.id));
+          }
+        }
       } catch (error) {
         console.error(`Error fetching products for ${value}:`, error);
       } finally {
@@ -41,7 +53,33 @@ export function ProductCarouselSection({ title, type = 'section', value }: Produ
       }
     };
     fetchProducts();
-  }, [type, value]);
+  }, [type, value, session]);
+
+  const toggleFavorite = async (e: React.MouseEvent, productId: string, productName: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (!session) {
+      alert('Inicia sesión para guardar favoritos');
+      return;
+    }
+
+    try {
+      const res = await fetch('/api/user/favorites', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ productId, productName }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setUserFavorites(prev => 
+          data.isFavorite ? [...prev, productId] : prev.filter(id => id !== productId)
+        );
+      }
+    } catch (error) {
+      console.error('Error toggling favorite:', error);
+    }
+  };
 
   const handleScroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
@@ -157,7 +195,16 @@ export function ProductCarouselSection({ title, type = 'section', value }: Produ
                             <span className="text-[7px] sm:text-[9px]">OFF</span>
                           </div>
                         )}
-                        <div className="aspect-square flex items-center justify-center p-4 sm:p-6 bg-white">
+                        <div className="aspect-square flex items-center justify-center p-4 sm:p-6 bg-white shrink-0 relative">
+                          {/* Favorite Star Button */}
+                          <button
+                            onClick={(e) => toggleFavorite(e, product.id, product.name)}
+                            className="absolute top-2 right-2 w-8 h-8 bg-white/80 backdrop-blur-sm rounded-full flex items-center justify-center shadow-sm z-30 transition-all hover:scale-110 active:scale-95 border border-gray-100"
+                            style={{ color: userFavorites.includes(product.id) ? '#ffc107' : '#d1d5db' }}
+                          >
+                            {userFavorites.includes(product.id) ? <FaStar size={16} /> : <FaRegStar size={16} />}
+                          </button>
+                          
                           <img src={displayImage} alt={product.name} className="max-w-[90%] max-h-[90%] object-contain transition-transform duration-500 group-hover:scale-105" />
                         </div>
                         <div className="p-4 flex flex-col flex-grow bg-white border-t border-gray-50">

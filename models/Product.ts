@@ -7,7 +7,7 @@ const ProductSchema = new Schema({
   originalPrice: { type: Number },
   discount: { type: Number },
   image: { type: String, required: true },
-  images: [{ type: String }], // Array for up to 4 additional images
+  images: [{ type: String }], // Array for up to 8 additional images
   category: { type: String, required: true }, // Slug of the category
   description: { type: String },
   stock: { type: Number, default: 0 },

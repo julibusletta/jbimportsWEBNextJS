@@ -186,7 +186,7 @@ export default function ProductsPage() {
           const priceDiscount = getVal(row, 'Precio con descuento', 'preciocondescuento', 'descuento', 'oferta');
           const finalPrice = priceDiscount ? Number(priceDiscount) : priceOriginal;
           const imagesRaw = String(getVal(row, 'Imágenes producto', 'imagenesproducto', 'imagen', 'image', 'foto') || '');
-          const allImages = imagesRaw.split(/[,\s+]/).map(s => s.trim()).filter(Boolean).slice(0, 4);
+          const allImages = imagesRaw.split(/[,\s+]/).map(s => s.trim()).filter(Boolean).slice(0, 8);
           const firstImage = allImages[0] || '/images/placeholder.jpg';
           const rawCategory = String(getVal(row, 'Categoría', 'category', 'categoria', 'rubro') || 'general');
 
@@ -615,7 +615,7 @@ export default function ProductsPage() {
                         <div className="space-y-8 animate-fadeIn">
                           <h4 className="text-sm font-black text-gray-900 uppercase tracking-widest border-b border-gray-100 pb-4 mb-6">Galería de Imágenes</h4>
                           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-                            {[0, 1, 2, 3].map((index) => {
+                            {[0, 1, 2, 3, 4, 5, 6, 7].map((index) => {
                               const currentImg = (p.images || [])[index] || '';
                               return (
                                 <div key={index} className="space-y-3">

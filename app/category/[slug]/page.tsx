@@ -6,18 +6,21 @@ import { getProductsByCategory, Product } from '@/lib/api/productService';
 import { getCategoryBySlug, Category } from '@/lib/api/categoriesService';
 import { useCart } from '@/app/context/CartContext';
 import Link from 'next/link';
-import { FaChevronDown, FaChevronUp, FaShoppingCart, FaEye } from 'react-icons/fa';
+import { FaChevronDown, FaChevronUp, FaShoppingCart, FaEye, FaStar, FaRegStar } from 'react-icons/fa';
+import { useSession } from 'next-auth/react';
 
 export default function CategoryPage() {
   const params = useParams();
   const slug = params.slug as string;
   const { addToCart } = useCart();
+  const { data: session } = useSession();
 
   const [category, setCategory] = useState<Category | null>(null);
   const [products, setProducts] = useState<Product[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [addedToCart, setAddedToCart] = useState<{ [key: string]: boolean }>({});
+  const [userFavorites, setUserFavorites] = useState<string[]>([]);
 
   // Filter states
   const [showOnlyAvailable, setShowOnlyAvailable] = useState(false);
@@ -46,6 +49,15 @@ export default function CategoryPage() {
           };
         }
         setCategory(cat);
+
+        // Load favorites if session exists
+        if (session?.user?.email) {
+          const favRes = await fetch('/api/user/favorites');
+          const favData = await favRes.json();
+          if (favData.success) {
+            setUserFavorites(favData.favorites.map((f: any) => f.id));
+          }
+        }
       } catch (error) {
         console.error('Error loading category:', error);
       } finally {
@@ -54,7 +66,33 @@ export default function CategoryPage() {
     };
 
     loadData();
-  }, [slug]);
+  }, [slug, session]);
+
+  const toggleFavorite = async (e: React.MouseEvent, productId: string, productName: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (!session) {
+      alert('Inicia sesión para guardar favoritos');
+      return;
+    }
+
+    try {
+      const res = await fetch('/api/user/favorites', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ productId, productName }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setUserFavorites(prev => 
+          data.isFavorite ? [...prev, productId] : prev.filter(id => id !== productId)
+        );
+      }
+    } catch (error) {
+      console.error('Error toggling favorite:', error);
+    }
+  };
 
   useEffect(() => {
     let filtered = [...products];
@@ -148,6 +186,7 @@ export default function CategoryPage() {
     onAddToCart: () => void;
   }) {
     const isFeaturedOffer = slug === 'ofertas' && ['378', '1339'].includes(product.id);
+    const isFavorite = userFavorites.includes(product.id);
 
     return (
       <div
@@ -220,6 +259,33 @@ export default function CategoryPage() {
             EN STOCK
           </div>
         )}
+
+        {/* Favorite Star Button */}
+        <button
+          onClick={(e) => toggleFavorite(e, product.id, product.name)}
+          style={{
+            position: 'absolute',
+            top: product.stock > 0 ? '34px' : '8px',
+            right: '8px',
+            background: 'white',
+            border: '1px solid #eee',
+            borderRadius: '50%',
+            width: '28px',
+            height: '28px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer',
+            zIndex: 10,
+            boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
+            color: isFavorite ? '#ffc107' : '#ccc',
+            transition: 'all 0.2s',
+          }}
+          onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.1)'}
+          onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
+        >
+          {isFavorite ? <FaStar size={14} /> : <FaRegStar size={14} />}
+        </button>
 
         {/* DISCOUNT badge — round circle */}
         {(product.discount && product.discount > 0) && (
