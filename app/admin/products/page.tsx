@@ -164,16 +164,28 @@ export default function ProductsPage() {
           return match !== undefined ? row[match] : undefined;
         };
 
-        const resolveCategory = (raw: string): string => {
+        const resolveCategory = (raw: string, productName: string = ''): string => {
           const s = raw.toLowerCase();
+          const p = productName.toLowerCase();
+          
           if (s.includes('iphone')) return 'iphone';
           if (s.includes('celular') || s.includes('telefono')) return 'celulares';
-          if (s.includes('auricular') || s.includes('headset')) return 'auriculares';
-          if (s.includes('parlante') || s.includes('audio') || s.includes('speaker')) return 'parlantes';
+          if (s.includes('parlante') || s.includes('audio') || s.includes('speaker') || s.includes('caixa de som')) return 'parlantes';
+          if (s.includes('auricular') || s.includes('headset') || s.includes('fone')) return 'auriculares';
           if (s.includes('macbook')) return 'macbook';
           if (s.includes('watch') || s.includes('reloj')) return 'watch';
           if (s.includes('notebook') || s.includes('laptop')) return 'notebooks';
           if (s.includes('apple')) return 'apple';
+          
+          // JBL specific sorting if category is unclear
+          if (p.includes('jbl')) {
+            const parlantesKeywords = ['boombox', 'charge', 'flip', 'go', 'clip', 'xtreme', 'party box', 'encore', 'pulse', 'caixa de som', 'partybox'];
+            const auricularesKeywords = ['fone', 'tune', 'sense', 'live', 'quantum', 'reflect', 'wave', 'buds', 'tour', 'auricular'];
+            
+            if (parlantesKeywords.some(k => p.includes(k))) return 'parlantes';
+            if (auricularesKeywords.some(k => p.includes(k))) return 'auriculares';
+          }
+
           return s.split(',')[0].trim() || 'general';
         };
 
@@ -197,7 +209,7 @@ export default function ProductsPage() {
             originalPrice: priceOriginal,
             image: firstImage,
             images: allImages,
-            category: resolveCategory(rawCategory),
+            category: resolveCategory(rawCategory, rawName),
             description: String(getVal(row, 'Descripción', 'description', 'descripcion', 'detalle') || ''),
             stock: Number(getVal(row, 'Cantidad', 'stock', 'stock', 'cantidad') || 0),
             badge: String(getVal(row, 'Badge', 'badge', 'etiqueta', 'promo', 'tipo') || ''),
