@@ -177,13 +177,24 @@ export default function ProductsPage() {
           if (s.includes('notebook') || s.includes('laptop')) return 'notebooks';
           if (s.includes('apple')) return 'apple';
           
-          // JBL specific sorting if category is unclear
+          // Brands specific sorting
           if (p.includes('jbl')) {
             const parlantesKeywords = ['boombox', 'charge', 'flip', 'go', 'clip', 'xtreme', 'party box', 'encore', 'pulse', 'caixa de som', 'partybox'];
             const auricularesKeywords = ['fone', 'tune', 'sense', 'live', 'quantum', 'reflect', 'wave', 'buds', 'tour', 'auricular'];
             
             if (parlantesKeywords.some(k => p.includes(k))) return 'parlantes';
             if (auricularesKeywords.some(k => p.includes(k))) return 'auriculares';
+          }
+          
+          if (p.includes('samsung')) return 'samsung';
+          if (p.includes('motorola')) return 'motorola';
+          if (p.includes('realme')) return 'realme';
+          if (p.includes('xiaomi')) {
+            // Xiaomi phones vs Xiaomi Home
+            if (p.includes('vacuum') || p.includes('robot') || p.includes('mop') || p.includes('aspiradora')) {
+              return 'aspiradoras-robot';
+            }
+            return 'xiaomi';
           }
 
           return s.split(',')[0].trim() || 'general';
