@@ -26,6 +26,7 @@ export default function ProductsPage() {
   const [activeTab, setActiveTab] = useState<'general' | 'media' | 'specs' | 'seo'>('general');
   const [uploadingIndex, setUploadingIndex] = useState<number | null>(null);
   const [isSaving, setIsSaving] = useState(false);
+  const [filterType, setFilterType] = useState<'all' | 'no-image' | 'no-description' | 'low-stock'>('all');
 
   useEffect(() => {
     fetchData();
@@ -294,15 +295,38 @@ export default function ProductsPage() {
              <div className="text-xl font-black text-gray-900">{Object.values(products).flat().filter(p => p.stock <= 5).length}</div>
           </div>
         </div>
-        <div className="admin-v2-card p-6 flex items-center gap-5">
-           <div className="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-lg flex items-center justify-center text-xl">
-             <FaTags />
+        <div className="admin-v2-card p-6 flex items-center gap-5 border-l-4 border-l-orange-400">
+           <div className="w-12 h-12 bg-orange-50 text-orange-600 rounded-lg flex items-center justify-center text-xl">
+             <FaTable />
           </div>
           <div>
-             <div className="text-[10px] font-bold text-gray-400 uppercase">Categorías</div>
-             <div className="text-xl font-black text-gray-900">{Object.keys(products).length}</div>
+             <div className="text-[10px] font-bold text-gray-400 uppercase">Sin Foto / Desc.</div>
+             <div className="text-xl font-black text-gray-900">
+               {Object.values(products).flat().filter(p => 
+                 !p.image || p.image.includes('placeholder') || p.image.includes('default') ||
+                 !p.description || p.description.trim().length < 20
+               ).length}
+             </div>
           </div>
         </div>
+      </div>
+
+      {/* Filter Tabs */}
+      <div className="flex gap-2 mb-6">
+        {[
+          { id: 'all', label: 'Todos', count: Object.values(products).flat().length },
+          { id: 'no-image', label: 'Sin Foto', count: Object.values(products).flat().filter(p => !p.image || p.image.includes('placeholder') || p.image.includes('default')).length },
+          { id: 'no-description', label: 'Sin Descripción', count: Object.values(products).flat().filter(p => !p.description || p.description.trim().length < 20).length },
+          { id: 'low-stock', label: 'Stock Bajo', count: Object.values(products).flat().filter(p => p.stock <= 5).length },
+        ].map(tab => (
+          <button
+            key={tab.id}
+            onClick={() => setFilterType(tab.id as any)}
+            className={`px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all border ${filterType === tab.id ? 'bg-[#058c8c] text-white border-[#058c8c]' : 'bg-white text-gray-500 border-gray-200 hover:border-gray-300'}`}
+          >
+            {tab.label} <span className="ml-1 opacity-60">({tab.count})</span>
+          </button>
+        ))}
       </div>
 
       {/* Tools Card */}
@@ -360,10 +384,24 @@ export default function ProductsPage() {
       {/* Product Tables */}
       <div className="space-y-12">
         {products && Object.entries(products).map(([category, items]) => {
-          const filteredItems = items.filter(p =>
-            p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            p.id.toLowerCase().includes(searchTerm.toLowerCase())
-          );
+          const filteredItems = items.filter(p => {
+            const matchesSearch = p.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                                p.id.toLowerCase().includes(searchTerm.toLowerCase());
+            
+            if (!matchesSearch) return false;
+
+            if (filterType === 'no-image') {
+              return !p.image || p.image.includes('placeholder') || p.image.includes('default');
+            }
+            if (filterType === 'no-description') {
+              return !p.description || p.description.trim().length < 20;
+            }
+            if (filterType === 'low-stock') {
+              return p.stock <= 5;
+            }
+
+            return true;
+          });
 
           if (filteredItems.length === 0 && searchTerm) return null;
 
