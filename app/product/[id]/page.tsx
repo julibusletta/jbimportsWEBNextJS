@@ -44,6 +44,9 @@ export default function ProductDetailsPage() {
           const products = await getProductsByCategory(foundProduct.category);
           const related = products.filter((p: Product) => p.id !== id).slice(0, 10);
           setRelatedProducts(related);
+          
+          // Initialize quantity based on stock
+          setQuantity(foundProduct.stock > 0 ? 1 : 0);
         }
 
         // Load favorites
@@ -130,24 +133,32 @@ export default function ProductDetailsPage() {
   const handleAddToCart = () => {
     if (!product) return;
     
+    // Ensure we don't add more than available stock
+    const finalQuantity = Math.min(quantity, product.stock);
+    if (finalQuantity <= 0) return;
+
     addToCart({
       id: product.id,
       name: product.name,
       price: product.price,
       image: product.image,
-      quantity,
+      quantity: finalQuantity,
     });
   };
 
   const handleComprarAhora = () => {
     if (!product) return;
     
+    // Ensure we don't add more than available stock
+    const finalQuantity = Math.min(quantity, product.stock);
+    if (finalQuantity <= 0) return;
+
     addToCart({
       id: product.id,
       name: product.name,
       price: product.price,
       image: product.image,
-      quantity,
+      quantity: finalQuantity,
     });
     
     router.push('/cart'); // Or wherever checkout is
@@ -299,11 +310,12 @@ export default function ProductDetailsPage() {
                   />
                   <div className="flex flex-col border-l border-[#ccc] w-[30px] bg-[#f5f5f5]">
                     <button 
-                      onClick={() => setQuantity(q => q + 1)}
-                      className="flex-1 flex items-center justify-center border-b border-[#ccc] hover:bg-[#e0e0e0] cursor-pointer font-bold text-[#555]"
+                      onClick={() => setQuantity(q => (product && q < product.stock) ? q + 1 : q)}
+                      disabled={product && quantity >= product.stock}
+                      className={`flex-1 flex items-center justify-center border-b border-[#ccc] transition-colors font-bold text-[#555] ${product && quantity >= product.stock ? 'bg-gray-200 cursor-not-allowed opacity-50' : 'hover:bg-[#e0e0e0] cursor-pointer'}`}
                     >+</button>
                     <button 
-                      onClick={() => setQuantity(q => Math.max(1, q - 1))}
+                      onClick={() => setQuantity(q => Math.max(product && product.stock > 0 ? 1 : 0, q - 1))}
                       className="flex-1 flex items-center justify-center hover:bg-[#e0e0e0] cursor-pointer font-bold text-[#555]"
                     >-</button>
                   </div>
