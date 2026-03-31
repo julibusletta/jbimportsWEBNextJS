@@ -70,15 +70,10 @@ export async function POST(request: Request) {
     const paymentBody = {
       external_payment_id: currentOrderId,
       seller: { pos_id: NAVE_TERMINAL_ID },
-      // Optional: configuration at root level for global session override
-      configurations: {
-        installments: [instCount]
-      },
       transactions: [{
         amount: { currency: "ARS", value: total.toFixed(2).toString() },
-        // Use both [array] and integer format to attempt override of merchant dashboard settings
-        installments: instCount, 
-        allowed_installments: [instCount],
+        // Reverting to array [instCount] to avoid schema validation error
+        installments: [instCount],
         products: items.map((item: any) => ({
           name: item.name,
           quantity: item.quantity,
