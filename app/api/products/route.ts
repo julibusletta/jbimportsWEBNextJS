@@ -17,7 +17,9 @@ export async function GET(request: Request) {
       'apple': ['apple', 'iphone', 'macbook', 'watch', 'ipad', 'airpods'],
       'jbl': ['jbl', 'parlantes', 'auriculares', 'sounds-bars'],
       'smart-home': ['smart-home', 'amazon', 'google', 'xiaomi-home', 'aspiradoras-robot', 'camaras-seguridad'],
-      'smart-watches': ['smart-watches', 'xiaomi-watches', 'watch']
+      'smart-watches': ['smart-watches', 'xiaomi-watches', 'watch'],
+      'notebooks': ['notebooks', 'macbook'],
+      'notebooks-y-tablets': ['notebooks', 'macbook', 'tablets']
     };
 
     if (category === 'ofertas') {
