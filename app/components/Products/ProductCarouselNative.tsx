@@ -53,7 +53,7 @@ export function ProductCarouselSection({ title, type = 'section', value }: Produ
       }
     };
     fetchProducts();
-  }, [type, value, session]);
+  }, [type, value, session?.user?.email]);
 
   const toggleFavorite = async (e: React.MouseEvent, productId: string, productName: string) => {
     e.preventDefault();

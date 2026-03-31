@@ -62,7 +62,7 @@ export default function ProductDetailsPage() {
     };
 
     loadData();
-  }, [id, session]);
+  }, [id, session?.user?.email]);
 
   const toggleFavorite = async (e: React.MouseEvent, productId: string, productName: string) => {
     e.preventDefault();

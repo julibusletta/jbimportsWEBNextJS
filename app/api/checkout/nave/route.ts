@@ -69,6 +69,7 @@ export async function POST(request: Request) {
     const paymentBody = {
       external_payment_id: currentOrderId,
       seller: { pos_id: NAVE_TERMINAL_ID },
+      installments: paymentMode === 'CUOTAS' ? [6] : [1],
       transactions: [{
         amount: { currency: "ARS", value: total.toFixed(2).toString() },
         products: items.map((item: any) => ({
