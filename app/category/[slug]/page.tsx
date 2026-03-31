@@ -28,6 +28,10 @@ export default function CategoryPage() {
   const [showBrandsFilter, setShowBrandsFilter] = useState(true);
   const [showPriceFilter, setShowPriceFilter] = useState(false);
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
+  
+  // Pagination states
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(12);
 
   useEffect(() => {
     const loadData = async () => {
@@ -125,7 +129,20 @@ export default function CategoryPage() {
     }
 
     setFilteredProducts(filtered);
+    setCurrentPage(1); // Reset to first page whenever filters change
   }, [products, showOnlyAvailable, sortBy, selectedBrands, slug]);
+  
+  // Handle page change with scroll to top
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // Pagination calculations
+  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+  const currentItems = itemsPerPage === -1 
+    ? filteredProducts 
+    : filteredProducts.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   const handleAddToCart = (product: Product) => {
     addToCart({
@@ -681,7 +698,7 @@ export default function CategoryPage() {
           </div>
 
           {/* Products Grid */}
-          <div>
+          <div className="flex-1">
             {filteredProducts.length === 0 ? (
               <div style={{ textAlign: 'center', padding: '48px 0', color: '#666', fontSize: '14px' }}>
                 No hay productos disponibles
@@ -691,7 +708,7 @@ export default function CategoryPage() {
                 <div
                   className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4"
                 >
-                  {filteredProducts.map(product => (
+                  {currentItems.map(product => (
                     <ProductCard
                       key={product.id}
                       product={product}
@@ -701,41 +718,122 @@ export default function CategoryPage() {
                   ))}
                 </div>
 
-                {/* Pagination */}
-                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '4px', marginTop: '32px' }}>
-                  {[1, 2, 3, 4].map(page => (
+                {/* Pagination UI */}
+                {totalPages > 1 && itemsPerPage !== -1 && (
+                  <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px', marginTop: '48px', flexWrap: 'wrap' }}>
+                    {/* Previous Button */}
                     <button
-                      key={page}
+                      onClick={() => handlePageChange(currentPage - 1)}
+                      disabled={currentPage === 1}
                       style={{
-                        width: '32px',
-                        height: '32px',
-                        border: page === 1 ? 'none' : '1px solid #ccc',
-                        borderRadius: '3px',
-                        background: page === 1 ? '#333' : '#fff',
-                        color: page === 1 ? '#fff' : '#0066cc',
+                        padding: '0 12px',
+                        height: '36px',
+                        border: '1px solid #eee',
+                        borderRadius: '6px',
+                        background: '#fff',
+                        color: currentPage === 1 ? '#ccc' : '#0066cc',
                         fontSize: '13px',
-                        fontWeight: page === 1 ? 700 : 400,
-                        cursor: 'pointer',
+                        fontWeight: 600,
+                        cursor: currentPage === 1 ? 'not-allowed' : 'pointer',
+                        transition: 'all 0.2s',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
                       }}
                     >
-                      {page}
+                      ‹ ANTERIOR
                     </button>
-                  ))}
-                  <button
-                    style={{
-                      padding: '0 12px',
-                      height: '32px',
-                      border: '1px solid #ccc',
-                      borderRadius: '3px',
-                      background: '#fff',
-                      color: '#0066cc',
-                      fontSize: '13px',
-                      cursor: 'pointer',
-                    }}
-                  >
-                    TODO
-                  </button>
-                </div>
+
+                    {/* Page Numbers */}
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+                      <button
+                        key={page}
+                        onClick={() => handlePageChange(page)}
+                        style={{
+                          width: '36px',
+                          height: '36px',
+                          border: page === currentPage ? 'none' : '1px solid #eee',
+                          borderRadius: '6px',
+                          background: page === currentPage ? '#1a1a2e' : '#fff',
+                          color: page === currentPage ? '#fff' : '#444',
+                          fontSize: '14px',
+                          fontWeight: page === currentPage ? 700 : 500,
+                          cursor: 'pointer',
+                          transition: 'all 0.2s',
+                        }}
+                      >
+                        {page}
+                      </button>
+                    ))}
+
+                    {/* Next Button */}
+                    <button
+                      onClick={() => handlePageChange(currentPage + 1)}
+                      disabled={currentPage === totalPages}
+                      style={{
+                        padding: '0 12px',
+                        height: '36px',
+                        border: '1px solid #eee',
+                        borderRadius: '6px',
+                        background: '#fff',
+                        color: currentPage === totalPages ? '#ccc' : '#0066cc',
+                        fontSize: '13px',
+                        fontWeight: 600,
+                        cursor: currentPage === totalPages ? 'not-allowed' : 'pointer',
+                        transition: 'all 0.2s',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      SIGUIENTE ›
+                    </button>
+
+                    {/* "Ver Todo" Button */}
+                    <button
+                      onClick={() => setItemsPerPage(-1)}
+                      style={{
+                        padding: '0 15px',
+                        height: '36px',
+                        border: '1px solid #eee',
+                        borderRadius: '6px',
+                        background: '#fff',
+                        color: '#ff6600',
+                        fontSize: '13px',
+                        fontWeight: 700,
+                        cursor: 'pointer',
+                        marginLeft: '8px',
+                        transition: 'all 0.2s',
+                      }}
+                    >
+                      VER TODO
+                    </button>
+                  </div>
+                )}
+                
+                {/* Reset Pagination when "Ver Todo" is active */}
+                {itemsPerPage === -1 && filteredProducts.length > 12 && (
+                  <div style={{ display: 'flex', justifyContent: 'center', marginTop: '32px' }}>
+                     <button
+                        onClick={() => {
+                          setItemsPerPage(12);
+                          setCurrentPage(1);
+                        }}
+                        style={{
+                          padding: '8px 20px',
+                          border: '1px solid #0066cc',
+                          borderRadius: '6px',
+                          background: '#fff',
+                          color: '#0066cc',
+                          fontSize: '13px',
+                          fontWeight: 600,
+                          cursor: 'pointer',
+                        }}
+                      >
+                        MOSTRAR PAGINACIÓN
+                      </button>
+                  </div>
+                )}
               </>
             )}
           </div>
