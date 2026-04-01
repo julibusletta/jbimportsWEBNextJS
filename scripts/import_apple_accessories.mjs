@@ -35,8 +35,8 @@ function calculatePrice(usd) {
     // (Price + 10) * 1500 * 1.20
     return Math.ceil((usd + 10) * 1500 * 1.20);
   } else {
-    // (Price * 1500) + 10000
-    return Math.ceil((usd * 1500) + 10000);
+    // ((Price * 1500) + 10000) * 1.10
+    return Math.ceil(((usd * 1500) + 10000) * 1.10);
   }
 }
 
