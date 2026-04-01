@@ -186,11 +186,10 @@ export default function WholesalePage() {
       <div className="print-only-container bg-white p-0 md:p-8 rounded-2xl shadow-sm border border-[#e1e3e5]">
         
         {/* PDF HEADER - ONLY VISIBLE IN PRINT */}
-        <div className="print-header hidden mb-10 items-center justify-between border-b-4 border-black pb-8">
+        <div className="print-header hidden mb-12 items-center justify-between border-b-4 border-black pb-12">
            <div className="flex items-center gap-6">
               <img src="/images/logotest9.png" alt="JBimports" className="h-16 w-auto object-contain" />
               <div>
-                <h2 className="text-2xl font-black text-black leading-tight">JB IMPORTS</h2>
                 <p className="text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em]">Lista de Precios Mayorista</p>
               </div>
            </div>
@@ -267,7 +266,6 @@ export default function WholesalePage() {
                   <table className="w-full border-collapse">
                     <thead>
                       <tr className="border-b-2 border-gray-200">
-                        <th className="px-4 py-3 text-left text-[10px] font-black uppercase text-gray-400 w-24">Código</th>
                         <th className="px-4 py-3 text-left text-[10px] font-black uppercase text-gray-400">Producto</th>
                         <th className="px-4 py-3 text-right text-[10px] font-black uppercase text-gray-400 w-32">P. Mayorista</th>
                       </tr>
@@ -275,7 +273,6 @@ export default function WholesalePage() {
                     <tbody className="divide-y divide-gray-100">
                       {filteredItems.map((p) => (
                         <tr key={p.id} className="hover:bg-gray-50/50 transition-colors">
-                          <td className="px-4 py-3 text-[10px] font-bold text-gray-400">#{p.id}</td>
                           <td className="px-4 py-3 text-xs font-black text-gray-800">{p.name}</td>
                           <td className="px-4 py-3 text-right text-sm font-black text-black">
                             ${calculateWholesale(p.price, category).toLocaleString('es-AR')}
