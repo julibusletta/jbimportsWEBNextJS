@@ -6,8 +6,9 @@ import { NextResponse } from 'next/server';
  */
 
 const NAVE_ENV = (process.env.NAVE_ENV || 'sandbox').trim();
-const NAVE_TERMINAL_ID_NORMAL = (process.env.NAVE_TERMINAL_ID_NORMAL || '').trim();
-const NAVE_TERMINAL_ID_CUOTAS = (process.env.NAVE_TERMINAL_ID_CUOTAS || '').trim();
+// Fallback to old NAVE_TERMINAL_ID if specific ones are not yet set in production
+const NAVE_TERMINAL_ID_NORMAL = (process.env.NAVE_TERMINAL_ID_NORMAL || process.env.NAVE_TERMINAL_ID || '').trim();
+const NAVE_TERMINAL_ID_CUOTAS = (process.env.NAVE_TERMINAL_ID_CUOTAS || process.env.NAVE_TERMINAL_ID || '').trim();
 const NAVE_CLIENT_ID = (process.env.NAVE_CLIENT_ID || '').trim();
 const NAVE_CLIENT_SECRET = (process.env.NAVE_CLIENT_SECRET || '').trim();
 
