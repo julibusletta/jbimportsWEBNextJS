@@ -41,14 +41,19 @@ export default function WholesalePage() {
     const flatData: any[] = [];
     Object.entries(products).forEach(([category, items]) => {
       items.forEach(p => {
-        flatData.push({
-          'Categoría': category.toUpperCase(),
-          'Código': p.id,
-          'Producto': p.name,
-          'Precio Retail': p.price,
-          'Descuento %': discount,
-          'Precio Mayorista': calculateWholesale(p.price)
-        });
+        const isPublished = p.published !== false;
+        const hasStock = p.stock > 0;
+        
+        if (isPublished && hasStock) {
+          flatData.push({
+            'Categoría': category.toUpperCase(),
+            'Código': p.id,
+            'Producto': p.name,
+            'Precio Retail': p.price,
+            'Descuento %': discount,
+            'Precio Mayorista': calculateWholesale(p.price)
+          });
+        }
       });
     });
 
@@ -136,10 +141,14 @@ export default function WholesalePage() {
         {/* CATEGORIES SECTION */}
         <div className="space-y-12">
           {Object.entries(products).map(([category, items]) => {
-            const filteredItems = items.filter(p => 
-              p.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-              p.id.toLowerCase().includes(searchTerm.toLowerCase())
-            );
+            const filteredItems = items.filter(p => {
+              const isPublished = p.published !== false;
+              const hasStock = p.stock > 0;
+              const matchesSearch = p.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                                  p.id.toLowerCase().includes(searchTerm.toLowerCase());
+              
+              return isPublished && hasStock && matchesSearch;
+            });
 
             if (filteredItems.length === 0) return null;
 
