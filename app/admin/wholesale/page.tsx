@@ -156,30 +156,54 @@ export default function WholesalePage() {
         </div>
       </div>
 
-      {/* FILTER & MASTER CONTROLS - HIDDEN IN PRINT */}
-      <div className="no-print mb-10 flex flex-wrap items-center gap-6">
+      {/* CATEGORY SELECTOR PANEL */}
+      <div className="no-print mb-8 bg-white p-6 rounded-2xl shadow-sm border border-[#e1e3e5]">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+          <div>
+            <h2 className="text-sm font-black uppercase tracking-widest text-gray-900 mb-1">Seleccionar Categorías para el PDF</h2>
+            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-tight">Selecciona qué secciones quieres incluir en el documento final</p>
+          </div>
+          <div className="flex items-center gap-4">
+             <button 
+               onClick={() => toggleAllVisibility(true)}
+               className="text-[10px] font-black uppercase text-[#058c8c] hover:text-[#047a7a] transition-colors flex items-center gap-1"
+             >
+               <FaCheckSquare className="text-xs" /> Seleccionar Todo
+             </button>
+             <button 
+               onClick={() => toggleAllVisibility(false)}
+               className="text-[10px] font-black uppercase text-gray-400 hover:text-gray-600 transition-colors flex items-center gap-1"
+             >
+               <FaSquare className="text-xs" /> Deseleccionar Todo
+             </button>
+          </div>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {Object.keys(products).sort().map(cat => (
+            <button
+              key={cat}
+              onClick={() => toggleCategoryVisibility(cat)}
+              className={`px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-wider transition-all border ${
+                categoryConfigs[cat]?.visible 
+                  ? 'bg-[#058c8c] text-white border-[#058c8c] shadow-md shadow-[#058c8c]/20' 
+                  : 'bg-white text-gray-400 border-gray-200 hover:border-gray-300'
+              }`}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* FILTER CONTROLS - HIDDEN IN PRINT */}
+      <div className="no-print mb-10">
         <input
           type="text"
-          placeholder="Buscar producto..."
-          className="flex-1 max-w-md px-6 py-4 bg-white border border-[#e1e3e5] rounded-xl shadow-sm outline-none focus:border-[#058c8c] transition-all font-medium text-sm"
+          placeholder="Buscar producto por nombre o descripción..."
+          className="w-full max-w-md px-6 py-4 bg-white border border-[#e1e3e5] rounded-xl shadow-sm outline-none focus:border-[#058c8c] transition-all font-medium text-sm"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-
-        <div className="flex items-center gap-4">
-           <button 
-             onClick={() => toggleAllVisibility(true)}
-             className="text-[10px] font-black uppercase text-[#058c8c] hover:underline"
-           >
-             Seleccionar Todo
-           </button>
-           <button 
-             onClick={() => toggleAllVisibility(false)}
-             className="text-[10px] font-black uppercase text-gray-400 hover:underline"
-           >
-             Deseleccionar Todo
-           </button>
-        </div>
       </div>
 
       {/* PRINTABLE AREA */}
