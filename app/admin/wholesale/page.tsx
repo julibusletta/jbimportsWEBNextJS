@@ -2,14 +2,20 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { FaPrint, FaArrowLeft, FaWhatsapp, FaInstagram, FaDownload } from 'react-icons/fa';
+import { FaPrint, FaArrowLeft, FaWhatsapp, FaInstagram, FaDownload, FaCheckSquare, FaSquare, FaPercent, FaEye, FaEyeSlash } from 'react-icons/fa';
 import { Product } from '@/lib/api/productService';
 import * as XLSX from 'xlsx';
+
+interface CategoryConfig {
+  discount: number;
+  visible: boolean;
+}
 
 export default function WholesalePage() {
   const [products, setProducts] = useState<Record<string, Product[]>>({});
   const [loading, setLoading] = useState(true);
-  const [discount, setDiscount] = useState(15); // Default 15% discount
+  const [globalDiscount, setGlobalDiscount] = useState(15);
+  const [categoryConfigs, setCategoryConfigs] = useState<Record<string, CategoryConfig>>({});
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
@@ -21,7 +27,16 @@ export default function WholesalePage() {
       setLoading(true);
       const resp = await fetch('/api/admin');
       const data = await resp.json();
-      setProducts(data.products || {});
+      const fetchedProducts = data.products || {};
+      setProducts(fetchedProducts);
+      
+      // Initialize category configs
+      const configs: Record<string, CategoryConfig> = {};
+      Object.keys(fetchedProducts).forEach(cat => {
+        configs[cat] = { discount: 15, visible: true };
+      });
+      setCategoryConfigs(configs);
+
     } catch (err) {
       console.error('Error fetching products:', err);
     } finally {
@@ -29,8 +44,40 @@ export default function WholesalePage() {
     }
   };
 
-  const calculateWholesale = (price: number) => {
-    return Math.round(price * (1 - discount / 100));
+  const updateGlobalDiscount = (val: number) => {
+    setGlobalDiscount(val);
+    const updated = { ...categoryConfigs };
+    Object.keys(updated).forEach(cat => {
+      updated[cat].discount = val;
+    });
+    setCategoryConfigs(updated);
+  };
+
+  const toggleCategoryVisibility = (cat: string) => {
+    setCategoryConfigs(prev => ({
+      ...prev,
+      [cat]: { ...prev[cat], visible: !prev[cat].visible }
+    }));
+  };
+
+  const updateCategoryDiscount = (cat: string, val: number) => {
+    setCategoryConfigs(prev => ({
+      ...prev,
+      [cat]: { ...prev[cat], discount: val }
+    }));
+  };
+
+  const toggleAllVisibility = (visible: boolean) => {
+    const updated = { ...categoryConfigs };
+    Object.keys(updated).forEach(cat => {
+      updated[cat].visible = visible;
+    });
+    setCategoryConfigs(updated);
+  };
+
+  const calculateWholesale = (price: number, cat: string) => {
+    const disc = categoryConfigs[cat]?.discount ?? globalDiscount;
+    return Math.round(price * (1 - disc / 100));
   };
 
   const handlePrint = () => {
@@ -40,6 +87,9 @@ export default function WholesalePage() {
   const exportToExcel = () => {
     const flatData: any[] = [];
     Object.entries(products).forEach(([category, items]) => {
+      const config = categoryConfigs[category];
+      if (!config?.visible) return;
+
       items.forEach(p => {
         const isPublished = p.published !== false;
         const hasStock = p.stock > 0;
@@ -50,8 +100,8 @@ export default function WholesalePage() {
             'Código': p.id,
             'Producto': p.name,
             'Precio Retail': p.price,
-            'Descuento %': discount,
-            'Precio Mayorista': calculateWholesale(p.price)
+            'Descuento %': config.discount,
+            'Precio Mayorista': calculateWholesale(p.price, category)
           });
         }
       });
@@ -67,21 +117,23 @@ export default function WholesalePage() {
 
   return (
     <div className="wholesale-container p-4 md:p-10 bg-[#f8fafb] min-h-screen">
+      
       {/* HEADER - HIDDEN IN PRINT */}
       <div className="no-print mb-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
           <h1 className="text-2xl font-black text-gray-900 mb-1">Generador de Lista Mayorista</h1>
-          <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">Configura el descuento y genera tu PDF</p>
+          <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">Configura márgenes por categoría y genera tu PDF</p>
         </div>
         
         <div className="flex flex-wrap items-center gap-4">
+           {/* GLOBAL PRESET */}
            <div className="bg-white border border-[#e1e3e5] rounded-lg p-3 flex items-center gap-4 shadow-sm">
              <span className="text-[10px] font-black uppercase text-gray-400">Descuento Global:</span>
              <div className="flex items-center gap-2">
                <input 
                  type="number" 
-                 value={discount}
-                 onChange={(e) => setDiscount(Number(e.target.value))}
+                 value={globalDiscount}
+                 onChange={(e) => updateGlobalDiscount(Number(e.target.value))}
                  className="w-16 bg-gray-50 border-b-2 border-[#058c8c] text-center font-black text-gray-900 outline-none p-1"
                />
                <span className="font-bold text-[#058c8c]">%</span>
@@ -104,15 +156,30 @@ export default function WholesalePage() {
         </div>
       </div>
 
-      {/* SEARCH - HIDDEN IN PRINT */}
-      <div className="no-print mb-10">
+      {/* FILTER & MASTER CONTROLS - HIDDEN IN PRINT */}
+      <div className="no-print mb-10 flex flex-wrap items-center gap-6">
         <input
           type="text"
           placeholder="Buscar producto..."
-          className="w-full max-w-md px-6 py-4 bg-white border border-[#e1e3e5] rounded-xl shadow-sm outline-none focus:border-[#058c8c] transition-all font-medium text-sm"
+          className="flex-1 max-w-md px-6 py-4 bg-white border border-[#e1e3e5] rounded-xl shadow-sm outline-none focus:border-[#058c8c] transition-all font-medium text-sm"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
+
+        <div className="flex items-center gap-4">
+           <button 
+             onClick={() => toggleAllVisibility(true)}
+             className="text-[10px] font-black uppercase text-[#058c8c] hover:underline"
+           >
+             Seleccionar Todo
+           </button>
+           <button 
+             onClick={() => toggleAllVisibility(false)}
+             className="text-[10px] font-black uppercase text-gray-400 hover:underline"
+           >
+             Deseleccionar Todo
+           </button>
+        </div>
       </div>
 
       {/* PRINTABLE AREA */}
@@ -141,6 +208,11 @@ export default function WholesalePage() {
         {/* CATEGORIES SECTION */}
         <div className="space-y-12">
           {Object.entries(products).map(([category, items]) => {
+            const config = categoryConfigs[category] || { discount: globalDiscount, visible: true };
+            
+            // Only hide category if not printing (in print, filter out of JSX)
+            const isVisible = config.visible;
+
             const filteredItems = items.filter(p => {
               const isPublished = p.published !== false;
               const hasStock = p.stock > 0;
@@ -153,11 +225,45 @@ export default function WholesalePage() {
             if (filteredItems.length === 0) return null;
 
             return (
-              <div key={category} className="category-block break-inside-avoid">
-                <h3 className="text-xs font-black uppercase tracking-[0.3em] bg-black text-white px-6 py-2 mb-4 inline-block">
+              <div 
+                key={category} 
+                className={`category-block break-inside-avoid ${!isVisible ? 'no-print opacity-40 grayscale' : ''}`}
+              >
+                {/* CATEGORY HEADER WITH CONTROLS (Hidden in print) */}
+                <div className="flex items-center justify-between mb-4 bg-gray-50 p-2 rounded no-print">
+                   <div className="flex items-center gap-4">
+                      <button 
+                        onClick={() => toggleCategoryVisibility(category)}
+                        className={`w-8 h-8 flex items-center justify-center rounded transition-colors ${isVisible ? 'bg-[#058c8c] text-white' : 'bg-gray-200 text-gray-400'}`}
+                        title={isVisible ? 'Ocultar categoría del PDF' : 'Mostrar categoría en el PDF'}
+                      >
+                         {isVisible ? <FaEye /> : <FaEyeSlash />}
+                      </button>
+                      <h3 className="text-xs font-black uppercase tracking-[0.2em] text-gray-900">
+                        {category}
+                      </h3>
+                   </div>
+
+                   <div className="flex items-center gap-2">
+                      <span className="text-[9px] font-black text-gray-400 uppercase tracking-tighter">Dto Cat:</span>
+                      <div className="flex items-center bg-white border border-gray-200 rounded px-2">
+                        <input 
+                           type="number"
+                           className="w-12 py-1 text-xs font-black text-center outline-none bg-transparent"
+                           value={config.discount}
+                           onChange={(e) => updateCategoryDiscount(category, Number(e.target.value))}
+                        />
+                        <span className="text-[10px] font-bold text-[#058c8c]">%</span>
+                      </div>
+                   </div>
+                </div>
+
+                {/* PDF CATEGORY TITLE (Only visible in print) */}
+                <h3 className="print-only-header hidden text-xs font-black uppercase tracking-[0.3em] bg-black text-white px-6 py-2 mb-4 inline-block">
                   {category}
                 </h3>
-                <div className="overflow-x-auto">
+
+                <div className={`overflow-x-auto ${!isVisible ? 'hidden' : ''}`}>
                   <table className="w-full border-collapse">
                     <thead>
                       <tr className="border-b-2 border-gray-200">
@@ -172,7 +278,7 @@ export default function WholesalePage() {
                           <td className="px-4 py-3 text-[10px] font-bold text-gray-400">#{p.id}</td>
                           <td className="px-4 py-3 text-xs font-black text-gray-800">{p.name}</td>
                           <td className="px-4 py-3 text-right text-sm font-black text-black">
-                            ${calculateWholesale(p.price).toLocaleString('es-AR')}
+                            ${calculateWholesale(p.price, category).toLocaleString('es-AR')}
                           </td>
                         </tr>
                       ))}
@@ -228,6 +334,9 @@ export default function WholesalePage() {
           }
           .print-footer {
             display: block !important;
+          }
+          .print-only-header {
+             display: inline-block !important;
           }
           table {
             page-break-inside: auto;
