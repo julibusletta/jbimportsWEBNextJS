@@ -68,6 +68,7 @@ export default function Header() {
         { label: 'IPHONE', href: '/category/iphone' },
         { label: 'MACBOOK', href: '/category/macbook' },
         { label: 'WATCH', href: '/category/watch' },
+        { label: 'ACCESORIOS', href: '/category/apple-accesorios' },
       ],
     },
     {
