@@ -34,6 +34,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       items: [
         { label: 'Productos', href: '/admin/products', icon: <FaBox /> },
         { label: 'Categorías', href: '/admin/categories', icon: <FaTags /> },
+        { label: 'Lista Mayorista', href: '/admin/wholesale', icon: <FaTrophy /> },
       ]
     },
     {
