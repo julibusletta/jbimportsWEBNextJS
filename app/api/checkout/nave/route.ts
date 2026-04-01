@@ -6,7 +6,8 @@ import { NextResponse } from 'next/server';
  */
 
 const NAVE_ENV = (process.env.NAVE_ENV || 'sandbox').trim();
-const NAVE_TERMINAL_ID = (process.env.NAVE_TERMINAL_ID || '').trim();
+const NAVE_TERMINAL_ID_NORMAL = (process.env.NAVE_TERMINAL_ID_NORMAL || '').trim();
+const NAVE_TERMINAL_ID_CUOTAS = (process.env.NAVE_TERMINAL_ID_CUOTAS || '').trim();
 const NAVE_CLIENT_ID = (process.env.NAVE_CLIENT_ID || '').trim();
 const NAVE_CLIENT_SECRET = (process.env.NAVE_CLIENT_SECRET || '').trim();
 
@@ -67,9 +68,11 @@ export async function POST(request: Request) {
 
     // 4. Create Payment Request
     const instCount = paymentMode === 'CUOTAS' ? 6 : 1;
+    const activeTerminalId = instCount === 6 ? NAVE_TERMINAL_ID_CUOTAS : NAVE_TERMINAL_ID_NORMAL;
+
     const paymentBody = {
       external_payment_id: currentOrderId,
-      seller: { pos_id: NAVE_TERMINAL_ID },
+      seller: { pos_id: activeTerminalId },
       transactions: [{
         amount: { currency: "ARS", value: total.toFixed(2).toString() },
         // Reverting to array [instCount] to avoid schema validation error
@@ -96,7 +99,7 @@ export async function POST(request: Request) {
       'Authorization': `Bearer ${cleanToken}`,
       'Content-Type': 'application/json',
       'Accept': 'application/json',
-      'X-Terminal-Id': NAVE_TERMINAL_ID,
+      'X-Terminal-Id': activeTerminalId,
     };
 
     const checkoutResponse = await fetch(CHECKOUT_URL, {

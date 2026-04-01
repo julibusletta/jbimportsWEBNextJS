@@ -1,6 +1,7 @@
 
 const NAVE_ENV = 'production';
-const NAVE_TERMINAL_ID = 'bf1b6c74-59b7-4b90-a579-fa3b6ad2b492';
+const NAVE_TERMINAL_ID_NORMAL = 'f2823910-854c-4b19-bd80-06e960c314dd';
+const NAVE_TERMINAL_ID_CUOTAS = 'bf1b6c74-59b7-4b90-a579-fa3b6ad2b492';
 const NAVE_CLIENT_ID = 'TRG54rWLT09FFHPDQysXosdJp8g1Ehbl';
 const NAVE_CLIENT_SECRET = 'hG-5o1v2Kjm5QfxRu7FMR8V4GtVjJM_6CfoiGg2cWHCamG4NE68czTRQQTtEkbHO';
 
@@ -41,7 +42,7 @@ async function testNave() {
     const paymentBody = {
       external_payment_id: orderId,
       seller: {
-        pos_id: NAVE_TERMINAL_ID
+        pos_id: NAVE_TERMINAL_ID_NORMAL
       },
       transactions: [
         {
