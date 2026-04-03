@@ -82,6 +82,15 @@ export async function POST(request: Request) {
       await db.deleteProducts(productIds);
       return NextResponse.json({ success: true, message: `${productIds.length} productos eliminados correctamente` });
     }
+    
+    if (action === 'save_category') {
+      const { category } = data;
+      if (!category || (!category.id && !category.slug)) {
+        return NextResponse.json({ success: false, message: 'Datos de categoría incompletos' }, { status: 400 });
+      }
+      await db.saveCategory(category);
+      return NextResponse.json({ success: true, message: 'Categoría guardada correctamente' });
+    }
 
     return NextResponse.json({ success: false, message: 'Acción no válida' }, { status: 400 });
 
@@ -112,8 +121,11 @@ export async function GET() {
       console.warn('Specs file not found, using empty array');
     }
     
+    const mongoCategories = await db.getCategories();
+    
     return NextResponse.json({
       products: mongoProducts.length > 0 ? productsByCategory : {},
+      categories: mongoCategories,
       specifications: JSON.parse(specsData)
     });
   } catch (error: any) {

@@ -96,6 +96,33 @@ export const db = {
     }
   },
 
+  async getCategories(): Promise<any[]> {
+    try {
+      await dbConnect();
+      const Category = await this.getCategoryModel();
+      return await Category.find({}).sort({ name: 1 }).lean();
+    } catch (error) {
+      console.error('DB Error [getCategories]:', error);
+      throw error;
+    }
+  },
+
+  async saveCategory(categoryData: any): Promise<void> {
+    try {
+      await dbConnect();
+      const Category = await this.getCategoryModel();
+      const { id, slug } = categoryData;
+      await Category.findOneAndUpdate(
+        { $or: [{ id }, { slug }] },
+        { $set: categoryData },
+        { upsert: true, new: true }
+      );
+    } catch (error) {
+      console.error('DB Error [saveCategory]:', error);
+      throw error;
+    }
+  },
+
   async logWebhook(service: string, method: string, payload: any, headers?: any): Promise<void> {
     try {
       await dbConnect();

@@ -5,7 +5,7 @@ import * as XLSX from 'xlsx';
 import { Product } from '@/lib/api/productService';
 import { Spec } from '@/lib/api/productSpecifications';
 import Link from 'next/link';
-import { FaUpload, FaSave, FaInfoCircle, FaSearch, FaTable, FaThList, FaTimesCircle, FaTags, FaBoxOpen, FaCogs, FaGlobe, FaPlus, FaTrash, FaExclamationTriangle } from 'react-icons/fa';
+import { FaUpload, FaSave, FaInfoCircle, FaSearch, FaTable, FaThList, FaTimesCircle, FaTags, FaBoxOpen, FaCogs, FaGlobe, FaPlus, FaTrash, FaExclamationTriangle, FaPercentage } from 'react-icons/fa';
 
 const CATEGORIES = [
   'celulares', 'samsung', 'xiaomi', 'motorola', 'realme', 'iphone',
@@ -17,6 +17,7 @@ const CATEGORIES = [
 
 export default function ProductsPage() {
   const [products, setProducts] = useState<{ [key: string]: Product[] }>({});
+  const [categories, setCategories] = useState<any[]>([]);
   const [specifications, setSpecifications] = useState<Record<string, Spec[]>>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -47,6 +48,7 @@ export default function ProductsPage() {
       }
       const data = await resp.json();
       setProducts(data.products || {});
+      setCategories(data.categories || []);
       setSpecifications(data.specifications || {});
       setLoading(false);
     } catch (err: any) {
@@ -758,6 +760,19 @@ export default function ProductsPage() {
                                   <option value={p.category}>{p.category}</option>
                                 )}
                               </select>
+                              
+                              {categories.find(c => c.slug === p.category) && (
+                                <div className="mt-3 p-3 bg-[#058c8c]/[0.03] rounded-lg border border-dashed border-[#058c8c]/30 flex items-center gap-3 animate-fadeIn">
+                                   <div className="w-6 h-6 bg-white rounded shadow-sm flex items-center justify-center border border-gray-100"><FaPercentage className="text-[#058c8c]" size={10} /></div>
+                                   <div className="flex flex-col">
+                                      <span className="text-[8px] font-black text-[#058c8c] uppercase tracking-widest">Margen Sugerido</span>
+                                      <span className="text-[10px] font-bold text-gray-700">
+                                         {categories.find(c => c.slug === p.category).markupPercent || 0}% 
+                                         {categories.find(c => c.slug === p.category).markupFixed && ` (${categories.find(c => c.slug === p.category).markupFixed})`}
+                                      </span>
+                                   </div>
+                                </div>
+                              )}
                             </div>
                           </div>
                           <div>
