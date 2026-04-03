@@ -74,6 +74,15 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: true, message: 'Producto eliminado correctamente' });
     }
 
+    if (action === 'bulk_delete') {
+      const { productIds } = data;
+      if (!productIds || !Array.isArray(productIds) || productIds.length === 0) {
+        return NextResponse.json({ success: false, message: 'IDs de productos no proporcionados' }, { status: 400 });
+      }
+      await db.deleteProducts(productIds);
+      return NextResponse.json({ success: true, message: `${productIds.length} productos eliminados correctamente` });
+    }
+
     return NextResponse.json({ success: false, message: 'Acción no válida' }, { status: 400 });
 
   } catch (error: any) {

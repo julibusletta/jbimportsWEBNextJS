@@ -28,6 +28,8 @@ export default function ProductsPage() {
   const [isSaving, setIsSaving] = useState(false);
   const [filterType, setFilterType] = useState<'all' | 'no-image' | 'no-description' | 'low-stock'>('all');
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+
 
 
   useEffect(() => {
@@ -168,6 +170,49 @@ export default function ProductsPage() {
       alert('Error de conexión al eliminar');
     } finally {
       setDeletingId(null);
+    }
+  };
+
+  const toggleSelectProduct = (id: string) => {
+    setSelectedIds(prev => 
+      prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]
+    );
+  };
+
+  const toggleSelectAllInCategory = (categoryItems: Product[]) => {
+    const allIds = categoryItems.map(p => p.id);
+    const allSelected = allIds.every(id => selectedIds.includes(id));
+    
+    if (allSelected) {
+      setSelectedIds(prev => prev.filter(id => !allIds.includes(id)));
+    } else {
+      setSelectedIds(prev => [...new Set([...prev, ...allIds])]);
+    }
+  };
+
+  const handleBulkDelete = async () => {
+    if (!window.confirm(`¿Estás seguro de que deseas eliminar ${selectedIds.length} productos permanentemente?`)) return;
+    
+    setIsSaving(true);
+    try {
+      const resp = await fetch('/api/admin', {
+        method: 'POST',
+        body: JSON.stringify({ action: 'bulk_delete', data: { productIds: selectedIds } }),
+        headers: { 'Content-Type': 'application/json' }
+      });
+      const res = await resp.json();
+      if (res.success) {
+        setMessage(`${selectedIds.length} productos eliminados con éxito`);
+        setSelectedIds([]);
+        fetchData();
+        setTimeout(() => setMessage(''), 3000);
+      } else {
+        alert(`Error: ${res.message}`);
+      }
+    } catch (err) {
+      alert('Error de conexión al eliminar');
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -443,6 +488,14 @@ export default function ProductsPage() {
                 <table className="w-full text-left">
                   <thead>
                     <tr className="bg-gray-50/50 text-gray-400 text-[9px] font-black uppercase tracking-widest border-b border-[#e1e3e5]">
+                      <th className="px-6 py-4 w-12 text-center">
+                        <input
+                          type="checkbox"
+                          checked={filteredItems.length > 0 && filteredItems.every(p => selectedIds.includes(p.id))}
+                          onChange={() => toggleSelectAllInCategory(filteredItems)}
+                          className="w-4 h-4 rounded border-[#e1e3e5] text-[#058c8c] focus:ring-[#058c8c]"
+                        />
+                      </th>
                       <th className="px-6 py-4 w-16">ID</th>
                       <th className="px-6 py-4">Producto</th>
                       <th className="px-6 py-4 w-40">Precio</th>
@@ -455,7 +508,15 @@ export default function ProductsPage() {
                   </thead>
                   <tbody className="divide-y divide-[#e1e3e5]">
                     {filteredItems.map((p) => (
-                      <tr key={p.id} className="hover:bg-gray-50/30 transition shadow-none hover:shadow-inner">
+                      <tr key={p.id} className={`hover:bg-gray-50/30 transition shadow-none hover:shadow-inner ${selectedIds.includes(p.id) ? 'bg-blue-50/30' : ''}`}>
+                        <td className="px-6 py-4 text-center">
+                          <input
+                            type="checkbox"
+                            checked={selectedIds.includes(p.id)}
+                            onChange={() => toggleSelectProduct(p.id)}
+                            className="w-4 h-4 rounded border-[#e1e3e5] text-[#058c8c] focus:ring-[#058c8c]"
+                          />
+                        </td>
                         <td className="px-6 py-4">
                           <span className="text-[10px] font-bold text-gray-300">#{p.id}</span>
                         </td>
@@ -871,6 +932,34 @@ export default function ProductsPage() {
         </div>
       )}
 
+      {/* Bulk Actions Floating Bar */}
+      {selectedIds.length > 0 && (
+        <div className="fixed bottom-10 left-1/2 -translate-x-1/2 z-[110] bg-gray-900 text-white px-8 py-4 rounded-full shadow-2xl border border-gray-800 flex items-center gap-10 animate-slideUp">
+           <div className="flex items-center gap-4 border-r border-gray-700 pr-10">
+              <span className="text-[10px] font-black uppercase tracking-widest opacity-60">Seleccionados</span>
+              <span className="text-xl font-black">{selectedIds.length}</span>
+           </div>
+           
+           <div className="flex items-center gap-4">
+              <button
+                onClick={() => setSelectedIds([])}
+                className="text-[10px] font-bold uppercase tracking-widest hover:text-gray-400 transition"
+              >
+                Cancelar
+              </button>
+              
+              <button
+                onClick={handleBulkDelete}
+                disabled={isSaving}
+                className="bg-red-500 hover:bg-red-600 px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest flex items-center gap-2 transition-all hover:scale-105 disabled:opacity-50"
+              >
+                <FaTrash size={12} />
+                Eliminar Seleccionados
+              </button>
+           </div>
+        </div>
+      )}
+
       <style jsx>{`
         @keyframes fadeIn {
           from { opacity: 0; }
@@ -885,6 +974,13 @@ export default function ProductsPage() {
         }
         .animate-slideDown {
           animation: slideDown 0.3s ease-out forwards;
+        }
+        @keyframes slideUp {
+          from { transform: translate(-50%, 20px); opacity: 0; }
+          to { transform: translate(-50%, 0); opacity: 1; }
+        }
+        .animate-slideUp {
+          animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
       `}</style>
     </div>

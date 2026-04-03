@@ -188,6 +188,17 @@ export const db = {
     }
   },
 
+  async deleteProducts(ids: string[]): Promise<void> {
+    try {
+      await dbConnect();
+      const Product = await this.getProductModel();
+      await Product.deleteMany({ id: { $in: ids } });
+    } catch (error) {
+      console.error('DB Error [deleteProducts]:', error);
+      throw error;
+    }
+  },
+
   // Users logic
   async getUsers(): Promise<any[]> {
     try {
