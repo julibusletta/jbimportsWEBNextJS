@@ -123,9 +123,15 @@ export async function GET() {
     
     const mongoCategories = await db.getCategories();
     
+    // Add product counts to each category
+    const categoriesWithCounts = mongoCategories.map(cat => ({
+      ...cat,
+      productCount: productsByCategory[cat.slug]?.length || 0
+    }));
+
     return NextResponse.json({
       products: mongoProducts.length > 0 ? productsByCategory : {},
-      categories: mongoCategories,
+      categories: categoriesWithCounts,
       specifications: JSON.parse(specsData)
     });
   } catch (error: any) {

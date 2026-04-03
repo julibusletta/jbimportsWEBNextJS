@@ -12,6 +12,7 @@ interface Category {
   description?: string;
   markupPercent?: number;
   markupFixed?: string;
+  productCount?: number;
 }
 
 export default function CategoriesPage() {
@@ -110,9 +111,12 @@ export default function CategoriesPage() {
           <div key={cat.id} className="admin-v2-card group overflow-hidden hover:shadow-2xl transition-all duration-500 border border-transparent hover:border-[#058c8c]/20">
              <div className="h-40 bg-gray-50 relative overflow-hidden flex items-center justify-center">
                 <img src={cat.image} alt={cat.name} className="w-2/3 h-2/3 object-contain p-4 group-hover:scale-110 transition-transform duration-700" />
-                <div className="absolute top-4 right-4">
+                <div className="absolute top-4 right-4 flex flex-col items-end gap-2">
                    <div className="bg-white/90 backdrop-blur-sm shadow-sm px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-tighter text-[#058c8c] border border-gray-100">
                       {cat.slug}
+                   </div>
+                   <div className="bg-[#058c8c] text-white px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-widest shadow-sm">
+                      {cat.productCount || 0} ITEMS
                    </div>
                 </div>
              </div>
