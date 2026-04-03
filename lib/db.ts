@@ -177,6 +177,17 @@ export const db = {
     }
   },
 
+  async deleteProduct(id: string): Promise<void> {
+    try {
+      await dbConnect();
+      const Product = await this.getProductModel();
+      await Product.deleteOne({ id });
+    } catch (error) {
+      console.error('DB Error [deleteProduct]:', error);
+      throw error;
+    }
+  },
+
   // Users logic
   async getUsers(): Promise<any[]> {
     try {

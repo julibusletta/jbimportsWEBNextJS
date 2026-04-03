@@ -65,6 +65,15 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: true, message: 'Importación completada en MongoDB' });
     }
 
+    if (action === 'delete_product') {
+      const { productId } = data;
+      if (!productId) {
+        return NextResponse.json({ success: false, message: 'ID de producto no proporcionado' }, { status: 400 });
+      }
+      await db.deleteProduct(productId);
+      return NextResponse.json({ success: true, message: 'Producto eliminado correctamente' });
+    }
+
     return NextResponse.json({ success: false, message: 'Acción no válida' }, { status: 400 });
 
   } catch (error: any) {

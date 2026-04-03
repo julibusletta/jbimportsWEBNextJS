@@ -27,6 +27,8 @@ export default function ProductsPage() {
   const [uploadingIndex, setUploadingIndex] = useState<number | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [filterType, setFilterType] = useState<'all' | 'no-image' | 'no-description' | 'low-stock'>('all');
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+
 
   useEffect(() => {
     fetchData();
@@ -140,6 +142,32 @@ export default function ProductsPage() {
       setMessage('Error de conexión al guardar');
     } finally {
       setIsSaving(false);
+    }
+  };
+
+  const handleDeleteProduct = async (productId: string) => {
+    if (!window.confirm('¿Estás seguro de que deseas eliminar este producto permanentemente?')) return;
+    
+    setDeletingId(productId);
+    try {
+      const resp = await fetch('/api/admin', {
+        method: 'POST',
+        body: JSON.stringify({ action: 'delete_product', data: { productId } }),
+        headers: { 'Content-Type': 'application/json' }
+      });
+      const res = await resp.json();
+      if (res.success) {
+        setMessage('Producto eliminado con éxito');
+        setEditingProduct(null);
+        fetchData();
+        setTimeout(() => setMessage(''), 3000);
+      } else {
+        alert(`Error: ${res.message}`);
+      }
+    } catch (err) {
+      alert('Error de conexión al eliminar');
+    } finally {
+      setDeletingId(null);
     }
   };
 
@@ -422,6 +450,7 @@ export default function ProductsPage() {
                       <th className="px-6 py-4 w-28">Stock</th>
                       <th className="px-6 py-4 w-24 text-center border-l bg-gray-100 border-[#e1e3e5]">Publicado</th>
                       <th className="px-6 py-4 w-28 text-center">Estado</th>
+                      <th className="px-6 py-4 w-16 text-center"></th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-[#e1e3e5]">
@@ -491,6 +520,16 @@ export default function ProductsPage() {
                            <span className={`px-2 py-1 rounded text-[9px] font-black uppercase tracking-tighter ${p.stock > 0 ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-600'}`}>
                               {p.stock > 0 ? 'Publicado' : 'Sin Stock'}
                            </span>
+                        </td>
+                        <td className="px-6 py-4 text-center">
+                            <button
+                              onClick={() => handleDeleteProduct(p.id)}
+                              disabled={deletingId === p.id}
+                              className="text-gray-300 hover:text-red-500 transition-colors p-2"
+                              title="Eliminar producto"
+                            >
+                              <FaTrash size={14} className={deletingId === p.id ? 'animate-pulse' : ''} />
+                            </button>
                         </td>
                       </tr>
                     ))}
@@ -786,14 +825,24 @@ export default function ProductsPage() {
                         </div>
                       )}
 
-                      {/* SAVE BUTTON AT THE BOTTOM */}
-                      <div className="mt-12 pt-8 border-t border-gray-100 flex justify-end gap-4">
+                      {/* DELETE AND SAVE BUTTONS AT THE BOTTOM */}
+                      <div className="mt-12 pt-8 border-t border-gray-100 flex justify-between items-center">
                         <button
-                          onClick={() => setEditingProduct(null)}
-                          className="px-6 py-3 text-gray-400 font-bold text-[10px] uppercase tracking-widest hover:text-gray-600 transition"
+                          onClick={() => handleDeleteProduct(p.id)}
+                          disabled={deletingId === p.id}
+                          className="flex items-center gap-2 text-red-400 hover:text-red-500 font-bold text-[10px] uppercase tracking-widest transition-colors px-4 py-2 rounded hover:bg-red-50"
                         >
-                          Cancelar
+                          <FaTrash size={12} />
+                          {deletingId === p.id ? 'Eliminando...' : 'Eliminar Producto'}
                         </button>
+                        
+                        <div className="flex gap-4">
+                          <button
+                            onClick={() => setEditingProduct(null)}
+                            className="px-6 py-3 text-gray-400 font-bold text-[10px] uppercase tracking-widest hover:text-gray-600 transition"
+                          >
+                            Cancelar
+                          </button>
                         <button
                           onClick={saveProducts}
                           disabled={isSaving}
@@ -813,7 +862,8 @@ export default function ProductsPage() {
                         </button>
                       </div>
                     </div>
-                  </main>
+                  </div>
+                </main>
                 </div>
               </>
             );
