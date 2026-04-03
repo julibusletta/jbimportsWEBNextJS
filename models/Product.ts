@@ -4,6 +4,7 @@ const ProductSchema = new Schema({
   id: { type: String, required: true, unique: true },
   name: { type: String, required: true },
   price: { type: Number, required: true },
+  costPrice: { type: Number }, // Cost in USD
   originalPrice: { type: Number },
   discount: { type: Number },
   image: { type: String, required: true },

@@ -17,8 +17,10 @@ interface Category {
 
 export default function CategoriesPage() {
   const [categories, setCategories] = useState<Category[]>([]);
+  const [allProducts, setAllProducts] = useState<Record<string, any[]>>({});
   const [loading, setLoading] = useState(true);
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
+  const [viewingProducts, setViewingProducts] = useState<Category | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [message, setMessage] = useState('');
 
@@ -32,6 +34,7 @@ export default function CategoriesPage() {
       const resp = await fetch('/api/admin');
       const data = await resp.json();
       setCategories(data.categories || []);
+      setAllProducts(data.products || {});
     } catch (err) {
       console.error('Error fetching categories:', err);
     } finally {
@@ -144,12 +147,20 @@ export default function CategoriesPage() {
                    </div>
                 </div>
 
-                <button 
-                  onClick={() => setEditingCategory(cat)}
-                  className="w-full mt-8 py-3.5 bg-gray-900 text-white rounded text-[10px] font-black uppercase tracking-widest hover:bg-[#058c8c] shadow-lg shadow-gray-200 hover:shadow-[#058c8c]/20 transition-all transform active:scale-95"
-                >
-                   Configurar Ganancia
-                </button>
+                <div className="grid grid-cols-2 gap-4 mt-8">
+                   <button 
+                     onClick={() => setEditingCategory(cat)}
+                     className="py-3.5 bg-gray-100 text-gray-700 rounded text-[9px] font-black uppercase tracking-widest hover:bg-gray-200 transition-all active:scale-95"
+                   >
+                      Márgenes
+                   </button>
+                   <button 
+                     onClick={() => setViewingProducts(cat)}
+                     className="py-3.5 bg-gray-900 text-white rounded text-[9px] font-black uppercase tracking-widest hover:bg-[#058c8c] shadow-lg shadow-gray-200 hover:shadow-[#058c8c]/20 transition-all active:scale-95 flex items-center justify-center gap-2"
+                   >
+                      Ver Productos <FaChevronRight size={8} />
+                   </button>
+                </div>
              </div>
           </div>
         ))}
@@ -224,6 +235,97 @@ export default function CategoriesPage() {
               </div>
            </div>
         </div>
+      )}
+
+      {/* Products Slide-over */}
+      {viewingProducts && (
+        <>
+          <div className="fixed inset-0 z-[200] bg-gray-900/40 backdrop-blur-sm animate-fadeIn" onClick={() => setViewingProducts(null)}></div>
+          <div className="fixed inset-y-0 right-0 z-[201] w-full max-w-2xl bg-white shadow-2xl flex flex-col animate-slideInRight">
+             <div className="p-8 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+                <div>
+                   <h2 className="text-xl font-black text-gray-900 uppercase tracking-tight">{viewingProducts.name}</h2>
+                   <p className="text-[10px] font-bold text-[#058c8c] uppercase tracking-widest mt-1">
+                      {allProducts[viewingProducts.slug]?.length || 0} Productos en Catálogo
+                   </p>
+                </div>
+                <button onClick={() => setViewingProducts(null)} className="w-10 h-10 rounded-full bg-white shadow-sm border border-gray-100 flex items-center justify-center text-gray-400 hover:text-gray-900 transition">
+                   <FaTimesCircle size={20} />
+                </button>
+             </div>
+
+             <div className="flex-1 overflow-y-auto p-8 space-y-6">
+                {allProducts[viewingProducts.slug]?.map((p, idx) => {
+                   // Estimate cost (Logic simplified for display)
+                   const margin = viewingProducts.markupPercent || 30;
+                   const finalPrice = p.price;
+                   // reverse: ARS / 1.3 / 1500 = approximate cost
+                   const estimatedCost = Math.round(finalPrice / (1 + margin/100) / 1500);
+
+                   return (
+                      <div key={p.id} className="p-5 border border-[#e1e3e5] rounded-2xl hover:border-[#058c8c]/30 transition-all group">
+                         <div className="flex gap-5 items-center">
+                            <div className="w-16 h-16 bg-gray-50 rounded-xl overflow-hidden flex-shrink-0 border border-gray-100">
+                               <img src={p.image} className="w-full h-full object-contain p-2" />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                               <h4 className="text-[11px] font-black text-gray-900 uppercase tracking-wider truncate mb-1">{p.name}</h4>
+                               <div className="flex items-center gap-2">
+                                  <span className="text-sm font-black text-[#058c8c]">${finalPrice.toLocaleString()} ARS</span>
+                                  {p.costPrice && (
+                                     <span className="bg-gray-100 text-[9px] font-black text-gray-400 px-2 py-0.5 rounded uppercase leading-none">Real</span>
+                                  )}
+                               </div>
+                            </div>
+                         </div>
+
+                         <div className="mt-5 pt-5 border-t border-gray-50 grid grid-cols-4 gap-4">
+                            <div className="text-center p-3 bg-gray-50 text-[10px] items-center justify-center flex flex-col rounded-xl">
+                               <span className="text-[8px] font-black text-gray-400 uppercase tracking-tighter mb-1">Costo Est.</span>
+                               <span className="font-black text-gray-900">${p.costPrice || estimatedCost} <span className="text-[8px] text-gray-400 font-bold tracking-tighter">USD</span></span>
+                            </div>
+                            <div className="text-center p-3 bg-[#058c8c]/[0.03] text-[10px] items-center justify-center flex flex-col rounded-xl border border-[#058c8c]/10">
+                               <span className="text-[8px] font-black text-[#058c8c] uppercase tracking-tighter mb-1">Ajuste</span>
+                               <span className="font-black text-[#058c8c] text-[9px] uppercase tracking-tighter">{viewingProducts.markupFixed?.split('|')[1]?.trim() || '+ $20 USD'}</span>
+                            </div>
+                            <div className="text-center p-3 bg-gray-50 text-[10px] items-center justify-center flex flex-col rounded-xl">
+                               <span className="text-[8px] font-black text-gray-400 uppercase tracking-tighter mb-1">Tasa</span>
+                               <span className="font-black text-gray-900">1.500</span>
+                            </div>
+                            <div className="text-center p-3 bg-[#058c8c]/[0.03] text-[10px] items-center justify-center flex flex-col rounded-xl border border-[#058c8c]/10">
+                               <span className="text-[8px] font-black text-[#058c8c] uppercase tracking-tighter mb-1">Margen</span>
+                               <span className="font-black text-[#058c8c]">{margin}%</span>
+                            </div>
+                         </div>
+
+                         <div className="mt-4 flex items-center justify-center gap-2">
+                            <div className="h-px bg-gray-100 flex-1"></div>
+                            <div className="text-[8px] font-black text-gray-300 uppercase tracking-widest flex items-center gap-2">
+                               Fórmula Aplicada <FaChevronRight size={6} />
+                            </div>
+                            <div className="h-px bg-gray-100 flex-1"></div>
+                         </div>
+                      </div>
+                   );
+                })}
+
+                {!allProducts[viewingProducts.slug]?.length && (
+                   <div className="p-20 text-center flex flex-col items-center">
+                      <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center text-gray-300 mb-4">
+                         <FaTags size={24} />
+                      </div>
+                      <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Sin productos en esta sección</p>
+                   </div>
+                )}
+             </div>
+
+             <div className="p-8 bg-gray-50 border-t border-gray-100">
+                <p className="text-[9px] text-gray-500 font-medium italic leading-relaxed">
+                   * El "Costo Estimado" se calcula automáticamente revirtiendo la fórmula de la categoría. Es una aproximación para ayudarte a gestionar tus precios rápidamente.
+                </p>
+             </div>
+          </div>
+        </>
       )}
     </div>
   );
