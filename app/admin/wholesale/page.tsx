@@ -90,7 +90,9 @@ export default function WholesalePage() {
       const config = categoryConfigs[category];
       if (!config?.visible) return;
 
-      items.forEach(p => {
+      const sortedItems = [...items].sort((a, b) => a.price - b.price);
+
+      sortedItems.forEach(p => {
         const isPublished = p.published !== false;
         const hasStock = p.stock > 0;
         
@@ -230,7 +232,7 @@ export default function WholesalePage() {
 
         {/* CATEGORIES SECTION */}
         <div className="space-y-12">
-          {Object.entries(products).map(([category, items]) => {
+          {Object.entries(products).sort(([a], [b]) => a.localeCompare(b)).map(([category, items]) => {
             const config = categoryConfigs[category] || { discount: globalDiscount, visible: true };
             
             // Only hide category if not printing (in print, filter out of JSX)
@@ -243,7 +245,7 @@ export default function WholesalePage() {
                                   p.id.toLowerCase().includes(searchTerm.toLowerCase());
               
               return isPublished && hasStock && matchesSearch;
-            });
+            }).sort((a, b) => a.price - b.price);
 
             if (filteredItems.length === 0) return null;
 
