@@ -28,7 +28,14 @@ export default function WholesalePage() {
       const resp = await fetch('/api/admin');
       const data = await resp.json();
       const fetchedProducts = data.products || {};
-      setProducts(fetchedProducts);
+      
+      // Sort products by price (lowest to highest) within each category
+      const sorted: Record<string, Product[]> = {};
+      Object.keys(fetchedProducts).forEach(cat => {
+        sorted[cat] = [...fetchedProducts[cat]].sort((a, b) => (Number(a.price) || 0) - (Number(b.price) || 0));
+      });
+
+      setProducts(sorted);
       
       // Initialize category configs
       const configs: Record<string, CategoryConfig> = {};
@@ -245,9 +252,15 @@ export default function WholesalePage() {
                                   p.id.toLowerCase().includes(searchTerm.toLowerCase());
               
               return isPublished && hasStock && matchesSearch;
-            }).sort((a, b) => a.price - b.price);
+            });
 
-            if (filteredItems.length === 0) return null;
+            const sortedItems = Array.from(filteredItems).sort((a, b) => {
+               const pA = Number(a.price) || 0;
+               const pB = Number(b.price) || 0;
+               return pA - pB;
+            });
+
+            if (sortedItems.length === 0) return null;
 
             return (
               <div 
@@ -297,7 +310,7 @@ export default function WholesalePage() {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-100">
-                      {filteredItems.map((p) => (
+                      {sortedItems.map((p) => (
                         <tr key={p.id} className="hover:bg-gray-50/50 transition-colors">
                           <td className="px-4 py-3 text-xs font-black text-gray-800">{p.name}</td>
                           <td className="px-4 py-3 text-right text-sm font-black text-black">
