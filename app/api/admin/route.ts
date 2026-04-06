@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import fs from 'fs/promises';
 import path from 'path';
 import { db } from '@/lib/db';
+import { revalidatePath, revalidateTag } from 'next/cache';
 
 /**
  * API Route for Admin operations (Save changes, Import Excel)
@@ -94,6 +95,15 @@ export async function POST(request: Request) {
       
       // We can also manually trigger it if we want to get the count
       const count = await db.recalculateProductPrices(category.slug, category.markupPercent, category.markupFixed);
+      
+      // Revalidate cache to show changes in the frontend immediately
+      try {
+        revalidatePath('/', 'layout');
+        revalidatePath(`/category/${category.slug}`, 'page');
+        revalidateTag('products');
+      } catch (e) {
+        console.warn('Revalidation failed:', e);
+      }
       
       return NextResponse.json({ 
         success: true, 

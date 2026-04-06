@@ -139,13 +139,18 @@ export const db = {
       const Product = await this.getProductModel();
       const products = await Product.find({ category: categorySlug });
       
+      console.log(`[recalculateProductPrices] Found ${products.length} products for category: ${categorySlug}`);
       if (products.length === 0) return 0;
 
       const rate = 1500;
       const margin = 1 + (markupPercent / 100);
 
-      const operations = products.map(p => {
-        if (!p.costPrice || isNaN(p.costPrice)) return null;
+      const operations: any[] = [];
+      
+      for (const p of products) {
+        if (!p.costPrice || isNaN(p.costPrice)) {
+           continue;
+        }
         
         let subtotal = 0;
         const cost = p.costPrice;
@@ -159,19 +164,33 @@ export const db = {
           let isUSD = true;
           
           if (markupFixed) {
-             // Parse something like "+$20 USD" or "+$10000 ARS"
-             const usdMatch = markupFixed.match(/\$(\d+)\s*USD/i);
-             const arsMatch = markupFixed.match(/\$(\d+)\s*ARS/i);
+             const cleanFixed = markupFixed.toUpperCase();
+             // Parse something like "+$20 USD" or "+$10k ARS" or "+$10000 ARS"
+             const usdMatch = cleanFixed.match(/\$(\d+)\s*USD/i);
+             const arsMatch = cleanFixed.match(/\$(\d+)(K)?\s*ARS/i);
+             
              if (arsMatch) {
                fixedAdj = parseFloat(arsMatch[1]);
+               if (arsMatch[2]) fixedAdj *= 1000; // Handle "10k"
                isUSD = false;
              } else if (usdMatch) {
                fixedAdj = parseFloat(usdMatch[1]);
                isUSD = true;
              } else {
-               // Fallback / default
-               fixedAdj = 20;
-               isUSD = true;
+               // Secondary check for "20 USD" (no $)
+               const usdMatchNoSign = cleanFixed.match(/(\d+)\s*USD/i);
+               const arsMatchNoSign = cleanFixed.match(/(\d+)(K)?\s*ARS/i);
+               if (arsMatchNoSign) {
+                 fixedAdj = parseFloat(arsMatchNoSign[1]);
+                 if (arsMatchNoSign[2]) fixedAdj *= 1000;
+                 isUSD = false;
+               } else if (usdMatchNoSign) {
+                 fixedAdj = parseFloat(usdMatchNoSign[1]);
+                 isUSD = true;
+               } else {
+                 fixedAdj = 20; // Default
+                 isUSD = true;
+               }
              }
           } else {
             fixedAdj = 20;
@@ -188,24 +207,25 @@ export const db = {
         // Final Price Calculation
         let finalPrice = subtotal * margin;
         
-        // Rounding: We'll use Math.round(finalPrice) to keep precision but avoid floats in most cases
-        // If it's a very high number (like millions), rounding to 100 is often cleaner
+        // Rounding
         if (finalPrice > 100000) {
           finalPrice = Math.round(finalPrice / 100) * 100;
         } else {
           finalPrice = Math.round(finalPrice / 10) * 10;
         }
 
-        return {
+        operations.push({
           updateOne: {
-            filter: { _id: p._id },
+            filter: { _id: (p as any)._id },
             update: { $set: { price: finalPrice, originalPrice: finalPrice } }
           }
-        };
-      }).filter(Boolean);
+        });
+      }
 
+      console.log(`[recalculateProductPrices] Prepared ${operations.length} operations for category: ${categorySlug}`);
       if (operations.length > 0) {
         const result = await Product.bulkWrite(operations);
+        console.log(`[recalculateProductPrices] Result: ${result.modifiedCount} updated`);
         return result.modifiedCount || 0;
       }
       return 0;
