@@ -100,7 +100,8 @@ export async function POST(request: Request) {
       try {
         revalidatePath('/', 'layout');
         revalidatePath(`/category/${category.slug}`, 'page');
-        revalidateTag('products');
+        // In Next.js 16, revalidateTag requires a profile as second argument
+        revalidateTag('products', 'default');
       } catch (e) {
         console.warn('Revalidation failed:', e);
       }
