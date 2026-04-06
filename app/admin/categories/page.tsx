@@ -52,10 +52,10 @@ export default function CategoriesPage() {
       });
       const res = await resp.json();
       if (res.success) {
-        setMessage('Categoría guardada con éxito');
+        setMessage(res.message || 'Categoría guardada con éxito');
         setEditingCategory(null);
         fetchData();
-        setTimeout(() => setMessage(''), 3000);
+        setTimeout(() => setMessage(''), 5000);
       }
     } catch (err) {
       alert('Error al guardar');

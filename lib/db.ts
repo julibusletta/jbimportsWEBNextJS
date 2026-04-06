@@ -111,14 +111,106 @@ export const db = {
     try {
       await dbConnect();
       const Category = await this.getCategoryModel();
-      const { id, slug } = categoryData;
+      const { id, slug, markupPercent, markupFixed } = categoryData;
+      
+      // Update Category
       await Category.findOneAndUpdate(
         { $or: [{ id }, { slug }] },
         { $set: categoryData },
         { upsert: true, new: true }
       );
+
+      // Trigger automatic price recalculation for all products in this category
+      if (typeof markupPercent === 'number') {
+        await this.recalculateProductPrices(slug, markupPercent, markupFixed);
+      }
     } catch (error) {
       console.error('DB Error [saveCategory]:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Recalculates all product prices in a category based on margin rules
+   */
+  async recalculateProductPrices(categorySlug: string, markupPercent: number, markupFixed?: string): Promise<number> {
+    try {
+      await dbConnect();
+      const Product = await this.getProductModel();
+      const products = await Product.find({ category: categorySlug });
+      
+      if (products.length === 0) return 0;
+
+      const rate = 1500;
+      const margin = 1 + (markupPercent / 100);
+
+      const operations = products.map(p => {
+        if (!p.costPrice || isNaN(p.costPrice)) return null;
+        
+        let subtotal = 0;
+        const cost = p.costPrice;
+
+        if (cost >= 500) {
+          // Rule for > 500: Cost + 10% then rate
+          subtotal = (cost * 1.10) * rate;
+        } else {
+          // Determine fixed adjustment (< 500)
+          let fixedAdj = 0;
+          let isUSD = true;
+          
+          if (markupFixed) {
+             // Parse something like "+$20 USD" or "+$10000 ARS"
+             const usdMatch = markupFixed.match(/\$(\d+)\s*USD/i);
+             const arsMatch = markupFixed.match(/\$(\d+)\s*ARS/i);
+             if (arsMatch) {
+               fixedAdj = parseFloat(arsMatch[1]);
+               isUSD = false;
+             } else if (usdMatch) {
+               fixedAdj = parseFloat(usdMatch[1]);
+               isUSD = true;
+             } else {
+               // Fallback / default
+               fixedAdj = 20;
+               isUSD = true;
+             }
+          } else {
+            fixedAdj = 20;
+            isUSD = true;
+          }
+
+          if (isUSD) {
+            subtotal = (cost + fixedAdj) * rate;
+          } else {
+            subtotal = (cost * rate) + fixedAdj;
+          }
+        }
+
+        // Final Price Calculation
+        let finalPrice = subtotal * margin;
+        
+        // Rounding: We'll use Math.round(finalPrice) to keep precision but avoid floats in most cases
+        // If it's a very high number (like millions), rounding to 100 is often cleaner
+        if (finalPrice > 100000) {
+          finalPrice = Math.round(finalPrice / 100) * 100;
+        } else {
+          finalPrice = Math.round(finalPrice / 10) * 10;
+        }
+
+        return {
+          updateOne: {
+            filter: { _id: p._id },
+            update: { $set: { price: finalPrice, originalPrice: finalPrice } }
+          }
+        };
+      }).filter(Boolean);
+
+      if (operations.length > 0) {
+        const result = await Product.bulkWrite(operations);
+        return result.modifiedCount || 0;
+      }
+      return 0;
+    } catch (error) {
+      console.error('Error recalculating prices:', error);
       throw error;
     }
   },

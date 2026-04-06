@@ -88,8 +88,19 @@ export async function POST(request: Request) {
       if (!category || (!category.id && !category.slug)) {
         return NextResponse.json({ success: false, message: 'Datos de categoría incompletos' }, { status: 400 });
       }
+      
+      // Save category and recalculate prices
       await db.saveCategory(category);
-      return NextResponse.json({ success: true, message: 'Categoría guardada correctamente' });
+      
+      // We can also manually trigger it if we want to get the count
+      const count = await db.recalculateProductPrices(category.slug, category.markupPercent, category.markupFixed);
+      
+      return NextResponse.json({ 
+        success: true, 
+        message: count > 0 
+          ? `Categoría guardada y ${count} productos actualizados.` 
+          : 'Categoría guardada correctamente.' 
+      });
     }
 
     return NextResponse.json({ success: false, message: 'Acción no válida' }, { status: 400 });
