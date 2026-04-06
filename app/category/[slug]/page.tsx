@@ -42,15 +42,35 @@ export default function CategoryPage() {
         setFilteredProducts(prods);
 
         let cat = await getCategoryBySlug(slug);
-        if (!cat && slug === 'ofertas') {
-          cat = {
-            id: 'ofertas',
-            name: 'OFERTAS SEMANALES',
-            slug: 'ofertas',
-            image: '/images/categories/ofertas.png',
-            isMain: false,
-            description: 'Las mejores ofertas de la semana en JB Imports'
-          };
+        if (!cat) {
+          if (slug === 'ofertas') {
+            cat = {
+              id: 'ofertas',
+              name: 'OFERTAS SEMANALES',
+              slug: 'ofertas',
+              image: '/images/categories/ofertas.png',
+              isMain: false,
+              description: 'Las mejores ofertas de la semana en JB Imports'
+            };
+          } else if (slug === 'notebooks-y-tablets') {
+            cat = {
+              id: 'notebooks-tablets',
+              name: 'NOTEBOOKS Y TABLETS',
+              slug: 'notebooks-y-tablets',
+              image: '/images/categories/notebooks.png',
+              isMain: false,
+              description: 'Encontrá las mejores Notebooks y Tablets en un solo lugar'
+            };
+          } else if (slug === 'smart-watches') {
+            cat = {
+              id: 'smart-watches',
+              name: 'SMARTWATCHES',
+              slug: 'smart-watches',
+              image: '/images/categories/watch.png',
+              isMain: false,
+              description: 'Relojes inteligentes de las mejores marcas'
+            };
+          }
         }
         setCategory(cat);
 
