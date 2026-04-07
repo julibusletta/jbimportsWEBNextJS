@@ -149,20 +149,17 @@ async function enrichJBLSpecs() {
     let totalUpdated = 0;
 
     for (const [modelKey, specs] of Object.entries(jblSpecs)) {
+      // Transform specs object to array of { label, value }
+      const specsArray = Object.entries(specs).map(([label, value]) => ({ label, value }));
+
       // Búsqueda insensible a mayúsculas y más flexible
       const searchRegex = new RegExp(`${modelKey}`, 'i');
       
       const result = await Product.updateMany(
         { 
-          name: { $regex: searchRegex },
-          $or: [
-            { specifications: { $exists: false } },
-            { specifications: null },
-            { specifications: {} },
-            { "specifications.Características generales": { $exists: false } } // Forzar actualización si faltan campos
-          ]
+          name: { $regex: searchRegex }
         },
-        { $set: { specifications: specs } }
+        { $set: { specifications: specsArray } }
       );
 
       if (result.modifiedCount > 0) {
