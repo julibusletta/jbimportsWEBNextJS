@@ -576,148 +576,358 @@ function ProductsContent({
         })}
       </div>
 
+      {/* Product Editor Full-Screen Overlay */}
       {editingProduct && (
-        <div className="fixed inset-0 z-[100] bg-gray-900/60 flex flex-col backdrop-blur-sm animate-fadeIn">
+        <div className="fixed top-0 right-0 bottom-0 left-[250px] z-[100] bg-[#f8fafb] flex flex-col animate-fadeIn border-l border-[#e1e3e5] shadow-2xl">
           {(() => {
             const p = editingProduct;
             return (
-              <div className="absolute top-0 right-0 bottom-0 left-[250px] bg-white flex flex-col shadow-2xl">
-                <div className="bg-white border-b border-gray-100 px-8 py-4 flex items-center justify-between z-10">
+              <>
+                {/* Header */}
+                <div className="bg-white border-b border-[#e1e3e5] px-8 py-4 flex items-center justify-between z-10 shrink-0">
                   <div className="flex items-center gap-4">
-                    <button onClick={() => setEditingProduct(null)} className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors"><FaTimesCircle size={20} className="text-gray-300" /></button>
+                    <button
+                      onClick={() => setEditingProduct(null)}
+                      className="w-8 h-8 flex items-center justify-center rounded hover:bg-gray-100 transition-colors text-gray-400 font-bold"
+                    >
+                      <FaTimesCircle size={20} />
+                    </button>
                     <div>
-                      <h3 className="text-sm font-black text-gray-900 uppercase tracking-tight">{p.name || 'Nuevo Producto'}</h3>
-                      <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">#{p.id}</span>
+                      <h3 className="text-lg font-black text-gray-900 leading-tight">{p.name || 'Nuevo Producto'}</h3>
+                      <div className="flex items-center gap-2 mt-0.5">
+                        <span className="text-[9px] bg-gray-100 text-gray-500 font-bold px-2 py-0.5 rounded uppercase tracking-widest">{p.category}</span>
+                        <span className="text-[9px] text-gray-300 font-bold">#{p.id}</span>
+                      </div>
                     </div>
                   </div>
-                  <button onClick={() => setEditingProduct(null)} className="px-6 py-2 bg-gray-900 text-white rounded-full text-[10px] font-black uppercase tracking-widest">Listo</button>
+
+                  <div className="flex items-center gap-4">
+                    <button
+                      onClick={() => setEditingProduct(null)}
+                      className="px-8 py-2 bg-gray-100 text-gray-700 rounded h-10 font-bold text-xs uppercase tracking-widest hover:bg-gray-200 transition-colors shadow-sm"
+                    >
+                      Cerrar editor
+                    </button>
+                  </div>
                 </div>
 
                 <div className="flex-1 flex overflow-hidden">
-                  <aside className="w-60 border-r border-gray-50 flex flex-col p-6 gap-2 bg-gray-50/30">
-                    {(['general', 'media', 'specs', 'seo'] as const).map(tab => (
-                      <button key={tab} onClick={() => setActiveTab(tab)} className={`px-4 py-3 rounded-xl text-left text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === tab ? 'bg-white shadow-sm text-[#058c8c]' : 'text-gray-400 hover:text-gray-600'}`}>{tab}</button>
+                  <aside className="w-64 bg-white border-r border-[#e1e3e5] flex flex-col p-6 gap-1 shrink-0">
+                    <h4 className="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-4 px-2">Navegación</h4>
+                    {[
+                      { id: 'general', label: 'Información', icon: <FaTags />, desc: 'Básicos y Precio' },
+                      { id: 'media', label: 'Imágenes', icon: <FaBoxOpen />, desc: 'Galería visual' },
+                      { id: 'specs', label: 'Ficha Técnica', icon: <FaCogs />, desc: 'Especificaciones' },
+                      { id: 'seo', label: 'SEO', icon: <FaGlobe />, desc: 'Meta y Búsqueda' },
+                    ].map((tab) => (
+                      <button
+                        key={tab.id}
+                        onClick={() => setActiveTab(tab.id as any)}
+                        className={`flex flex-col items-start gap-0.5 p-3 rounded transition-all text-left ${activeTab === tab.id ? 'bg-[#edeeef] text-[#058c8c]' : 'text-gray-500 hover:bg-gray-50'}`}
+                      >
+                        <div className="flex items-center gap-3">
+                          <span className="text-sm">{tab.icon}</span>
+                          <span className="text-xs font-bold leading-none">{tab.label}</span>
+                        </div>
+                        <span className="text-[10px] opacity-60 font-medium ml-7">{tab.desc}</span>
+                      </button>
                     ))}
+                    <div className="mt-auto pt-6 border-t border-gray-100">
+                      <div className="bg-gray-50 rounded p-4 border border-gray-100">
+                        <h5 className="text-[9px] font-black text-gray-500 uppercase tracking-widest mb-2">Cambios Locales</h5>
+                        <p className="text-[10px] text-gray-400 leading-relaxed font-medium">Recuerda guardar los cambios al final.</p>
+                      </div>
+                    </div>
                   </aside>
-                  <main className="flex-1 overflow-y-auto p-12 bg-gray-50/20">
-                    <div className="max-w-3xl mx-auto admin-v2-card p-10">
+
+                  <main className="flex-1 overflow-y-auto bg-gray-50/30 p-12">
+                    <div className="max-w-4xl mx-auto admin-v2-card bg-white p-10">
                       {activeTab === 'general' && (
-                        <div className="space-y-8">
-                          <div className="space-y-2">
-                             <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest">Nombre</label>
-                             <input type="text" value={p.name} onChange={(e) => handleProductChange(p.id, p.category, 'name', e.target.value)} className="w-full p-4 bg-gray-50 border border-transparent focus:border-[#058c8c] focus:bg-white rounded-xl outline-none font-bold text-sm" />
-                          </div>
-                          <div className="grid grid-cols-2 gap-6">
-                            <div className="space-y-2">
-                               <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest">Categoría</label>
-                               <select value={p.category} onChange={(e) => handleProductChange(p.id, p.category, 'category', e.target.value)} className="w-full p-4 bg-gray-50 rounded-xl outline-none font-bold text-xs uppercase appearance-none">
-                                  {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
+                        <div className="space-y-8 animate-fadeIn">
+                          <h4 className="text-sm font-black text-gray-900 uppercase tracking-widest border-b border-gray-100 pb-4 mb-6">Información General</h4>
+                          <div className="grid grid-cols-2 gap-8">
+                            <div className="col-span-2">
+                              <label className="block text-[9px] font-black text-gray-400 uppercase tracking-widest mb-2 px-1">Nombre</label>
+                              <input
+                                type="text"
+                                value={p.name}
+                                onChange={(e) => handleProductChange(p.id, p.category, 'name', e.target.value)}
+                                className="w-full px-4 py-3 bg-gray-50 border border-[#e1e3e5] rounded outline-none text-sm font-bold text-gray-900 focus:border-[#058c8c] focus:bg-white transition"
+                              />
+                            </div>
+                            
+                            <div className="col-span-2 bg-[#058c8c]/[0.02] p-8 border border-[#058c8c]/10 rounded-2xl flex items-center justify-between">
+                              <div>
+                                 <label className="block text-[10px] font-black text-[#058c8c] uppercase tracking-widest mb-2">Costo (USD)</label>
+                                 <input
+                                   type="number"
+                                   value={p.costPrice || 0}
+                                   onChange={(e) => handleProductChange(p.id, p.category, 'costPrice', Number(e.target.value))}
+                                   className="bg-transparent text-2xl font-black text-gray-900 outline-none w-32 border-b-2 border-transparent focus:border-[#058c8c] transition-all"
+                                 />
+                              </div>
+                              <div className="text-right">
+                                 <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Precio Minorista (ARS)</label>
+                                 <div className="text-2xl font-black text-[#058c8c]">$ {p.price?.toLocaleString()}</div>
+                                 <p className="text-[10px] text-gray-400 font-bold mt-1 italic uppercase tracking-tighter">Basado en tasa y márgenes</p>
+                              </div>
+                            </div>
+
+                            <div>
+                              <label className="block text-[9px] font-black text-gray-400 uppercase mb-2">Stock Actual</label>
+                              <input
+                                type="number"
+                                value={p.stock}
+                                onChange={(e) => handleProductChange(p.id, p.category, 'stock', Number(e.target.value))}
+                                className="w-full px-4 py-3 bg-gray-50 border border-[#e1e3e5] rounded outline-none text-sm font-bold"
+                              />
+                            </div>
+                            <div>
+                               <label className="block text-[9px] font-black text-gray-400 uppercase mb-2">Categoría</label>
+                               <select
+                                 value={p.category}
+                                 onChange={(e) => handleProductChange(p.id, p.category, 'category', e.target.value)}
+                                 className="w-full px-4 py-3 bg-gray-50 border border-[#e1e3e5] rounded outline-none text-sm font-bold text-gray-600 focus:border-[#058c8c] focus:bg-white transition appearance-none"
+                               >
+                                 {CATEGORIES.map(cat => (
+                                   <option key={cat} value={cat}>{cat.charAt(0).toUpperCase() + cat.slice(1)}</option>
+                                 ))}
                                </select>
                             </div>
-                            <div className="space-y-2">
-                               <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest">Stock</label>
-                               <input type="number" value={p.stock} onChange={(e) => handleProductChange(p.id, p.category, 'stock', Number(e.target.value))} className="w-full p-4 bg-gray-50 rounded-xl outline-none font-bold text-sm" />
+                          </div>
+                          <div>
+                            <label className="block text-[9px] font-black text-gray-400 uppercase mb-2">Descripción</label>
+                            <textarea
+                              rows={5}
+                              value={p.description || ''}
+                              onChange={(e) => handleProductChange(p.id, p.category, 'description', e.target.value)}
+                              className="w-full px-4 py-3 bg-gray-50 border border-[#e1e3e5] rounded outline-none text-sm text-gray-600 leading-relaxed"
+                            />
+                          </div>
+                        </div>
+                      )}
+
+                      {activeTab === 'media' && (
+                        <div className="space-y-8 animate-fadeIn">
+                          <h4 className="text-sm font-black text-gray-900 uppercase tracking-widest border-b border-gray-100 pb-4 mb-6">Galería de Imágenes</h4>
+                          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+                            {[0, 1, 2, 3, 4, 5, 6, 7].map((index) => {
+                              const currentImg = (p.images || [])[index] || '';
+                              return (
+                                <div key={index} className="space-y-3">
+                                  <div className="aspect-square bg-gray-50 rounded border-2 border-dashed border-[#e1e3e5] overflow-hidden flex items-center justify-center relative group">
+                                     {currentImg ? (
+                                       <img src={currentImg} alt="" className="w-full h-full object-contain p-2" />
+                                     ) : (
+                                       <FaUpload className="text-gray-200" size={24} />
+                                     )}
+                                     <input 
+                                       type="file" 
+                                       className="absolute inset-0 opacity-0 cursor-pointer" 
+                                       onChange={(e) => handleFileUpload(e, index)} 
+                                     />
+                                     {uploadingIndex === index && (
+                                       <div className="absolute inset-0 bg-white/80 flex items-center justify-center">
+                                          <div className="w-5 h-5 border-2 border-[#058c8c] border-t-transparent rounded-full animate-spin"></div>
+                                       </div>
+                                     )}
+                                  </div>
+                                  <input
+                                    type="text"
+                                    placeholder="URL"
+                                    value={currentImg}
+                                    onChange={(e) => {
+                                      const newImgs = [...(p.images || [])];
+                                      newImgs[index] = e.target.value;
+                                      handleProductChange(p.id, p.category, 'images', newImgs.filter(Boolean));
+                                    }}
+                                    className="w-full text-[10px] px-2 py-1 bg-white border border-[#e1e3e5] rounded outline-none"
+                                  />
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      )}
+
+                      {activeTab === 'specs' && (
+                        <div className="space-y-8 animate-fadeIn">
+                          <div className="flex items-center justify-between border-b border-gray-100 pb-4 mb-6">
+                            <h4 className="text-sm font-black text-gray-900 uppercase tracking-widest">Especificaciones</h4>
+                            <button
+                              onClick={() => {
+                                const newSpecs = [...(p.specifications || [])];
+                                newSpecs.push({ label: '', value: '' });
+                                handleProductChange(p.id, p.category, 'specifications', newSpecs);
+                              }}
+                              className="px-4 py-2 bg-gray-900 text-white rounded text-[10px] font-black uppercase tracking-widest shadow-sm"
+                            >
+                              + Añadir
+                            </button>
+                          </div>
+                          <div className="space-y-3">
+                            {(p.specifications || []).map((spec: any, idx: number) => (
+                              <div key={idx} className="flex gap-4 p-4 bg-gray-50 border border-[#e1e3e5] rounded items-center">
+                                <input
+                                  type="text"
+                                  placeholder="Etiqueta"
+                                  value={spec.label}
+                                  onChange={(e) => {
+                                    const newSpecs = [...(p.specifications || [])];
+                                    newSpecs[idx].label = e.target.value;
+                                    handleProductChange(p.id, p.category, 'specifications', newSpecs);
+                                  }}
+                                  className="w-1/3 px-3 py-2 bg-white border border-[#e1e3e5] rounded text-xs font-bold"
+                                />
+                                <input
+                                  type="text"
+                                  placeholder="Valor"
+                                  value={spec.value}
+                                  onChange={(e) => {
+                                    const newSpecs = [...(p.specifications || [])];
+                                    newSpecs[idx].value = e.target.value;
+                                    handleProductChange(p.id, p.category, 'specifications', newSpecs);
+                                  }}
+                                  className="flex-1 px-3 py-2 bg-white border border-[#e1e3e5] rounded text-xs"
+                                />
+                                <button
+                                  onClick={() => {
+                                    const newSpecs = (p.specifications || []).filter((_: any, i: number) => i !== idx);
+                                    handleProductChange(p.id, p.category, 'specifications', newSpecs);
+                                  }}
+                                  className="text-gray-300 hover:text-red-500 transition"
+                                >
+                                  <FaTrash size={14} />
+                                </button>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {activeTab === 'seo' && (
+                        <div className="space-y-8 animate-fadeIn">
+                          <h4 className="text-sm font-black text-gray-900 uppercase tracking-widest border-b border-gray-100 pb-4 mb-6">SEO y Logística</h4>
+                          <div className="grid grid-cols-2 gap-8">
+                            <div>
+                               <label className="block text-[9px] font-black text-gray-400 uppercase mb-2">Peso (kg)</label>
+                               <input
+                                 type="text"
+                                 value={p.properties?.weight || ''}
+                                 onChange={(e) => handleProductChange(p.id, p.category, 'properties', { ...p.properties, weight: e.target.value })}
+                                 className="w-full px-4 py-3 bg-gray-50 border border-[#e1e3e5] rounded outline-none text-sm font-bold"
+                               />
+                            </div>
+                            <div>
+                               <label className="block text-[9px] font-black text-gray-400 uppercase mb-2">Dimensiones</label>
+                               <input
+                                 type="text"
+                                 value={p.properties?.dimensions || ''}
+                                 onChange={(e) => handleProductChange(p.id, p.category, 'properties', { ...p.properties, dimensions: e.target.value })}
+                                 className="w-full px-4 py-3 bg-gray-50 border border-[#e1e3e5] rounded outline-none text-sm font-bold"
+                               />
                             </div>
                           </div>
-                          <div className="p-8 bg-[#058c8c]/5 rounded-2xl border border-[#058c8c]/10 space-y-6">
-                             <div className="flex justify-between items-center bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
-                                <div>
-                                   <label className="text-[9px] font-black text-[#058c8c] uppercase tracking-widest block mb-1">Costo (USD)</label>
-                                   <input type="number" value={p.costPrice || 0} onChange={(e) => handleProductChange(p.id, p.category, 'costPrice', Number(e.target.value))} className="bg-transparent text-xl font-black text-gray-900 outline-none w-32 border-b-2 border-transparent focus:border-[#058c8c] transition-all" />
-                                </div>
-                                <div className="text-right">
-                                   <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest block mb-1">Precio Final (ARS)</label>
-                                   <div className="text-2xl font-black text-[#058c8c]">$ {p.price?.toLocaleString()}</div>
-                                </div>
-                             </div>
-                          </div>
                         </div>
                       )}
-                      {activeTab === 'media' && (
-                        <div className="grid grid-cols-4 gap-6">
-                          {Array.from({ length: 8 }).map((_: any, idx: number) => {
-                            const img = p.images?.[idx];
-                            return (
-                              <div key={idx} className="aspect-square bg-white rounded-2xl border-2 border-dashed border-gray-200 relative group flex items-center justify-center cursor-pointer overflow-hidden hover:border-[#058c8c]/50 transition-all shadow-sm">
-                                {img ? <img src={img} className="w-full h-full object-contain p-2" /> : <div className="flex flex-col items-center gap-2 text-gray-300 font-black text-[8px] uppercase tracking-tighter"><FaPlus /> Subir</div>}
-                                <input type="file" className="absolute inset-0 opacity-0 cursor-pointer" onChange={(e) => handleFileUpload(e, idx)} />
-                                {uploadingIndex === idx && (
-                                  <div className="absolute inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center">
-                                    <div className="w-6 h-6 border-4 border-[#058c8c] border-t-transparent rounded-full animate-spin"></div>
-                                  </div>
-                                )}
-                              </div>
-                            );
-                          })}
-                        </div>
-                      )}
-                      {activeTab === 'specs' && (
-                        <div className="space-y-6">
-                           <button onClick={() => handleProductChange(p.id, p.category, 'specifications', [...(p.specifications || []), { label: '', value: '' }])} className="w-full py-4 border-2 border-dashed border-gray-100 rounded-xl text-[10px] font-black text-gray-400 hover:text-[#058c8c] hover:border-[#058c8c]/30 transition-all uppercase tracking-widest">+ Añadir Ficha Técnica</button>
-                           {(p.specifications || []).map((s: any, idx: number) => (
-                             <div key={idx} className="flex gap-4 items-center animate-fadeIn">
-                               <input type="text" value={s.label} onChange={(e) => {
-                                 const nx = [...(p.specifications || [])];
-                                 nx[idx].label = e.target.value;
-                                 handleProductChange(p.id, p.category, 'specifications', nx);
-                               }} className="w-1/3 p-3 bg-gray-50 rounded-lg outline-none text-[10px] font-black uppercase" placeholder="Etiqueta" />
-                               <input type="text" value={s.value} onChange={(e) => {
-                                 const nx = [...(p.specifications || [])];
-                                 nx[idx].value = e.target.value;
-                                 handleProductChange(p.id, p.category, 'specifications', nx);
-                               }} className="flex-1 p-3 bg-gray-50 rounded-lg outline-none text-xs font-bold" placeholder="Valor" />
-                               <button onClick={() => handleProductChange(p.id, p.category, 'specifications', (p.specifications || []).filter((_: any, i: number) => i !== idx))} className="text-gray-200 hover:text-red-500 transition-colors"><FaTrash size={12} /></button>
-                             </div>
-                           ))}
-                        </div>
-                      )}
-                      {activeTab === 'seo' && (
-                        <div className="space-y-4">
-                           <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest pr-4">Descripción General</label>
-                           <textarea value={p.description || ''} onChange={(e) => handleProductChange(p.id, p.category, 'description', e.target.value)} rows={10} className="w-full p-6 bg-gray-50 rounded-2xl outline-none font-medium text-sm leading-relaxed" />
-                        </div>
-                      )}
+
+                      {/* DELETE AND SAVE BUTTONS AT THE BOTTOM */}
+                      <div className="mt-12 pt-8 border-t border-gray-100 flex justify-between items-center">
+                        <button
+                          onClick={() => handleDeleteProduct(p.id)}
+                          disabled={deletingId === p.id}
+                          className="flex items-center gap-2 text-red-400 hover:text-red-500 font-bold text-[10px] uppercase tracking-widest transition-colors px-4 py-2 rounded hover:bg-red-50"
+                        >
+                          <FaTrash size={12} />
+                          {deletingId === p.id ? 'Eliminando...' : 'Eliminar Producto'}
+                        </button>
+                        
+                        <div className="flex gap-4">
+                          <button
+                            onClick={() => setEditingProduct(null)}
+                            className="px-6 py-3 text-gray-400 font-bold text-[10px] uppercase tracking-widest hover:text-gray-600 transition"
+                          >
+                            Cancelar
+                          </button>
+                        <button
+                          onClick={saveProducts}
+                          disabled={isSaving}
+                          className={`px-10 py-3 bg-[#058c8c] text-white rounded font-black text-[10px] uppercase tracking-widest shadow-xl hover:bg-[#047a7a] transition-all flex items-center gap-3 ${isSaving ? 'opacity-70 cursor-not-allowed' : 'hover:scale-[1.02]'}`}
+                        >
+                          {isSaving ? (
+                            <>
+                              <div className="w-3 h-3 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                              Guardando...
+                            </>
+                          ) : (
+                            <>
+                              <FaSave size={14} />
+                              Guardar cambios del producto
+                            </>
+                          )}
+                        </button>
+                      </div>
                     </div>
-                  </main>
+                  </div>
+                </main>
                 </div>
-                
-                <div className="bg-white border-t border-gray-100 p-8 flex justify-between items-center sm:px-12">
-                   <div className="flex items-center gap-4">
-                      <div className={`w-3 h-3 rounded-full ${p.published !== false ? 'bg-green-500 animate-pulse' : 'bg-gray-300'}`}></div>
-                      <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest">{p.published !== false ? 'Producto Publicado' : 'Borrador'}</span>
-                   </div>
-                   <div className="flex gap-4">
-                      <button onClick={() => setEditingProduct(null)} className="px-8 py-3 text-gray-400 font-bold text-[10px] uppercase tracking-widest">Cerrar</button>
-                      <button onClick={() => {
-                        const updated = { ...products };
-                        if (updated[p.category]) {
-                          updated[p.category] = updated[p.category].map((item: any) => item.id === p.id ? p : item);
-                        }
-                        setProducts(updated);
-                        setEditingProduct(null);
-                      }} className="px-10 py-3 bg-[#058c8c] text-white rounded-xl font-black text-[10px] uppercase tracking-widest shadow-lg shadow-[#058c8c]/20">Guardar Cambios Locales</button>
-                   </div>
-                </div>
-              </div>
+              </>
             );
           })()}
         </div>
       )}
 
+      {/* Bulk Actions Floating Bar */}
       {selectedIds.length > 0 && (
-        <div className="fixed bottom-10 left-1/2 -translate-x-1/2 z-[110] bg-gray-900 text-white px-10 py-5 rounded-full shadow-2xl flex items-center gap-10 animate-slideUp">
+        <div className="fixed bottom-10 left-1/2 -translate-x-1/2 z-[110] bg-gray-900 text-white px-8 py-4 rounded-full shadow-2xl border border-gray-800 flex items-center gap-10 animate-slideUp">
            <div className="flex items-center gap-4 border-r border-gray-700 pr-10">
-              <span className="text-[10px] font-black uppercase tracking-widest opacity-40">Seleccionados</span>
+              <span className="text-[10px] font-black uppercase tracking-widest opacity-60">Seleccionados</span>
               <span className="text-xl font-black">{selectedIds.length}</span>
            </div>
-           <div className="flex items-center gap-6">
-              <button onClick={() => setSelectedIds([])} className="text-[10px] font-black uppercase tracking-widest hover:text-gray-400 transition-colors">Cancelar</button>
-              <button onClick={handleBulkDelete} disabled={isSaving} className="bg-red-500 hover:bg-red-600 px-8 py-3 rounded-full text-[10px] font-black uppercase tracking-widest flex items-center gap-2 transition-all hover:scale-105 shadow-xl shadow-red-500/20">
-                <FaTrash size={12} /> Eliminar Masivamente
+           
+           <div className="flex items-center gap-4">
+              <button
+                onClick={() => setSelectedIds([])}
+                className="text-[10px] font-bold uppercase tracking-widest hover:text-gray-400 transition"
+              >
+                Cancelar
+              </button>
+              
+              <button
+                onClick={handleBulkDelete}
+                disabled={isSaving}
+                className="bg-red-500 hover:bg-red-600 px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest flex items-center gap-2 transition-all hover:scale-105 disabled:opacity-50"
+              >
+                <FaTrash size={12} />
+                Eliminar Seleccionados
               </button>
            </div>
         </div>
       )}
+
+      <style jsx>{`
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        .animate-fadeIn {
+          animation: fadeIn 0.3s ease-out forwards;
+        }
+        @keyframes slideDown {
+          from { transform: translateY(-10px); opacity: 0; }
+          to { transform: translateY(0); opacity: 1; }
+        }
+        .animate-slideDown {
+          animation: slideDown 0.3s ease-out forwards;
+        }
+        @keyframes slideUp {
+          from { transform: translate(-50%, 20px); opacity: 0; }
+          to { transform: translate(-50%, 0); opacity: 1; }
+        }
+        .animate-slideUp {
+          animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+      `}</style>
     </div>
   );
 }
