@@ -23,6 +23,10 @@ export const db = {
     const WebhookLog = (await import('../models/WebhookLog')).default;
     return WebhookLog;
   },
+  async getGlobalSettingsModel() {
+    const GlobalSettings = (await import('../models/GlobalSettings')).default;
+    return GlobalSettings;
+  },
 
   // Orders logic
   async getOrders(): Promise<any[]> {
@@ -122,7 +126,8 @@ export const db = {
 
       // Trigger automatic price recalculation for all products in this category
       if (typeof markupPercent === 'number') {
-        await this.recalculateProductPrices(slug, markupPercent, markupFixed);
+        const settings = await this.getGlobalSettings();
+        await this.recalculateProductPrices(slug, markupPercent, markupFixed, settings.exchangeRate);
       }
     } catch (error) {
       console.error('DB Error [saveCategory]:', error);
@@ -130,10 +135,91 @@ export const db = {
     }
   },
 
+  async getGlobalSettings(): Promise<any> {
+    try {
+      await dbConnect();
+      const GlobalSettings = await this.getGlobalSettingsModel();
+      let settings = await GlobalSettings.findOne().lean();
+      if (!settings) {
+        settings = await GlobalSettings.create({ exchangeRate: 1500 });
+      }
+      return settings;
+    } catch (error) {
+      console.error('DB Error [getGlobalSettings]:', error);
+      return { exchangeRate: 1500 };
+    }
+  },
+
+  /**
+   * Core pricing logic
+   */
+  calculatePrice(cost: number, rate: number, markupPercent: number, markupFixed?: string): number {
+    const margin = 1 + (markupPercent / 100);
+    let subtotal = 0;
+
+    if (cost >= 500) {
+      // Rule for > 500: Cost + 10% then rate
+      subtotal = (cost * 1.10) * rate;
+    } else {
+      // Determine fixed adjustment (< 500)
+      let fixedAdj = 0;
+      let isUSD = true;
+      
+      if (markupFixed) {
+         const cleanFixed = markupFixed.toUpperCase();
+         const usdMatch = cleanFixed.match(/\$(\d+)\s*USD/i);
+         const arsMatch = cleanFixed.match(/\$(\d+)(K)?\s*ARS/i);
+         
+         if (arsMatch) {
+           fixedAdj = parseFloat(arsMatch[1]);
+           if (arsMatch[2]) fixedAdj *= 1000;
+           isUSD = false;
+         } else if (usdMatch) {
+           fixedAdj = parseFloat(usdMatch[1]);
+           isUSD = true;
+         } else {
+           const usdMatchNoSign = cleanFixed.match(/(\d+)\s*USD/i);
+           const arsMatchNoSign = cleanFixed.match(/(\d+)(K)?\s*ARS/i);
+           if (arsMatchNoSign) {
+             fixedAdj = parseFloat(arsMatchNoSign[1]);
+             if (arsMatchNoSign[2]) fixedAdj *= 1000;
+             isUSD = false;
+           } else if (usdMatchNoSign) {
+             fixedAdj = parseFloat(usdMatchNoSign[1]);
+             isUSD = true;
+           } else {
+             fixedAdj = 20; // Default
+             isUSD = true;
+           }
+         }
+      } else {
+        fixedAdj = 20;
+        isUSD = true;
+      }
+
+      if (isUSD) {
+        subtotal = (cost + fixedAdj) * rate;
+      } else {
+        subtotal = (cost * rate) + fixedAdj;
+      }
+    }
+
+    let finalPrice = subtotal * margin;
+    
+    // Rounding
+    if (finalPrice > 100000) {
+      finalPrice = Math.round(finalPrice / 100) * 100;
+    } else {
+      finalPrice = Math.round(finalPrice / 10) * 10;
+    }
+
+    return finalPrice;
+  },
+
   /**
    * Recalculates all product prices in a category based on margin rules
    */
-  async recalculateProductPrices(categorySlug: string, markupPercent: number, markupFixed?: string): Promise<number> {
+  async recalculateProductPrices(categorySlug: string, markupPercent: number, markupFixed?: string, rate?: number): Promise<number> {
     try {
       await dbConnect();
       const Product = await this.getProductModel();
@@ -142,8 +228,10 @@ export const db = {
       console.log(`[recalculateProductPrices] Found ${products.length} products for category: ${categorySlug}`);
       if (products.length === 0) return 0;
 
-      const rate = 1500;
-      const margin = 1 + (markupPercent / 100);
+      if (!rate) {
+        const settings = await this.getGlobalSettings();
+        rate = settings.exchangeRate;
+      }
 
       const operations: any[] = [];
       
@@ -152,67 +240,7 @@ export const db = {
            continue;
         }
         
-        let subtotal = 0;
-        const cost = p.costPrice;
-
-        if (cost >= 500) {
-          // Rule for > 500: Cost + 10% then rate
-          subtotal = (cost * 1.10) * rate;
-        } else {
-          // Determine fixed adjustment (< 500)
-          let fixedAdj = 0;
-          let isUSD = true;
-          
-          if (markupFixed) {
-             const cleanFixed = markupFixed.toUpperCase();
-             // Parse something like "+$20 USD" or "+$10k ARS" or "+$10000 ARS"
-             const usdMatch = cleanFixed.match(/\$(\d+)\s*USD/i);
-             const arsMatch = cleanFixed.match(/\$(\d+)(K)?\s*ARS/i);
-             
-             if (arsMatch) {
-               fixedAdj = parseFloat(arsMatch[1]);
-               if (arsMatch[2]) fixedAdj *= 1000; // Handle "10k"
-               isUSD = false;
-             } else if (usdMatch) {
-               fixedAdj = parseFloat(usdMatch[1]);
-               isUSD = true;
-             } else {
-               // Secondary check for "20 USD" (no $)
-               const usdMatchNoSign = cleanFixed.match(/(\d+)\s*USD/i);
-               const arsMatchNoSign = cleanFixed.match(/(\d+)(K)?\s*ARS/i);
-               if (arsMatchNoSign) {
-                 fixedAdj = parseFloat(arsMatchNoSign[1]);
-                 if (arsMatchNoSign[2]) fixedAdj *= 1000;
-                 isUSD = false;
-               } else if (usdMatchNoSign) {
-                 fixedAdj = parseFloat(usdMatchNoSign[1]);
-                 isUSD = true;
-               } else {
-                 fixedAdj = 20; // Default
-                 isUSD = true;
-               }
-             }
-          } else {
-            fixedAdj = 20;
-            isUSD = true;
-          }
-
-          if (isUSD) {
-            subtotal = (cost + fixedAdj) * rate;
-          } else {
-            subtotal = (cost * rate) + fixedAdj;
-          }
-        }
-
-        // Final Price Calculation
-        let finalPrice = subtotal * margin;
-        
-        // Rounding
-        if (finalPrice > 100000) {
-          finalPrice = Math.round(finalPrice / 100) * 100;
-        } else {
-          finalPrice = Math.round(finalPrice / 10) * 10;
-        }
+        const finalPrice = this.calculatePrice(p.costPrice, rate || 1500, markupPercent, markupFixed);
 
         operations.push({
           updateOne: {
@@ -231,6 +259,27 @@ export const db = {
       return 0;
     } catch (error) {
       console.error('Error recalculating prices:', error);
+      throw error;
+    }
+  },
+
+  async recalculateAllProducts(): Promise<number> {
+    try {
+      await dbConnect();
+      const categories = await this.getCategories();
+      const settings = await this.getGlobalSettings();
+      const rate = settings.exchangeRate;
+      
+      let totalUpdated = 0;
+      for (const cat of categories) {
+        if (typeof cat.markupPercent === 'number') {
+           const count = await this.recalculateProductPrices(cat.slug, cat.markupPercent, cat.markupFixed, rate);
+           totalUpdated += count;
+        }
+      }
+      return totalUpdated;
+    } catch (error) {
+      console.error('Error recalculating all products:', error);
       throw error;
     }
   },

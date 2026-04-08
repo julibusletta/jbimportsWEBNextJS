@@ -8,6 +8,7 @@ export interface Product {
     brand?: string;
     sku?: string;
     price: number;
+    costPrice?: number;
     originalPrice?: number;
     discountPercentage?: number;
     discount?: number;
