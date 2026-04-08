@@ -21,8 +21,6 @@ export default function CategoryPage() {
   const [loading, setLoading] = useState(true);
   const [addedToCart, setAddedToCart] = useState<{ [key: string]: boolean }>({});
   const [userFavorites, setUserFavorites] = useState<string[]>([]);
-  const [exchangeRate, setExchangeRate] = useState<number>(1500);
-  const [isAdmin, setIsAdmin] = useState(false);
 
   // Filter states
   const [showOnlyAvailable, setShowOnlyAvailable] = useState(false);
@@ -92,22 +90,6 @@ export default function CategoryPage() {
     };
 
     loadData();
-    
-    if (session?.user) {
-      setIsAdmin((session.user as any).role === 'ADMIN');
-      
-      // Fetch current exchange rate for admins
-      if ((session.user as any).role === 'ADMIN') {
-        fetch('/api/admin/settings')
-          .then(res => res.json())
-          .then(data => {
-            if (data.success) {
-              setExchangeRate(data.settings.exchangeRate);
-            }
-          })
-          .catch(err => console.error('Error fetching rate:', err));
-      }
-    }
   }, [slug, session]);
 
   const toggleFavorite = async (e: React.MouseEvent, productId: string, productName: string) => {
@@ -242,34 +224,6 @@ export default function CategoryPage() {
   }) {
     const isFeaturedOffer = slug === 'ofertas' && ['378', '1339'].includes(product.id);
     const isFavorite = userFavorites.includes(product.id);
-    
-    // Admin editing state
-    const [cost, setCost] = useState(product.costPrice || 0);
-    const [isSaving, setIsSaving] = useState(false);
-    const [tempPrice, setTempPrice] = useState(product.price);
-
-    const handleCostUpdate = async () => {
-      if (cost === product.costPrice) return;
-      setIsSaving(true);
-      try {
-        const res = await fetch(`/api/products/${product.id}`, {
-          method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ costPrice: Number(cost) }),
-        });
-        const data = await res.json();
-        if (data.success) {
-          // Update local product price in the list
-          setProducts(prev => prev.map(p => p.id === product.id ? { ...p, costPrice: cost, price: data.product.price } : p));
-          setTempPrice(data.product.price);
-        }
-      } catch (err) {
-        console.error('Error updating cost:', err);
-        setCost(product.costPrice || 0); // Revert
-      } finally {
-        setIsSaving(false);
-      }
-    };
 
     return (
       <div
@@ -563,38 +517,6 @@ export default function CategoryPage() {
             </button>
           </div>
         </div>
-
-        {/* Admin Edit Section */}
-        {isAdmin && (
-          <div className="px-3 py-2 bg-blue-50/50 border-t border-blue-100/30">
-            <div className="flex items-center justify-between gap-2">
-              <div className="flex-1">
-                <label className="block text-[9px] font-extrabold text-blue-400 uppercase tracking-tighter mb-0.5">Costo (USD)</label>
-                <div className="relative">
-                  <span className="absolute left-2 top-1/2 -translate-y-1/2 text-blue-400 text-[10px] font-bold">U$S</span>
-                  <input 
-                    type="number"
-                    value={cost}
-                    onChange={(e) => setCost(Number(e.target.value))}
-                    onBlur={handleCostUpdate}
-                    onKeyDown={(e) => e.key === 'Enter' && handleCostUpdate()}
-                    className={`w-full bg-white border ${isSaving ? 'border-amber-200' : 'border-blue-100'} rounded py-1 pl-7 pr-1 text-xs text-blue-700 font-bold focus:ring-1 focus:ring-blue-500 transition-all outline-none`}
-                  />
-                </div>
-              </div>
-              <div className="text-right">
-                <div className="text-[9px] font-extrabold text-slate-400 uppercase tracking-tighter mb-0.5">Venta (ARS)</div>
-                <div className="text-xs font-bold text-slate-700">
-                  ${product.price.toLocaleString('es-AR')}
-                </div>
-              </div>
-            </div>
-            <div className="mt-1 flex justify-between items-center">
-              <span className="text-[8px] text-blue-400 font-medium">Tasa: ${exchangeRate}</span>
-              {isSaving && <span className="text-[8px] text-amber-500 font-bold animate-pulse uppercase">Guardando...</span>}
-            </div>
-          </div>
-        )}
 
         {/* Price footer */}
         <div

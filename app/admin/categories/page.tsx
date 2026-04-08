@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { FaTags, FaPlus, FaSave, FaPercentage, FaDollarSign, FaInfoCircle, FaTimesCircle, FaChevronRight } from 'react-icons/fa';
+import { FaTags, FaPlus, FaSave, FaPercentage, FaDollarSign, FaInfoCircle, FaTimesCircle, FaChevronRight, FaCheck } from 'react-icons/fa';
 
 interface Category {
   id: string;
@@ -22,6 +22,8 @@ export default function CategoriesPage() {
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
   const [viewingProducts, setViewingProducts] = useState<Category | null>(null);
   const [isSaving, setIsSaving] = useState(false);
+  const [exchangeRate, setExchangeRate] = useState<number>(1500);
+  const [updatingCostId, setUpdatingCostId] = useState<string | null>(null);
   const [message, setMessage] = useState('');
 
   useEffect(() => {
@@ -35,6 +37,12 @@ export default function CategoriesPage() {
       const data = await resp.json();
       setCategories(data.categories || []);
       setAllProducts(data.products || {});
+      
+      const settingsResp = await fetch('/api/admin/settings');
+      const settingsData = await settingsResp.json();
+      if (settingsData.success) {
+        setExchangeRate(settingsData.settings.exchangeRate);
+      }
     } catch (err) {
       console.error('Error fetching categories:', err);
     } finally {
@@ -61,6 +69,32 @@ export default function CategoriesPage() {
       alert('Error al guardar');
     } finally {
       setIsSaving(false);
+    }
+  };
+
+  const handleCostUpdate = async (productId: string, categorySlug: string, newCost: number) => {
+    setUpdatingCostId(productId);
+    try {
+      const resp = await fetch(`/api/products/${productId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ costPrice: newCost })
+      });
+      const data = await resp.json();
+      if (data.success) {
+        // Update local state
+        setAllProducts(prev => {
+           const updated = { ...prev };
+           updated[categorySlug] = updated[categorySlug].map(p => 
+             p.id === productId ? { ...p, costPrice: newCost, price: data.product.price } : p
+           );
+           return updated;
+        });
+      }
+    } catch (err) {
+      console.error('Error updating cost:', err);
+    } finally {
+      setUpdatingCostId(null);
     }
   };
 
@@ -110,7 +144,7 @@ export default function CategoriesPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {categories.map(cat => (
+        {categories.map((cat: Category) => (
           <div key={cat.id} className="admin-v2-card group overflow-hidden hover:shadow-2xl transition-all duration-500 border border-transparent hover:border-[#058c8c]/20">
              <div className="h-40 bg-gray-50 relative overflow-hidden flex items-center justify-center">
                 <img src={cat.image} alt={cat.name} className="w-2/3 h-2/3 object-contain p-4 group-hover:scale-110 transition-transform duration-700" />
@@ -243,11 +277,19 @@ export default function CategoriesPage() {
           <div className="fixed inset-0 z-[200] bg-gray-900/40 backdrop-blur-sm animate-fadeIn" onClick={() => setViewingProducts(null)}></div>
           <div className="fixed inset-y-0 right-0 z-[201] w-full max-w-2xl bg-white shadow-2xl flex flex-col animate-slideInRight">
              <div className="p-8 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
-                <div>
+                <div className="flex-1">
                    <h2 className="text-xl font-black text-gray-900 uppercase tracking-tight">{viewingProducts.name}</h2>
-                   <p className="text-[10px] font-bold text-[#058c8c] uppercase tracking-widest mt-1">
-                      {allProducts[viewingProducts.slug]?.length || 0} Productos en Catálogo
-                   </p>
+                   <div className="flex items-center gap-3 mt-1">
+                      <p className="text-[10px] font-bold text-[#058c8c] uppercase tracking-widest">
+                         {allProducts[viewingProducts.slug]?.length || 0} Productos
+                      </p>
+                      <Link 
+                        href={`/admin/products?new=true&category=${viewingProducts.slug}`}
+                        className="text-[9px] font-black bg-gray-900 text-white px-3 py-1 rounded-full uppercase tracking-tighter hover:bg-[#058c8c] transition-all flex items-center gap-1.5"
+                      >
+                        <FaPlus size={8} /> Nuevo Producto
+                      </Link>
+                   </div>
                 </div>
                 <button onClick={() => setViewingProducts(null)} className="w-10 h-10 rounded-full bg-white shadow-sm border border-gray-100 flex items-center justify-center text-gray-400 hover:text-gray-900 transition">
                    <FaTimesCircle size={20} />
@@ -255,7 +297,7 @@ export default function CategoriesPage() {
              </div>
 
              <div className="flex-1 overflow-y-auto p-8 space-y-6">
-                {allProducts[viewingProducts.slug]?.map((p, idx) => {
+                {allProducts[viewingProducts.slug]?.map((p: any, idx: number) => {
                    // Estimate cost (Logic simplified for display)
                    const margin = viewingProducts.markupPercent || 30;
                    const finalPrice = p.price;
@@ -280,9 +322,35 @@ export default function CategoriesPage() {
                          </div>
 
                          <div className="mt-5 pt-5 border-t border-gray-50 grid grid-cols-4 gap-4">
-                            <div className="text-center p-3 bg-gray-50 text-[10px] items-center justify-center flex flex-col rounded-xl">
-                               <span className="text-[8px] font-black text-gray-400 uppercase tracking-tighter mb-1">Costo Est.</span>
-                               <span className="font-black text-gray-900">${p.costPrice || estimatedCost} <span className="text-[8px] text-gray-400 font-bold tracking-tighter">USD</span></span>
+                            <div className="text-center p-3 bg-gray-50 text-[10px] items-center justify-center flex flex-col rounded-xl relative group-hover:bg-blue-50/50 transition-colors">
+                               <span className="text-[8px] font-black text-gray-400 uppercase tracking-tighter mb-1">Costo (USD)</span>
+                                <div className="flex items-center gap-1 w-full px-1">
+                                   <input 
+                                     type="number"
+                                     id={`cost-input-${p.id}`}
+                                     defaultValue={p.costPrice || estimatedCost}
+                                     onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                                       if (e.key === 'Enter') {
+                                         handleCostUpdate(p.id, viewingProducts.slug, Number(e.currentTarget.value));
+                                       }
+                                     }}
+                                     className="w-full bg-transparent text-center font-black text-gray-900 outline-none transition-all text-xs"
+                                   />
+                                   <button 
+                                     onClick={() => {
+                                       const input = document.getElementById(`cost-input-${p.id}`) as HTMLInputElement;
+                                       if (input) handleCostUpdate(p.id, viewingProducts.slug, Number(input.value));
+                                     }}
+                                     className="w-5 h-5 flex-shrink-0 bg-[#058c8c] text-white rounded flex items-center justify-center hover:scale-110 active:scale-90 transition-all"
+                                   >
+                                      <FaCheck size={8} />
+                                   </button>
+                                </div>
+                               {updatingCostId === p.id && (
+                                 <div className="absolute inset-0 bg-white/80 backdrop-blur-[2px] flex items-center justify-center animate-fadeIn rounded-xl z-20">
+                                    <div className="w-4 h-4 border-2 border-[#058c8c] border-t-transparent rounded-full animate-spin"></div>
+                                 </div>
+                               )}
                             </div>
                             <div className="text-center p-3 bg-[#058c8c]/[0.03] text-[10px] items-center justify-center flex flex-col rounded-xl border border-[#058c8c]/10">
                                <span className="text-[8px] font-black text-[#058c8c] uppercase tracking-tighter mb-1">Ajuste</span>
@@ -290,7 +358,7 @@ export default function CategoriesPage() {
                             </div>
                             <div className="text-center p-3 bg-gray-50 text-[10px] items-center justify-center flex flex-col rounded-xl">
                                <span className="text-[8px] font-black text-gray-400 uppercase tracking-tighter mb-1">Tasa</span>
-                               <span className="font-black text-gray-900">1.500</span>
+                               <span className="font-black text-gray-900">{exchangeRate.toLocaleString()}</span>
                             </div>
                             <div className="text-center p-3 bg-[#058c8c]/[0.03] text-[10px] items-center justify-center flex flex-col rounded-xl border border-[#058c8c]/10">
                                <span className="text-[8px] font-black text-[#058c8c] uppercase tracking-tighter mb-1">Margen</span>
