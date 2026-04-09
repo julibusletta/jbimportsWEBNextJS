@@ -563,6 +563,17 @@ function ProductsContent({
                         <td className="px-6 py-4 w-28 text-center">
                            <input type="number" value={p.stock} onChange={(e) => handleStockChange(category, p.id, Number(e.target.value))} className={`w-12 bg-transparent text-center font-bold text-xs ${p.stock <= 5 ? 'text-red-500' : 'text-gray-900'}`} />
                         </td>
+                        <td className="px-6 py-4 w-20 text-center">
+                           <label className="relative inline-flex items-center cursor-pointer">
+                             <input
+                               type="checkbox"
+                               className="sr-only peer"
+                               checked={p.published !== false}
+                               onChange={(e) => handleProductChange(p.id, category, 'published', e.target.checked)}
+                             />
+                             <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#058c8c]"></div>
+                           </label>
+                        </td>
                         <td className="px-6 py-4 w-16 text-right">
                            <button onClick={() => handleDeleteProduct(p.id)} className="text-gray-200 hover:text-red-500 transition-colors"><FaTrash size={12} /></button>
                         </td>
@@ -694,6 +705,21 @@ function ProductsContent({
                                  ))}
                                </select>
                             </div>
+                            <div className="flex items-center justify-between p-4 bg-gray-50 border border-[#e1e3e5] rounded">
+                               <div>
+                                 <label className="block text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1">Visibilidad</label>
+                                 <p className="text-[10px] text-gray-400 font-medium">{p.published !== false ? 'Público en el catálogo' : 'Oculto (Borrador)'}</p>
+                               </div>
+                               <label className="relative inline-flex items-center cursor-pointer">
+                                 <input
+                                   type="checkbox"
+                                   className="sr-only peer"
+                                   checked={p.published !== false}
+                                   onChange={(e) => handleProductChange(p.id, p.category, 'published', e.target.checked)}
+                                 />
+                                 <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#058c8c]"></div>
+                               </label>
+                             </div>
                           </div>
                           <div>
                             <label className="block text-[9px] font-black text-gray-400 uppercase mb-2">Descripción</label>
