@@ -66,6 +66,7 @@ export default function Header() {
       id: 'apple',
       submenu: [
         { label: 'IPHONE', href: '/category/iphone' },
+        { label: 'IPAD', href: '/category/ipad' },
         { label: 'MACBOOK', href: '/category/macbook' },
         { label: 'WATCH', href: '/category/watch' },
         { label: 'ACCESORIOS', href: '/category/apple-accesorios' },

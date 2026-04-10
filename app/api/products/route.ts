@@ -22,7 +22,9 @@ export async function GET(request: Request) {
       'notebooks-y-tablets': ['notebooks', 'macbook', 'tablets']
     };
 
-    if (category === 'ofertas') {
+    const cleanCategory = category?.toLowerCase().trim();
+
+    if (cleanCategory === 'ofertas') {
       // Special "Ofertas" category: all products with a discount + featured IDs
       query = { 
         $or: [
@@ -30,14 +32,24 @@ export async function GET(request: Request) {
           { id: { $in: ['378', '1339'] } }
         ]
       };
-    } else if (category && categoryMapping[category.toLowerCase().trim()]) {
+    } else if (cleanCategory === 'ipad') {
+      // Virtual category: iPads are filed under 'tablets' but user wants them separate
+      query = { category: 'tablets', name: { $regex: /ipad/i } };
+    } else if (cleanCategory === 'apple') {
+      // Apple parent category must include iPads that are in the 'tablets' category
+      query = { 
+        $or: [
+          { category: { $in: ['apple', 'iphone', 'macbook', 'watch', 'ipad', 'airpods'] } },
+          { category: 'tablets', name: { $regex: /ipad/i } }
+        ]
+      };
+    } else if (cleanCategory && categoryMapping[cleanCategory]) {
       // If it's a parent category, include all children
-      query = { category: { $in: categoryMapping[category.toLowerCase().trim()] } };
+      query = { category: { $in: categoryMapping[cleanCategory] } };
     } else if (category) {
       // Standard case-insensitive match for specific subcategories
-      // Trimming and using a simple equality or regex
-      const cleanCategory = category.trim();
-      query = { category: { $regex: cleanCategory, $options: 'i' } };
+      const trimmedCategory = category.trim();
+      query = { category: { $regex: trimmedCategory, $options: 'i' } };
     }
     
     // Always hide unpublished products from the frontend unless it's explicitly stated

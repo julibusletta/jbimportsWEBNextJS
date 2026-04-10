@@ -70,6 +70,15 @@ export default function CategoryPage() {
               isMain: false,
               description: 'Relojes inteligentes de las mejores marcas'
             };
+          } else if (slug === 'ipad') {
+            cat = {
+              id: 'ipad',
+              name: 'IPADS',
+              slug: 'ipad',
+              image: '/images/categories/apple.png',
+              isMain: false,
+              description: 'Las mejores tablets de Apple en un solo lugar'
+            };
           }
         }
         setCategory(cat);
