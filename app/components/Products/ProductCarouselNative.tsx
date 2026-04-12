@@ -155,11 +155,17 @@ export function ProductCarouselSection({ title, type = 'section', value }: Produ
         </div>
 
         <div className="relative w-full overflow-hidden">
+          <style dangerouslySetInnerHTML={{ __html: `
+            :root { --item-width: 25%; }
+            @media (max-width: 1024px) { :root { --item-width: 33.333%; } }
+            @media (max-width: 768px) { :root { --item-width: 50%; } }
+            @media (max-width: 480px) { :root { --item-width: 100%; } }
+          `}} />
           {loading && <p className="text-center py-10">Cargando...</p>}
           {!loading && products.length > 0 && (
             <div 
               ref={scrollRef}
-              className="flex overflow-x-auto snap-x snap-mandatory no-scrollbar"
+              className="flex items-stretch overflow-x-auto snap-x snap-mandatory no-scrollbar"
               onMouseEnter={() => setIsPaused(true)}
               onMouseLeave={() => setIsPaused(false)}
               style={{ 
@@ -177,17 +183,13 @@ export function ProductCarouselSection({ title, type = 'section', value }: Produ
                 return (
                   <div 
                     key={`${value}-${product.id}-${index}`} 
-                    className="flex-none snap-start"
+                    className="flex-none snap-start flex flex-col"
                     style={{ 
                       width: 'var(--item-width)', 
                       padding: '10px' 
                     }}
                   >
-                    <style dangerouslySetInnerHTML={{ __html: `
-                      :root { --item-width: 25%; }
-                      @media (max-width: 768px) { :root { --item-width: 50%; } }
-                    `}} />
-                    <Link href={`/product/${product.id}`} className="block h-full group no-underline">
+                    <Link href={`/product/${product.id}`} className="flex flex-col flex-grow group no-underline">
                       <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 h-full flex flex-col border border-gray-100 relative">
                         {discountPct > 0 && (
                           <div className="absolute top-3 left-3 bg-[#e60000] text-white text-[10px] sm:text-xs font-black w-10 h-10 sm:w-12 sm:h-12 rounded-full z-20 flex flex-col items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform duration-300 border-2 border-white leading-none">
@@ -208,7 +210,7 @@ export function ProductCarouselSection({ title, type = 'section', value }: Produ
                           <img src={displayImage} alt={product.name} className="max-w-[90%] max-h-[90%] object-contain transition-transform duration-500 group-hover:scale-105" />
                         </div>
                         <div className="p-4 flex flex-col flex-grow bg-white border-t border-gray-50">
-                          <h3 className="text-[12px] sm:text-[14px] font-bold text-gray-800 mb-1 line-clamp-2 min-h-[2.5rem] uppercase leading-tight">{product.name}</h3>
+                          <h3 className="text-[12px] sm:text-[14px] font-bold text-gray-800 mb-1 line-clamp-2 min-h-[3rem] uppercase leading-tight">{product.name}</h3>
                           <p className="text-[9px] text-gray-400 mb-3 uppercase font-semibold">SKU: {product.sku || 'N/A'}</p>
                           <div className="mt-auto">
                             <div className="mb-3">

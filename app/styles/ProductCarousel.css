@@ -102,10 +102,10 @@
 /* Extra Small Mobile (Specific Fixes) */
 @media (max-width: 480px) {
   .product-card {
-    height: 380px !important; /* Ensure enough height for the info */
+    height: auto !important;
   }
   
   .product-info h3 {
-    min-height: 2rem !important;
+    min-height: 3rem !important;
   }
 }
