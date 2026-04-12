@@ -155,6 +155,7 @@ export function ProductCarouselSection({ title, type = 'section', value }: Produ
         </div>
 
         <div className="relative w-full overflow-hidden">
+          {/* Los estilos de variables se mantienen aquí para reactividad rápida en breakpoints */}
           <style dangerouslySetInnerHTML={{ __html: `
             :root { --item-width: 25%; }
             @media (max-width: 1024px) { :root { --item-width: 33.333%; } }
@@ -165,19 +166,9 @@ export function ProductCarouselSection({ title, type = 'section', value }: Produ
           {!loading && products.length > 0 && (
             <div 
               ref={scrollRef}
-              className="grid overflow-x-auto snap-x snap-mandatory no-scrollbar"
+              className="native-carousel-grid no-scrollbar"
               onMouseEnter={() => setIsPaused(true)}
               onMouseLeave={() => setIsPaused(false)}
-              style={{ 
-                msOverflowStyle: 'none', 
-                scrollbarWidth: 'none', 
-                scrollBehavior: 'smooth',
-                WebkitOverflowScrolling: 'touch',
-                gap: '0',
-                gridAutoFlow: 'column',
-                gridAutoColumns: 'var(--item-width)',
-                alignItems: 'stretch'
-              }}
             >
               {products.map((product, index) => {
                 const displayImage = product.image || (product.imageUrls?.[0]) || '/images/placeholder.png';
@@ -186,17 +177,17 @@ export function ProductCarouselSection({ title, type = 'section', value }: Produ
                 return (
                   <div 
                     key={`${value}-${product.id}-${index}`} 
-                    className="snap-start p-[10px] flex flex-col"
+                    className="product-item-wrapper"
                   >
-                    <Link href={`/product/${product.id}`} className="flex flex-col flex-grow group no-underline h-full">
-                      <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex-grow flex flex-col border border-gray-100 relative h-full">
+                    <Link href={`/product/${product.id}`} className="product-link-wrapper">
+                      <div className="product-card-white shadow-sm hover:shadow-xl transition-all duration-300">
                         {discountPct > 0 && (
                           <div className="absolute top-3 left-3 bg-[#e60000] text-white text-[10px] sm:text-xs font-black w-10 h-10 sm:w-12 sm:h-12 rounded-full z-20 flex flex-col items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform duration-300 border-2 border-white leading-none">
                             <span>{Math.round(discountPct)}%</span>
                             <span className="text-[7px] sm:text-[9px]">OFF</span>
                           </div>
                         )}
-                        <div className="aspect-square flex items-center justify-center p-4 sm:p-6 bg-white shrink-0 relative w-full">
+                        <div className="product-image-fixed relative">
                           {/* Favorite Star Button */}
                           <button
                             onClick={(e) => toggleFavorite(e, product.id, product.name)}
@@ -235,6 +226,72 @@ export function ProductCarouselSection({ title, type = 'section', value }: Produ
       </div>
       <style jsx>{`
         .no-scrollbar::-webkit-scrollbar { display: none; }
+        
+        .native-carousel-grid {
+          display: grid;
+          grid-auto-flow: column;
+          grid-auto-columns: var(--item-width);
+          align-items: stretch;
+          overflow-x: auto;
+          scroll-snap-type: x mandatory;
+          scroll-behavior: smooth;
+          -webkit-overflow-scrolling: touch;
+          ms-overflow-style: none;
+          scrollbar-width: none;
+          gap: 0;
+        }
+
+        .product-item-wrapper {
+          scroll-snap-align: start;
+          padding: 10px;
+          display: flex !important;
+          flex-direction: column !important;
+        }
+
+        .product-link-wrapper {
+          display: flex !important;
+          flex-direction: column !important;
+          flex-grow: 1 !important;
+          text-decoration: none !important;
+          height: 100% !important;
+        }
+
+        .product-card-white {
+          background: white;
+          border-radius: 1rem;
+          overflow: hidden;
+          border: 1px solid #f3f4f6;
+          display: flex !important;
+          flex-direction: column !important;
+          flex-grow: 1 !important;
+          height: 100% !important;
+          position: relative;
+        }
+
+        .product-image-fixed {
+          height: 260px !important;
+          width: 100% !important;
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          background: white;
+          padding: 1.5rem;
+          flex-shrink: 0;
+        }
+
+        @media (max-width: 768px) {
+          .product-image-fixed {
+            height: 200px !important;
+            padding: 1rem;
+          }
+        }
+
+        .line-clamp-2 {
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
       `}</style>
     </section>
   );
