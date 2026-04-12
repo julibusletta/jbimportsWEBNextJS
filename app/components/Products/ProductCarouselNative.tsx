@@ -165,7 +165,7 @@ export function ProductCarouselSection({ title, type = 'section', value }: Produ
           {!loading && products.length > 0 && (
             <div 
               ref={scrollRef}
-              className="flex items-stretch overflow-x-auto snap-x snap-mandatory no-scrollbar"
+              className="grid overflow-x-auto snap-x snap-mandatory no-scrollbar"
               onMouseEnter={() => setIsPaused(true)}
               onMouseLeave={() => setIsPaused(false)}
               style={{ 
@@ -173,7 +173,10 @@ export function ProductCarouselSection({ title, type = 'section', value }: Produ
                 scrollbarWidth: 'none', 
                 scrollBehavior: 'smooth',
                 WebkitOverflowScrolling: 'touch',
-                gap: '0'
+                gap: '0',
+                gridAutoFlow: 'column',
+                gridAutoColumns: 'var(--item-width)',
+                alignItems: 'stretch'
               }}
             >
               {products.map((product, index) => {
@@ -183,21 +186,17 @@ export function ProductCarouselSection({ title, type = 'section', value }: Produ
                 return (
                   <div 
                     key={`${value}-${product.id}-${index}`} 
-                    className="flex-none snap-start flex flex-col"
-                    style={{ 
-                      width: 'var(--item-width)', 
-                      padding: '10px' 
-                    }}
+                    className="snap-start p-[10px] flex flex-col"
                   >
-                    <Link href={`/product/${product.id}`} className="flex flex-col flex-grow group no-underline">
-                      <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 h-full flex flex-col border border-gray-100 relative">
+                    <Link href={`/product/${product.id}`} className="flex flex-col flex-grow group no-underline h-full">
+                      <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex-grow flex flex-col border border-gray-100 relative h-full">
                         {discountPct > 0 && (
                           <div className="absolute top-3 left-3 bg-[#e60000] text-white text-[10px] sm:text-xs font-black w-10 h-10 sm:w-12 sm:h-12 rounded-full z-20 flex flex-col items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform duration-300 border-2 border-white leading-none">
                             <span>{Math.round(discountPct)}%</span>
                             <span className="text-[7px] sm:text-[9px]">OFF</span>
                           </div>
                         )}
-                        <div className="aspect-square flex items-center justify-center p-4 sm:p-6 bg-white shrink-0 relative">
+                        <div className="aspect-square flex items-center justify-center p-4 sm:p-6 bg-white shrink-0 relative w-full">
                           {/* Favorite Star Button */}
                           <button
                             onClick={(e) => toggleFavorite(e, product.id, product.name)}
