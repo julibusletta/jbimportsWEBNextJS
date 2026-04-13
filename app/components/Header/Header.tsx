@@ -193,6 +193,15 @@ export default function Header() {
 
 
 
+            {/* Account Icon Mobile */}
+            <button 
+              className="md:hidden bg-transparent border-0 cursor-pointer text-gray-700 hover:text-orange-600" 
+              aria-label="Cuenta"
+              onClick={() => session ? router.push('/mi-cuenta') : openLogin()}
+            >
+              <FaUserCircle size={24} />
+            </button>
+
             {/* Cart */}
             <Link href="/cart" className="cart-icon relative flex items-center text-gray-700 hover:text-orange-600 cursor-pointer transition-colors">
               <FaShoppingCart size={28} />
@@ -317,57 +326,7 @@ export default function Header() {
         }`}
       >
         <nav className="mobile-dropdown-nav flex flex-col overflow-y-auto max-h-[80vh]">
-          {/* Mobile Account Section */}
-          <div className="mobile-menu-item border-b border-gray-100 bg-gray-50">
-            {session ? (
-              <div className="flex flex-col">
-                <div className="flex items-center justify-between px-6 py-4">
-                  <span className="text-black text-sm font-black uppercase">MI CUENTA</span>
-                  <button 
-                    onClick={() => toggleDropdown('mobile-account')}
-                    className="p-2 text-gray-400 bg-transparent border-0 cursor-pointer"
-                  >
-                    <FaChevronDown className={`transition-transform duration-300 ${openDropdown === 'mobile-account' ? 'rotate-180' : ''}`} size={16} />
-                  </button>
-                </div>
-                {openDropdown === 'mobile-account' && (
-                  <div className="bg-white px-2 pb-4">
-                    {[
-                      { label: 'Mi cuenta', href: '/mi-cuenta', icon: <FaUserCircle /> },
-                      { label: 'Mis Compras', href: '/mi-cuenta/compras', icon: <FaShoppingBag /> },
-                      { label: 'Facturas', href: '/mi-cuenta/facturas', icon: <FaFileInvoice /> },
-                      { label: 'Seguimiento', href: '/mi-cuenta/seguimiento', icon: <FaTruck /> },
-                      { label: 'Preguntas frecuentes', href: '/preguntas', icon: <FaQuestionCircle /> },
-                    ].map((item) => (
-                      <Link
-                        key={item.label}
-                        href={item.href}
-                        className="flex items-center gap-4 px-6 py-4 text-gray-600 text-xs font-bold uppercase no-underline hover:text-blue-600"
-                        onClick={() => setIsMenuOpen(false)}
-                      >
-                        <span className="text-gray-300">{item.icon}</span>
-                        {item.label}
-                      </Link>
-                    ))}
-                    <button
-                      onClick={() => { signOut(); setIsMenuOpen(false); }}
-                      className="w-full flex items-center gap-4 px-6 py-4 text-red-500 text-xs font-bold uppercase no-underline bg-transparent border-0 cursor-pointer text-left"
-                    >
-                      <FaSignOutAlt />
-                      SALIR
-                    </button>
-                  </div>
-                )}
-              </div>
-            ) : (
-              <button
-                onClick={() => { openLogin(); setIsMenuOpen(false); }}
-                className="w-full text-left px-6 py-4 text-black text-sm font-black uppercase bg-transparent border-0 cursor-pointer"
-              >
-                INGRESAR / MI CUENTA
-              </button>
-            )}
-          </div>
+          {/* Mobile Account Section Removed - Now in Header Icons */}
 
           {navLinks.map((link) => (
             <div key={link.label} className="mobile-menu-item border-b border-gray-100">
