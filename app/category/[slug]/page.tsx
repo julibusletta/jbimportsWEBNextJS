@@ -308,12 +308,6 @@ export default function CategoryPage() {
     );
   }
 
-  // Extract brand names from products for filter
-  const knownBrands = ['Apple', 'Samsung', 'Xiaomi', 'Motorola', 'Realme', 'JBL', 'Amazon', 'Starlink', 'Asus', 'MSI', 'Gigabyte', 'HP', 'NVIDIA', 'AMD', 'Corsair', 'Kingston'];
-  const availableBrands = knownBrands.map(brand => ({
-    name: brand,
-    count: products.filter(p => p.name.toLowerCase().includes(brand.toLowerCase())).length,
-  })).filter(b => b.count > 0);
 
   const toggleBrand = (brand: string) => {
     setSelectedBrands(prev =>
@@ -349,6 +343,8 @@ export default function CategoryPage() {
     setPriceRange([minPrice, maxPrice]);
     setShowOnlyAvailable(false);
   };
+
+  const knownBrands = ['Apple', 'Samsung', 'Xiaomi', 'Motorola', 'Realme', 'JBL', 'Amazon', 'Starlink', 'Asus', 'MSI', 'Gigabyte', 'HP', 'NVIDIA', 'AMD', 'Corsair', 'Kingston'];
 
   // Derive filter options
   const availableBrands = knownBrands.map(brand => ({
