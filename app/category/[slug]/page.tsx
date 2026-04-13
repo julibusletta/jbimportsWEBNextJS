@@ -9,6 +9,8 @@ import Link from 'next/link';
 import { FaChevronDown, FaChevronUp, FaShoppingCart, FaEye, FaStar, FaRegStar, FaFilter, FaTimes } from 'react-icons/fa';
 import { useSession } from 'next-auth/react';
 
+const KNOWN_BRANDS = ['Apple', 'Samsung', 'Xiaomi', 'Motorola', 'Realme', 'JBL', 'Amazon', 'Starlink', 'Asus', 'MSI', 'Gigabyte', 'HP', 'NVIDIA', 'AMD', 'Corsair', 'Kingston'];
+
 export default function CategoryPage() {
   const params = useParams();
   const slug = params.slug as string;
@@ -156,8 +158,7 @@ export default function CategoryPage() {
   };
 
   const parseProps = (name: string) => {
-    const knownBrands = ['Apple', 'Samsung', 'Xiaomi', 'Motorola', 'Realme', 'JBL', 'Amazon', 'Starlink', 'Asus', 'MSI', 'Gigabyte', 'HP', 'NVIDIA', 'AMD', 'Corsair', 'Kingston'];
-    const brandMatch = knownBrands.find(b => name.toLowerCase().includes(b.toLowerCase()));
+    const brandMatch = KNOWN_BRANDS.find(b => name.toLowerCase().includes(b.toLowerCase()));
     
     let ram = '';
     const ramSlashMatch = name.match(/(\d+)\/(\d+)GB/);
@@ -344,16 +345,15 @@ export default function CategoryPage() {
     setShowOnlyAvailable(false);
   };
 
-  const knownBrands = ['Apple', 'Samsung', 'Xiaomi', 'Motorola', 'Realme', 'JBL', 'Amazon', 'Starlink', 'Asus', 'MSI', 'Gigabyte', 'HP', 'NVIDIA', 'AMD', 'Corsair', 'Kingston'];
 
   // Derive filter options
-  const availableBrands = knownBrands.map(brand => ({
+  const availableBrands = KNOWN_BRANDS.map(brand => ({
     name: brand,
     count: products.filter(p => p.name.toLowerCase().includes(brand.toLowerCase())).length,
   })).filter(b => b.count > 0);
 
-  // Models are only shown if a brand is selected OR if it's a specific brand category (slug in knownBrands)
-  const isBrandPage = knownBrands.some(b => b.toLowerCase() === slug.toLowerCase());
+  // Models are only shown if a brand is selected OR if it's a specific brand category (slug in KNOWN_BRANDS)
+  const isBrandPage = KNOWN_BRANDS.some(b => b.toLowerCase() === slug.toLowerCase());
   const productsForModels = (selectedBrands.length > 0 || isBrandPage)
     ? products.filter(p => {
         if (selectedBrands.length > 0) {
