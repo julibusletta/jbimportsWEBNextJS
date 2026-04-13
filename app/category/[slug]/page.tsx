@@ -6,7 +6,7 @@ import { getProductsByCategory, Product } from '@/lib/api/productService';
 import { getCategoryBySlug, Category } from '@/lib/api/categoriesService';
 import { useCart } from '@/app/context/CartContext';
 import Link from 'next/link';
-import { FaChevronDown, FaChevronUp, FaShoppingCart, FaEye, FaStar, FaRegStar } from 'react-icons/fa';
+import { FaChevronDown, FaChevronUp, FaShoppingCart, FaEye, FaStar, FaRegStar, FaFilter, FaTimes } from 'react-icons/fa';
 import { useSession } from 'next-auth/react';
 
 export default function CategoryPage() {
@@ -28,6 +28,15 @@ export default function CategoryPage() {
   const [showBrandsFilter, setShowBrandsFilter] = useState(true);
   const [showPriceFilter, setShowPriceFilter] = useState(false);
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
+  const [minPrice, setMinPrice] = useState<number>(0);
+  const [maxPrice, setMaxPrice] = useState<number>(1000000);
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000000]);
+  const [selectedModels, setSelectedModels] = useState<string[]>([]);
+  const [selectedRAM, setSelectedRAM] = useState<string[]>([]);
+  const [selectedStorage, setSelectedStorage] = useState<string[]>([]);
+  const [showModelsFilter, setShowModelsFilter] = useState(false);
+  const [showRAMFilter, setShowRAMFilter] = useState(false);
+  const [showStorageFilter, setShowStorageFilter] = useState(false);
   
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
@@ -40,6 +49,16 @@ export default function CategoryPage() {
         const prods = await getProductsByCategory(slug);
         setProducts(prods);
         setFilteredProducts(prods);
+
+        // Price range initialization
+        if (prods.length > 0) {
+          const prices = prods.map(p => p.price);
+          const min = Math.floor(Math.min(...prices));
+          const max = Math.ceil(Math.max(...prices));
+          setMinPrice(min);
+          setMaxPrice(max);
+          setPriceRange([min, max]);
+        }
 
         let cat = await getCategoryBySlug(slug);
         if (!cat) {
@@ -136,6 +155,59 @@ export default function CategoryPage() {
     }
   };
 
+  const parseProps = (name: string) => {
+    const knownBrands = ['Apple', 'Samsung', 'Xiaomi', 'Motorola', 'Realme', 'JBL', 'Amazon', 'Starlink', 'Asus', 'MSI', 'Gigabyte', 'HP', 'NVIDIA', 'AMD', 'Corsair', 'Kingston'];
+    const brandMatch = knownBrands.find(b => name.toLowerCase().includes(b.toLowerCase()));
+    
+    let ram = '';
+    const ramSlashMatch = name.match(/(\d+)\/(\d+)GB/);
+    if (ramSlashMatch) {
+      ram = ramSlashMatch[1] + 'GB';
+    } else {
+      const ramExplicit = name.match(/(\d+)\s*(?:GB|RAM|G)\s*RAM/i) || name.match(/(\d+)RAM/i);
+      if (ramExplicit) {
+        ram = parseInt(ramExplicit[1]) + 'GB';
+      } else {
+         const gbMatches = [...name.matchAll(/(\d+)GB/gi)];
+         for (const m of gbMatches) {
+           const val = parseInt(m[1]);
+           if (val <= 64 && !ram) ram = val + 'GB';
+         }
+      }
+    }
+
+    let storage = '';
+    if (ramSlashMatch) {
+      storage = ramSlashMatch[2] + 'GB';
+    } else {
+      const allMatches = [...name.matchAll(/(\d+)\s*(?:GB|TB|G|SSD|HDD)/gi)];
+      if (allMatches.length > 1) {
+         const vals = allMatches.map(m => ({ val: parseInt(m[1]), unit: m[0].toUpperCase().includes('TB') ? 'TB' : 'GB', text: m[0] }));
+         const high = vals.sort((a,b) => {
+           const valA = a.unit === 'TB' ? a.val * 1024 : a.val;
+           const valB = b.unit === 'TB' ? b.val * 1024 : b.val;
+           return valB - valA;
+         })[0];
+         storage = high.text.replace(/\s/g, '').toUpperCase();
+      } else if (allMatches.length === 1) {
+         storage = allMatches[0][0].replace(/\s/g, '').toUpperCase();
+      }
+    }
+
+    let model = name;
+    if (brandMatch) model = model.replace(new RegExp(brandMatch, 'i'), '');
+    model = model.replace(/\d+\/\d+GB/i, '');
+    model = model.replace(/\d+\s*(?:GB|RAM|TB|SSD|HDD|G)/gi, '');
+    const suffixes = ['NEGRO', 'BLANCO', 'AZUL', 'PLATA', 'SILVER', 'GRAY', 'GRIS', 'ORO', 'GOLD', 'ROSA', 'PINK', 'VERDE', 'GREEN', 'PURPURA', 'PURPLE', 'RED', 'ROJO', 'TITANIUM', 'OCEAN', 'MIDNIGHT', 'ESIM', 'WIFI', 'GENERACION', 'GEN', 'BIVOLT', 'TOUCH', 'FHD', 'UHD', 'OLED', 'AMOLED', 'DISPLAY', 'RETINA', 'LIQUID'];
+    suffixes.forEach(s => {
+      model = model.replace(new RegExp(`\\b${s}\\b`, 'gi'), '');
+    });
+    model = model.replace(/[",']/g, '').replace(/\s+/g, ' ').trim();
+    if (model.length < 2) model = name;
+
+    return { ram, storage, model };
+  };
+
   useEffect(() => {
     let filtered = [...products];
 
@@ -147,6 +219,24 @@ export default function CategoryPage() {
       filtered = filtered.filter(p =>
         selectedBrands.some(brand => p.name.toLowerCase().includes(brand.toLowerCase()))
       );
+    }
+
+    // Price Range Filter
+    filtered = filtered.filter(p => p.price >= priceRange[0] && p.price <= priceRange[1]);
+
+    // Model Filter
+    if (selectedModels.length > 0) {
+      filtered = filtered.filter(p => selectedModels.includes(parseProps(p.name).model));
+    }
+
+    // RAM Filter
+    if (selectedRAM.length > 0) {
+      filtered = filtered.filter(p => selectedRAM.includes(parseProps(p.name).ram));
+    }
+
+    // Storage Filter
+    if (selectedStorage.length > 0) {
+      filtered = filtered.filter(p => selectedStorage.includes(parseProps(p.name).storage));
     }
 
     if (sortBy === 'precio-asc') {
@@ -167,8 +257,8 @@ export default function CategoryPage() {
     }
 
     setFilteredProducts(filtered);
-    setCurrentPage(1); // Reset to first page whenever filters change
-  }, [products, showOnlyAvailable, sortBy, selectedBrands, slug]);
+    setCurrentPage(1); 
+  }, [products, showOnlyAvailable, sortBy, selectedBrands, priceRange, selectedModels, selectedRAM, selectedStorage, slug]);
   
   // Handle page change with scroll to top
   const handlePageChange = (page: number) => {
@@ -229,7 +319,85 @@ export default function CategoryPage() {
     setSelectedBrands(prev =>
       prev.includes(brand) ? prev.filter(b => b !== brand) : [...prev, brand]
     );
+    // Reset models if brands change
+    setSelectedModels([]);
   };
+
+  const toggleModel = (model: string) => {
+    setSelectedModels(prev =>
+      prev.includes(model) ? prev.filter(m => m !== model) : [...prev, model]
+    );
+  };
+
+  const toggleRAM = (ram: string) => {
+    setSelectedRAM(prev =>
+      prev.includes(ram) ? prev.filter(r => r !== ram) : [...prev, ram]
+    );
+  };
+
+  const toggleStorage = (storage: string) => {
+    setSelectedStorage(prev =>
+      prev.includes(storage) ? prev.filter(s => s !== storage) : [...prev, storage]
+    );
+  };
+
+  const clearAllFilters = () => {
+    setSelectedBrands([]);
+    setSelectedModels([]);
+    setSelectedRAM([]);
+    setSelectedStorage([]);
+    setPriceRange([minPrice, maxPrice]);
+    setShowOnlyAvailable(false);
+  };
+
+  // Derive filter options
+  const availableBrands = knownBrands.map(brand => ({
+    name: brand,
+    count: products.filter(p => p.name.toLowerCase().includes(brand.toLowerCase())).length,
+  })).filter(b => b.count > 0);
+
+  // Models are only shown if a brand is selected OR if it's a specific brand category (slug in knownBrands)
+  const isBrandPage = knownBrands.some(b => b.toLowerCase() === slug.toLowerCase());
+  const productsForModels = (selectedBrands.length > 0 || isBrandPage)
+    ? products.filter(p => {
+        if (selectedBrands.length > 0) {
+          return selectedBrands.some(brand => p.name.toLowerCase().includes(brand.toLowerCase()));
+        }
+        return true; // If it's a brand page, products are already filtered by brand
+      })
+    : [];
+
+  const availableModels = Array.from(new Set(productsForModels.map(p => parseProps(p.name).model)))
+    .filter(m => m && m.length > 1)
+    .sort()
+    .map(m => ({
+      name: m,
+      count: productsForModels.filter(p => parseProps(p.name).model === m).length
+    }));
+
+  const availableRAM = Array.from(new Set(products.map(p => parseProps(p.name).ram)))
+    .filter(r => r)
+    .sort((a, b) => parseInt(a) - parseInt(b))
+    .map(r => ({
+      name: r,
+      count: products.filter(p => parseProps(p.name).ram === r).length
+    }));
+
+  const availableStorage = Array.from(new Set(products.map(p => parseProps(p.name).storage)))
+    .filter(s => s)
+    .sort((a, b) => {
+       const getMB = (str: string) => {
+         const num = parseInt(str);
+         if (str.toUpperCase().includes('TB')) return num * 1024 * 1024;
+         if (str.toUpperCase().includes('GB') || str.toUpperCase().includes('G')) return num * 1024;
+         return num;
+       };
+       return getMB(a) - getMB(b);
+    })
+    .map(s => ({
+      name: s,
+      count: products.filter(p => parseProps(p.name).storage === s).length
+    }));
 
   function ProductCard({
     product,
@@ -667,7 +835,163 @@ export default function CategoryPage() {
                 Precio
                 {showPriceFilter ? <FaChevronUp size={11} /> : <FaChevronDown size={11} />}
               </button>
+              {showPriceFilter && (
+                <div style={{ padding: '15px 12px' }}>
+                  <div style={{ display: 'flex', gap: '8px', marginBottom: '15px' }}>
+                    <div style={{ flex: 1 }}>
+                      <label style={{ fontSize: '9px', color: '#999', display: 'block', fontWeight: 700, marginBottom: '4px' }}>MÍNIMO</label>
+                      <input 
+                        type="number" 
+                        value={priceRange[0]} 
+                        onChange={e => setPriceRange([Number(e.target.value), priceRange[1]])}
+                        style={{ width: '100%', border: '1px solid #ddd', borderRadius: '3px', padding: '6px', fontSize: '12px', outline: 'none' }}
+                      />
+                    </div>
+                    <div style={{ flex: 1 }}>
+                      <label style={{ fontSize: '9px', color: '#999', display: 'block', fontWeight: 700, marginBottom: '4px' }}>MÁXIMO</label>
+                      <input 
+                        type="number" 
+                        value={priceRange[1]} 
+                        onChange={e => setPriceRange([priceRange[0], Number(e.target.value)])}
+                        style={{ width: '100%', border: '1px solid #ddd', borderRadius: '3px', padding: '6px', fontSize: '12px', outline: 'none' }}
+                      />
+                    </div>
+                  </div>
+                  <input 
+                    type="range" 
+                    min={minPrice} 
+                    max={maxPrice} 
+                    value={priceRange[1]} 
+                    onChange={e => setPriceRange([priceRange[0], Number(e.target.value)])}
+                    style={{ width: '100%', height: '4px', accentColor: '#0066cc', cursor: 'pointer' }}
+                  />
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '5px', fontSize: '10px', color: '#bbb' }}>
+                    <span>${minPrice.toLocaleString()}</span>
+                    <span>${maxPrice.toLocaleString()}</span>
+                  </div>
+                </div>
+              )}
             </div>
+
+            {/* Model filter */}
+            {availableModels.length > 0 && (
+              <div style={{ border: '1px solid #e0e0e0', borderRadius: '3px', overflow: 'hidden', marginBottom: '10px' }}>
+                <button
+                  onClick={() => setShowModelsFilter(!showModelsFilter)}
+                  style={{
+                    width: '100%',
+                    background: '#f8f8f8',
+                    border: 'none',
+                    padding: '10px 12px',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    cursor: 'pointer',
+                    fontSize: '13px',
+                    fontWeight: 600,
+                    color: '#222',
+                  }}
+                >
+                  Modelo
+                  {showModelsFilter ? <FaChevronUp size={11} /> : <FaChevronDown size={11} />}
+                </button>
+                {showModelsFilter && (
+                  <div style={{ padding: '10px 12px', display: 'flex', flexDirection: 'column', gap: '8px', maxHeight: '250px', overflowY: 'auto' }}>
+                    {availableModels.map(model => (
+                      <label key={model.name} style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '12px', color: '#333' }}>
+                        <input
+                          type="checkbox"
+                          checked={selectedModels.includes(model.name)}
+                          onChange={() => toggleModel(model.name)}
+                        />
+                        <span>{model.name}</span>
+                        <span style={{ color: '#aaa', fontSize: '11px' }}>({model.count})</span>
+                      </label>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* RAM filter */}
+            {availableRAM.length > 0 && (
+              <div style={{ border: '1px solid #e0e0e0', borderRadius: '3px', overflow: 'hidden', marginBottom: '10px' }}>
+                <button
+                  onClick={() => setShowRAMFilter(!showRAMFilter)}
+                  style={{
+                    width: '100%',
+                    background: '#f8f8f8',
+                    border: 'none',
+                    padding: '10px 12px',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    cursor: 'pointer',
+                    fontSize: '13px',
+                    fontWeight: 600,
+                    color: '#222',
+                  }}
+                >
+                  Memoria RAM
+                  {showRAMFilter ? <FaChevronUp size={11} /> : <FaChevronDown size={11} />}
+                </button>
+                {showRAMFilter && (
+                  <div style={{ padding: '10px 12px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    {availableRAM.map(ram => (
+                      <label key={ram.name} style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '12px', color: '#333' }}>
+                        <input
+                          type="checkbox"
+                          checked={selectedRAM.includes(ram.name)}
+                          onChange={() => toggleRAM(ram.name)}
+                        />
+                        <span>{ram.name}</span>
+                        <span style={{ color: '#aaa', fontSize: '11px' }}>({ram.count})</span>
+                      </label>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Storage filter */}
+            {availableStorage.length > 0 && (
+              <div style={{ border: '1px solid #e0e0e0', borderRadius: '3px', overflow: 'hidden', marginBottom: '10px' }}>
+                <button
+                  onClick={() => setShowStorageFilter(!showStorageFilter)}
+                  style={{
+                    width: '100%',
+                    background: '#f8f8f8',
+                    border: 'none',
+                    padding: '10px 12px',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    cursor: 'pointer',
+                    fontSize: '13px',
+                    fontWeight: 600,
+                    color: '#222',
+                  }}
+                >
+                  Almacenamiento
+                  {showStorageFilter ? <FaChevronUp size={11} /> : <FaChevronDown size={11} />}
+                </button>
+                {showStorageFilter && (
+                  <div style={{ padding: '10px 12px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    {availableStorage.map(storage => (
+                      <label key={storage.name} style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '12px', color: '#333' }}>
+                        <input
+                          type="checkbox"
+                          checked={selectedStorage.includes(storage.name)}
+                          onChange={() => toggleStorage(storage.name)}
+                        />
+                        <span>{storage.name}</span>
+                        <span style={{ color: '#aaa', fontSize: '11px' }}>({storage.count})</span>
+                      </label>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* Availability filter */}
             <div style={{ border: '1px solid #e0e0e0', borderRadius: '3px', overflow: 'hidden' }}>
@@ -687,6 +1011,33 @@ export default function CategoryPage() {
                 </label>
               </div>
             </div>
+
+            {/* Clear Filters Button */}
+            {(selectedBrands.length > 0 || selectedModels.length > 0 || selectedRAM.length > 0 || selectedStorage.length > 0 || priceRange[0] !== minPrice || priceRange[1] !== maxPrice || showOnlyAvailable) && (
+              <button
+                onClick={clearAllFilters}
+                style={{
+                  width: '100%',
+                  marginTop: '15px',
+                  padding: '10px',
+                  background: '#f0f0f0',
+                  border: '1px solid #ddd',
+                  borderRadius: '4px',
+                  fontSize: '11px',
+                  fontWeight: 800,
+                  color: '#666',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px',
+                  textTransform: 'uppercase',
+                  letterSpacing: '1px'
+                }}
+              >
+                <FaTimes size={10} /> Limpiar Filtros
+              </button>
+            )}
           </div>
 
           {/* Products Grid */}
