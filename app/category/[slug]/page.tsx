@@ -79,6 +79,15 @@ export default function CategoryPage() {
               isMain: false,
               description: 'Las mejores tablets de Apple en un solo lugar'
             };
+          } else if (slug === 'apple') {
+            cat = {
+              id: 'apple',
+              name: 'APPLE',
+              slug: 'apple',
+              image: '/images/categories/apple.png',
+              isMain: true,
+              description: 'Toda la línea Apple: iPhone, Macbook, Watch, iPad y más'
+            };
           }
         }
         setCategory(cat);
@@ -546,56 +555,6 @@ export default function CategoryPage() {
     );
   }
 
-  function AppleLanding() {
-    const subCategories = [
-      { name: 'iPhone', slug: 'iphone', image: '/images/categories/iphone.png' },
-      { name: 'Macbook', slug: 'macbook', image: '/images/categories/macbook.png' },
-      { name: 'Apple Watch', slug: 'watch', image: '/images/categories/watch.png' },
-    ];
-
-    return (
-      <div className="bg-white flex flex-col items-center min-h-screen pt-2">
-        <div className="max-w-[1300px] w-full px-4 pb-20">
-          <div style={{ fontSize: '12px', color: '#666', marginBottom: '10px', display: 'flex', gap: '4px' }}>
-            <Link href="/" style={{ color: '#666', textDecoration: 'none' }}>Inicio</Link>
-            <span>›</span>
-            <span style={{ color: '#333' }}>Apple</span>
-          </div>
-          
-          <h1 style={{ fontSize: '32px', fontWeight: 800, color: '#000', marginBottom: '40px', textAlign: 'center', textTransform: 'uppercase' }}>
-            Mundo <b>Apple</b>
-          </h1>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {subCategories.map((sub) => (
-              <Link
-                key={sub.slug}
-                href={`/category/${sub.slug}`}
-                className="group relative block overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500"
-                style={{ aspectRatio: '4/5' }}
-              >
-                <div 
-                  className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-                  style={{ backgroundImage: `url(${sub.image})` }}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                <div className="absolute bottom-0 left-0 right-0 p-8 text-white">
-                  <h3 className="text-2xl font-bold mb-2">{sub.name}</h3>
-                  <span className="inline-block bg-white/20 backdrop-blur-md px-4 py-2 rounded-full text-sm font-semibold group-hover:bg-white group-hover:text-black transition-colors">
-                    Ver Catálogo
-                  </span>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (slug === 'apple') {
-    return <AppleLanding />;
-  }
 
   return (
     <div className="bg-white flex flex-col items-center min-h-screen pt-2">
