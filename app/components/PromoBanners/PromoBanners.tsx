@@ -1,11 +1,30 @@
 'use client';
 
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { FaCreditCard, FaRegCreditCard, FaTruck } from 'react-icons/fa';
 import '../../styles/PromoBanners.css';
 
+const TOTAL_SLIDES = 2;
+const SLIDE_INTERVAL_MS = 3500;
+
 const PromoBanners = () => {
+    const carouselRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const el = carouselRef.current;
+        if (!el) return;
+
+        let currentIndex = 0;
+
+        const interval = setInterval(() => {
+            currentIndex = (currentIndex + 1) % TOTAL_SLIDES;
+            el.scrollTo({ left: el.offsetWidth * currentIndex, behavior: 'smooth' });
+        }, SLIDE_INTERVAL_MS);
+
+        return () => clearInterval(interval);
+    }, []);
+
     return (
         <section className="promo-banners-section mb-12 px-4" style={{ paddingTop: '10px' }}>
             <div className="w-full bg-[#e2e6eb] rounded-[24px] shadow-[0_2px_10px_rgba(0,0,0,0.05)] border border-[#d1d5db]" style={{ maxWidth: '1480px', margin: '0 auto', paddingTop: '48px', paddingBottom: '48px' }}>
@@ -16,7 +35,11 @@ const PromoBanners = () => {
                         </h2>
                     </div>
                 </div>
-                <div className="promo-banners-container" style={{ padding: '0 16px', maxWidth: '1400px', margin: '0 auto' }}>
+                <div
+                    className="promo-banners-container"
+                    ref={carouselRef}
+                    style={{ padding: '0 16px', maxWidth: '1400px', margin: '0 auto' }}
+                >
                     {/* Banner 1: JBL */}
                     <Link href="/product/378" className="tb-card tb-jbl">
                         <div className="tb-image-col">
