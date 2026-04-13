@@ -439,7 +439,7 @@ header.scrolled .logo {
     position: absolute !important;
     left: 50% !important;
     top: 50% !important;
-    transform: translate(-50%, -50%) scale(1.9) !important;
+    transform: translate(-50%, -50%) scale(1.75) !important;
     height: 60px !important;
     margin: 0 !important;
     z-index: 20 !important;
@@ -457,7 +457,7 @@ header.scrolled .logo {
     right: 20px !important;
     top: 50% !important;
     transform: translateY(-50%) !important;
-    gap: 12px !important;
+    gap: 10px !important;
     align-items: center !important;
     z-index: 25 !important;
   }
