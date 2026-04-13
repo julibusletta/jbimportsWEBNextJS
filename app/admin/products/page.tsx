@@ -178,7 +178,10 @@ export default function ProductsPage() {
       if (res.success) {
         const newImages = [...(editingProduct.images || [])];
         newImages[index] = res.url;
-        handleProductChange(editingProduct.id, editingProduct.category, 'images', newImages.filter(Boolean));
+        const cleanImages = newImages.filter(Boolean);
+        handleProductChange(editingProduct.id, editingProduct.category, 'images', cleanImages);
+        // Auto-guardar inmediatamente tras subir la imagen
+        await autoSaveProductImages(editingProduct.id, editingProduct.category, cleanImages);
       } else {
         alert(res.message || 'Error al subir archivo');
       }
@@ -209,6 +212,32 @@ export default function ProductsPage() {
       setMessage('Error de conexión al guardar');
     } finally {
       setIsSaving(false);
+    }
+  };
+
+  // Auto-guarda las imágenes de un producto específico inmediatamente en MongoDB
+  const autoSaveProductImages = async (productId: string, category: string, updatedImages: string[]) => {
+    try {
+      const updatedData: { [key: string]: Product[] } = {};
+      for (const [cat, items] of Object.entries(products)) {
+        updatedData[cat] = (items as Product[]).map((p: Product) =>
+          p.id === productId && cat === category
+            ? { ...p, images: updatedImages, image: updatedImages[0] || p.image }
+            : p
+        );
+      }
+      const resp = await fetch('/api/admin', {
+        method: 'POST',
+        body: JSON.stringify({ action: 'save_products', data: updatedData }),
+        headers: { 'Content-Type': 'application/json' }
+      });
+      const res = await resp.json();
+      if (res.success) {
+        setMessage('✓ Imagen guardada automáticamente');
+        setTimeout(() => setMessage(''), 2500);
+      }
+    } catch (err) {
+      console.error('Error en autoguardado de imágenes:', err);
     }
   };
 
@@ -397,7 +426,7 @@ export default function ProductsPage() {
           categoryFilter, setCategoryFilter,
           deletingId, setDeletingId, selectedIds, setSelectedIds, exchangeRate, setExchangeRate,
           fetchData, handleStockChange, handlePriceChange, handleProductChange, handleFileUpload,
-          saveProducts, handleDeleteProduct, handleAddNewProduct, toggleSelectProduct,
+          saveProducts, autoSaveProductImages, handleDeleteProduct, handleAddNewProduct, toggleSelectProduct,
           toggleSelectAllInCategory, handleBulkDelete, handleExcelImport
         }} 
       />
@@ -410,7 +439,8 @@ function ProductsContent({
   setEditingProduct, activeTab, setActiveTab, uploadingIndex, isSaving, filterType,
   setFilterType, categoryFilter, setCategoryFilter, deletingId, selectedIds, setSelectedIds,
   exchangeRate, fetchData, handleStockChange,
-  handlePriceChange, handleProductChange, handleFileUpload, saveProducts, handleDeleteProduct,
+  handlePriceChange, handleProductChange, handleFileUpload, saveProducts, autoSaveProductImages,
+  handleDeleteProduct,
   handleAddNewProduct, toggleSelectProduct, toggleSelectAllInCategory, handleBulkDelete,
   handleExcelImport, setProducts
 }: any) {
@@ -797,6 +827,12 @@ function ProductsContent({
                                       newImgs[index] = e.target.value;
                                       handleProductChange(p.id, p.category, 'images', newImgs.filter(Boolean));
                                     }}
+                                     onBlur={(e) => {
+                                       const newImgs = [...(p.images || [])];
+                                       newImgs[index] = e.currentTarget.value;
+                                       const imgs = newImgs.filter(Boolean);
+                                       if (imgs.length > 0) autoSaveProductImages(p.id, p.category, imgs);
+                                     }}
                                     className="w-full text-[10px] px-2 py-1 bg-white border border-[#e1e3e5] rounded outline-none"
                                   />
                                 </div>
