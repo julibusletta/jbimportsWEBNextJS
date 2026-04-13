@@ -146,7 +146,7 @@ export default function Header() {
 
   return (
     <header 
-      className={`main-site-header sticky top-0 z-[1000] bg-white transition-shadow duration-300 ${isScrolled ? 'shadow-lg' : 'shadow-sm'}`}
+      className={`main-site-header fixed top-0 left-0 right-0 z-[1100] bg-white transition-shadow duration-300 ${isScrolled ? 'shadow-lg' : 'shadow-sm'}`}
     >
       <div className="header-top flex items-center justify-between px-4 md:px-10 py-3 md:py-4">
         {/* Left: Hamburger (Mobile Only) */}
@@ -215,7 +215,7 @@ export default function Header() {
       </div>
       {/* Mobile Search Input */}
       {isMobileSearchOpen && (
-        <div className="md:hidden px-4 pb-3 bg-white border-b border-gray-100 animate-slideDown">
+        <div className="md:hidden px-4 pb-3 bg-white border-b border-gray-100">
           <form onSubmit={handleSearch} className="flex search-bar items-center rounded-lg border border-gray-300 bg-gray-50 shadow-inner">
             <input
               type="text"
@@ -245,7 +245,7 @@ export default function Header() {
                 {link.submenu && <FaChevronDown size={10} className="transition-transform duration-200 group-hover:rotate-180 opacity-70" />}
               </Link>
               {link.submenu && (
-                <div className="dropdown-content absolute bg-white min-w-55 shadow-lg rounded-lg top-full left-0 p-3 hidden group-hover:block transition-all">
+                <div className="dropdown-content absolute bg-white min-w-55 shadow-lg rounded-lg top-full left-0 p-3 hidden group-hover:block">
                   {link.submenu.map((sublink) => (
                     <Link
                       key={sublink.label}
@@ -277,7 +277,7 @@ export default function Header() {
                   MI CUENTA
                   <FaChevronDown size={10} className="transition-transform duration-200 group-hover:rotate-180 opacity-70" />
                 </button>
-                <div className="dropdown-content absolute bg-white min-w-[220px] shadow-[0_10px_30px_rgba(0,0,0,0.1)] rounded-lg top-[calc(100%-8px)] right-0 p-3 hidden group-hover:block transition-all z-[1100] border border-gray-100">
+                <div className="dropdown-content absolute bg-white min-w-[220px] shadow-[0_10px_30px_rgba(0,0,0,0.1)] rounded-lg top-[calc(100%-8px)] right-0 p-3 hidden group-hover:block z-[1100] border border-gray-100">
                   <div className="px-4 py-3 border-b border-gray-50 mb-1">
                     <p className="text-sm text-gray-400 m-0">Hola {session.user?.name?.split(' ')[0] || session.user?.email?.split('@')[0]}</p>
                   </div>
