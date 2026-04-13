@@ -31,6 +31,7 @@ export default function ProductsPage() {
   const [uploadingIndex, setUploadingIndex] = useState<number | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [filterType, setFilterType] = useState<'all' | 'no-image' | 'no-description' | 'low-stock'>('all');
+  const [categoryFilter, setCategoryFilter] = useState<string>('all');
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [exchangeRate, setExchangeRate] = useState<number>(1500);
@@ -393,6 +394,7 @@ export default function ProductsPage() {
           loading, setLoading, isDataLoaded, setIsDataLoaded, error, setError, message, setMessage,
           searchTerm, setSearchTerm, editingProduct, setEditingProduct, activeTab, setActiveTab,
           uploadingIndex, setUploadingIndex, isSaving, setIsSaving, filterType, setFilterType,
+          categoryFilter, setCategoryFilter,
           deletingId, setDeletingId, selectedIds, setSelectedIds, exchangeRate, setExchangeRate,
           fetchData, handleStockChange, handlePriceChange, handleProductChange, handleFileUpload,
           saveProducts, handleDeleteProduct, handleAddNewProduct, toggleSelectProduct,
@@ -406,7 +408,8 @@ export default function ProductsPage() {
 function ProductsContent({
   products, loading, isDataLoaded, message, searchTerm, setSearchTerm, editingProduct,
   setEditingProduct, activeTab, setActiveTab, uploadingIndex, isSaving, filterType,
-  setFilterType, deletingId, selectedIds, setSelectedIds, exchangeRate, fetchData, handleStockChange,
+  setFilterType, categoryFilter, setCategoryFilter, deletingId, selectedIds, setSelectedIds,
+  exchangeRate, fetchData, handleStockChange,
   handlePriceChange, handleProductChange, handleFileUpload, saveProducts, handleDeleteProduct,
   handleAddNewProduct, toggleSelectProduct, toggleSelectAllInCategory, handleBulkDelete,
   handleExcelImport, setProducts
@@ -479,7 +482,7 @@ function ProductsContent({
         </div>
       </div>
 
-      <div className="flex gap-2 mb-6 overflow-x-auto pb-2">
+      <div className="flex gap-2 mb-6 overflow-x-auto pb-2 items-center">
         {(['all', 'no-image', 'no-description', 'low-stock'] as const).map(tab => (
           <button
             key={tab}
@@ -489,6 +492,21 @@ function ProductsContent({
             {tab === 'all' ? 'Todos' : tab === 'no-image' ? 'Sin Foto' : tab === 'no-description' ? 'Sin Desc.' : 'Stock Bajo'}
           </button>
         ))}
+        <div className="ml-auto flex-shrink-0">
+          <select
+            value={categoryFilter}
+            onChange={(e) => setCategoryFilter(e.target.value)}
+            className="px-4 py-2 rounded-full text-[9px] font-black uppercase tracking-widest border border-gray-200 bg-white text-gray-600 outline-none cursor-pointer hover:border-gray-400 transition-all appearance-none pr-8"
+            style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%236b7280'/%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 12px center' }}
+          >
+            <option value="all">📂 Todas las categorías</option>
+            {products && Object.keys(products).sort().map(cat => (
+              <option key={cat} value={cat}>
+                {cat.charAt(0).toUpperCase() + cat.slice(1).replace(/-/g, ' ')}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
 
       <div className="admin-v2-card mb-10 overflow-hidden">
@@ -518,7 +536,9 @@ function ProductsContent({
       )}
 
       <div className="space-y-12">
-        {products && Object.entries(products).map(([category, items]: [any, any]) => {
+        {products && Object.entries(products)
+          .filter(([category]) => categoryFilter === 'all' || category === categoryFilter)
+          .map(([category, items]: [any, any]) => {
           const filteredItems = items.filter((p: Product) => {
             const matchesSearch = p.name.toLowerCase().includes(searchTerm.toLowerCase()) || p.id.toLowerCase().includes(searchTerm.toLowerCase());
             if (!matchesSearch) return false;
