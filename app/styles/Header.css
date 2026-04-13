@@ -433,13 +433,13 @@ header.scrolled .logo {
 
   .logo {
     display: flex !important;
-    order: 2 !important;
-    flex: 0 0 auto !important;
-    justify-content: flex-start !important;
-    height: 70px !important;
-    margin-left: 30px !important;
-    transform: scale(1.1);
-    transform-origin: left center;
+    position: absolute !important;
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) scale(1.35) !important;
+    height: 65px !important; /* Ajustado para dar espacio vertical */
+    margin: 0 !important;
+    z-index: 20 !important;
   }
 
   .logo img {
