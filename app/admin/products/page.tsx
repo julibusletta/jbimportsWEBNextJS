@@ -677,10 +677,20 @@ function ProductsContent({
                                    className="bg-transparent text-2xl font-black text-gray-900 outline-none w-32 border-b-2 border-transparent focus:border-[#058c8c] transition-all"
                                  />
                               </div>
-                              <div className="text-right">
+                               <div className="text-right">
                                  <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Precio Minorista (ARS)</label>
-                                 <div className="text-2xl font-black text-[#058c8c]">$ {p.price?.toLocaleString()}</div>
-                                 <p className="text-[10px] text-gray-400 font-bold mt-1 italic uppercase tracking-tighter">Basado en tasa y márgenes</p>
+                                 <div className="flex items-center justify-end gap-2 text-[#058c8c]">
+                                   <span className="text-2xl font-black">$</span>
+                                   <input
+                                     type="number"
+                                     value={p.price || 0}
+                                     onChange={(e) => handleProductChange(p.id, p.category, 'price', Number(e.target.value))}
+                                     className="bg-transparent text-2xl font-black text-right outline-none w-48 border-b-2 border-transparent focus:border-[#058c8c] transition-all"
+                                   />
+                                 </div>
+                                 <p className="text-[10px] text-gray-400 font-bold mt-1 italic uppercase tracking-tighter">
+                                   {p.costPrice && p.costPrice > 0 ? 'Basado en tasa y márgenes' : 'Precio establecido manualmente'}
+                                 </p>
                               </div>
                             </div>
 
