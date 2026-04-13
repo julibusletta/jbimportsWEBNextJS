@@ -300,6 +300,10 @@
   .payment-methods img {
     height: 26px !important;
   }
+
+  .slider-dots {
+    display: none;
+  }
 }
 
 /* === SMALL MOBILE / iPhone Pro Max (430px and below) === */
