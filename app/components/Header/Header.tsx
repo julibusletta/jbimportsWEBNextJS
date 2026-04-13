@@ -146,7 +146,7 @@ export default function Header() {
 
   return (
     <header 
-      className={`main-site-header fixed top-0 left-0 right-0 z-[1100] bg-white transition-shadow duration-300 ${isScrolled ? 'shadow-lg' : 'shadow-sm'}`}
+      className={`main-site-header sticky top-0 z-[1100] bg-white transition-shadow duration-300 ${isScrolled ? 'shadow-lg' : 'shadow-sm'}`}
     >
       <div className="header-top flex items-center justify-between px-4 md:px-10 py-3 md:py-4">
         {/* Left: Hamburger (Mobile Only) */}

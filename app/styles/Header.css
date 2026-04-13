@@ -2,7 +2,7 @@
 
 .main-site-header {
   width: 100%;
-  position: fixed;
+  position: sticky;
   top: 0;
   left: 0;
   right: 0;
@@ -404,7 +404,7 @@ header.scrolled .logo {
 @media (max-width: 768px) {
   .main-site-header {
     display: block !important;
-    position: fixed !important;
+    position: sticky !important;
     top: 0 !important;
     left: 0 !important;
     right: 0 !important;
