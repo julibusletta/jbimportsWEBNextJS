@@ -52,11 +52,40 @@ export const authOptions: NextAuthOptions = {
     })
   ],
   callbacks: {
-    async jwt({ token, user }: any) {
+    async signIn({ user, account, profile }: any) {
+      if (account?.provider === "google" || account?.provider === "facebook") {
+        if (!user.email) return false;
+        const existingUser = await db.getUserByEmail(user.email);
+        if (!existingUser) {
+          const nameParts = (user.name || "").split(" ");
+          const firstName = nameParts[0] || "Usuario";
+          const lastName = nameParts.slice(1).join(" ") || "";
+          
+          await db.saveUser({
+            email: user.email,
+            firstName,
+            lastName,
+            role: "USER",
+            image: user.image,
+          });
+        }
+      }
+      return true;
+    },
+    async jwt({ token, user, account }: any) {
       if (user) {
-        token.role = user.role;
-        token.dni = user.dni;
-        token.address = user.address;
+        if (account?.provider === "google" || account?.provider === "facebook") {
+          const dbUser = await db.getUserByEmail(user.email);
+          if (dbUser) {
+            token.role = dbUser.role || "USER";
+            token.dni = dbUser.dni;
+            token.address = dbUser.address;
+          }
+        } else {
+          token.role = user.role;
+          token.dni = user.dni;
+          token.address = user.address;
+        }
       }
       return token;
     },
