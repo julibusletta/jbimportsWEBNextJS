@@ -24,7 +24,9 @@ export default function AdminDashboard() {
     pendingOrders: 0,
     totalSales: 0,
     totalClients: 0,
-    recentOrders: [] as any[]
+    recentOrders: [] as any[],
+    visitsLast7: [] as { label: string, count: number }[],
+    totalVisitsToday: 0
   });
   const [loading, setLoading] = useState(true);
 
@@ -62,6 +64,28 @@ export default function AdminDashboard() {
           });
         }
 
+        // Process Visits
+        const rawVisits = prodData.visits || [];
+        const chartData = [];
+        let todayVisits = 0;
+        
+        // Pad to 7 days
+        for (let i = 6; i >= 0; i--) {
+          const d = new Date();
+          d.setDate(d.getDate() - i);
+          const dateStr = d.toISOString().split('T')[0];
+          
+          const found = rawVisits.find((v: any) => v.dateStr === dateStr);
+          const count = found ? found.count : 0;
+          
+          if (i === 0) todayVisits = count;
+          
+          chartData.push({
+            label: d.toLocaleDateString('es-AR', { weekday: 'short' }),
+            count
+          });
+        }
+
         setStats({
           totalProducts: allProducts.length,
           lowStock: lowStockCount,
@@ -69,7 +93,9 @@ export default function AdminDashboard() {
           pendingOrders: pendingCount,
           totalSales: totalSalesVal,
           totalClients: uniqueClients.size,
-          recentOrders: fetchedOrders.slice(0, 5)
+          recentOrders: fetchedOrders.slice(0, 5),
+          visitsLast7: chartData,
+          totalVisitsToday: todayVisits
         });
         setLoading(false);
       } catch (err) {
@@ -149,22 +175,31 @@ export default function AdminDashboard() {
           {/* Sales Chart Placeholder */}
           <div className="admin-v2-card">
             <div className="p-6 border-b border-[#e1e3e5] flex justify-between items-center">
-              <h3 className="font-bold text-gray-900">Ingresos Semanales</h3>
-              <button className="text-gray-400 hover:text-gray-600"><FaEllipsisH /></button>
+              <h3 className="font-bold text-gray-900">Visitas Diarias</h3>
+              <div className="text-xs font-bold text-[#058c8c] bg-[#058c8c]/10 px-3 py-1 rounded-full">
+                Hoy: {stats.totalVisitsToday} Visitas
+              </div>
             </div>
             <div className="p-10 h-80 flex flex-col justify-end gap-2">
                <div className="flex items-end justify-between h-full gap-2">
-                  {[40, 65, 45, 80, 55, 90, 70].map((h, i) => (
-                    <div key={i} className="flex-1 flex flex-col items-center gap-2 group">
-                      <div className="w-full bg-gray-50 rounded-t-lg relative overflow-hidden h-full">
-                        <div 
-                          className="absolute bottom-0 left-0 w-full bg-[#058c8c]/20 group-hover:bg-[#058c8c]/40 transition-all rounded-t-lg" 
-                          style={{ height: `${h}%` }}
-                        ></div>
+                  {stats.visitsLast7.map((item, i) => {
+                    const maxCount = Math.max(...stats.visitsLast7.map(v => v.count), 1); // Avoid div by 0
+                    const heightPercent = Math.max((item.count / maxCount) * 100, 5); // At least 5% bar height visually
+                    
+                    return (
+                      <div key={i} className="flex-1 flex flex-col items-center gap-2 group">
+                        <div className="w-full bg-gray-50 rounded-t-lg relative overflow-hidden h-full">
+                          <div 
+                            className="absolute bottom-0 left-0 w-full bg-[#058c8c]/20 group-hover:bg-[#058c8c]/40 transition-all rounded-t-lg flex items-end justify-center pb-1 text-[9px] font-bold text-[#058c8c]/70" 
+                            style={{ height: `${heightPercent}%` }}
+                          >
+                            {item.count > 0 ? item.count : ''}
+                          </div>
+                        </div>
+                        <span className="text-[10px] font-bold text-gray-400 capitalize">{item.label}</span>
                       </div>
-                      <span className="text-[10px] font-bold text-gray-400 uppercase">{['Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab', 'Dom'][i]}</span>
-                    </div>
-                  ))}
+                    );
+                  })}
                </div>
             </div>
           </div>

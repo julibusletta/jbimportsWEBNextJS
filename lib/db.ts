@@ -27,6 +27,45 @@ export const db = {
     const GlobalSettings = (await import('../models/GlobalSettings')).default;
     return GlobalSettings;
   },
+  async getVisitModel() {
+    const VisitModel = (await import('../models/Visit')).default;
+    return VisitModel;
+  },
+
+  // Analytics logic
+  async incrementVisit(): Promise<void> {
+    try {
+      await dbConnect();
+      const Visit = await this.getVisitModel();
+      // Get today's date in YYYY-MM-DD
+      const dateStr = new Date().toISOString().split('T')[0];
+      
+      await Visit.findOneAndUpdate(
+        { dateStr },
+        { $inc: { count: 1 } },
+        { upsert: true, new: true }
+      );
+    } catch (error) {
+      console.error('DB Error [incrementVisit]:', error);
+    }
+  },
+
+  async getRecentVisits(days: number = 7): Promise<any[]> {
+    try {
+      await dbConnect();
+      const Visit = await this.getVisitModel();
+      
+      const visits = await Visit.find({})
+        .sort({ dateStr: -1 })
+        .limit(days)
+        .lean();
+        
+      return visits.reverse(); // Return oldest first for charting
+    } catch (error) {
+      console.error('DB Error [getRecentVisits]:', error);
+      return [];
+    }
+  },
 
   // Orders logic
   async getOrders(): Promise<any[]> {

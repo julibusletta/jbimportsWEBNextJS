@@ -151,10 +151,13 @@ export async function GET() {
       productCount: productsByCategory[cat.slug]?.length || 0
     }));
 
+    const recentVisits = await db.getRecentVisits(7);
+
     return NextResponse.json({
       products: mongoProducts.length > 0 ? productsByCategory : {},
       categories: categoriesWithCounts,
-      specifications: JSON.parse(specsData)
+      specifications: JSON.parse(specsData),
+      visits: recentVisits
     });
   } catch (error: any) {
     console.error('GET error:', error);

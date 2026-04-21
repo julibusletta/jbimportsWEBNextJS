@@ -11,6 +11,7 @@ import { AuthProvider } from "./components/AuthProvider/AuthProvider";
 import ConditionalLayout from "./components/ConditionalLayout";
 import { AuthModalProvider } from "./context/AuthModalContext";
 import AuthModal from "./components/Auth/AuthModal";
+import AnalyticsTracker from "./components/AnalyticsTracker";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,8 +30,19 @@ const orbitron = Orbitron({
 });
 
 export const metadata: Metadata = {
-  title: "JBimports - Tecnología a un solo clic",
-  description: "Los mejores productos de tecnología al mejor precio",
+  title: "JB Imports | Tecnología a un solo clic",
+  description: "Los mejores productos de tecnología al mejor precio. Envíos a todo el país. Importadores directos de Xiaomi, Apple, Samsung y Notebooks.",
+  keywords: ["celulares", "notebooks", "tecnología", "importadores", "cuotas", "xiaomi", "apple", "samsung", "tablets", "JB Imports", "tienda"],
+  authors: [{ name: "JB Imports" }],
+  openGraph: {
+    title: "JB Imports | Tecnología a un solo clic",
+    description: "Renová tu celular y notebook al mejor precio de Argentina. Descubrí nuestro catálogo.",
+    url: "https://www.jbimports.com.ar",
+    siteName: "JB Imports",
+    images: [{ url: "https://www.jbimports.com.ar/images/logojbimports.webp", width: 800, height: 600, alt: "JB Imports Logo" }],
+    locale: "es_AR",
+    type: "website",
+  },
   icons: {
     icon: "/images/logojbimports.webp",
     shortcut: "/images/logojbimports.webp",
@@ -48,6 +60,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${orbitron.variable} antialiased`}
       >
+        <AnalyticsTracker />
         <ViewportHandler />
         <AnimationInitializer />
         <CartProvider>
