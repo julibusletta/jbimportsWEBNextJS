@@ -195,6 +195,15 @@ export default function ProductsPage() {
   const saveProducts = async () => {
     setMessage('Guardando cambios...');
     setIsSaving(true);
+
+    const allProducts = Object.values(products).flat() as Product[];
+    const invalidProduct = allProducts.find((p) => !p.name || p.name.trim() === '');
+    if (invalidProduct) {
+      setMessage(`Error: El producto con ID ${invalidProduct.id} no tiene nombre. Por favor asígnale un nombre a todos los productos antes de guardar.`);
+      setIsSaving(false);
+      return;
+    }
+
     try {
       const resp = await fetch('/api/admin', {
         method: 'POST',

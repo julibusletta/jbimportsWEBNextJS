@@ -79,7 +79,7 @@ export async function POST(request: Request) {
         // Reverting to array [instCount] to avoid schema validation error
         installments: [instCount],
         products: items.map((item: any) => ({
-          name: item.name,
+          name: item.name?.trim() || 'Producto sin nombre',
           quantity: item.quantity,
           unit_price: { currency: "ARS", value: item.price.toFixed(2).toString() }
         }))
@@ -130,7 +130,7 @@ export async function POST(request: Request) {
       id: currentOrderId,
       userEmail,
       userName,
-      items: items.map((item: any) => ({ name: item.name, quantity: item.quantity, price: item.price })),
+      items: items.map((item: any) => ({ name: item.name?.trim() || 'Producto sin nombre', quantity: item.quantity, price: item.price })),
       total,
       status: 'PENDING',
       paymentMethod: 'NAVE',
