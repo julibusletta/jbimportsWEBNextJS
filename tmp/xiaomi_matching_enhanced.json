@@ -1,0 +1,2924 @@
+{
+  "exactMatches": [
+    {
+      "supplier": {
+        "code": "12809-4",
+        "name": "XIAOMI NOTE 14 PRO+ 256GB 8RAM 5G BLACK GLOBAL",
+        "price": 267
+      },
+      "local": {
+        "_id": "69d11e0bb5c43c0f6f9b14e7",
+        "id": "xiaomi-xiaomi-note-14-pro--256gb-8ram-5g-black-global",
+        "name": "XIAOMI NOTE 14 PRO+ 256GB 8RAM 5G BLACK GLOBAL",
+        "price": 559000,
+        "category": "xiaomi",
+        "costPrice": 280,
+        "stock": 5,
+        "published": true,
+        "image": "https://http2.mlstatic.com/D_NQ_NP_2X_620313-MLA92390421932_092025-F.webp",
+        "images": [
+          "https://http2.mlstatic.com/D_NQ_NP_2X_620313-MLA92390421932_092025-F.webp",
+          "https://http2.mlstatic.com/D_NQ_NP_2X_709673-MLA92390694958_092025-F.webp",
+          "https://http2.mlstatic.com/D_NQ_NP_2X_919027-MLA91872862803_092025-F.webp",
+          "https://http2.mlstatic.com/D_NQ_NP_2X_819528-MLA92390568548_092025-F.webp",
+          "https://http2.mlstatic.com/D_NQ_NP_2X_716655-MLA88611230024_072025-F.webp"
+        ],
+        "description": "XIAOMI NOTE 14 PRO+ 256GB 8RAM 5G BLACK GLOBAL - Versión Global.",
+        "originalPrice": 559000,
+        "__v": 0,
+        "updatedAt": "2026-04-11T18:27:57.195Z",
+        "specifications": [
+          {
+            "label": "Procesador",
+            "value": "Snapdragon 7s Gen 3 (4nm)",
+            "_id": "69d6d4f92ed54f1909bbf075"
+          },
+          {
+            "label": "Almacenamiento y RAM",
+            "value": "256GB / 8RAM",
+            "_id": "69d6d4f92ed54f1909bbf076"
+          },
+          {
+            "label": "Dimensiones",
+            "value": "162.3 x 74.4 x 8.5 mm",
+            "_id": "69d6d4f92ed54f1909bbf077"
+          },
+          {
+            "label": "Pantalla",
+            "value": "6.67\" AMOLED 1.5K Curva, 120Hz, 3000 nits (peak)",
+            "_id": "69d6d4f92ed54f1909bbf078"
+          },
+          {
+            "label": "Cámara trasera",
+            "value": "50MP (Light Fusion 800, OIS) + 50MP (Teleobjetivo) + 8MP (Ultra-wide)",
+            "_id": "69d6d4f92ed54f1909bbf079"
+          },
+          {
+            "label": "Cámara frontal",
+            "value": "20MP",
+            "_id": "69d6d4f92ed54f1909bbf07a"
+          },
+          {
+            "label": "Batería y carga",
+            "value": "6200 mAh, HyperCharge 90W",
+            "_id": "69d6d4f92ed54f1909bbf07b"
+          },
+          {
+            "label": "Funciones de IA",
+            "value": "AI Smart Charging, AI Photo Editing, AI Translation",
+            "_id": "69d6d4f92ed54f1909bbf07c"
+          },
+          {
+            "label": "Seguridad",
+            "value": "Huella en pantalla, Reconocimiento facial IA",
+            "_id": "69d6d4f92ed54f1909bbf07d"
+          },
+          {
+            "label": "Redes y conectividad",
+            "value": "5G, Wi-Fi 6, Bluetooth 5.4, Infrarrojos",
+            "_id": "69d6d4f92ed54f1909bbf07e"
+          },
+          {
+            "label": "Resistencias al agua y polvo",
+            "value": "IP68/IP69K (Súper resistencia)",
+            "_id": "69d6d4f92ed54f1909bbf07f"
+          },
+          {
+            "label": "NFC",
+            "value": "Sí",
+            "_id": "69d6d4f92ed54f1909bbf080"
+          },
+          {
+            "label": "Navegación y posicionamiento",
+            "value": "Multibanda GPS (L1+L5), Galileo, GLONASS",
+            "_id": "69d6d4f92ed54f1909bbf081"
+          },
+          {
+            "label": "Audio",
+            "value": "Triple micrófono, Altavoces estéreo Hi-Res",
+            "_id": "69d6d4f92ed54f1909bbf082"
+          },
+          {
+            "label": "Sensores",
+            "value": "Todos los sensores estándar + Barómetro",
+            "_id": "69d6d4f92ed54f1909bbf083"
+          },
+          {
+            "label": "Sistema operativo",
+            "value": "Xiaomi HyperOS 2.0",
+            "_id": "69d6d4f92ed54f1909bbf084"
+          },
+          {
+            "label": "Marca",
+            "value": "Xiaomi",
+            "_id": "69d6d4f92ed54f1909bbf085"
+          },
+          {
+            "label": "Modelo",
+            "value": "NOTE 14 PRO+",
+            "_id": "69d6d4f92ed54f1909bbf086"
+          }
+        ]
+      }
+    },
+    {
+      "supplier": {
+        "code": "15285-3",
+        "name": "XIAOMI NOTE 15 PRO 256GB 8RAM 5G TITANIUM GLOBAL",
+        "price": 275
+      },
+      "local": {
+        "_id": "69cd84e900fb3a88a4d0b599",
+        "id": "xiaomi-note-15-pro-256gb-8ram-titanium-global",
+        "name": "XIAOMI NOTE 15 PRO 256GB 8RAM TITANIUM GLOBAL",
+        "price": 346000,
+        "originalPrice": 346000,
+        "image": "https://http2.mlstatic.com/D_NQ_NP_2X_620042-MLA106233077568_022026-F.webp",
+        "images": [
+          "https://http2.mlstatic.com/D_NQ_NP_2X_620042-MLA106233077568_022026-F.webp",
+          "https://http2.mlstatic.com/D_NQ_NP_2X_740884-MLA106232284264_022026-F.webp",
+          "https://http2.mlstatic.com/D_NQ_NP_2X_622391-MLA106232577710_022026-F.webp"
+        ],
+        "category": "xiaomi",
+        "description": "XIAOMI NOTE 15 PRO 256GB 8RAM TITANIUM GLOBAL - Versión Global.",
+        "stock": 5,
+        "published": true,
+        "createdAt": "2026-04-01T20:49:45.621Z",
+        "updatedAt": "2026-04-11T18:27:57.194Z",
+        "specifications": [
+          {
+            "label": "Procesador",
+            "value": "Snapdragon 7s Gen 4 (4nm)",
+            "_id": "69d6d4f92ed54f1909bbe8c7"
+          },
+          {
+            "label": "Almacenamiento y RAM",
+            "value": "256GB / 8RAM",
+            "_id": "69d6d4f92ed54f1909bbe8c8"
+          },
+          {
+            "label": "Dimensiones",
+            "value": "162.3 x 74.8 x 8.1 mm",
+            "_id": "69d6d4f92ed54f1909bbe8c9"
+          },
+          {
+            "label": "Pantalla",
+            "value": "6.83\" AMOLED, 120Hz, 12-bit color, HDR10+",
+            "_id": "69d6d4f92ed54f1909bbe8ca"
+          },
+          {
+            "label": "Cámara trasera",
+            "value": "200MP (OIS, Samsung HP3) + 8MP (UW) + 2MP (Macro)",
+            "_id": "69d6d4f92ed54f1909bbe8cb"
+          },
+          {
+            "label": "Cámara frontal",
+            "value": "32MP",
+            "_id": "69d6d4f92ed54f1909bbe8cc"
+          },
+          {
+            "label": "Batería y carga",
+            "value": "6580 mAh (Silicio-Carbono), 45W",
+            "_id": "69d6d4f92ed54f1909bbe8cd"
+          },
+          {
+            "label": "Funciones de IA",
+            "value": "AI Image Expansion, AI Voice Assistant",
+            "_id": "69d6d4f92ed54f1909bbe8ce"
+          },
+          {
+            "label": "Seguridad",
+            "value": "IP68/IP69K, Huella ultra-rápida",
+            "_id": "69d6d4f92ed54f1909bbe8cf"
+          },
+          {
+            "label": "Redes y conectividad",
+            "value": "5G, Wi-Fi 7 Ready, Bluetooth 5.4",
+            "_id": "69d6d4f92ed54f1909bbe8d0"
+          },
+          {
+            "label": "Resistencias al agua y polvo",
+            "value": "IP68/IP69K (Sumergible 2m)",
+            "_id": "69d6d4f92ed54f1909bbe8d1"
+          },
+          {
+            "label": "NFC",
+            "value": "Sí (Xiaomi Pay)",
+            "_id": "69d6d4f92ed54f1909bbe8d2"
+          },
+          {
+            "label": "Navegación y posicionamiento",
+            "value": "L1+L5 Multibanda GPS",
+            "_id": "69d6d4f92ed54f1909bbe8d3"
+          },
+          {
+            "label": "Audio",
+            "value": "Dolby Atmos, Altavoces simétricos",
+            "_id": "69d6d4f92ed54f1909bbe8d4"
+          },
+          {
+            "label": "Sensores",
+            "value": "Completo incluyendo sensor espectral",
+            "_id": "69d6d4f92ed54f1909bbe8d5"
+          },
+          {
+            "label": "Sistema operativo",
+            "value": "Xiaomi HyperOS 2",
+            "_id": "69d6d4f92ed54f1909bbe8d6"
+          },
+          {
+            "label": "Marca",
+            "value": "Xiaomi",
+            "_id": "69d6d4f92ed54f1909bbe8d7"
+          },
+          {
+            "label": "Modelo",
+            "value": "NOTE 15 PRO",
+            "_id": "69d6d4f92ed54f1909bbe8d8"
+          }
+        ]
+      }
+    },
+    {
+      "supplier": {
+        "code": "15290-7",
+        "name": "XIAOMI NOTE 15 PRO 256GB 8RAM TITANIUM GLOBAL",
+        "price": 222
+      },
+      "local": {
+        "_id": "69cd84e900fb3a88a4d0b599",
+        "id": "xiaomi-note-15-pro-256gb-8ram-titanium-global",
+        "name": "XIAOMI NOTE 15 PRO 256GB 8RAM TITANIUM GLOBAL",
+        "price": 346000,
+        "originalPrice": 346000,
+        "image": "https://http2.mlstatic.com/D_NQ_NP_2X_620042-MLA106233077568_022026-F.webp",
+        "images": [
+          "https://http2.mlstatic.com/D_NQ_NP_2X_620042-MLA106233077568_022026-F.webp",
+          "https://http2.mlstatic.com/D_NQ_NP_2X_740884-MLA106232284264_022026-F.webp",
+          "https://http2.mlstatic.com/D_NQ_NP_2X_622391-MLA106232577710_022026-F.webp"
+        ],
+        "category": "xiaomi",
+        "description": "XIAOMI NOTE 15 PRO 256GB 8RAM TITANIUM GLOBAL - Versión Global.",
+        "stock": 5,
+        "published": true,
+        "createdAt": "2026-04-01T20:49:45.621Z",
+        "updatedAt": "2026-04-11T18:27:57.194Z",
+        "specifications": [
+          {
+            "label": "Procesador",
+            "value": "Snapdragon 7s Gen 4 (4nm)",
+            "_id": "69d6d4f92ed54f1909bbe8c7"
+          },
+          {
+            "label": "Almacenamiento y RAM",
+            "value": "256GB / 8RAM",
+            "_id": "69d6d4f92ed54f1909bbe8c8"
+          },
+          {
+            "label": "Dimensiones",
+            "value": "162.3 x 74.8 x 8.1 mm",
+            "_id": "69d6d4f92ed54f1909bbe8c9"
+          },
+          {
+            "label": "Pantalla",
+            "value": "6.83\" AMOLED, 120Hz, 12-bit color, HDR10+",
+            "_id": "69d6d4f92ed54f1909bbe8ca"
+          },
+          {
+            "label": "Cámara trasera",
+            "value": "200MP (OIS, Samsung HP3) + 8MP (UW) + 2MP (Macro)",
+            "_id": "69d6d4f92ed54f1909bbe8cb"
+          },
+          {
+            "label": "Cámara frontal",
+            "value": "32MP",
+            "_id": "69d6d4f92ed54f1909bbe8cc"
+          },
+          {
+            "label": "Batería y carga",
+            "value": "6580 mAh (Silicio-Carbono), 45W",
+            "_id": "69d6d4f92ed54f1909bbe8cd"
+          },
+          {
+            "label": "Funciones de IA",
+            "value": "AI Image Expansion, AI Voice Assistant",
+            "_id": "69d6d4f92ed54f1909bbe8ce"
+          },
+          {
+            "label": "Seguridad",
+            "value": "IP68/IP69K, Huella ultra-rápida",
+            "_id": "69d6d4f92ed54f1909bbe8cf"
+          },
+          {
+            "label": "Redes y conectividad",
+            "value": "5G, Wi-Fi 7 Ready, Bluetooth 5.4",
+            "_id": "69d6d4f92ed54f1909bbe8d0"
+          },
+          {
+            "label": "Resistencias al agua y polvo",
+            "value": "IP68/IP69K (Sumergible 2m)",
+            "_id": "69d6d4f92ed54f1909bbe8d1"
+          },
+          {
+            "label": "NFC",
+            "value": "Sí (Xiaomi Pay)",
+            "_id": "69d6d4f92ed54f1909bbe8d2"
+          },
+          {
+            "label": "Navegación y posicionamiento",
+            "value": "L1+L5 Multibanda GPS",
+            "_id": "69d6d4f92ed54f1909bbe8d3"
+          },
+          {
+            "label": "Audio",
+            "value": "Dolby Atmos, Altavoces simétricos",
+            "_id": "69d6d4f92ed54f1909bbe8d4"
+          },
+          {
+            "label": "Sensores",
+            "value": "Completo incluyendo sensor espectral",
+            "_id": "69d6d4f92ed54f1909bbe8d5"
+          },
+          {
+            "label": "Sistema operativo",
+            "value": "Xiaomi HyperOS 2",
+            "_id": "69d6d4f92ed54f1909bbe8d6"
+          },
+          {
+            "label": "Marca",
+            "value": "Xiaomi",
+            "_id": "69d6d4f92ed54f1909bbe8d7"
+          },
+          {
+            "label": "Modelo",
+            "value": "NOTE 15 PRO",
+            "_id": "69d6d4f92ed54f1909bbe8d8"
+          }
+        ]
+      }
+    },
+    {
+      "supplier": {
+        "code": "15831-2",
+        "name": "XIAOMI NOTE 15 PRO 512GB 12RAM TITANIUM GLOBAL",
+        "price": 285
+      },
+      "local": {
+        "_id": "69cd84e900fb3a88a4d0b59c",
+        "id": "xiaomi-note-15-pro-512gb-12ram-titanium-global",
+        "name": "XIAOMI NOTE 15 PRO 512GB 12RAM TITANIUM GLOBAL",
+        "price": 568750,
+        "originalPrice": 568750,
+        "image": "/images/hero-xiaomi.png",
+        "images": [
+          "/images/hero-xiaomi.png"
+        ],
+        "category": "xiaomi",
+        "description": "XIAOMI NOTE 15 PRO 512GB 12RAM TITANIUM GLOBAL - Versión Global.",
+        "stock": 5,
+        "published": true,
+        "createdAt": "2026-04-01T20:49:45.621Z",
+        "updatedAt": "2026-04-11T18:27:57.194Z",
+        "costPrice": 285,
+        "specifications": [
+          {
+            "label": "Procesador",
+            "value": "Snapdragon 7s Gen 4 (4nm)",
+            "_id": "69d6d4f92ed54f1909bbea91"
+          },
+          {
+            "label": "Almacenamiento y RAM",
+            "value": "512GB / 12RAM",
+            "_id": "69d6d4f92ed54f1909bbea92"
+          },
+          {
+            "label": "Dimensiones",
+            "value": "162.3 x 74.8 x 8.1 mm",
+            "_id": "69d6d4f92ed54f1909bbea93"
+          },
+          {
+            "label": "Pantalla",
+            "value": "6.83\" AMOLED, 120Hz, 12-bit color, HDR10+",
+            "_id": "69d6d4f92ed54f1909bbea94"
+          },
+          {
+            "label": "Cámara trasera",
+            "value": "200MP (OIS, Samsung HP3) + 8MP (UW) + 2MP (Macro)",
+            "_id": "69d6d4f92ed54f1909bbea95"
+          },
+          {
+            "label": "Cámara frontal",
+            "value": "32MP",
+            "_id": "69d6d4f92ed54f1909bbea96"
+          },
+          {
+            "label": "Batería y carga",
+            "value": "6580 mAh (Silicio-Carbono), 45W",
+            "_id": "69d6d4f92ed54f1909bbea97"
+          },
+          {
+            "label": "Funciones de IA",
+            "value": "AI Image Expansion, AI Voice Assistant",
+            "_id": "69d6d4f92ed54f1909bbea98"
+          },
+          {
+            "label": "Seguridad",
+            "value": "IP68/IP69K, Huella ultra-rápida",
+            "_id": "69d6d4f92ed54f1909bbea99"
+          },
+          {
+            "label": "Redes y conectividad",
+            "value": "5G, Wi-Fi 7 Ready, Bluetooth 5.4",
+            "_id": "69d6d4f92ed54f1909bbea9a"
+          },
+          {
+            "label": "Resistencias al agua y polvo",
+            "value": "IP68/IP69K (Sumergible 2m)",
+            "_id": "69d6d4f92ed54f1909bbea9b"
+          },
+          {
+            "label": "NFC",
+            "value": "Sí (Xiaomi Pay)",
+            "_id": "69d6d4f92ed54f1909bbea9c"
+          },
+          {
+            "label": "Navegación y posicionamiento",
+            "value": "L1+L5 Multibanda GPS",
+            "_id": "69d6d4f92ed54f1909bbea9d"
+          },
+          {
+            "label": "Audio",
+            "value": "Dolby Atmos, Altavoces simétricos",
+            "_id": "69d6d4f92ed54f1909bbea9e"
+          },
+          {
+            "label": "Sensores",
+            "value": "Completo incluyendo sensor espectral",
+            "_id": "69d6d4f92ed54f1909bbea9f"
+          },
+          {
+            "label": "Sistema operativo",
+            "value": "Xiaomi HyperOS 2",
+            "_id": "69d6d4f92ed54f1909bbeaa0"
+          },
+          {
+            "label": "Marca",
+            "value": "Xiaomi",
+            "_id": "69d6d4f92ed54f1909bbeaa1"
+          },
+          {
+            "label": "Modelo",
+            "value": "NOTE 15 PRO",
+            "_id": "69d6d4f92ed54f1909bbeaa2"
+          }
+        ]
+      }
+    },
+    {
+      "supplier": {
+        "code": "15339-3",
+        "name": "XIAOMI NOTE 15 PRO+ 256GB 8RAM 5G BLACK GLOBAL",
+        "price": 330
+      },
+      "local": {
+        "_id": "69d11e0cb5c43c0f6f9b1504",
+        "id": "xiaomi-xiaomi-note-15-pro--256gb-8ram-5g-black-global",
+        "name": "XIAOMI NOTE 15 PRO+ 256GB 8RAM 5G BLACK GLOBAL",
+        "price": 656500,
+        "category": "xiaomi",
+        "costPrice": 330,
+        "stock": 5,
+        "published": true,
+        "image": "https://http2.mlstatic.com/D_NQ_NP_2X_725260-MLA106863865467_022026-F.webp",
+        "images": [
+          "https://http2.mlstatic.com/D_NQ_NP_2X_725260-MLA106863865467_022026-F.webp",
+          "https://http2.mlstatic.com/D_NQ_NP_2X_751005-MLA106237335986_022026-F.webp",
+          "https://http2.mlstatic.com/D_NQ_NP_2X_636455-MLA106862510937_022026-F.webp"
+        ],
+        "description": "XIAOMI NOTE 15 PRO+ 256GB 8RAM 5G BLACK GLOBAL - Versión Global.",
+        "originalPrice": 656500,
+        "__v": 0,
+        "updatedAt": "2026-04-11T18:27:57.195Z",
+        "specifications": [
+          {
+            "label": "Procesador",
+            "value": "MediaTek Dimensity 8400-Ultra (3nm)",
+            "_id": "69d6d4f92ed54f1909bbf099"
+          },
+          {
+            "label": "Almacenamiento y RAM",
+            "value": "256GB / 8RAM",
+            "_id": "69d6d4f92ed54f1909bbf09a"
+          },
+          {
+            "label": "Dimensiones",
+            "value": "162.1 x 74.6 x 8.4 mm",
+            "_id": "69d6d4f92ed54f1909bbf09b"
+          },
+          {
+            "label": "Pantalla",
+            "value": "6.83\" AMOLED Curva Pro, 144Hz, DC Dimming",
+            "_id": "69d6d4f92ed54f1909bbf09c"
+          },
+          {
+            "label": "Cámara trasera",
+            "value": "200MP (Pro-OIS) + 50MP (Tele) + 12MP (UW)",
+            "_id": "69d6d4f92ed54f1909bbf09d"
+          },
+          {
+            "label": "Cámara frontal",
+            "value": "32MP Pro",
+            "_id": "69d6d4f92ed54f1909bbf09e"
+          },
+          {
+            "label": "Batería y carga",
+            "value": "6500 mAh, HyperCharge 100W",
+            "_id": "69d6d4f92ed54f1909bbf09f"
+          },
+          {
+            "label": "Funciones de IA",
+            "value": "Generative AI Photo, AI Video Enhancement",
+            "_id": "69d6d4f92ed54f1909bbf0a0"
+          },
+          {
+            "label": "Seguridad",
+            "value": "Bio-seguridad avanzada, IP69K",
+            "_id": "69d6d4f92ed54f1909bbf0a1"
+          },
+          {
+            "label": "Redes y conectividad",
+            "value": "5G, Wi-Fi 7, Bluetooth 5.5",
+            "_id": "69d6d4f92ed54f1909bbf0a2"
+          },
+          {
+            "label": "Resistencias al agua y polvo",
+            "value": "IP68/IP69K Resistente a alta presión",
+            "_id": "69d6d4f92ed54f1909bbf0a3"
+          },
+          {
+            "label": "NFC",
+            "value": "Sí (NFC 3.0)",
+            "_id": "69d6d4f92ed54f1909bbf0a4"
+          },
+          {
+            "label": "Navegación y posicionamiento",
+            "value": "GPS (L1+L5), NavIC, Galileo",
+            "_id": "69d6d4f92ed54f1909bbf0a5"
+          },
+          {
+            "label": "Audio",
+            "value": "Hi-Fi Audio, Dual Speakers Bose Tuned",
+            "_id": "69d6d4f92ed54f1909bbf0a6"
+          },
+          {
+            "label": "Sensores",
+            "value": "Sensor de parpadeo, Barómetro, Giroscopio",
+            "_id": "69d6d4f92ed54f1909bbf0a7"
+          },
+          {
+            "label": "Sistema operativo",
+            "value": "Xiaomi HyperOS 2.1",
+            "_id": "69d6d4f92ed54f1909bbf0a8"
+          },
+          {
+            "label": "Marca",
+            "value": "Xiaomi",
+            "_id": "69d6d4f92ed54f1909bbf0a9"
+          },
+          {
+            "label": "Modelo",
+            "value": "NOTE 15 PRO+",
+            "_id": "69d6d4f92ed54f1909bbf0aa"
+          }
+        ]
+      }
+    },
+    {
+      "supplier": {
+        "code": "15341-6",
+        "name": "XIAOMI NOTE 15 PRO+ 256GB 8RAM 5G BLUE GLOBAL",
+        "price": 330
+      },
+      "local": {
+        "_id": "69d11e0cb5c43c0f6f9b1506",
+        "id": "xiaomi-xiaomi-note-15-pro--256gb-8ram-5g-blue-global",
+        "name": "XIAOMI NOTE 15 PRO+ 256GB 8RAM 5G BLUE GLOBAL",
+        "price": 656500,
+        "category": "xiaomi",
+        "costPrice": 330,
+        "stock": 5,
+        "published": true,
+        "image": "https://http2.mlstatic.com/D_NQ_NP_2X_842383-MLA106054970500_022026-F.webp",
+        "images": [
+          "https://http2.mlstatic.com/D_NQ_NP_2X_842383-MLA106054970500_022026-F.webp",
+          "https://http2.mlstatic.com/D_NQ_NP_2X_913069-MLA106671531691_022026-F.webp",
+          "https://http2.mlstatic.com/D_NQ_NP_2X_835953-MLA106672477969_022026-F.webp"
+        ],
+        "description": "XIAOMI NOTE 15 PRO+ 256GB 8RAM 5G BLUE GLOBAL - Versión Global.",
+        "originalPrice": 656500,
+        "__v": 0,
+        "updatedAt": "2026-04-11T18:27:57.195Z",
+        "specifications": [
+          {
+            "label": "Procesador",
+            "value": "MediaTek Dimensity 8400-Ultra (3nm)",
+            "_id": "69d6d4f92ed54f1909bbf0ab"
+          },
+          {
+            "label": "Almacenamiento y RAM",
+            "value": "256GB / 8RAM",
+            "_id": "69d6d4f92ed54f1909bbf0ac"
+          },
+          {
+            "label": "Dimensiones",
+            "value": "162.1 x 74.6 x 8.4 mm",
+            "_id": "69d6d4f92ed54f1909bbf0ad"
+          },
+          {
+            "label": "Pantalla",
+            "value": "6.83\" AMOLED Curva Pro, 144Hz, DC Dimming",
+            "_id": "69d6d4f92ed54f1909bbf0ae"
+          },
+          {
+            "label": "Cámara trasera",
+            "value": "200MP (Pro-OIS) + 50MP (Tele) + 12MP (UW)",
+            "_id": "69d6d4f92ed54f1909bbf0af"
+          },
+          {
+            "label": "Cámara frontal",
+            "value": "32MP Pro",
+            "_id": "69d6d4f92ed54f1909bbf0b0"
+          },
+          {
+            "label": "Batería y carga",
+            "value": "6500 mAh, HyperCharge 100W",
+            "_id": "69d6d4f92ed54f1909bbf0b1"
+          },
+          {
+            "label": "Funciones de IA",
+            "value": "Generative AI Photo, AI Video Enhancement",
+            "_id": "69d6d4f92ed54f1909bbf0b2"
+          },
+          {
+            "label": "Seguridad",
+            "value": "Bio-seguridad avanzada, IP69K",
+            "_id": "69d6d4f92ed54f1909bbf0b3"
+          },
+          {
+            "label": "Redes y conectividad",
+            "value": "5G, Wi-Fi 7, Bluetooth 5.5",
+            "_id": "69d6d4f92ed54f1909bbf0b4"
+          },
+          {
+            "label": "Resistencias al agua y polvo",
+            "value": "IP68/IP69K Resistente a alta presión",
+            "_id": "69d6d4f92ed54f1909bbf0b5"
+          },
+          {
+            "label": "NFC",
+            "value": "Sí (NFC 3.0)",
+            "_id": "69d6d4f92ed54f1909bbf0b6"
+          },
+          {
+            "label": "Navegación y posicionamiento",
+            "value": "GPS (L1+L5), NavIC, Galileo",
+            "_id": "69d6d4f92ed54f1909bbf0b7"
+          },
+          {
+            "label": "Audio",
+            "value": "Hi-Fi Audio, Dual Speakers Bose Tuned",
+            "_id": "69d6d4f92ed54f1909bbf0b8"
+          },
+          {
+            "label": "Sensores",
+            "value": "Sensor de parpadeo, Barómetro, Giroscopio",
+            "_id": "69d6d4f92ed54f1909bbf0b9"
+          },
+          {
+            "label": "Sistema operativo",
+            "value": "Xiaomi HyperOS 2.1",
+            "_id": "69d6d4f92ed54f1909bbf0ba"
+          },
+          {
+            "label": "Marca",
+            "value": "Xiaomi",
+            "_id": "69d6d4f92ed54f1909bbf0bb"
+          },
+          {
+            "label": "Modelo",
+            "value": "NOTE 15 PRO+",
+            "_id": "69d6d4f92ed54f1909bbf0bc"
+          }
+        ]
+      }
+    },
+    {
+      "supplier": {
+        "code": "15342-3",
+        "name": "XIAOMI NOTE 15 PRO+ 256GB 8RAM 5G BROWN GLOBAL",
+        "price": 330
+      },
+      "local": {
+        "_id": "69cd84e900fb3a88a4d0b59f",
+        "id": "xiaomi-note-15-pro-256gb-8ram-5g-brown-global",
+        "name": "XIAOMI NOTE 15 PRO+ 256GB 8RAM 5G BROWN GLOBAL",
+        "price": 656500,
+        "originalPrice": 656500,
+        "image": "https://http2.mlstatic.com/D_NQ_NP_2X_605782-MLA105494620218_012026-F.webp",
+        "images": [
+          "https://http2.mlstatic.com/D_NQ_NP_2X_605782-MLA105494620218_012026-F.webp",
+          "https://http2.mlstatic.com/D_NQ_NP_2X_601388-MLA105494590432_012026-F.webp",
+          "https://http2.mlstatic.com/D_NQ_NP_2X_697292-MLA106092177213_012026-F.webp",
+          "https://http2.mlstatic.com/D_NQ_NP_2X_813458-MLA106091293979_012026-F.webp"
+        ],
+        "category": "xiaomi",
+        "description": "XIAOMI NOTE 15 PRO+ 256GB 8RAM 5G BROWN GLOBAL - Versión Global.",
+        "stock": 5,
+        "published": true,
+        "createdAt": "2026-04-01T20:49:45.621Z",
+        "updatedAt": "2026-04-11T18:27:57.194Z",
+        "costPrice": 330,
+        "specifications": [
+          {
+            "label": "Procesador",
+            "value": "MediaTek Dimensity 8400-Ultra (3nm)",
+            "_id": "69d6d4f92ed54f1909bbe8eb"
+          },
+          {
+            "label": "Almacenamiento y RAM",
+            "value": "256GB / 8RAM",
+            "_id": "69d6d4f92ed54f1909bbe8ec"
+          },
+          {
+            "label": "Dimensiones",
+            "value": "162.1 x 74.6 x 8.4 mm",
+            "_id": "69d6d4f92ed54f1909bbe8ed"
+          },
+          {
+            "label": "Pantalla",
+            "value": "6.83\" AMOLED Curva Pro, 144Hz, DC Dimming",
+            "_id": "69d6d4f92ed54f1909bbe8ee"
+          },
+          {
+            "label": "Cámara trasera",
+            "value": "200MP (Pro-OIS) + 50MP (Tele) + 12MP (UW)",
+            "_id": "69d6d4f92ed54f1909bbe8ef"
+          },
+          {
+            "label": "Cámara frontal",
+            "value": "32MP Pro",
+            "_id": "69d6d4f92ed54f1909bbe8f0"
+          },
+          {
+            "label": "Batería y carga",
+            "value": "6500 mAh, HyperCharge 100W",
+            "_id": "69d6d4f92ed54f1909bbe8f1"
+          },
+          {
+            "label": "Funciones de IA",
+            "value": "Generative AI Photo, AI Video Enhancement",
+            "_id": "69d6d4f92ed54f1909bbe8f2"
+          },
+          {
+            "label": "Seguridad",
+            "value": "Bio-seguridad avanzada, IP69K",
+            "_id": "69d6d4f92ed54f1909bbe8f3"
+          },
+          {
+            "label": "Redes y conectividad",
+            "value": "5G, Wi-Fi 7, Bluetooth 5.5",
+            "_id": "69d6d4f92ed54f1909bbe8f4"
+          },
+          {
+            "label": "Resistencias al agua y polvo",
+            "value": "IP68/IP69K Resistente a alta presión",
+            "_id": "69d6d4f92ed54f1909bbe8f5"
+          },
+          {
+            "label": "NFC",
+            "value": "Sí (NFC 3.0)",
+            "_id": "69d6d4f92ed54f1909bbe8f6"
+          },
+          {
+            "label": "Navegación y posicionamiento",
+            "value": "GPS (L1+L5), NavIC, Galileo",
+            "_id": "69d6d4f92ed54f1909bbe8f7"
+          },
+          {
+            "label": "Audio",
+            "value": "Hi-Fi Audio, Dual Speakers Bose Tuned",
+            "_id": "69d6d4f92ed54f1909bbe8f8"
+          },
+          {
+            "label": "Sensores",
+            "value": "Sensor de parpadeo, Barómetro, Giroscopio",
+            "_id": "69d6d4f92ed54f1909bbe8f9"
+          },
+          {
+            "label": "Sistema operativo",
+            "value": "Xiaomi HyperOS 2.1",
+            "_id": "69d6d4f92ed54f1909bbe8fa"
+          },
+          {
+            "label": "Marca",
+            "value": "Xiaomi",
+            "_id": "69d6d4f92ed54f1909bbe8fb"
+          },
+          {
+            "label": "Modelo",
+            "value": "NOTE 15 PRO+",
+            "_id": "69d6d4f92ed54f1909bbe8fc"
+          }
+        ]
+      }
+    },
+    {
+      "supplier": {
+        "code": "15159-7",
+        "name": "XIAOMI POCO F8 ULTRA 12RAM 256GB 5G BLACK GLOBAL",
+        "price": 735
+      },
+      "local": {
+        "_id": "69d11e0db5c43c0f6f9b151a",
+        "id": "xiaomi-xiaomi-poco-f8-ultra-12ram-256gb-5g-black-global",
+        "name": "XIAOMI POCO F8 ULTRA 12RAM 256GB 5G BLACK GLOBAL",
+        "price": 1606605,
+        "category": "xiaomi",
+        "costPrice": 749,
+        "stock": 5,
+        "published": false,
+        "image": "/images/hero-xiaomi.png",
+        "images": [
+          "/images/hero-xiaomi.png"
+        ],
+        "description": "XIAOMI POCO F8 ULTRA 12RAM 256GB 5G BLACK GLOBAL - Versión Global.",
+        "originalPrice": 1606605,
+        "__v": 0,
+        "updatedAt": "2026-04-11T18:27:57.195Z",
+        "specifications": [
+          {
+            "label": "Procesador",
+            "value": "Snapdragon 8 Elite Special Edition",
+            "_id": "69d6d4f92ed54f1909bbf0bd"
+          },
+          {
+            "label": "Almacenamiento y RAM",
+            "value": "256GB / 12RAM",
+            "_id": "69d6d4f92ed54f1909bbf0be"
+          },
+          {
+            "label": "Dimensiones",
+            "value": "163.5 x 76.2 x 8.4 mm",
+            "_id": "69d6d4f92ed54f1909bbf0bf"
+          },
+          {
+            "label": "Pantalla",
+            "value": "6.9\" 1.5K LTPO AMOLED, 144Hz, 4000 nits",
+            "_id": "69d6d4f92ed54f1909bbf0c0"
+          },
+          {
+            "label": "Cámara trasera",
+            "value": "50MP (1-inch) + 50MP (Periscosopio 5x) + 50MP (UW)",
+            "_id": "69d6d4f92ed54f1909bbf0c1"
+          },
+          {
+            "label": "Cámara frontal",
+            "value": "32MP Under-display",
+            "_id": "69d6d4f92ed54f1909bbf0c2"
+          },
+          {
+            "label": "Batería y carga",
+            "value": "6500 mAh, 120W Wired, 80W Wireless",
+            "_id": "69d6d4f92ed54f1909bbf0c3"
+          },
+          {
+            "label": "Funciones de IA",
+            "value": "Full Suite AI (Magic Eraser, Video Boost, AI Search)",
+            "_id": "69d6d4f92ed54f1909bbf0c4"
+          },
+          {
+            "label": "Seguridad",
+            "value": "Huella Ultrasónica, IP69K",
+            "_id": "69d6d4f92ed54f1909bbf0c5"
+          },
+          {
+            "label": "Redes y conectividad",
+            "value": "5G Advanced, Wi-Fi 7+, BT 5.6",
+            "_id": "69d6d4f92ed54f1909bbf0c6"
+          },
+          {
+            "label": "Resistencias al agua y polvo",
+            "value": "IP69K (Grado militar)",
+            "_id": "69d6d4f92ed54f1909bbf0c7"
+          },
+          {
+            "label": "NFC",
+            "value": "Sí",
+            "_id": "69d6d4f92ed54f1909bbf0c8"
+          },
+          {
+            "label": "Navegación y posicionamiento",
+            "value": "L1+L2+L5 GPS",
+            "_id": "69d6d4f92ed54f1909bbf0c9"
+          },
+          {
+            "label": "Audio",
+            "value": "Cinematic Bose Audio System",
+            "_id": "69d6d4f92ed54f1909bbf0ca"
+          },
+          {
+            "label": "Sensores",
+            "value": "ToF sensor, Espectrómetro, Barómetro",
+            "_id": "69d6d4f92ed54f1909bbf0cb"
+          },
+          {
+            "label": "Sistema operativo",
+            "value": "HyperOS 2 Pro",
+            "_id": "69d6d4f92ed54f1909bbf0cc"
+          },
+          {
+            "label": "Marca",
+            "value": "Xiaomi",
+            "_id": "69d6d4f92ed54f1909bbf0cd"
+          },
+          {
+            "label": "Modelo",
+            "value": "POCO F8 ULTRA",
+            "_id": "69d6d4f92ed54f1909bbf0ce"
+          }
+        ]
+      }
+    },
+    {
+      "supplier": {
+        "code": "15907-4",
+        "name": "XIAOMI POCO X8 PRO 512GB 12RAM 5G VERDE GLOBAL",
+        "price": 384
+      },
+      "local": {
+        "_id": "69cd84e900fb3a88a4d0b5cd",
+        "id": "xiaomi-poco-x8-pro-512gb-12ram-5g-verde-global",
+        "name": "XIAOMI POCO X8 PRO 512GB 12RAM 5G VERDE GLOBAL",
+        "price": 763750,
+        "originalPrice": 763750,
+        "image": "/images/hero-xiaomi.png",
+        "images": [
+          "/images/hero-xiaomi.png"
+        ],
+        "category": "xiaomi",
+        "description": "XIAOMI POCO X8 PRO 512GB 12RAM 5G VERDE GLOBAL - Versión Global.",
+        "stock": 5,
+        "published": true,
+        "createdAt": "2026-04-01T20:49:45.621Z",
+        "updatedAt": "2026-04-11T18:27:57.195Z",
+        "costPrice": 385,
+        "specifications": [
+          {
+            "label": "Procesador",
+            "value": "MediaTek Dimensity 8500-Ultra",
+            "_id": "69d6d4f92ed54f1909bbefe5"
+          },
+          {
+            "label": "Almacenamiento y RAM",
+            "value": "512GB / 12RAM",
+            "_id": "69d6d4f92ed54f1909bbefe6"
+          },
+          {
+            "label": "Dimensiones",
+            "value": "161.0 x 74.5 x 7.9 mm",
+            "_id": "69d6d4f92ed54f1909bbefe7"
+          },
+          {
+            "label": "Pantalla",
+            "value": "6.59\" 1.5K AMOLED, 120Hz, 3500 nits",
+            "_id": "69d6d4f92ed54f1909bbefe8"
+          },
+          {
+            "label": "Cámara trasera",
+            "value": "50MP (OIS) + 8MP (UW) + 2MP (Macro)",
+            "_id": "69d6d4f92ed54f1909bbefe9"
+          },
+          {
+            "label": "Cámara frontal",
+            "value": "20MP",
+            "_id": "69d6d4f92ed54f1909bbefea"
+          },
+          {
+            "label": "Batería y carga",
+            "value": "6500 mAh, 100W HyperCharge",
+            "_id": "69d6d4f92ed54f1909bbefeb"
+          },
+          {
+            "label": "Funciones de IA",
+            "value": "AI Ray Tracing Engine, AI Battery Management",
+            "_id": "69d6d4f92ed54f1909bbefec"
+          },
+          {
+            "label": "Seguridad",
+            "value": "Huella en pantalla, IP68",
+            "_id": "69d6d4f92ed54f1909bbefed"
+          },
+          {
+            "label": "Redes y conectividad",
+            "value": "5G, Wi-Fi 7, Bluetooth 5.4",
+            "_id": "69d6d4f92ed54f1909bbefee"
+          },
+          {
+            "label": "Resistencias al agua y polvo",
+            "value": "IP68/IP69K",
+            "_id": "69d6d4f92ed54f1909bbefef"
+          },
+          {
+            "label": "NFC",
+            "value": "Sí",
+            "_id": "69d6d4f92ed54f1909bbeff0"
+          },
+          {
+            "label": "Navegación y posicionamiento",
+            "value": "Tri-band GPS",
+            "_id": "69d6d4f92ed54f1909bbeff1"
+          },
+          {
+            "label": "Audio",
+            "value": "Bose Audio, Dual Speakers",
+            "_id": "69d6d4f92ed54f1909bbeff2"
+          },
+          {
+            "label": "Sensores",
+            "value": "Giroscopio, Acelerómetro, E-Compass",
+            "_id": "69d6d4f92ed54f1909bbeff3"
+          },
+          {
+            "label": "Sistema operativo",
+            "value": "HyperOS 2.0",
+            "_id": "69d6d4f92ed54f1909bbeff4"
+          },
+          {
+            "label": "Marca",
+            "value": "Xiaomi",
+            "_id": "69d6d4f92ed54f1909bbeff5"
+          },
+          {
+            "label": "Modelo",
+            "value": "POCO X8 PRO",
+            "_id": "69d6d4f92ed54f1909bbeff6"
+          }
+        ]
+      }
+    },
+    {
+      "supplier": {
+        "code": "14506-0",
+        "name": "XIAOMI REDMI 15C 256GB 8RAM ORANGE GLOBAL",
+        "price": 132
+      },
+      "local": {
+        "_id": "69cd84e900fb3a88a4d0b5f1",
+        "id": "xiaomi-redmi-15c-256gb-8ram-orange-global",
+        "name": "XIAOMI REDMI 15C 256GB 8RAM ORANGE GLOBAL",
+        "price": 260650,
+        "originalPrice": 260650,
+        "image": "/images/hero-xiaomi.png",
+        "images": [
+          "/images/hero-xiaomi.png"
+        ],
+        "category": "xiaomi",
+        "description": "XIAOMI REDMI 15C 256GB 8RAM ORANGE GLOBAL - Versión Global.",
+        "stock": 5,
+        "published": true,
+        "createdAt": "2026-04-01T20:49:45.621Z",
+        "updatedAt": "2026-04-11T18:27:57.194Z",
+        "costPrice": 127,
+        "specifications": [
+          {
+            "label": "Procesador",
+            "value": "MediaTek Dimensity 6100+ / Helio G81-Ultra",
+            "_id": "69d6d4f92ed54f1909bbebe7"
+          },
+          {
+            "label": "Almacenamiento y RAM",
+            "value": "256GB / 8RAM",
+            "_id": "69d6d4f92ed54f1909bbebe8"
+          },
+          {
+            "label": "Dimensiones",
+            "value": "171.8 x 77.8 x 8.2 mm",
+            "_id": "69d6d4f92ed54f1909bbebe9"
+          },
+          {
+            "label": "Pantalla",
+            "value": "6.88\" HD+ LCD, 90Hz-120Hz",
+            "_id": "69d6d4f92ed54f1909bbebea"
+          },
+          {
+            "label": "Cámara trasera",
+            "value": "50MP AI Camera",
+            "_id": "69d6d4f92ed54f1909bbebeb"
+          },
+          {
+            "label": "Cámara frontal",
+            "value": "8MP",
+            "_id": "69d6d4f92ed54f1909bbebec"
+          },
+          {
+            "label": "Batería y carga",
+            "value": "6000 mAh, 18W-33W",
+            "_id": "69d6d4f92ed54f1909bbebed"
+          },
+          {
+            "label": "Funciones de IA",
+            "value": "AI Night Mode",
+            "_id": "69d6d4f92ed54f1909bbebee"
+          },
+          {
+            "label": "Seguridad",
+            "value": "Huella lateral",
+            "_id": "69d6d4f92ed54f1909bbebef"
+          },
+          {
+            "label": "Redes y conectividad",
+            "value": "4G/5G (según modelo), BT 5.3",
+            "_id": "69d6d4f92ed54f1909bbebf0"
+          },
+          {
+            "label": "Resistencias al agua y polvo",
+            "value": "IP54",
+            "_id": "69d6d4f92ed54f1909bbebf1"
+          },
+          {
+            "label": "NFC",
+            "value": "Sí",
+            "_id": "69d6d4f92ed54f1909bbebf2"
+          },
+          {
+            "label": "Navegación y posicionamiento",
+            "value": "GPS, GLONASS, Galileo, BSD",
+            "_id": "69d6d4f92ed54f1909bbebf3"
+          },
+          {
+            "label": "Audio",
+            "value": "Jack 3.5mm, Mono altavoz fuerte",
+            "_id": "69d6d4f92ed54f1909bbebf4"
+          },
+          {
+            "label": "Sensores",
+            "value": "Luz, Proximidad virtual, Acelerómetro",
+            "_id": "69d6d4f92ed54f1909bbebf5"
+          },
+          {
+            "label": "Sistema operativo",
+            "value": "Xiaomi HyperOS (Go/Standard)",
+            "_id": "69d6d4f92ed54f1909bbebf6"
+          },
+          {
+            "label": "Marca",
+            "value": "Xiaomi",
+            "_id": "69d6d4f92ed54f1909bbebf7"
+          },
+          {
+            "label": "Modelo",
+            "value": "REDMI 15C",
+            "_id": "69d6d4f92ed54f1909bbebf8"
+          }
+        ]
+      }
+    },
+    {
+      "supplier": {
+        "code": "14505-3",
+        "name": "XIAOMI REDMI 15C 256GB 8RAM VERDE GLOBAL",
+        "price": 132
+      },
+      "local": {
+        "_id": "69cd84e900fb3a88a4d0b5f2",
+        "id": "xiaomi-redmi-15c-256gb-8ram-verde-global",
+        "name": "XIAOMI REDMI 15C 256GB 8RAM VERDE GLOBAL",
+        "price": 260650,
+        "originalPrice": 260650,
+        "image": "/images/hero-xiaomi.png",
+        "images": [
+          "/images/hero-xiaomi.png"
+        ],
+        "category": "xiaomi",
+        "description": "XIAOMI REDMI 15C 256GB 8RAM VERDE GLOBAL - Versión Global.",
+        "stock": 5,
+        "published": true,
+        "createdAt": "2026-04-01T20:49:45.621Z",
+        "updatedAt": "2026-04-11T18:27:57.195Z",
+        "costPrice": 127,
+        "specifications": [
+          {
+            "label": "Procesador",
+            "value": "MediaTek Dimensity 6100+ / Helio G81-Ultra",
+            "_id": "69d6d4f92ed54f1909bbee2d"
+          },
+          {
+            "label": "Almacenamiento y RAM",
+            "value": "256GB / 8RAM",
+            "_id": "69d6d4f92ed54f1909bbee2e"
+          },
+          {
+            "label": "Dimensiones",
+            "value": "171.8 x 77.8 x 8.2 mm",
+            "_id": "69d6d4f92ed54f1909bbee2f"
+          },
+          {
+            "label": "Pantalla",
+            "value": "6.88\" HD+ LCD, 90Hz-120Hz",
+            "_id": "69d6d4f92ed54f1909bbee30"
+          },
+          {
+            "label": "Cámara trasera",
+            "value": "50MP AI Camera",
+            "_id": "69d6d4f92ed54f1909bbee31"
+          },
+          {
+            "label": "Cámara frontal",
+            "value": "8MP",
+            "_id": "69d6d4f92ed54f1909bbee32"
+          },
+          {
+            "label": "Batería y carga",
+            "value": "6000 mAh, 18W-33W",
+            "_id": "69d6d4f92ed54f1909bbee33"
+          },
+          {
+            "label": "Funciones de IA",
+            "value": "AI Night Mode",
+            "_id": "69d6d4f92ed54f1909bbee34"
+          },
+          {
+            "label": "Seguridad",
+            "value": "Huella lateral",
+            "_id": "69d6d4f92ed54f1909bbee35"
+          },
+          {
+            "label": "Redes y conectividad",
+            "value": "4G/5G (según modelo), BT 5.3",
+            "_id": "69d6d4f92ed54f1909bbee36"
+          },
+          {
+            "label": "Resistencias al agua y polvo",
+            "value": "IP54",
+            "_id": "69d6d4f92ed54f1909bbee37"
+          },
+          {
+            "label": "NFC",
+            "value": "Sí",
+            "_id": "69d6d4f92ed54f1909bbee38"
+          },
+          {
+            "label": "Navegación y posicionamiento",
+            "value": "GPS, GLONASS, Galileo, BSD",
+            "_id": "69d6d4f92ed54f1909bbee39"
+          },
+          {
+            "label": "Audio",
+            "value": "Jack 3.5mm, Mono altavoz fuerte",
+            "_id": "69d6d4f92ed54f1909bbee3a"
+          },
+          {
+            "label": "Sensores",
+            "value": "Luz, Proximidad virtual, Acelerómetro",
+            "_id": "69d6d4f92ed54f1909bbee3b"
+          },
+          {
+            "label": "Sistema operativo",
+            "value": "Xiaomi HyperOS (Go/Standard)",
+            "_id": "69d6d4f92ed54f1909bbee3c"
+          },
+          {
+            "label": "Marca",
+            "value": "Xiaomi",
+            "_id": "69d6d4f92ed54f1909bbee3d"
+          },
+          {
+            "label": "Modelo",
+            "value": "REDMI 15C",
+            "_id": "69d6d4f92ed54f1909bbee3e"
+          }
+        ]
+      }
+    }
+  ],
+  "partialMatches": [
+    {
+      "supplier": {
+        "code": "15166-5",
+        "name": "ROBOT XIAOMI VACUUM H40 220V - WHITE",
+        "price": 250
+      },
+      "matches": [
+        {
+          "name": "ROBOT XIAOMI VACUUM H40 220V - BLANCO /IVO",
+          "id": "robot-xiaomi-vacuum-h40-220v-white-ivo",
+          "score": 0.8888888888888888
+        }
+      ]
+    },
+    {
+      "supplier": {
+        "code": "15093-4",
+        "name": "ROBOT XIAOMI VACUUM S40 BIVOLT BRANCO",
+        "price": 162
+      },
+      "matches": [
+        {
+          "name": "ROBOT XIAOMI VACUUM S40 BIVOLT BLANCO /IVO",
+          "id": "robot-xiaomi-vacuum-s40-bivolt-branco-ivo",
+          "score": 0.8571428571428571
+        },
+        {
+          "name": "ROBOT XIAOMI VACUUM S40 PRO BIVOLT BLANCO /IVO",
+          "id": "robot-xiaomi-vacuum-s40-pro-bivolt-branco-ivo",
+          "score": 0.75
+        }
+      ]
+    },
+    {
+      "supplier": {
+        "code": "15551-9",
+        "name": "ROBOT XIAOMI VACUUM S40 PRO BIVOLT BRANCO",
+        "price": 305
+      },
+      "matches": [
+        {
+          "name": "ROBOT XIAOMI VACUUM S40 PRO BIVOLT BLANCO /IVO",
+          "id": "robot-xiaomi-vacuum-s40-pro-bivolt-branco-ivo",
+          "score": 0.8888888888888888
+        },
+        {
+          "name": "ROBOT XIAOMI VACUUM S40 BIVOLT BLANCO /IVO",
+          "id": "robot-xiaomi-vacuum-s40-bivolt-branco-ivo",
+          "score": 0.75
+        }
+      ]
+    },
+    {
+      "supplier": {
+        "code": "14319-6",
+        "name": "ROBOT XIAOMI VACUUM S40C BIVOLT BRANCO",
+        "price": 148
+      },
+      "matches": [
+        {
+          "name": "ROBOT XIAOMI VACUUM S40C BIVOLT BLANCO /IVO",
+          "id": "robot-xiaomi-vacuum-s40c-bivolt-branco-ivo",
+          "score": 0.8571428571428571
+        }
+      ]
+    },
+    {
+      "supplier": {
+        "code": "14663-0",
+        "name": "ROBOT XIAOMI VACUUM X20 PRO WHITE 220V",
+        "price": 475
+      },
+      "matches": [
+        {
+          "name": "ROBOT XIAOMI VACUUM X20 PRO BLANCO 220V /IVO",
+          "id": "robot-xiaomi-vacuum-x20-pro-white-220v-ivo",
+          "score": 0.8888888888888888
+        }
+      ]
+    },
+    {
+      "supplier": {
+        "code": "13059-2",
+        "name": "XIAOMI NOTE 14 256GB 8RAM 5G BLACK GLOBAL",
+        "price": 194
+      },
+      "matches": [
+        {
+          "name": "XIAOMI NOTE 14 PRO+ 256GB 8RAM 5G BLACK GLOBAL",
+          "id": "xiaomi-xiaomi-note-14-pro--256gb-8ram-5g-black-global",
+          "score": 0.8571428571428571
+        }
+      ]
+    },
+    {
+      "supplier": {
+        "code": "12803-2",
+        "name": "XIAOMI NOTE 14 256GB 8RAM BLACK GLOBAL",
+        "price": 157
+      },
+      "matches": [
+        {
+          "name": "XIAOMI NOTE 14 PRO+ 256GB 8RAM 5G BLACK GLOBAL",
+          "id": "xiaomi-xiaomi-note-14-pro--256gb-8ram-5g-black-global",
+          "score": 0.8571428571428571
+        }
+      ]
+    },
+    {
+      "supplier": {
+        "code": "12807-0",
+        "name": "XIAOMI NOTE 14 PRO 256GB 8RAM 5G BLACK GLOBAL",
+        "price": 253
+      },
+      "matches": [
+        {
+          "name": "XIAOMI NOTE 14 PRO 512GB 12RAM 5G VERDE GLOBAL",
+          "id": "xiaomi-note-14-pro-512gb-12ram-5g-green-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 14 PRO 256GB 8RAM 5G NEGRO GLOBAL",
+          "id": "xiaomi-note-14-pro-256gb-8ram-5g-black-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 14 PRO 256GB 8RAM NEGRO GLOBAL",
+          "id": "xiaomi-note-14-pro-256gb-8ram-black-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 14 PRO+ 256GB 8RAM 5G BLACK GLOBAL",
+          "id": "xiaomi-xiaomi-note-14-pro--256gb-8ram-5g-black-global",
+          "score": 0.75
+        }
+      ]
+    },
+    {
+      "supplier": {
+        "code": "12805-6",
+        "name": "XIAOMI NOTE 14 PRO 256GB 8RAM BLACK GLOBAL",
+        "price": 227.75
+      },
+      "matches": [
+        {
+          "name": "XIAOMI NOTE 14 PRO 512GB 12RAM 5G VERDE GLOBAL",
+          "id": "xiaomi-note-14-pro-512gb-12ram-5g-green-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 14 PRO 256GB 8RAM 5G NEGRO GLOBAL",
+          "id": "xiaomi-note-14-pro-256gb-8ram-5g-black-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 14 PRO 256GB 8RAM NEGRO GLOBAL",
+          "id": "xiaomi-note-14-pro-256gb-8ram-black-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 14 PRO+ 256GB 8RAM 5G BLACK GLOBAL",
+          "id": "xiaomi-xiaomi-note-14-pro--256gb-8ram-5g-black-global",
+          "score": 0.75
+        }
+      ]
+    },
+    {
+      "supplier": {
+        "code": "13130-8",
+        "name": "XIAOMI NOTE 14 PRO 512GB 12RAM 5G GREEN GLOBAL",
+        "price": 287.75
+      },
+      "matches": [
+        {
+          "name": "XIAOMI NOTE 14 PRO 512GB 12RAM 5G VERDE GLOBAL",
+          "id": "xiaomi-note-14-pro-512gb-12ram-5g-green-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 14 PRO 256GB 8RAM 5G NEGRO GLOBAL",
+          "id": "xiaomi-note-14-pro-256gb-8ram-5g-black-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 14 PRO 256GB 8RAM NEGRO GLOBAL",
+          "id": "xiaomi-note-14-pro-256gb-8ram-black-global",
+          "score": 0.75
+        }
+      ]
+    },
+    {
+      "supplier": {
+        "code": "12810-0",
+        "name": "XIAOMI NOTE 14 PRO+ 256GB 8RAM 5G BLUE GLOBAL",
+        "price": 263
+      },
+      "matches": [
+        {
+          "name": "XIAOMI NOTE 14 PRO+ 256GB 8RAM 5G AZUL GLOBAL",
+          "id": "xiaomi-note-14-pro-256gb-8ram-5g-blue-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 14 PRO+ 256GB 8RAM 5G DORADO GLOBAL",
+          "id": "xiaomi-note-14-pro-256gb-8ram-5g-gold-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 14 PRO+ 256GB 8RAM 5G PÚRPURA GLOBAL",
+          "id": "xiaomi-note-14-pro-256gb-8ram-5g-purple-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 14 PRO+ 256GB 8RAM 5G BLACK GLOBAL",
+          "id": "xiaomi-xiaomi-note-14-pro--256gb-8ram-5g-black-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO+ 256GB 8RAM 5G BLUE GLOBAL",
+          "id": "xiaomi-xiaomi-note-15-pro--256gb-8ram-5g-blue-global",
+          "score": 0.75
+        }
+      ]
+    },
+    {
+      "supplier": {
+        "code": "14664-7",
+        "name": "XIAOMI NOTE 14 PRO+ 256GB 8RAM 5G GOLD GLOBAL",
+        "price": 263
+      },
+      "matches": [
+        {
+          "name": "XIAOMI NOTE 14 PRO+ 256GB 8RAM 5G AZUL GLOBAL",
+          "id": "xiaomi-note-14-pro-256gb-8ram-5g-blue-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 14 PRO+ 256GB 8RAM 5G DORADO GLOBAL",
+          "id": "xiaomi-note-14-pro-256gb-8ram-5g-gold-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 14 PRO+ 256GB 8RAM 5G PÚRPURA GLOBAL",
+          "id": "xiaomi-note-14-pro-256gb-8ram-5g-purple-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 14 PRO+ 256GB 8RAM 5G BLACK GLOBAL",
+          "id": "xiaomi-xiaomi-note-14-pro--256gb-8ram-5g-black-global",
+          "score": 0.75
+        }
+      ]
+    },
+    {
+      "supplier": {
+        "code": "13053-0",
+        "name": "XIAOMI NOTE 14 PRO+ 256GB 8RAM 5G PURPLE GLOBAL",
+        "price": 263
+      },
+      "matches": [
+        {
+          "name": "XIAOMI NOTE 14 PRO+ 256GB 8RAM 5G AZUL GLOBAL",
+          "id": "xiaomi-note-14-pro-256gb-8ram-5g-blue-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 14 PRO+ 256GB 8RAM 5G DORADO GLOBAL",
+          "id": "xiaomi-note-14-pro-256gb-8ram-5g-gold-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 14 PRO+ 256GB 8RAM 5G PÚRPURA GLOBAL",
+          "id": "xiaomi-note-14-pro-256gb-8ram-5g-purple-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 14 PRO+ 256GB 8RAM 5G BLACK GLOBAL",
+          "id": "xiaomi-xiaomi-note-14-pro--256gb-8ram-5g-black-global",
+          "score": 0.75
+        }
+      ]
+    },
+    {
+      "supplier": {
+        "code": "15293-8",
+        "name": "XIAOMI NOTE 15 256GB 8RAM 5G BLACK GLOBAL",
+        "price": 222
+      },
+      "matches": [
+        {
+          "name": "XIAOMI NOTE 15 PRO+ 256GB 8RAM 5G BLACK GLOBAL",
+          "id": "xiaomi-xiaomi-note-15-pro--256gb-8ram-5g-black-global",
+          "score": 0.8571428571428571
+        }
+      ]
+    },
+    {
+      "supplier": {
+        "code": "15929-6",
+        "name": "XIAOMI NOTE 15 256GB 8RAM 5G BLUE GLOBAL",
+        "price": 222
+      },
+      "matches": [
+        {
+          "name": "XIAOMI NOTE 15 PRO+ 256GB 8RAM 5G BLUE GLOBAL",
+          "id": "xiaomi-xiaomi-note-15-pro--256gb-8ram-5g-blue-global",
+          "score": 0.8571428571428571
+        }
+      ]
+    },
+    {
+      "supplier": {
+        "code": "15283-9",
+        "name": "XIAOMI NOTE 15 256GB 8RAM BLACK GLOBAL",
+        "price": 177
+      },
+      "matches": [
+        {
+          "name": "XIAOMI NOTE 15 PRO+ 256GB 8RAM 5G BLACK GLOBAL",
+          "id": "xiaomi-xiaomi-note-15-pro--256gb-8ram-5g-black-global",
+          "score": 0.8571428571428571
+        }
+      ]
+    },
+    {
+      "supplier": {
+        "code": "15284-6",
+        "name": "XIAOMI NOTE 15 256GB 8RAM BLUE GLOBAL",
+        "price": 177
+      },
+      "matches": [
+        {
+          "name": "XIAOMI NOTE 15 PRO+ 256GB 8RAM 5G BLUE GLOBAL",
+          "id": "xiaomi-xiaomi-note-15-pro--256gb-8ram-5g-blue-global",
+          "score": 0.8571428571428571
+        }
+      ]
+    },
+    {
+      "supplier": {
+        "code": "15287-7",
+        "name": "XIAOMI NOTE 15 PRO 256GB 8RAM 5G BLACK GLOBAL",
+        "price": 275
+      },
+      "matches": [
+        {
+          "name": "XIAOMI NOTE 15 PRO 256GB 8RAM 5G NEGRO GLOBAL",
+          "id": "xiaomi-note-15-pro-256gb-8ram-5g-black-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 256GB 8RAM TITANIUM GLOBAL",
+          "id": "xiaomi-note-15-pro-256gb-8ram-titanium-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 512GB 12RAM AZUL GLOBAL",
+          "id": "xiaomi-note-15-pro-512gb-12ram-blue-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 256GB 8RAM AZUL GLOBAL",
+          "id": "xiaomi-note-15-pro-256gb-8ram-blue-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 512GB 12RAM NEGRO GLOBAL",
+          "id": "xiaomi-note-15-pro-512gb-12ram-black-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 512GB 12RAM TITANIUM GLOBAL",
+          "id": "xiaomi-note-15-pro-512gb-12ram-titanium-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 256GB 8RAM NEGRO GLOBAL",
+          "id": "xiaomi-note-15-pro-256gb-8ram-black-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 512GB 8RAM 5G NEGRO GLOBAL",
+          "id": "xiaomi-note-15-pro-512gb-8ram-5g-black-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 256GB 8RAM 5G AZUL GLOBAL",
+          "id": "xiaomi-note-15-pro-256gb-8ram-5g-blue-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 512GB 8RAM 5G PÚRPURA GLOBAL",
+          "id": "xiaomi-note-15-pro-512gb-8ram-5g-purple-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 256GB 8RAM TITANUIM GLOBAL",
+          "id": "xiaomi-xiaomi-note-15-pro-256gb-8ram-titanuim-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO+ 256GB 8RAM 5G BLACK GLOBAL",
+          "id": "xiaomi-xiaomi-note-15-pro--256gb-8ram-5g-black-global",
+          "score": 0.75
+        }
+      ]
+    },
+    {
+      "supplier": {
+        "code": "15286-0",
+        "name": "XIAOMI NOTE 15 PRO 256GB 8RAM 5G BLUE GLOBAL",
+        "price": 275
+      },
+      "matches": [
+        {
+          "name": "XIAOMI NOTE 15 PRO 256GB 8RAM 5G NEGRO GLOBAL",
+          "id": "xiaomi-note-15-pro-256gb-8ram-5g-black-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 256GB 8RAM TITANIUM GLOBAL",
+          "id": "xiaomi-note-15-pro-256gb-8ram-titanium-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 512GB 12RAM AZUL GLOBAL",
+          "id": "xiaomi-note-15-pro-512gb-12ram-blue-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 256GB 8RAM AZUL GLOBAL",
+          "id": "xiaomi-note-15-pro-256gb-8ram-blue-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 512GB 12RAM NEGRO GLOBAL",
+          "id": "xiaomi-note-15-pro-512gb-12ram-black-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 512GB 12RAM TITANIUM GLOBAL",
+          "id": "xiaomi-note-15-pro-512gb-12ram-titanium-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 256GB 8RAM NEGRO GLOBAL",
+          "id": "xiaomi-note-15-pro-256gb-8ram-black-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 512GB 8RAM 5G NEGRO GLOBAL",
+          "id": "xiaomi-note-15-pro-512gb-8ram-5g-black-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 256GB 8RAM 5G AZUL GLOBAL",
+          "id": "xiaomi-note-15-pro-256gb-8ram-5g-blue-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 512GB 8RAM 5G PÚRPURA GLOBAL",
+          "id": "xiaomi-note-15-pro-512gb-8ram-5g-purple-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 256GB 8RAM TITANUIM GLOBAL",
+          "id": "xiaomi-xiaomi-note-15-pro-256gb-8ram-titanuim-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO+ 256GB 8RAM 5G BLUE GLOBAL",
+          "id": "xiaomi-xiaomi-note-15-pro--256gb-8ram-5g-blue-global",
+          "score": 0.75
+        }
+      ]
+    },
+    {
+      "supplier": {
+        "code": "15289-1",
+        "name": "XIAOMI NOTE 15 PRO 256GB 8RAM BLACK GLOBAL",
+        "price": 222
+      },
+      "matches": [
+        {
+          "name": "XIAOMI NOTE 15 PRO 256GB 8RAM 5G NEGRO GLOBAL",
+          "id": "xiaomi-note-15-pro-256gb-8ram-5g-black-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 256GB 8RAM TITANIUM GLOBAL",
+          "id": "xiaomi-note-15-pro-256gb-8ram-titanium-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 512GB 12RAM AZUL GLOBAL",
+          "id": "xiaomi-note-15-pro-512gb-12ram-blue-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 256GB 8RAM AZUL GLOBAL",
+          "id": "xiaomi-note-15-pro-256gb-8ram-blue-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 512GB 12RAM NEGRO GLOBAL",
+          "id": "xiaomi-note-15-pro-512gb-12ram-black-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 512GB 12RAM TITANIUM GLOBAL",
+          "id": "xiaomi-note-15-pro-512gb-12ram-titanium-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 256GB 8RAM NEGRO GLOBAL",
+          "id": "xiaomi-note-15-pro-256gb-8ram-black-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 512GB 8RAM 5G NEGRO GLOBAL",
+          "id": "xiaomi-note-15-pro-512gb-8ram-5g-black-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 256GB 8RAM 5G AZUL GLOBAL",
+          "id": "xiaomi-note-15-pro-256gb-8ram-5g-blue-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 512GB 8RAM 5G PÚRPURA GLOBAL",
+          "id": "xiaomi-note-15-pro-512gb-8ram-5g-purple-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 256GB 8RAM TITANUIM GLOBAL",
+          "id": "xiaomi-xiaomi-note-15-pro-256gb-8ram-titanuim-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO+ 256GB 8RAM 5G BLACK GLOBAL",
+          "id": "xiaomi-xiaomi-note-15-pro--256gb-8ram-5g-black-global",
+          "score": 0.75
+        }
+      ]
+    },
+    {
+      "supplier": {
+        "code": "15291-4",
+        "name": "XIAOMI NOTE 15 PRO 256GB 8RAM BLUE GLOBAL",
+        "price": 222
+      },
+      "matches": [
+        {
+          "name": "XIAOMI NOTE 15 PRO 256GB 8RAM 5G NEGRO GLOBAL",
+          "id": "xiaomi-note-15-pro-256gb-8ram-5g-black-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 256GB 8RAM TITANIUM GLOBAL",
+          "id": "xiaomi-note-15-pro-256gb-8ram-titanium-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 512GB 12RAM AZUL GLOBAL",
+          "id": "xiaomi-note-15-pro-512gb-12ram-blue-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 256GB 8RAM AZUL GLOBAL",
+          "id": "xiaomi-note-15-pro-256gb-8ram-blue-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 512GB 12RAM NEGRO GLOBAL",
+          "id": "xiaomi-note-15-pro-512gb-12ram-black-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 512GB 12RAM TITANIUM GLOBAL",
+          "id": "xiaomi-note-15-pro-512gb-12ram-titanium-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 256GB 8RAM NEGRO GLOBAL",
+          "id": "xiaomi-note-15-pro-256gb-8ram-black-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 512GB 8RAM 5G NEGRO GLOBAL",
+          "id": "xiaomi-note-15-pro-512gb-8ram-5g-black-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 256GB 8RAM 5G AZUL GLOBAL",
+          "id": "xiaomi-note-15-pro-256gb-8ram-5g-blue-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 512GB 8RAM 5G PÚRPURA GLOBAL",
+          "id": "xiaomi-note-15-pro-512gb-8ram-5g-purple-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 256GB 8RAM TITANUIM GLOBAL",
+          "id": "xiaomi-xiaomi-note-15-pro-256gb-8ram-titanuim-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO+ 256GB 8RAM 5G BLUE GLOBAL",
+          "id": "xiaomi-xiaomi-note-15-pro--256gb-8ram-5g-blue-global",
+          "score": 0.75
+        }
+      ]
+    },
+    {
+      "supplier": {
+        "code": "15829-9",
+        "name": "XIAOMI NOTE 15 PRO 512GB 12RAM BLACK GLOBAL",
+        "price": 285
+      },
+      "matches": [
+        {
+          "name": "XIAOMI NOTE 15 PRO 256GB 8RAM 5G NEGRO GLOBAL",
+          "id": "xiaomi-note-15-pro-256gb-8ram-5g-black-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 256GB 8RAM TITANIUM GLOBAL",
+          "id": "xiaomi-note-15-pro-256gb-8ram-titanium-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 512GB 12RAM AZUL GLOBAL",
+          "id": "xiaomi-note-15-pro-512gb-12ram-blue-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 256GB 8RAM AZUL GLOBAL",
+          "id": "xiaomi-note-15-pro-256gb-8ram-blue-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 512GB 12RAM NEGRO GLOBAL",
+          "id": "xiaomi-note-15-pro-512gb-12ram-black-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 512GB 12RAM TITANIUM GLOBAL",
+          "id": "xiaomi-note-15-pro-512gb-12ram-titanium-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 256GB 8RAM NEGRO GLOBAL",
+          "id": "xiaomi-note-15-pro-256gb-8ram-black-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 512GB 8RAM 5G NEGRO GLOBAL",
+          "id": "xiaomi-note-15-pro-512gb-8ram-5g-black-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 256GB 8RAM 5G AZUL GLOBAL",
+          "id": "xiaomi-note-15-pro-256gb-8ram-5g-blue-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 512GB 8RAM 5G PÚRPURA GLOBAL",
+          "id": "xiaomi-note-15-pro-512gb-8ram-5g-purple-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 256GB 8RAM TITANUIM GLOBAL",
+          "id": "xiaomi-xiaomi-note-15-pro-256gb-8ram-titanuim-global",
+          "score": 0.75
+        }
+      ]
+    },
+    {
+      "supplier": {
+        "code": "15830-5",
+        "name": "XIAOMI NOTE 15 PRO 512GB 12RAM BLUE GLOBAL",
+        "price": 285
+      },
+      "matches": [
+        {
+          "name": "XIAOMI NOTE 15 PRO 256GB 8RAM 5G NEGRO GLOBAL",
+          "id": "xiaomi-note-15-pro-256gb-8ram-5g-black-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 256GB 8RAM TITANIUM GLOBAL",
+          "id": "xiaomi-note-15-pro-256gb-8ram-titanium-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 512GB 12RAM AZUL GLOBAL",
+          "id": "xiaomi-note-15-pro-512gb-12ram-blue-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 256GB 8RAM AZUL GLOBAL",
+          "id": "xiaomi-note-15-pro-256gb-8ram-blue-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 512GB 12RAM NEGRO GLOBAL",
+          "id": "xiaomi-note-15-pro-512gb-12ram-black-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 512GB 12RAM TITANIUM GLOBAL",
+          "id": "xiaomi-note-15-pro-512gb-12ram-titanium-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 256GB 8RAM NEGRO GLOBAL",
+          "id": "xiaomi-note-15-pro-256gb-8ram-black-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 512GB 8RAM 5G NEGRO GLOBAL",
+          "id": "xiaomi-note-15-pro-512gb-8ram-5g-black-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 256GB 8RAM 5G AZUL GLOBAL",
+          "id": "xiaomi-note-15-pro-256gb-8ram-5g-blue-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 512GB 8RAM 5G PÚRPURA GLOBAL",
+          "id": "xiaomi-note-15-pro-512gb-8ram-5g-purple-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 256GB 8RAM TITANUIM GLOBAL",
+          "id": "xiaomi-xiaomi-note-15-pro-256gb-8ram-titanuim-global",
+          "score": 0.75
+        }
+      ]
+    },
+    {
+      "supplier": {
+        "code": "15335-5",
+        "name": "XIAOMI NOTE 15 PRO 512GB 8RAM 5G BLACK GLOBAL",
+        "price": 293
+      },
+      "matches": [
+        {
+          "name": "XIAOMI NOTE 15 PRO 256GB 8RAM 5G NEGRO GLOBAL",
+          "id": "xiaomi-note-15-pro-256gb-8ram-5g-black-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 256GB 8RAM TITANIUM GLOBAL",
+          "id": "xiaomi-note-15-pro-256gb-8ram-titanium-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 512GB 12RAM AZUL GLOBAL",
+          "id": "xiaomi-note-15-pro-512gb-12ram-blue-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 256GB 8RAM AZUL GLOBAL",
+          "id": "xiaomi-note-15-pro-256gb-8ram-blue-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 512GB 12RAM NEGRO GLOBAL",
+          "id": "xiaomi-note-15-pro-512gb-12ram-black-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 512GB 12RAM TITANIUM GLOBAL",
+          "id": "xiaomi-note-15-pro-512gb-12ram-titanium-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 256GB 8RAM NEGRO GLOBAL",
+          "id": "xiaomi-note-15-pro-256gb-8ram-black-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 512GB 8RAM 5G NEGRO GLOBAL",
+          "id": "xiaomi-note-15-pro-512gb-8ram-5g-black-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 256GB 8RAM 5G AZUL GLOBAL",
+          "id": "xiaomi-note-15-pro-256gb-8ram-5g-blue-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 512GB 8RAM 5G PÚRPURA GLOBAL",
+          "id": "xiaomi-note-15-pro-512gb-8ram-5g-purple-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 256GB 8RAM TITANUIM GLOBAL",
+          "id": "xiaomi-xiaomi-note-15-pro-256gb-8ram-titanuim-global",
+          "score": 0.75
+        }
+      ]
+    },
+    {
+      "supplier": {
+        "code": "15736-0",
+        "name": "XIAOMI NOTE 15 PRO 512GB 8RAM 5G BLUE GLOBAL",
+        "price": 293
+      },
+      "matches": [
+        {
+          "name": "XIAOMI NOTE 15 PRO 256GB 8RAM 5G NEGRO GLOBAL",
+          "id": "xiaomi-note-15-pro-256gb-8ram-5g-black-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 256GB 8RAM TITANIUM GLOBAL",
+          "id": "xiaomi-note-15-pro-256gb-8ram-titanium-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 512GB 12RAM AZUL GLOBAL",
+          "id": "xiaomi-note-15-pro-512gb-12ram-blue-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 256GB 8RAM AZUL GLOBAL",
+          "id": "xiaomi-note-15-pro-256gb-8ram-blue-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 512GB 12RAM NEGRO GLOBAL",
+          "id": "xiaomi-note-15-pro-512gb-12ram-black-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 512GB 12RAM TITANIUM GLOBAL",
+          "id": "xiaomi-note-15-pro-512gb-12ram-titanium-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 256GB 8RAM NEGRO GLOBAL",
+          "id": "xiaomi-note-15-pro-256gb-8ram-black-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 512GB 8RAM 5G NEGRO GLOBAL",
+          "id": "xiaomi-note-15-pro-512gb-8ram-5g-black-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 256GB 8RAM 5G AZUL GLOBAL",
+          "id": "xiaomi-note-15-pro-256gb-8ram-5g-blue-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 512GB 8RAM 5G PÚRPURA GLOBAL",
+          "id": "xiaomi-note-15-pro-512gb-8ram-5g-purple-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 256GB 8RAM TITANUIM GLOBAL",
+          "id": "xiaomi-xiaomi-note-15-pro-256gb-8ram-titanuim-global",
+          "score": 0.75
+        }
+      ]
+    },
+    {
+      "supplier": {
+        "code": "15336-2",
+        "name": "XIAOMI NOTE 15 PRO 512GB 8RAM 5G PURPLE GLOBAL",
+        "price": 293
+      },
+      "matches": [
+        {
+          "name": "XIAOMI NOTE 15 PRO 256GB 8RAM 5G NEGRO GLOBAL",
+          "id": "xiaomi-note-15-pro-256gb-8ram-5g-black-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 256GB 8RAM TITANIUM GLOBAL",
+          "id": "xiaomi-note-15-pro-256gb-8ram-titanium-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 512GB 12RAM AZUL GLOBAL",
+          "id": "xiaomi-note-15-pro-512gb-12ram-blue-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 256GB 8RAM AZUL GLOBAL",
+          "id": "xiaomi-note-15-pro-256gb-8ram-blue-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 512GB 12RAM NEGRO GLOBAL",
+          "id": "xiaomi-note-15-pro-512gb-12ram-black-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 512GB 12RAM TITANIUM GLOBAL",
+          "id": "xiaomi-note-15-pro-512gb-12ram-titanium-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 256GB 8RAM NEGRO GLOBAL",
+          "id": "xiaomi-note-15-pro-256gb-8ram-black-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 512GB 8RAM 5G NEGRO GLOBAL",
+          "id": "xiaomi-note-15-pro-512gb-8ram-5g-black-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 256GB 8RAM 5G AZUL GLOBAL",
+          "id": "xiaomi-note-15-pro-256gb-8ram-5g-blue-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 512GB 8RAM 5G PÚRPURA GLOBAL",
+          "id": "xiaomi-note-15-pro-512gb-8ram-5g-purple-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 256GB 8RAM TITANUIM GLOBAL",
+          "id": "xiaomi-xiaomi-note-15-pro-256gb-8ram-titanuim-global",
+          "score": 0.75
+        }
+      ]
+    },
+    {
+      "supplier": {
+        "code": "15340-9",
+        "name": "XIAOMI NOTE 15 PRO 512GB 8RAM 5G TITANIUM GLOBAL",
+        "price": 293
+      },
+      "matches": [
+        {
+          "name": "XIAOMI NOTE 15 PRO 256GB 8RAM 5G NEGRO GLOBAL",
+          "id": "xiaomi-note-15-pro-256gb-8ram-5g-black-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 256GB 8RAM TITANIUM GLOBAL",
+          "id": "xiaomi-note-15-pro-256gb-8ram-titanium-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 512GB 12RAM AZUL GLOBAL",
+          "id": "xiaomi-note-15-pro-512gb-12ram-blue-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 256GB 8RAM AZUL GLOBAL",
+          "id": "xiaomi-note-15-pro-256gb-8ram-blue-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 512GB 12RAM NEGRO GLOBAL",
+          "id": "xiaomi-note-15-pro-512gb-12ram-black-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 512GB 12RAM TITANIUM GLOBAL",
+          "id": "xiaomi-note-15-pro-512gb-12ram-titanium-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 256GB 8RAM NEGRO GLOBAL",
+          "id": "xiaomi-note-15-pro-256gb-8ram-black-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 512GB 8RAM 5G NEGRO GLOBAL",
+          "id": "xiaomi-note-15-pro-512gb-8ram-5g-black-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 256GB 8RAM 5G AZUL GLOBAL",
+          "id": "xiaomi-note-15-pro-256gb-8ram-5g-blue-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 512GB 8RAM 5G PÚRPURA GLOBAL",
+          "id": "xiaomi-note-15-pro-512gb-8ram-5g-purple-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO 256GB 8RAM TITANUIM GLOBAL",
+          "id": "xiaomi-xiaomi-note-15-pro-256gb-8ram-titanuim-global",
+          "score": 0.75
+        }
+      ]
+    },
+    {
+      "supplier": {
+        "code": "15337-9",
+        "name": "XIAOMI NOTE 15 PRO+ 512GB 12RAM 5G BLACK GLOBAL",
+        "price": 395
+      },
+      "matches": [
+        {
+          "name": "XIAOMI NOTE 15 PRO+ 256GB 8RAM 5G BROWN GLOBAL",
+          "id": "xiaomi-note-15-pro-256gb-8ram-5g-brown-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO+ 512GB 12RAM 5G NEGRO GLOBAL",
+          "id": "xiaomi-note-15-pro-512gb-12ram-5g-black-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO+ 512GB 12RAM 5G AZUL GLOBAL",
+          "id": "xiaomi-note-15-pro-512gb-12ram-5g-blue-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO+ 256GB 8RAM 5G BLACK GLOBAL",
+          "id": "xiaomi-xiaomi-note-15-pro--256gb-8ram-5g-black-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO+ 256GB 8RAM 5G BLUE GLOBAL",
+          "id": "xiaomi-xiaomi-note-15-pro--256gb-8ram-5g-blue-global",
+          "score": 0.75
+        }
+      ]
+    },
+    {
+      "supplier": {
+        "code": "15338-6",
+        "name": "XIAOMI NOTE 15 PRO+ 512GB 12RAM 5G BLUE GLOBAL",
+        "price": 395
+      },
+      "matches": [
+        {
+          "name": "XIAOMI NOTE 15 PRO+ 256GB 8RAM 5G BROWN GLOBAL",
+          "id": "xiaomi-note-15-pro-256gb-8ram-5g-brown-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO+ 512GB 12RAM 5G NEGRO GLOBAL",
+          "id": "xiaomi-note-15-pro-512gb-12ram-5g-black-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO+ 512GB 12RAM 5G AZUL GLOBAL",
+          "id": "xiaomi-note-15-pro-512gb-12ram-5g-blue-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO+ 256GB 8RAM 5G BLACK GLOBAL",
+          "id": "xiaomi-xiaomi-note-15-pro--256gb-8ram-5g-black-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO+ 256GB 8RAM 5G BLUE GLOBAL",
+          "id": "xiaomi-xiaomi-note-15-pro--256gb-8ram-5g-blue-global",
+          "score": 0.75
+        }
+      ]
+    },
+    {
+      "supplier": {
+        "code": "15343-0",
+        "name": "XIAOMI NOTE 15 PRO+ 512GB 12RAM 5G BROWN GLOBAL",
+        "price": 395
+      },
+      "matches": [
+        {
+          "name": "XIAOMI NOTE 15 PRO+ 256GB 8RAM 5G BROWN GLOBAL",
+          "id": "xiaomi-note-15-pro-256gb-8ram-5g-brown-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO+ 512GB 12RAM 5G NEGRO GLOBAL",
+          "id": "xiaomi-note-15-pro-512gb-12ram-5g-black-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO+ 512GB 12RAM 5G AZUL GLOBAL",
+          "id": "xiaomi-note-15-pro-512gb-12ram-5g-blue-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO+ 256GB 8RAM 5G BLACK GLOBAL",
+          "id": "xiaomi-xiaomi-note-15-pro--256gb-8ram-5g-black-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI NOTE 15 PRO+ 256GB 8RAM 5G BLUE GLOBAL",
+          "id": "xiaomi-xiaomi-note-15-pro--256gb-8ram-5g-blue-global",
+          "score": 0.75
+        }
+      ]
+    },
+    {
+      "supplier": {
+        "code": "15857-2",
+        "name": "XIAOMI POCO X8 PRO MAX 256GB 12RAM 5G BLACK GLOBAL",
+        "price": 427
+      },
+      "matches": [
+        {
+          "name": "XIAOMI POCO X8 PRO MAX 256GB 12RAM 5G NEGRO GLOBAL",
+          "id": "xiaomi-poco-x8-pro-max-256gb-12ram-5g-black-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI POCO X8 PRO MAX 512GB 12RAM 5G AZUL GLOBAL",
+          "id": "xiaomi-poco-x8-pro-max-512gb-12ram-5g-blue-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI POCO X8 PRO MAX 512GB 12RAM 5G NEGRO GLOBAL",
+          "id": "xiaomi-poco-x8-pro-max-512gb-12ram-5g-black-global",
+          "score": 0.75
+        }
+      ]
+    },
+    {
+      "supplier": {
+        "code": "15987-6",
+        "name": "XIAOMI POCO X8 PRO MAX 256GB 12RAM 5G BLUE GLOBAL",
+        "price": 427
+      },
+      "matches": [
+        {
+          "name": "XIAOMI POCO X8 PRO MAX 256GB 12RAM 5G NEGRO GLOBAL",
+          "id": "xiaomi-poco-x8-pro-max-256gb-12ram-5g-black-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI POCO X8 PRO MAX 512GB 12RAM 5G AZUL GLOBAL",
+          "id": "xiaomi-poco-x8-pro-max-512gb-12ram-5g-blue-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI POCO X8 PRO MAX 512GB 12RAM 5G NEGRO GLOBAL",
+          "id": "xiaomi-poco-x8-pro-max-512gb-12ram-5g-black-global",
+          "score": 0.75
+        }
+      ]
+    },
+    {
+      "supplier": {
+        "code": "16016-2",
+        "name": "XIAOMI POCO X8 PRO MAX 256GB 12RAM 5G WHITE GLOBAL",
+        "price": 427
+      },
+      "matches": [
+        {
+          "name": "XIAOMI POCO X8 PRO MAX 256GB 12RAM 5G NEGRO GLOBAL",
+          "id": "xiaomi-poco-x8-pro-max-256gb-12ram-5g-black-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI POCO X8 PRO MAX 512GB 12RAM 5G AZUL GLOBAL",
+          "id": "xiaomi-poco-x8-pro-max-512gb-12ram-5g-blue-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI POCO X8 PRO MAX 512GB 12RAM 5G NEGRO GLOBAL",
+          "id": "xiaomi-poco-x8-pro-max-512gb-12ram-5g-black-global",
+          "score": 0.75
+        }
+      ]
+    },
+    {
+      "supplier": {
+        "code": "15827-5",
+        "name": "XIAOMI POCO X8 PRO MAX 512GB 12RAM 5G WHITE GLOBAL",
+        "price": 485
+      },
+      "matches": [
+        {
+          "name": "XIAOMI POCO X8 PRO MAX 256GB 12RAM 5G NEGRO GLOBAL",
+          "id": "xiaomi-poco-x8-pro-max-256gb-12ram-5g-black-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI POCO X8 PRO MAX 512GB 12RAM 5G AZUL GLOBAL",
+          "id": "xiaomi-poco-x8-pro-max-512gb-12ram-5g-blue-global",
+          "score": 0.75
+        },
+        {
+          "name": "XIAOMI POCO X8 PRO MAX 512GB 12RAM 5G NEGRO GLOBAL",
+          "id": "xiaomi-poco-x8-pro-max-512gb-12ram-5g-black-global",
+          "score": 0.75
+        }
+      ]
+    }
+  ],
+  "noMatches": [
+    {
+      "code": "13826-0",
+      "name": "ROBOT XIAOMI VACUUM 220V X20 MAX - PRETO",
+      "price": 545
+    },
+    {
+      "code": "15552-6",
+      "name": "ROBOT XIAOMI VACUUM S 220V BRANCO",
+      "price": 670
+    },
+    {
+      "code": "13900-7",
+      "name": "TABLET XIAOMI REDMI PAD 2 4RAM 128GB GRAPHITE GRAY 11'",
+      "price": 149.75
+    },
+    {
+      "code": "13949-6",
+      "name": "TABLET XIAOMI REDMI PAD 2 8RAM 256GB GRAPHITE GRAY 11'",
+      "price": 205
+    },
+    {
+      "code": "14648-7",
+      "name": "TABLET XIAOMI REDMI PAD 2 8RAM 256GB GREEN 11'",
+      "price": 205
+    },
+    {
+      "code": "15707-0",
+      "name": "TABLET XIAOMI REDMI PAD 2 8RAM 256GB PURPLE 11'",
+      "price": 205
+    },
+    {
+      "code": "15605-9",
+      "name": "TABLET XIAOMI REDMI PAD 2 PRO 6RAM/128GB PURPLE",
+      "price": 219
+    },
+    {
+      "code": "15606-6",
+      "name": "TABLET XIAOMI REDMI PAD 2 PRO 6RAM/128GB SILVER",
+      "price": 219
+    },
+    {
+      "code": "15607-3",
+      "name": "TABLET XIAOMI REDMI PAD 2 PRO 8RAM/256GB PURPLE",
+      "price": 279
+    },
+    {
+      "code": "11644-2",
+      "name": "TABLET XIAOMI REDMI PAD SE 4GB/128GB 8.7' BLUE",
+      "price": 122
+    },
+    {
+      "code": "11643-5",
+      "name": "TABLET XIAOMI REDMI PAD SE 4GB/128GB 8.7' GREEN",
+      "price": 122
+    },
+    {
+      "code": "15523-6",
+      "name": "XIAOMI 15T PRO 512GB 12RAM GOLD GLOBAL",
+      "price": 739
+    },
+    {
+      "code": "12800-1",
+      "name": "XIAOMI NOTE 14 128GB 6RAM BLACK GLOBAL",
+      "price": 131.75
+    },
+    {
+      "code": "12801-8",
+      "name": "XIAOMI NOTE 14 128GB 6RAM BLUE GLOBAL",
+      "price": 130
+    },
+    {
+      "code": "12802-5",
+      "name": "XIAOMI NOTE 14 128GB 6RAM GREEN GLOBAL",
+      "price": 130
+    },
+    {
+      "code": "14684-5",
+      "name": "XIAOMI NOTE 14 128GB 6RAM PURPLE GLOBAL",
+      "price": 130
+    },
+    {
+      "code": "13165-0",
+      "name": "XIAOMI NOTE 14 256GB 8RAM 5G PURPLE GLOBAL",
+      "price": 193.75
+    },
+    {
+      "code": "12804-9",
+      "name": "XIAOMI NOTE 14 256GB 8RAM BLUE GLOBAL",
+      "price": 157
+    },
+    {
+      "code": "12812-4",
+      "name": "XIAOMI NOTE 14 256GB 8RAM GREEN GLOBAL",
+      "price": 157
+    },
+    {
+      "code": "13366-1",
+      "name": "XIAOMI NOTE 14S 256GB 8RAM BLACK GLOBAL",
+      "price": 185.75
+    },
+    {
+      "code": "13367-8",
+      "name": "XIAOMI NOTE 14S 256GB 8RAM BLUE GLOBAL",
+      "price": 185.75
+    },
+    {
+      "code": "13423-1",
+      "name": "XIAOMI NOTE 14S 256GB 8RAM PURPLE GLOBAL",
+      "price": 185.75
+    },
+    {
+      "code": "15278-5",
+      "name": "XIAOMI NOTE 15 128GB 6RAM BLACK GLOBAL",
+      "price": 156
+    },
+    {
+      "code": "15288-4",
+      "name": "XIAOMI NOTE 15 128GB 6RAM BLUE GLOBAL",
+      "price": 156
+    },
+    {
+      "code": "15279-2",
+      "name": "XIAOMI NOTE 15 128GB 6RAM GREEN GLOBAL",
+      "price": 156
+    },
+    {
+      "code": "15280-8",
+      "name": "XIAOMI NOTE 15 128GB 6RAM PURPLE GLOBAL",
+      "price": 156
+    },
+    {
+      "code": "15292-1",
+      "name": "XIAOMI NOTE 15 256GB 8RAM 5G PURPLE GLOBAL",
+      "price": 222
+    },
+    {
+      "code": "15281-5",
+      "name": "XIAOMI NOTE 15 256GB 8RAM GREEN GLOBAL",
+      "price": 177
+    },
+    {
+      "code": "15282-2",
+      "name": "XIAOMI NOTE 15 256GB 8RAM PURPLE GLOBAL",
+      "price": 177
+    },
+    {
+      "code": "15828-2",
+      "name": "XIAOMI NOTE 15 512GB 8RAM 5G BLUE GLOBAL",
+      "price": 258
+    },
+    {
+      "code": "13581-8",
+      "name": "XIAOMI POCO C71 128GB 4RAM BLACK GLOBAL",
+      "price": 94.75
+    },
+    {
+      "code": "13582-5",
+      "name": "XIAOMI POCO C71 128GB 4RAM BLUE GLOBAL",
+      "price": 94.75
+    },
+    {
+      "code": "13583-2",
+      "name": "XIAOMI POCO C71 128GB 4RAM GOLD GLOBAL",
+      "price": 94.75
+    },
+    {
+      "code": "13584-9",
+      "name": "XIAOMI POCO C71 64GB 3RAM BLACK GLOBAL",
+      "price": 85
+    },
+    {
+      "code": "13585-6",
+      "name": "XIAOMI POCO C71 64GB 3RAM BLUE GLOBAL",
+      "price": 85
+    },
+    {
+      "code": "13586-3",
+      "name": "XIAOMI POCO C71 64GB 3RAM GOLD GLOBAL",
+      "price": 85
+    },
+    {
+      "code": "14455-1",
+      "name": "XIAOMI POCO C85 128GB 6RAM BLACK GLOBAL",
+      "price": 109.75
+    },
+    {
+      "code": "14513-8",
+      "name": "XIAOMI POCO C85 128GB 6RAM GREEN GLOBAL",
+      "price": 109.75
+    },
+    {
+      "code": "14514-5",
+      "name": "XIAOMI POCO C85 128GB 6RAM PURPLE GLOBAL",
+      "price": 109.75
+    },
+    {
+      "code": "14495-7",
+      "name": "XIAOMI POCO C85 256GB 8RAM BLACK GLOBAL",
+      "price": 132.75
+    },
+    {
+      "code": "14790-3",
+      "name": "XIAOMI POCO C85 256GB 8RAM GREEN GLOBAL",
+      "price": 132.75
+    },
+    {
+      "code": "14536-7",
+      "name": "XIAOMI POCO C85 256GB 8RAM PURPLE GLOBAL",
+      "price": 132.75
+    },
+    {
+      "code": "14417-9",
+      "name": "XIAOMI POCO F7 12RAM 512GB 5G BLACK GLOBAL",
+      "price": 455
+    },
+    {
+      "code": "14440-7",
+      "name": "XIAOMI POCO M7 256GB 8RAM SILVER GLOBAL",
+      "price": 142.75
+    },
+    {
+      "code": "13133-9",
+      "name": "XIAOMI POCO M7 PRO 256GB 8RAM 5G BLACK GLOBAL",
+      "price": 221
+    },
+    {
+      "code": "14317-2",
+      "name": "XIAOMI POCO M7 PRO 256GB 8RAM 5G BLACK GLOBAL",
+      "price": 221
+    },
+    {
+      "code": "13561-0",
+      "name": "XIAOMI POCO M7 PRO 256GB 8RAM 5G GREEN GLOBAL",
+      "price": 216.75
+    },
+    {
+      "code": "15420-8",
+      "name": "XIAOMI POCO M8 512GB 8RAM 5G GREEN GLOBAL",
+      "price": 224
+    },
+    {
+      "code": "15381-2",
+      "name": "XIAOMI POCO M8 PRO 256GB 8RAM 5G GREEN GLOBAL",
+      "price": 258
+    },
+    {
+      "code": "15378-2",
+      "name": "XIAOMI POCO M8 PRO 512GB 12RAM 5G GREEN GLOBAL",
+      "price": 313
+    },
+    {
+      "code": "15379-9",
+      "name": "XIAOMI POCO M8 PRO 512GB 12RAM 5G SILVER GLOBAL",
+      "price": 313
+    },
+    {
+      "code": "13140-7",
+      "name": "XIAOMI POCO X7 PRO 256GB 8RAM 5G BLACK GLOBAL",
+      "price": 294
+    },
+    {
+      "code": "13141-4",
+      "name": "XIAOMI POCO X7 PRO 256GB 8RAM 5G GREEN GLOBAL",
+      "price": 294
+    },
+    {
+      "code": "12811-7",
+      "name": "XIAOMI POCO X7 PRO 512GB 12RAM 5G BLACK GLOBAL",
+      "price": 350
+    },
+    {
+      "code": "12799-8",
+      "name": "XIAOMI POCO X7 PRO 512GB 12RAM 5G GREEN GLOBAL",
+      "price": 350
+    },
+    {
+      "code": "15823-7",
+      "name": "XIAOMI POCO X8 PRO 256GB 8RAM 5G BLACK GLOBAL",
+      "price": 305
+    },
+    {
+      "code": "15854-1",
+      "name": "XIAOMI POCO X8 PRO 256GB 8RAM 5G GREEN GLOBAL",
+      "price": 305
+    },
+    {
+      "code": "15822-0",
+      "name": "XIAOMI POCO X8 PRO 512GB 12RAM 5G BLACK GLOBAL",
+      "price": 384
+    },
+    {
+      "code": "15899-2",
+      "name": "XIAOMI POCO X8 PRO 512GB 12RAM 5G WHITE GLOBAL",
+      "price": 385
+    },
+    {
+      "code": "15898-5",
+      "name": "XIAOMI POCO X8 PRO 512GB 8RAM 5G BLACK GLOBAL",
+      "price": 333
+    },
+    {
+      "code": "15856-5",
+      "name": "XIAOMI POCO X8 PRO 512GB 8RAM 5G GREEN GLOBAL",
+      "price": 333
+    },
+    {
+      "code": "15824-4",
+      "name": "XIAOMI POCO X8 PRO 512GB 8RAM 5G WHITE GLOBAL",
+      "price": 333
+    },
+    {
+      "code": "14461-2",
+      "name": "XIAOMI REDMI 15 256GB 8RAM BLACK GLOBAL",
+      "price": 160
+    },
+    {
+      "code": "14463-6",
+      "name": "XIAOMI REDMI 15 256GB 8RAM PURPLE GLOBAL",
+      "price": 160
+    },
+    {
+      "code": "14457-5",
+      "name": "XIAOMI REDMI 15C 128GB 4RAM BLACK GLOBAL",
+      "price": 106
+    },
+    {
+      "code": "14464-3",
+      "name": "XIAOMI REDMI 15C 128GB 4RAM BLUE GLOBAL",
+      "price": 106
+    },
+    {
+      "code": "14497-1",
+      "name": "XIAOMI REDMI 15C 128GB 4RAM GREEN GLOBAL",
+      "price": 106
+    },
+    {
+      "code": "14498-8",
+      "name": "XIAOMI REDMI 15C 128GB 4RAM ORANGE GLOBAL",
+      "price": 106
+    },
+    {
+      "code": "14563-3",
+      "name": "XIAOMI REDMI 15C 256GB 4RAM BLACK GLOBAL",
+      "price": 116
+    },
+    {
+      "code": "14465-0",
+      "name": "XIAOMI REDMI 15C 256GB 4RAM BLUE GLOBAL",
+      "price": 116
+    },
+    {
+      "code": "14559-6",
+      "name": "XIAOMI REDMI 15C 256GB 4RAM GREEN GLOBAL",
+      "price": 115
+    },
+    {
+      "code": "14467-4",
+      "name": "XIAOMI REDMI 15C 256GB 8RAM BLACK GLOBAL",
+      "price": 132
+    },
+    {
+      "code": "14468-1",
+      "name": "XIAOMI REDMI 15C 256GB 8RAM BLUE GLOBAL",
+      "price": 132
+    },
+    {
+      "code": "13465-1",
+      "name": "XIAOMI REDMI A5 128GB 4RAM BLACK GLOBAL",
+      "price": 99
+    },
+    {
+      "code": "13466-8",
+      "name": "XIAOMI REDMI A5 128GB 4RAM BLUE GLOBAL",
+      "price": 99
+    },
+    {
+      "code": "13487-3",
+      "name": "XIAOMI REDMI A5 128GB 4RAM GOLD GLOBAL",
+      "price": 99
+    },
+    {
+      "code": "13804-8",
+      "name": "XIAOMI REDMI A5 128GB 4RAM GREEN GLOBAL",
+      "price": 99
+    },
+    {
+      "code": "13587-0",
+      "name": "XIAOMI REDMI A5 64GB 3RAM BLACK GLOBAL",
+      "price": 81
+    },
+    {
+      "code": "13653-2",
+      "name": "XIAOMI REDMI A5 64GB 3RAM BLUE GLOBAL",
+      "price": 81
+    },
+    {
+      "code": "13588-7",
+      "name": "XIAOMI REDMI A5 64GB 3RAM GOLD GLOBAL",
+      "price": 81
+    },
+    {
+      "code": "15794-0",
+      "name": "XIAOMI REDMI A7 PRO 128GB 4RAM GREEN GLOBAL",
+      "price": 110
+    },
+    {
+      "code": "15795-7",
+      "name": "XIAOMI REDMI A7 PRO 64GB 4RAM BLACK GLOBAL",
+      "price": 96
+    },
+    {
+      "code": "15796-4",
+      "name": "XIAOMI REDMI A7 PRO 64GB 4RAM BLUE GLOBAL",
+      "price": 96
+    },
+    {
+      "code": "16013-1",
+      "name": "XIAOMI REDMI A7 PRO 64GB 4RAM VERDE GLOBAL",
+      "price": 96
+    }
+  ]
+}

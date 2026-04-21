@@ -75,6 +75,11 @@ function CheckoutContent() {
   const [paymentMethod, setPaymentMethod] = useState<'nave' | 'transfer' | 'nave_cuotas'>('nave');
   const [error, setError] = useState<string | null>(null);
 
+  const [couponCode, setCouponCode] = useState('');
+  const [appliedCoupon, setAppliedCoupon] = useState<{ code: string, discount: number, type: 'PERCENTAGE' | 'FIXED' } | null>(null);
+  const [couponError, setCouponError] = useState<string | null>(null);
+  const [isApplyingCoupon, setIsApplyingCoupon] = useState(false);
+
   // Pre-fill user data from session
   useEffect(() => {
     if (session?.user) {
@@ -95,6 +100,48 @@ function CheckoutContent() {
       }));
     }
   }, [session]);
+
+  const handleApplyCoupon = async () => {
+    setCouponError(null);
+    if (!couponCode.trim()) return;
+
+    setIsApplyingCoupon(true);
+    try {
+      const response = await fetch('/api/coupons/validate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: couponCode })
+      });
+      const data = await response.json();
+      if (data.success) {
+        setAppliedCoupon(data.coupon);
+        setCouponCode('');
+      } else {
+        setCouponError(data.message || 'Cupón inválido');
+        setAppliedCoupon(null);
+      }
+    } catch (err) {
+      setCouponError('Error al validar el cupón');
+    } finally {
+      setIsApplyingCoupon(false);
+    }
+  };
+
+  const handleRemoveCoupon = () => {
+    setAppliedCoupon(null);
+    setCouponError(null);
+  };
+
+  let couponDiscountAmount = 0;
+  if (appliedCoupon) {
+    if (appliedCoupon.type === 'PERCENTAGE') {
+      couponDiscountAmount = cartTotal * (appliedCoupon.discount / 100);
+    } else {
+      couponDiscountAmount = appliedCoupon.discount;
+    }
+  }
+
+  const subtotalAfterCoupon = Math.max(0, cartTotal - couponDiscountAmount);
 
   const handleNextStep = () => {
     if (currentStep === 1) {
@@ -139,7 +186,7 @@ function CheckoutContent() {
     setLoading(true);
     setError(null);
 
-    const subtotalWithShipping = cartTotal + (selectedRate?.price || 0);
+    const subtotalWithShipping = subtotalAfterCoupon + (selectedRate?.price || 0);
     let finalTotal = subtotalWithShipping;
     if (paymentMethod === 'transfer') {
       finalTotal = subtotalWithShipping * 0.9;
@@ -310,7 +357,7 @@ function CheckoutContent() {
                     <div className="payment-info">
                       <span className="payment-name">Tarjeta Crédito / Débito (1 Pago)</span>
                     </div>
-                    <span className="payment-price-tag">${(cartTotal).toLocaleString('es-AR')}</span>
+                    <span className="payment-price-tag">${(subtotalAfterCoupon).toLocaleString('es-AR')}</span>
                   </div>
 
                   {/* Transferencia */}
@@ -324,7 +371,7 @@ function CheckoutContent() {
                       <span className="payment-name">Transferencia Bancaria</span>
                       <span className="payment-badge">10% OFF</span>
                     </div>
-                    <span className="payment-price-tag">${(cartTotal * 0.9).toLocaleString('es-AR')}</span>
+                    <span className="payment-price-tag">${(subtotalAfterCoupon * 0.9).toLocaleString('es-AR')}</span>
                   </div>
 
                   <div 
@@ -336,7 +383,7 @@ function CheckoutContent() {
                     <div className="payment-info">
                       <span className="payment-name">6 Cuotas Sin Interés</span>
                     </div>
-                    <span className="payment-price-tag">${(cartTotal * 1.2).toLocaleString('es-AR')}</span>
+                    <span className="payment-price-tag">${(subtotalAfterCoupon * 1.2).toLocaleString('es-AR')}</span>
                   </div>
 
                 </div>
@@ -415,11 +462,54 @@ function CheckoutContent() {
               ))}
             </div>
 
+            <div className="mt-4 mb-4 border-b border-slate-100 pb-4">
+              {!appliedCoupon ? (
+                <div className="flex flex-col gap-2">
+                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">Código de Descuento</span>
+                  <div className="flex gap-2">
+                    <input 
+                      type="text" 
+                      className="checkout-input !text-sm !p-2 flex-1 m-0"
+                      placeholder="Ingresá tu cupón"
+                      value={couponCode}
+                      onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                      onKeyDown={(e) => e.key === 'Enter' && handleApplyCoupon()}
+                    />
+                    <button 
+                      onClick={handleApplyCoupon}
+                      disabled={isApplyingCoupon || !couponCode.trim()}
+                      className="bg-[#0066cc] text-white px-4 text-xs font-bold uppercase rounded-md flex items-center justify-center disabled:opacity-50"
+                    >
+                      {isApplyingCoupon ? <FaSpinner className="animate-spin" /> : 'Aplicar'}
+                    </button>
+                  </div>
+                  {couponError && <span className="text-red-500 text-[10px] font-bold uppercase mt-1">{couponError}</span>}
+                </div>
+              ) : (
+                <div className="bg-green-50 p-3 rounded-md flex justify-between items-center border border-green-200">
+                  <div className="flex flex-col">
+                     <span className="text-green-700 text-[10px] font-black uppercase tracking-widest">Cupón Aplicado</span>
+                     <span className="text-green-800 font-bold uppercase">{appliedCoupon.code}</span>
+                  </div>
+                  <button onClick={handleRemoveCoupon} className="text-red-500 text-[10px] font-bold uppercase hover:underline">Quitar</button>
+                </div>
+              )}
+            </div>
+
             <div className="summary-totals">
               <div className="total-row">
-                <span className="total-label">Subtotal Productos</span>
+                <span className="total-label">Subtotal</span>
                 <span className="total-value">${cartTotal.toLocaleString('es-AR')}</span>
               </div>
+              {appliedCoupon && (
+                <div className="total-row">
+                  <span className="total-label text-green-600">
+                    Cupón ({appliedCoupon.code})
+                    {appliedCoupon.type === 'PERCENTAGE' && ` ${appliedCoupon.discount}%`}
+                  </span>
+                  <span className="total-value text-green-600">-${couponDiscountAmount.toLocaleString('es-AR')}</span>
+                </div>
+              )}
               <div className="total-row">
                 <span className="total-label">Costo de Envío</span>
                 <span className="total-value text-green-600">SIN CARGO</span>
@@ -427,14 +517,14 @@ function CheckoutContent() {
               {paymentMethod === 'transfer' && (
                 <div className="total-row">
                   <span className="total-label text-red-600">Descuento Transferencia (10%)</span>
-                  <span className="total-value text-red-600">-${(cartTotal * 0.1).toLocaleString('es-AR')}</span>
+                  <span className="total-value text-red-600">-${(subtotalAfterCoupon * 0.1).toLocaleString('es-AR')}</span>
                 </div>
               )}
               
               <div className="final-total-row">
                 <span className="final-total-label">Total Final</span>
                 <span className="final-total-value">
-                  ${(paymentMethod === 'transfer' ? cartTotal * 0.9 : (paymentMethod === 'nave_cuotas' ? cartTotal * 1.2 : cartTotal)).toLocaleString('es-AR')}
+                  ${(paymentMethod === 'transfer' ? subtotalAfterCoupon * 0.9 : (paymentMethod === 'nave_cuotas' ? subtotalAfterCoupon * 1.2 : subtotalAfterCoupon)).toLocaleString('es-AR')}
                 </span>
               </div>
             </div>
