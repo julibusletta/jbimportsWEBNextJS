@@ -65,8 +65,6 @@ export default function CookieConsent() {
           </button>
         </div>
       </div>
-
-      </div>
     </div>
   );
 }
