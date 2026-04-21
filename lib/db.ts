@@ -33,18 +33,30 @@ export const db = {
   },
 
   // Analytics logic
-  async incrementVisit(): Promise<void> {
+  async incrementVisit(city?: string): Promise<void> {
     try {
       await dbConnect();
       const Visit = await this.getVisitModel();
       // Get today's date in YYYY-MM-DD
       const dateStr = new Date().toISOString().split('T')[0];
       
-      await Visit.findOneAndUpdate(
-        { dateStr },
-        { $inc: { count: 1 } },
-        { upsert: true, new: true }
-      );
+      let visitRecord = await Visit.findOne({ dateStr });
+      if (!visitRecord) {
+        visitRecord = new Visit({ dateStr, count: 0, cities: [] });
+      }
+
+      visitRecord.count += 1;
+
+      if (city) {
+        const cityIndex = visitRecord.cities.findIndex((c: any) => c.name === city);
+        if (cityIndex > -1) {
+           visitRecord.cities[cityIndex].count += 1;
+        } else {
+           visitRecord.cities.push({ name: city, count: 1 });
+        }
+      }
+
+      await visitRecord.save();
     } catch (error) {
       console.error('DB Error [incrementVisit]:', error);
     }

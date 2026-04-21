@@ -26,7 +26,8 @@ export default function AdminDashboard() {
     totalClients: 0,
     recentOrders: [] as any[],
     visitsLast7: [] as { label: string, count: number }[],
-    totalVisitsToday: 0
+    totalVisitsToday: 0,
+    topRegions: [] as { name: string, count: number }[]
   });
   const [loading, setLoading] = useState(true);
 
@@ -86,6 +87,20 @@ export default function AdminDashboard() {
           });
         }
 
+        // Process Top Regions (aggregate from all recent visits)
+        const regionMap: Record<string, number> = {};
+        rawVisits.forEach((v: any) => {
+          if (v.cities && Array.isArray(v.cities)) {
+            v.cities.forEach((c: any) => {
+              regionMap[c.name] = (regionMap[c.name] || 0) + c.count;
+            });
+          }
+        });
+        const topRegions = Object.entries(regionMap)
+          .map(([name, count]) => ({ name, count }))
+          .sort((a, b) => b.count - a.count)
+          .slice(0, 5);
+
         setStats({
           totalProducts: allProducts.length,
           lowStock: lowStockCount,
@@ -95,7 +110,8 @@ export default function AdminDashboard() {
           totalClients: uniqueClients.size,
           recentOrders: fetchedOrders.slice(0, 5),
           visitsLast7: chartData,
-          totalVisitsToday: todayVisits
+          totalVisitsToday: todayVisits,
+          topRegions
         });
         setLoading(false);
       } catch (err) {
@@ -255,13 +271,35 @@ export default function AdminDashboard() {
 
         {/* Sidebar Info Cards */}
         <div className="space-y-8">
-           <div className="admin-v2-card bg-[#1a1c1d] text-white p-6 relative overflow-hidden">
+            <div className="admin-v2-card bg-[#1a1c1d] text-white p-6 relative overflow-hidden">
               <div className="absolute top-0 right-0 p-4 opacity-10">
                  <FaTrophy className="text-6xl rotate-12" />
               </div>
               <h4 className="font-bold mb-2">Ofertas Activas</h4>
               <p className="text-xs text-gray-400 mb-6 leading-relaxed">Tienes 3 promociones de temporada activas que vencen este viernes.</p>
               <button className="w-full py-2 bg-white/10 hover:bg-white/20 text-white rounded text-xs font-bold transition">Gestionar Ofertas</button>
+           </div>
+
+           <div className="admin-v2-card p-6">
+              <h4 className="font-bold text-gray-900 mb-4">Top Tráfico Geográfico</h4>
+              <div className="space-y-4">
+                 {stats.topRegions.length > 0 ? stats.topRegions.map((region, i) => (
+                   <div key={i} className="flex flex-col gap-1.5">
+                      <div className="flex justify-between items-end">
+                         <span className="text-[11px] font-bold text-gray-700 uppercase tracking-tight">{region.name}</span>
+                         <span className="text-[10px] font-black text-[#058c8c]">{region.count}</span>
+                      </div>
+                      <div className="h-1.5 w-full bg-gray-100 rounded-full overflow-hidden">
+                         <div 
+                           className="h-full bg-[#058c8c] rounded-full" 
+                           style={{ width: `${Math.min((region.count / Math.max(...stats.topRegions.map(r => r.count), 1)) * 100, 100)}%` }}
+                         ></div>
+                      </div>
+                   </div>
+                 )) : (
+                   <div className="py-4 text-center text-[10px] font-bold text-gray-400 uppercase tracking-widest">Calculando datos...</div>
+                 )}
+              </div>
            </div>
 
            <div className="admin-v2-card p-6">

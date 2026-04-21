@@ -9,7 +9,11 @@ const VisitSchema = new mongoose.Schema({
   count: { 
     type: Number, 
     default: 0 
-  }
+  },
+  cities: [{
+    name: String,
+    count: Number
+  }]
 });
 
 const VisitModel = mongoose.models.Visit || mongoose.model('Visit', VisitSchema);
