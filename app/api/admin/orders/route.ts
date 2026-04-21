@@ -17,6 +17,20 @@ export async function POST(request: Request) {
 
     if (action === 'update_status') {
       await db.updateOrderStatus(orderId, status);
+
+      // Si el administrador lo marca manualmente como APROBADO, le enviamos su comprobante.
+      if (status === 'APPROVED') {
+        const order = await db.getOrderById(orderId);
+        if (order && order.userEmail) {
+          try {
+            const { mailer } = await import('@/lib/mailer');
+            await mailer.sendPurchaseConfirmation(order.userEmail, order.userName || 'Cliente', order);
+          } catch (e) {
+            console.error('Error enviando mail de confirmación manual:', e);
+          }
+        }
+      }
+
       return NextResponse.json({ success: true, message: 'Estado del pedido actualizado' });
     }
 
