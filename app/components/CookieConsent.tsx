@@ -26,9 +26,9 @@ export default function CookieConsent() {
 
   return (
     <div className="fixed inset-0 z-[100] flex items-end justify-center pointer-events-none p-4 md:p-8">
-      <div className="privacy_prompt explicit_consent w-full max-w-4xl bg-white border border-gray-200 shadow-[0_20px_50px_rgba(0,0,0,0.2)] p-6 md:p-10 pointer-events-auto animate-in slide-in-from-bottom-10 duration-500 rounded-sm">
+      <div className="privacy_prompt explicit_consent w-full max-w-4xl bg-white border border-gray-200 shadow-[0_30px_70px_rgba(0,0,0,0.3)] p-10 md:p-14 lg:p-20 pointer-events-auto animate-in slide-in-from-bottom-10 duration-500 rounded-sm">
         
-        <h1 className="text-xl md:text-2xl font-bold text-gray-900 mb-4 font-sans tracking-tight">
+        <h1 className="text-xl md:text-3xl font-bold text-gray-900 mb-8 font-sans tracking-tight">
           Acerca de las cookies de este sitio
         </h1>
         
@@ -48,7 +48,7 @@ export default function CookieConsent() {
           </Link>.
         </p>
 
-        <div className="flex flex-col sm:flex-row justify-end items-center gap-4 border-t border-gray-100 pt-8">
+        <div className="flex flex-col sm:flex-row justify-end items-center gap-6 border-t border-gray-100 pt-12">
           <button 
             id="reject_prompt_submit"
             onClick={() => handleConsent('essential')}
