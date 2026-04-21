@@ -25,8 +25,11 @@ export default function CookieConsent() {
   if (!show) return null;
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-end justify-center pointer-events-none p-4 md:p-8">
-      <div className="privacy_prompt explicit_consent w-full max-w-4xl bg-white border border-gray-200 shadow-[0_30px_70px_rgba(0,0,0,0.3)] p-10 md:p-14 lg:p-20 pointer-events-auto animate-in slide-in-from-bottom-10 duration-500 rounded-sm">
+    <div className="fixed inset-0 z-[100] flex items-end justify-center pointer-events-none p-4 md:p-12">
+      <div 
+        className="w-full max-w-4xl bg-white border border-gray-200 shadow-[0_30px_70px_rgba(0,0,0,0.3)] pointer-events-auto animate-in slide-in-from-bottom-10 duration-500 rounded-sm"
+        style={{ padding: '3.5rem' }}
+      >
         
         <h1 className="text-xl md:text-3xl font-bold text-gray-900 mb-8 font-sans tracking-tight">
           Acerca de las cookies de este sitio
