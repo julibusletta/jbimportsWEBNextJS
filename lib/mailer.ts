@@ -7,6 +7,8 @@ import { logToFile } from './logger';
  * Handles sending purchase confirmation and status update emails
  */
 
+const BASE_URL = 'https://www.jbimports.com.ar';
+
 const transporter = nodemailer.createTransport({
   host: process.env.EMAIL_HOST,
   port: parseInt(process.env.EMAIL_PORT || '465'), 
@@ -84,7 +86,7 @@ export const mailer = {
             </table>
 
             <div style="text-align: center; margin-top: 30px;">
-              <a href="${process.env.NEXTAUTH_URL}/mi-cuenta/compras" style="display: inline-block; padding: 14px 28px; background-color: #1e293b; color: #ffffff; text-decoration: none; font-weight: bold; font-size: 12px; letter-spacing: 1px; text-transform: uppercase;">Gestionar mi pedido</a>
+              <a href="${BASE_URL}/mi-cuenta/compras" style="display: inline-block; padding: 14px 28px; background-color: #1e293b; color: #ffffff; text-decoration: none; font-weight: bold; font-size: 12px; letter-spacing: 1px; text-transform: uppercase;">Gestionar mi pedido</a>
             </div>
           </div>
           <div class="footer">
@@ -226,7 +228,7 @@ export const mailer = {
 
             <div style="text-align: center; margin-top: 40px;">
               <p style="font-size: 12px; color: #999; margin-bottom: 20px;">Puedes seguir tu envío fácilmente desde tu cuenta</p>
-              <a href="${process.env.NEXTAUTH_URL}/mi-cuenta/compras" style="display: inline-block; padding: 18px 35px; background: #000; color: #fff; text-decoration: none; font-weight: 900; font-size: 11px; letter-spacing: 2px; text-transform: uppercase;">Ir a Mis Compras</a>
+              <a href="${BASE_URL}/mi-cuenta/compras" style="display: inline-block; padding: 18px 35px; background: #000; color: #fff; text-decoration: none; font-weight: 900; font-size: 11px; letter-spacing: 2px; text-transform: uppercase;">Ir a Mis Compras</a>
             </div>
           </div>
           <div class="footer">
@@ -266,7 +268,7 @@ export const mailer = {
         <p>Se ha subido un nuevo comprobante para la orden <strong>#${orderId}</strong>.</p>
         <p><strong>Cliente:</strong> ${userName}</p>
         <div style="margin-top: 30px;">
-          <a href="${process.env.NEXTAUTH_URL}/admin/orders" style="background: #000; color: #fff; padding: 12px 25px; text-decoration: none; font-weight: bold; border-radius: 4px;">Ver en Panel Admin</a>
+          <a href="${BASE_URL}/admin/orders" style="background: #000; color: #fff; padding: 12px 25px; text-decoration: none; font-weight: bold; border-radius: 4px;">Ver en Panel Admin</a>
         </div>
       </div>
     `;
@@ -314,7 +316,7 @@ export const mailer = {
         </div>
         
         <div style="text-align: center;">
-          <a href="${process.env.NEXTAUTH_URL}/admin/products" style="display: inline-block; background: #111827; color: white; padding: 12px 24px; text-decoration: none; font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; border-radius: 6px;">Ver Catálogo</a>
+          <a href="${BASE_URL}/admin/products" style="display: inline-block; background: #111827; color: white; padding: 12px 24px; text-decoration: none; font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; border-radius: 6px;">Ver Catálogo</a>
         </div>
         
         <div style="margin-top: 35px; text-align: center; color: #9ca3af; font-size: 11px;">
