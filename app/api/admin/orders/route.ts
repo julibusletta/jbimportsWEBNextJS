@@ -34,6 +34,11 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: true, message: 'Estado del pedido actualizado' });
     }
 
+    if (action === 'delete_order') {
+      await db.deleteOrder(orderId);
+      return NextResponse.json({ success: true, message: 'Pedido eliminado físicamente de la base de datos' });
+    }
+
     return NextResponse.json({ success: false, message: 'Acción no válida' }, { status: 400 });
   } catch (error: any) {
     console.error('API Error [Orders POST]:', error);

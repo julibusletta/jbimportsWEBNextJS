@@ -141,6 +141,17 @@ export const db = {
     }
   },
 
+  async deleteOrder(id: string): Promise<void> {
+    try {
+      await dbConnect();
+      const Order = await this.getOrderModel();
+      await Order.deleteOne({ id });
+    } catch (error) {
+      console.error('DB Error [deleteOrder]:', error);
+      throw error;
+    }
+  },
+
   async getCategories(): Promise<any[]> {
     try {
       await dbConnect();

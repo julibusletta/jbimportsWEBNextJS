@@ -11,7 +11,8 @@ import {
   FaClock, 
   FaTruck,
   FaTimesCircle,
-  FaFileInvoiceDollar
+  FaFileInvoiceDollar,
+  FaTrash
 } from 'react-icons/fa';
 
 interface Order {
@@ -70,6 +71,25 @@ export default function OrdersPage() {
       }
     } catch (err) {
       console.error('Error updating order status:', err);
+    }
+  };
+
+  const deleteOrder = async (orderId: string) => {
+    if (!confirm('¿Estás seguro que deseas ELIMINAR FÍSICAMENTE esta orden? Esta acción NO se puede deshacer.')) return;
+    
+    try {
+      const resp = await fetch('/api/admin/orders', {
+        method: 'POST',
+        body: JSON.stringify({ action: 'delete_order', orderId }),
+        headers: { 'Content-Type': 'application/json' }
+      });
+      if (resp.ok) {
+        fetchOrders();
+      } else {
+        alert('Hubo un error al eliminar el pedido.');
+      }
+    } catch (err) {
+      console.error('Error deleting order:', err);
     }
   };
 
@@ -405,11 +425,18 @@ export default function OrdersPage() {
                     {getStatusBadge(order.status)}
                   </td>
                   <td className="px-6 py-6 text-center">
-                       <button 
-                         onClick={() => setSelectedOrder(order)}
-                         className="w-10 h-10 flex items-center justify-center bg-transparent border border-gray-100 text-gray-300 rounded hover:border-emerald-500 hover:text-emerald-500 transition cursor-pointer group-hover:border-emerald-200" title="Ver detalle">
-                         <FaEye size={16} />
-                       </button>
+                      <div className="flex justify-center gap-2">
+                        <button 
+                          onClick={() => setSelectedOrder(order)}
+                          className="w-10 h-10 flex items-center justify-center bg-transparent border border-gray-100 text-gray-300 rounded hover:border-emerald-500 hover:text-emerald-500 transition cursor-pointer group-hover:border-emerald-200" title="Ver detalle">
+                          <FaEye size={16} />
+                        </button>
+                        <button 
+                          onClick={() => deleteOrder(order.id)}
+                          className="w-10 h-10 flex items-center justify-center bg-transparent border border-gray-100 text-gray-300 rounded hover:border-red-500 hover:bg-red-50 hover:text-red-500 transition cursor-pointer group-hover:border-red-200" title="Eliminar definitivamente">
+                          <FaTrash size={14} />
+                        </button>
+                      </div>
                   </td>
                 </tr>
               )) : (
