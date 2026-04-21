@@ -22,7 +22,9 @@ export default function AdminDashboard() {
     lowStock: 0,
     totalOrders: 0,
     pendingOrders: 0,
-    totalSales: 0
+    totalSales: 0,
+    totalClients: 0,
+    recentOrders: [] as any[]
   });
   const [loading, setLoading] = useState(true);
 
@@ -30,18 +32,44 @@ export default function AdminDashboard() {
     const fetchStats = async () => {
       try {
         setLoading(true);
-        const prodResp = await fetch('/api/admin');
+        const [prodResp, ordersResp] = await Promise.all([
+          fetch('/api/admin'),
+          fetch('/api/admin/orders')
+        ]);
         const prodData = await prodResp.json();
+        const ordersData = await ordersResp.json();
         
         const allProducts = Object.values(prodData.products || {}).flat() as any[];
-        const lowStockCount = allProducts.filter(p => p.stock <= 5).length;
+        const lowStockCount = allProducts.filter((p: any) => p.stock <= 5).length;
+
+        let fetchedOrders = [];
+        let totalSalesVal = 0;
+        let pendingCount = 0;
+        let uniqueClients = new Set();
+        
+        if (ordersData.success && Array.isArray(ordersData.orders)) {
+          fetchedOrders = ordersData.orders;
+          fetchedOrders.forEach((o: any) => {
+             if (o.status === 'APPROVED' || o.status === 'SHIPPED') {
+                totalSalesVal += o.total || 0;
+             }
+             if (o.status === 'PENDING' || o.status === 'PENDING_REVIEW') {
+                pendingCount++;
+             }
+             if (o.userEmail) {
+                uniqueClients.add(o.userEmail);
+             }
+          });
+        }
 
         setStats({
           totalProducts: allProducts.length,
           lowStock: lowStockCount,
-          totalOrders: 42,
-          pendingOrders: 8,
-          totalSales: 342500
+          totalOrders: fetchedOrders.length,
+          pendingOrders: pendingCount,
+          totalSales: totalSalesVal,
+          totalClients: uniqueClients.size,
+          recentOrders: fetchedOrders.slice(0, 5)
         });
         setLoading(false);
       } catch (err) {
@@ -55,24 +83,24 @@ export default function AdminDashboard() {
 
   const cards = [
     { 
-      label: 'Ventas Totales', 
+      label: 'Ventas Aprobadas', 
       value: `$${stats.totalSales.toLocaleString()}`, 
       icon: <FaDollarSign />, 
-      trend: '+15.2%',
+      trend: 'Recibidas',
       trendUp: true
     },
     { 
-      label: 'Pedidos', 
+      label: 'Pedidos Totales', 
       value: stats.totalOrders.toString(), 
       icon: <FaShoppingCart />, 
-      trend: '+5 hoy',
-      trendUp: true
+      trend: stats.pendingOrders > 0 ? `${stats.pendingOrders} pendientes` : 'Al día',
+      trendUp: stats.pendingOrders === 0
     },
     { 
       label: 'Clientes', 
-      value: '128', 
+      value: stats.totalClients.toString(), 
       icon: <FaUsers />, 
-      trend: '+12%',
+      trend: 'Únicos',
       trendUp: true
     },
     { 
@@ -158,23 +186,30 @@ export default function AdminDashboard() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[#e1e3e5]">
-                  {[
-                    { id: '#1024', customer: 'Juan Perez', status: 'Pendiente', total: '$12,500' },
-                    { id: '#1023', customer: 'Maria Garcia', status: 'Enviado', total: '$45,000' },
-                    { id: '#1022', customer: 'Robert Smith', status: 'Completado', total: '$8,900' },
-                  ].map((order, i) => (
+                  {stats.recentOrders.length === 0 ? (
+                    <tr>
+                      <td colSpan={4} className="px-6 py-8 text-center text-gray-400 font-bold uppercase tracking-widest text-[10px]">Sin pedidos</td>
+                    </tr>
+                  ) : stats.recentOrders.map((order, i) => (
                     <tr key={i} className="hover:bg-gray-50 transition-colors text-sm">
-                      <td className="px-6 py-4 font-bold text-gray-900">{order.id}</td>
-                      <td className="px-6 py-4 text-gray-600">{order.customer}</td>
+                      <td className="px-6 py-4 font-bold text-gray-900">#{order.id.slice(-8).toUpperCase()}</td>
+                      <td className="px-6 py-4 text-gray-600">{order.userName || order.userEmail}</td>
                       <td className="px-6 py-4">
                         <span className={`px-2 py-1 rounded-full text-[10px] font-bold ${
-                          order.status === 'Pendiente' ? 'bg-amber-50 text-amber-600' : 
-                          order.status === 'Enviado' ? 'bg-blue-50 text-blue-600' : 'bg-green-50 text-green-600'
+                          order.status === 'PENDING' || order.status === 'PENDING_REVIEW' ? 'bg-amber-50 text-amber-600' : 
+                          order.status === 'SHIPPED' ? 'bg-blue-50 text-blue-600' : 
+                          order.status === 'CANCELLED' || order.status === 'REJECTED' ? 'bg-red-50 text-red-600' :
+                          'bg-green-50 text-green-600'
                         }`}>
-                          {order.status}
+                          {order.status === 'PENDING' ? 'Pendiente' : 
+                           order.status === 'APPROVED' ? 'Aprobado' : 
+                           order.status === 'SHIPPED' ? 'Enviado' : 
+                           order.status === 'PENDING_REVIEW' ? 'Revisión' : 
+                           order.status === 'CANCELLED' ? 'Cancelado' : 
+                           order.status === 'REJECTED' ? 'Rechazado' : order.status}
                         </span>
                       </td>
-                      <td className="px-6 py-4 text-right font-black text-gray-900">{order.total}</td>
+                      <td className="px-6 py-4 text-right font-black text-gray-900">${(order.total || 0).toLocaleString()}</td>
                     </tr>
                   ))}
                 </tbody>
