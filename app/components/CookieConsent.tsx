@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 
 export default function CookieConsent() {
   const [show, setShow] = useState(false);
@@ -9,7 +10,7 @@ export default function CookieConsent() {
     const consent = localStorage.getItem('jbi_cookie_consent');
     if (!consent) {
       // Show after a small delay for better UX
-      const timer = setTimeout(() => setShow(true), 2000);
+      const timer = setTimeout(() => setShow(true), 1500);
       return () => clearTimeout(timer);
     }
   }, []);
@@ -24,28 +25,47 @@ export default function CookieConsent() {
   if (!show) return null;
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-[100] p-4 md:p-6 animate-in slide-in-from-bottom duration-500">
-      <div className="max-w-4xl mx-auto bg-white/95 backdrop-blur-md border border-gray-100 shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.1)] rounded-2xl p-6 md:p-8 flex flex-col md:flex-row items-center gap-6">
-        <div className="flex-1">
-          <h3 className="text-sm font-black uppercase tracking-widest text-gray-900 mb-2">Tu privacidad en JB Imports</h3>
-          <p className="text-[12px] text-gray-500 leading-relaxed font-medium">
-            Utilizamos cookies propias y de terceros para analizar tu navegación con fines estadísticos y mostrate publicidad personalizada en redes sociales basada en tus intereses. Al aceptar, nos permites mejorar tu experiencia y ofrecerte ofertas exclusivas.
-          </p>
-        </div>
-        <div className="flex flex-wrap justify-center gap-3 shrink-0">
+    <div className="fixed inset-0 z-[100] flex items-end justify-center pointer-events-none p-4 md:p-8">
+      <div className="privacy_prompt explicit_consent w-full max-w-4xl bg-white border border-gray-200 shadow-[0_20px_50px_rgba(0,0,0,0.2)] p-6 md:p-10 pointer-events-auto animate-in slide-in-from-bottom-10 duration-500 rounded-sm">
+        
+        <h1 className="text-xl md:text-2xl font-bold text-gray-900 mb-4 font-sans tracking-tight">
+          Acerca de las cookies de este sitio
+        </h1>
+        
+        <p className="text-sm md:text-[15px] text-gray-600 leading-relaxed mb-8">
+          Este sitio utiliza cookies esenciales y no esenciales para mejorar su experiencia online, 
+          poder compartir contenido en redes sociales, medir el tráfico en este sitio web y 
+          mostrarle anuncios personalizados basados en su actividad de navegación.
+          <br /><br />
+          Al hacer clic en ACEPTAR, aceptas el{' '}
+          <Link href="/terminos" className="text-blue-600 hover:underline font-medium">
+            uso de cookies
+          </Link>{' '}
+          de JB Imports y de sus socios. Para obtener más información sobre las cookies utilizadas, 
+          consulta la{' '}
+          <Link href="/terminos" className="text-blue-600 hover:underline font-medium">
+            Política de Privacidad
+          </Link>.
+        </p>
+
+        <div className="flex flex-col sm:flex-row justify-end items-center gap-4 border-t border-gray-100 pt-8">
           <button 
+            id="reject_prompt_submit"
             onClick={() => handleConsent('essential')}
-            className="px-6 py-2.5 text-[10px] font-bold uppercase tracking-widest text-gray-400 hover:text-gray-600 transition"
+            className="w-full sm:w-auto px-10 py-3 text-[11px] font-black uppercase tracking-[0.2em] text-gray-500 bg-gray-50 hover:bg-gray-100 transition duration-300 rounded-sm order-2 sm:order-1"
           >
-            Solo esenciales
+            Rechazar
           </button>
           <button 
+            id="consent_prompt_submit"
             onClick={() => handleConsent('all')}
-            className="px-8 py-2.5 bg-gray-900 text-white text-[10px] font-black uppercase tracking-[0.2em] rounded-lg hover:bg-gray-800 transition shadow-lg shadow-gray-200"
+            className="w-full sm:w-auto px-12 py-3 bg-[#1a1a1a] text-white text-[11px] font-black uppercase tracking-[0.2em] hover:bg-black transition duration-300 shadow-xl rounded-sm order-1 sm:order-2"
           >
-            Aceptar todo
+            Aceptar
           </button>
         </div>
+      </div>
+
       </div>
     </div>
   );
