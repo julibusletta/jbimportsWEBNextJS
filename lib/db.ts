@@ -88,12 +88,14 @@ export const db = {
       await dbConnect();
       const Order = await this.getOrderModel();
       const updateData: any = { status };
-      if (navePaymentId) updateData.navePaymentId = navePaymentId;
+      
+      let query: any = { id };
+      if (navePaymentId) {
+        query = { $or: [{ id }, { navePaymentId }] };
+        updateData.navePaymentId = navePaymentId;
+      }
 
-      await Order.updateOne(
-        { $or: [{ id }, { navePaymentId }] },
-        updateData
-      );
+      await Order.updateOne(query, updateData);
     } catch (error) {
       console.error('DB Error [updateOrderStatus]:', error);
       throw error;

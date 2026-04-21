@@ -91,7 +91,12 @@ export async function POST(request: Request) {
 
     // 3. Update the database - ONLY if we have a status
     const naveInternalId = body.id || body.payment_id;
+    let previousStatus = null;
+    
     if (normalizedStatus) {
+      const orderPrior = await db.getOrderById(orderId);
+      previousStatus = orderPrior?.status;
+      
       await db.updateOrderStatus(orderId, normalizedStatus as any, naveInternalId);
     } else {
       logToFile(`NAVE WEBHOOK: Skipping DB update for ${orderId} (empty status)`);
@@ -100,7 +105,7 @@ export async function POST(request: Request) {
     // 4. If payment is approved and was not approved before, send confirmation email
     if (normalizedStatus === 'APPROVED') {
       const order = await db.getOrderById(orderId);
-      if (order && order.status !== 'APPROVED' && order.userEmail) {
+      if (order && previousStatus !== 'APPROVED' && order.userEmail) {
         try {
           const { mailer } = await import('@/lib/mailer');
           await mailer.sendPurchaseConfirmation(order.userEmail, order.userName, order);
