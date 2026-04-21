@@ -28,7 +28,7 @@ export default function CookieConsent() {
     <div className="fixed inset-0 z-[100] flex items-end justify-center pointer-events-none p-4 md:p-12">
       <div 
         className="w-full max-w-4xl bg-white border border-gray-200 shadow-[0_30px_70px_rgba(0,0,0,0.3)] pointer-events-auto animate-in slide-in-from-bottom-10 duration-500 rounded-sm"
-        style={{ padding: '3.5rem' }}
+        style={{ padding: '2.5rem' }}
       >
         
         <h1 className="text-xl md:text-3xl font-bold text-gray-900 mb-8 font-sans tracking-tight">
