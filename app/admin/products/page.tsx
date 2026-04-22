@@ -116,59 +116,6 @@ export default function ProductsPage() {
     setEditingProduct(prev => {
       if (prev?.id === id) {
         const newP = { ...prev, [field]: value };
-        if (field === 'costPrice') {
-          const cost = Number(value);
-          const categoryData = categories.find(c => c.slug === category);
-          if (categoryData && cost > 0) {
-            const markupPercent = categoryData.markupPercent || 0;
-            const markupFixed = categoryData.markupFixed;
-            const margin = 1 + (markupPercent / 100);
-            let finalPrice = 0;
-            
-            if (cost >= 500) {
-              finalPrice = (cost * 1.10) * exchangeRate * margin;
-            } else {
-              let fixedAdj = 0;
-              if (markupFixed) {
-                const cleanFixed = markupFixed.toUpperCase();
-                const usdMatch = cleanFixed.match(/\$(\d+)\s*USD/i);
-                const arsMatch = cleanFixed.match(/\$(\d+)(K)?\s*ARS/i);
-                if (arsMatch) {
-                  fixedAdj = parseFloat(arsMatch[1]);
-                  if (arsMatch[2]) fixedAdj *= 1000;
-                  finalPrice = (cost * exchangeRate + fixedAdj) * margin;
-                } else if (usdMatch) {
-                  fixedAdj = parseFloat(usdMatch[1]);
-                  finalPrice = ((cost + fixedAdj) * exchangeRate) * margin;
-                } else {
-                  finalPrice = (cost * exchangeRate) * margin;
-                }
-              } else {
-                finalPrice = (cost * exchangeRate) * margin;
-              }
-            }
-            finalPrice = finalPrice > 100000 ? Math.round(finalPrice / 100) * 100 : Math.round(finalPrice / 10) * 10;
-            
-            // If there's a discount, originalPrice is the base price
-            if (newP.discount && newP.discount > 0) {
-              newP.originalPrice = finalPrice;
-              newP.price = Math.round(finalPrice * (1 - newP.discount / 100));
-            } else {
-              newP.price = finalPrice;
-            }
-
-            setTimeout(() => {
-               setProducts(prevProducts => {
-                 const updated = { ...prevProducts };
-                 if (updated[category]) {
-                   updated[category] = updated[category].map(item => item.id === id ? { ...item, price: newP.price, originalPrice: newP.originalPrice } : item);
-                 }
-                 return updated;
-               });
-            }, 0);
-          }
-        }
-
         if (field === 'discount') {
           const disc = Number(value);
           const base = newP.originalPrice || newP.price;
@@ -810,7 +757,7 @@ function ProductsContent({
                                    />
                                  </div>
                                  <p className="text-[10px] text-gray-400 font-bold mt-1 italic uppercase tracking-tighter">
-                                   {p.costPrice && p.costPrice > 0 ? 'Basado en tasa y márgenes' : 'Precio establecido manualmente'}
+                                    Precio establecido manualmente
                                  </p>
                               </div>
                             </div>
