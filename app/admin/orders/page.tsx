@@ -203,7 +203,14 @@ export default function OrdersPage() {
                  </button>
               </div>
 
-              <div className="flex-1 overflow-y-auto p-8 lg:p-12">
+              <div className="flex-1 overflow-y-auto p-8 lg:p-12 min-h-[400px]">
+                 {/* Emergency Debug: Si algo rompe el renderizado del grid, al menos veremos esto */}
+                 {!selectedOrder.items && (
+                   <div className="p-4 bg-red-50 text-red-600 font-bold mb-4 rounded tracking-tight text-[10px] uppercase">
+                     ⚠️ Error de carga en los items de esta orden. Contactar a soporte.
+                   </div>
+                 )}
+
                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                     
                     {/* Customer & Info Side */}
@@ -226,8 +233,8 @@ export default function OrdersPage() {
                              {selectedOrder.navePaymentId && (
                                <div className="flex justify-between">
                                   <span className="text-xs text-gray-400 font-bold uppercase">ID NAVE:</span>
-                                  <span className="text-[10px] font-black text-gray-400 select-all">{selectedOrder.navePaymentId}</span>
-                               </div>
+                                  <span className="text-[10px] font-black text-gray-400 select-all tracking-tight">{selectedOrder.navePaymentId}</span>
+                                </div>
                              )}
                           </div>
                        </section>
@@ -240,16 +247,16 @@ export default function OrdersPage() {
                                   <div className="flex flex-col">
                                      <span className="text-[9px] text-amber-600 font-black uppercase tracking-widest mb-1">Dirección Completa</span>
                                      <span className="text-xs font-black text-gray-800 uppercase">
-                                       {selectedOrder.shippingAddress.street || 'Falta Calle'}
+                                       {selectedOrder.shippingAddress?.street || 'Sin calle'}
                                      </span>
                                      <span className="text-[11px] font-bold text-gray-500 uppercase">
-                                       {selectedOrder.shippingAddress.city || '---'}, {selectedOrder.shippingAddress.state || '---'} ({selectedOrder.shippingAddress.zip || '---'})
+                                       {selectedOrder.shippingAddress?.city || '---'}, {selectedOrder.shippingAddress?.state || '---'} ({selectedOrder.shippingAddress?.zip || '---'})
                                      </span>
                                   </div>
                                   <div className="flex justify-between items-center pt-2 border-t border-amber-100 mt-2">
-                                     <span className="text-[9px] text-amber-600 font-black uppercase tracking-widest">{selectedOrder.shippingAddress.shippingMethod || 'Envío Estándar'}</span>
+                                     <span className="text-[9px] text-amber-600 font-black uppercase tracking-widest">{selectedOrder.shippingAddress?.shippingMethod || 'Envío Estándar'}</span>
                                      <span className="text-xs font-black text-gray-800">
-                                       {typeof selectedOrder.shippingAddress.shippingCost === 'number' ? (selectedOrder.shippingAddress.shippingCost === 0 ? 'GRATIS' : `$${selectedOrder.shippingAddress.shippingCost.toLocaleString()}`) : '---'}
+                                       {typeof selectedOrder.shippingAddress?.shippingCost === 'number' ? (selectedOrder.shippingAddress.shippingCost === 0 ? 'GRATIS' : `$${selectedOrder.shippingAddress.shippingCost.toLocaleString()}`) : '---'}
                                      </span>
                                   </div>
                                </>
@@ -265,10 +272,10 @@ export default function OrdersPage() {
                              {selectedOrder.items?.map((item: any, idx: number) => (
                                 <div key={idx} className="flex justify-between items-center bg-gray-50 p-4 rounded border border-gray-100/50">
                                    <div className="flex-1 pr-4">
-                                      <p className="text-[11px] font-black text-gray-900 uppercase leading-tight">{item.name || 'Producto'}</p>
-                                      <p className="text-[10px] text-gray-400 font-bold mt-2 tracking-widest">CANTIDAD: {item.quantity || 1}</p>
+                                      <p className="text-[11px] font-black text-gray-900 uppercase leading-tight">{item?.name || 'Producto'}</p>
+                                      <p className="text-[10px] text-gray-400 font-bold mt-2 tracking-widest">CANTIDAD: {item?.quantity || 1}</p>
                                    </div>
-                                   <span className="text-xs font-black text-gray-900 whitespace-nowrap">${((item.price || 0) * (item.quantity || 1)).toLocaleString()}</span>
+                                   <span className="text-xs font-black text-gray-900 whitespace-nowrap">${((item?.price || 0) * (item?.quantity || 1)).toLocaleString()}</span>
                                 </div>
                              ))}
                           </div>
