@@ -30,7 +30,12 @@ export async function GET(request: Request) {
       query = { 
         $or: [
           { discount: { $gt: 0 } },
-          { originalPrice: { $gt: 0 } },
+          { 
+            $and: [
+              { originalPrice: { $exists: true } },
+              { $expr: { $gt: ["$originalPrice", "$price"] } }
+            ]
+          },
           { id: { $in: ['378', '1339'] } }
         ]
       };
