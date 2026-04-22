@@ -203,13 +203,21 @@ export default function OrdersPage() {
                  </button>
               </div>
 
-              <div className="flex-1 overflow-y-auto p-8 lg:p-12 min-h-[400px]">
-                 {/* Emergency Debug: Si algo rompe el renderizado del grid, al menos veremos esto */}
-                 {!selectedOrder.items && (
-                   <div className="p-4 bg-red-50 text-red-600 font-bold mb-4 rounded tracking-tight text-[10px] uppercase">
-                     ⚠️ Error de carga en los items de esta orden. Contactar a soporte.
-                   </div>
-                 )}
+              <div className="flex-1 overflow-y-auto p-8 lg:p-12 min-h-[500px] bg-white">
+                 {/* RESCUE UI: Si el diseño de abajo falla por CSS, esto se verá sí o sí */}
+                 <div className="mb-10 p-6 bg-slate-900 text-slate-100 rounded-lg font-mono text-[11px] leading-relaxed border-l-4 border-emerald-500">
+                    <p className="font-black text-emerald-400 mb-2 uppercase tracking-widest">--- MODO RESCUE ACTIVADO ---</p>
+                    <p><b className="text-slate-400">CLIENTE:</b> {selectedOrder.userName || '---'} ({selectedOrder.userEmail})</p>
+                    <p><b className="text-slate-400">PAGO:</b> {selectedOrder.paymentMethod || 'NAVE'} | ID: {selectedOrder.navePaymentId || 'PENDIENTE'}</p>
+                    <p><b className="text-slate-400">ENVÍO:</b> {selectedOrder.shippingAddress?.street}, {selectedOrder.shippingAddress?.city} ({selectedOrder.shippingAddress?.shippingMethod})</p>
+                    <div className="mt-2 pt-2 border-t border-slate-800">
+                       <b className="text-slate-400 uppercase">PRODUCTOS:</b>
+                       {selectedOrder.items?.map((it: any, i: number) => (
+                         <div key={i}>• {it.name} (x{it.quantity}) - ${it.price?.toLocaleString()}</div>
+                       ))}
+                    </div>
+                    <p className="mt-2 text-lg font-black text-emerald-400">TOTAL: ${selectedOrder.total?.toLocaleString()}</p>
+                 </div>
 
                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                     
@@ -294,7 +302,7 @@ export default function OrdersPage() {
                                  <>
                                     <img 
                                       src={selectedOrder.proofUrl} 
-                                      className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105" 
+                                      className="w-full h-full object-contain" 
                                       alt="Comprobante" 
                                     />
                                     <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
