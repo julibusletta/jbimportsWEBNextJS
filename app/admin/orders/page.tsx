@@ -27,6 +27,15 @@ interface Order {
   proofUrl?: string;
   proofUploadedAt?: string;
   invoiceUrl?: string;
+  navePaymentId?: string;
+  shippingAddress?: {
+    street: string;
+    city: string;
+    state: string;
+    zip: string;
+    shippingCost?: number;
+    shippingMethod?: string;
+  };
 }
 
 export default function OrdersPage() {
@@ -210,23 +219,56 @@ export default function OrdersPage() {
                                 <span className="text-xs text-gray-400 font-bold uppercase">Email:</span>
                                 <span className="text-xs font-black text-[#058c8c]">{selectedOrder.userEmail}</span>
                              </div>
-                             <div className="flex justify-between">
+                             <div className="flex justify-between border-b border-gray-50 pb-2">
                                 <span className="text-xs text-gray-400 font-bold uppercase">Pago:</span>
                                 <span className="text-xs font-black text-gray-800 uppercase tracking-widest">{selectedOrder.paymentMethod || 'NAVE'}</span>
                              </div>
+                             {selectedOrder.navePaymentId && (
+                               <div className="flex justify-between">
+                                  <span className="text-xs text-gray-400 font-bold uppercase">ID NAVE:</span>
+                                  <span className="text-[10px] font-black text-gray-400 select-all">{selectedOrder.navePaymentId}</span>
+                               </div>
+                             )}
+                          </div>
+                       </section>
+
+                       <section>
+                          <h4 className="text-[10px] font-black text-[#058c8c] uppercase tracking-[0.3em] mb-4">Información de Envío</h4>
+                          <div className="bg-amber-50/50 p-4 rounded-lg border border-amber-100/50 space-y-3">
+                             {selectedOrder.shippingAddress ? (
+                               <>
+                                  <div className="flex flex-col">
+                                     <span className="text-[9px] text-amber-600 font-black uppercase tracking-widest mb-1">Dirección Completa</span>
+                                     <span className="text-xs font-black text-gray-800 uppercase">
+                                       {selectedOrder.shippingAddress.street}
+                                     </span>
+                                     <span className="text-[11px] font-bold text-gray-500 uppercase">
+                                       {selectedOrder.shippingAddress.city}, {selectedOrder.shippingAddress.state} ({selectedOrder.shippingAddress.zip})
+                                     </span>
+                                  </div>
+                                  <div className="flex justify-between items-center pt-2 border-t border-amber-100 mt-2">
+                                     <span className="text-[9px] text-amber-600 font-black uppercase tracking-widest">{selectedOrder.shippingAddress.shippingMethod || 'Envío Estándar'}</span>
+                                     <span className="text-xs font-black text-gray-800">
+                                       {selectedOrder.shippingAddress.shippingCost === 0 ? 'GRATIS' : `$${selectedOrder.shippingAddress.shippingCost?.toLocaleString()}`}
+                                     </span>
+                                  </div>
+                               </>
+                             ) : (
+                               <p className="text-[10px] text-gray-400 font-bold italic uppercase">No se especificó información de envío.</p>
+                             )}
                           </div>
                        </section>
 
                        <section>
                           <h4 className="text-[10px] font-black text-[#058c8c] uppercase tracking-[0.3em] mb-4">Detalle de Productos</h4>
                           <div className="space-y-4 max-h-60 overflow-y-auto pr-4 custom-scrollbar">
-                             {selectedOrder.items.map((item, idx) => (
+                             {selectedOrder.items?.map((item: any, idx: number) => (
                                 <div key={idx} className="flex justify-between items-center bg-gray-50 p-4 rounded border border-gray-100/50">
-                                   <div>
-                                      <p className="text-[11px] font-black text-gray-900 uppercase leading-none">{item.name}</p>
-                                      <p className="text-[10px] text-gray-400 font-bold mt-2">CANTIDAD: {item.quantity}</p>
+                                   <div className="flex-1 pr-4">
+                                      <p className="text-[11px] font-black text-gray-900 uppercase leading-tight">{item.name}</p>
+                                      <p className="text-[10px] text-gray-400 font-bold mt-2 tracking-widest">CANTIDAD: {item.quantity}</p>
                                    </div>
-                                   <span className="text-xs font-black text-gray-900">${(item.price * item.quantity).toLocaleString()}</span>
+                                   <span className="text-xs font-black text-gray-900 whitespace-nowrap">${((item.price || 0) * (item.quantity || 1)).toLocaleString()}</span>
                                 </div>
                              ))}
                           </div>
