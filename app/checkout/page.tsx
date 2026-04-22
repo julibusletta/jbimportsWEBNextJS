@@ -325,7 +325,7 @@ function CheckoutContent() {
                     >
                       <img src={option.image} alt={option.name} />
                       <span className="shipping-name">{option.name}</span>
-                      <span className="shipping-desc">Llega en {option.estimatedDays} días hábiles</span>
+                      <span className="shipping-desc">Lo recibís en 3-5 días hábiles</span>
                       <span className="shipping-price">SIN CARGO</span>
                     </div>
                   ))}

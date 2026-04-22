@@ -108,7 +108,7 @@ export default function ShippingCalculator({
             <div key={option.id} className="flex justify-between items-center p-2 bg-white border border-[#eee] rounded-sm">
               <div className="flex flex-col">
                 <span className="text-[13px] font-bold text-[#333]">{option.name}</span>
-                <span className="text-[11px] text-[#666]">Llega en {option.estimatedDays} días hábiles</span>
+                <span className="text-[11px] text-[#666]">Lo recibís en 3-5 días hábiles</span>
               </div>
               <span className="text-[#0066cc] font-bold">
                 {option.price === 0 ? 'SIN CARGO' : `$${option.price.toLocaleString('es-AR')}`}
