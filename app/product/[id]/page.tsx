@@ -186,8 +186,8 @@ export default function ProductDetailsPage() {
     );
   }
   
-  // Calculated values mimicking Mexx
-  const cuotasPrice = Math.round(product.price * 1.4); 
+  // Calculated values mimicking Mexx - 60% surcharge for installments display
+  const cuotasPrice = Math.round(product.price * 1.6); 
   const sinImpuestos = Math.round(product.price * 0.79);
   
   // Deduplicate images and limit to 8
