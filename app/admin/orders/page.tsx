@@ -13,7 +13,8 @@ import {
   FaTimesCircle,
   FaFileInvoiceDollar,
   FaTrash,
-  FaPaperPlane
+  FaPaperPlane,
+  FaEnvelope
 } from 'react-icons/fa';
 
 interface Order {
@@ -350,13 +351,13 @@ export default function OrdersPage() {
                     >
                       Aprobar Pago
                     </button>
-                    {(selectedOrder.status === 'pending' || selectedOrder.status === 'pending_review') && (
+                    {(selectedOrder.status?.toLowerCase() === 'pending' || selectedOrder.status?.toLowerCase() === 'pending_review' || selectedOrder.status?.toLowerCase() === 'pendiente') && (
                       <button 
                         onClick={() => handleSendRecoveryEmail(selectedOrder.id)}
                         disabled={isRecoveringEmail}
                         className="px-6 py-3 bg-[#405D99] text-white rounded font-black text-[10px] uppercase tracking-[0.2em] shadow-lg shadow-blue-100 hover:bg-[#344e82] transition flex items-center gap-2 disabled:opacity-50"
                       >
-                        <FaPaperPlane size={12} />
+                        <FaEnvelope size={12} />
                         {isRecoveringEmail ? 'Enviando...' : 'Enviar Mail Recordatorio'}
                       </button>
                     )}
@@ -369,7 +370,7 @@ export default function OrdersPage() {
                  </div>
                  <div className="w-48">
                     <select 
-                      value={selectedOrder.status}
+                      value={selectedOrder.status?.toLowerCase()}
                       onChange={(e) => updateStatus(selectedOrder.id, e.target.value)}
                       className="w-full px-4 py-3 bg-white border border-gray-200 rounded font-bold text-[10px] uppercase tracking-widest text-gray-600 focus:border-[#058c8c] outline-none"
                     >
@@ -448,23 +449,23 @@ export default function OrdersPage() {
                 <tr key={order.id} className="hover:bg-gray-50/30 transition group">
                   <td className="px-6 py-6">
                     <div className="flex flex-col">
-                      <span className="text-[11px] font-black text-gray-900 tracking-tight">#{order.id.slice(-8).toUpperCase()}</span>
+                      <span className="text-[11px] font-black text-gray-900 tracking-tight">#{order.id?.slice(-8).toUpperCase() || '---'}</span>
                       <span className="text-[9px] text-gray-400 font-bold uppercase mt-1 tracking-widest">
-                        {new Date(order.createdAt).toLocaleDateString('es-AR', { day: '2-digit', month: 'short', year: 'numeric' })}
+                        {order.createdAt ? new Date(order.createdAt).toLocaleDateString('es-AR', { day: '2-digit', month: 'short', year: 'numeric' }) : '---'}
                       </span>
                     </div>
                   </td>
                   <td className="px-6 py-6">
                     <div className="flex flex-col">
                        <span className="text-[11px] font-black text-gray-800 uppercase leading-none mb-1">{order.userName || 'Cliente'}</span>
-                       <span className="text-[10px] font-medium text-gray-400 lowercase">{order.userEmail}</span>
+                       <span className="text-[10px] font-medium text-gray-400 lowercase">{order.userEmail || '---'}</span>
                     </div>
                   </td>
                   <td className="px-6 py-6">
-                    <span className="text-sm font-black text-gray-900 tracking-tighter">${order.total?.toLocaleString()}</span>
+                    <span className="text-sm font-black text-gray-900 tracking-tighter">${order.total?.toLocaleString() || '0'}</span>
                   </td>
                   <td className="px-6 py-6">
-                    {getStatusBadge(order.status)}
+                    {getStatusBadge(order.status || 'pending')}
                   </td>
                   <td className="px-6 py-6 text-center">
                       <div className="flex justify-center gap-2">
