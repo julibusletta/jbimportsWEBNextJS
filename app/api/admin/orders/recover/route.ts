@@ -8,11 +8,10 @@ export async function POST(request: Request) {
   try {
     const session = await getServerSession(authOptions);
 
-    // Basic admin check - assuming role 'admin' exists in session or check by specific emails
-    if (!session || (session.user as any).role !== 'admin') {
-      // Secondary check: allow specific admin emails if role is not properly set
-      const adminEmails = ['contacto@jbimports.com.ar', 'ventas@jbimports.com.ar', 'julibusletta@gmail.com'];
-      if (!session || !adminEmails.includes(session.user?.email || '')) {
+    if (!session) {
+      // allow specific admin emails if role is not properly set
+      const adminEmails = ['contacto@jbimports.com.ar', 'ventas@jbimports.com.ar', 'julian.busletta@gmail.com'];
+      if (!adminEmails.includes(session?.user?.email || '')) {
         return NextResponse.json({ success: false, message: 'No autorizado' }, { status: 403 });
       }
     }
