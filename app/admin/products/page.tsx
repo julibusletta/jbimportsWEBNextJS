@@ -14,7 +14,7 @@ const CATEGORIES = [
   'apple', 'macbook', 'watch', 'ipad', 'airpods',
   'jbl', 'parlantes', 'auriculares', 'sounds-bars',
   'smart-home', 'amazon', 'google', 'xiaomi-home', 'aspiradoras-robot', 'camaras-seguridad',
-  'smart-watches', 'xiaomi-watches', 'notebooks', 'accesorios-starlink', 'general'
+  'smart-watches', 'xiaomi-watches', 'notebooks', 'accesorios-starlink', 'ofertas-semanales', 'general'
 ];
 
 export default function ProductsPage() {
@@ -586,7 +586,9 @@ function ProductsContent({
             style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%236b7280'/%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 12px center' }}
           >
             <option value="all">📂 Todas las categorías</option>
-            {products && Object.keys(products).sort().map(cat => (
+            <option value="promociones">🏷️ TODAS LAS PROMOCIONES (CON DESCUENTO)</option>
+            <option value="ofertas-semanales">🔥 Ofertas Semanales (Categoría)</option>
+            {products && Object.keys(products).sort().filter(c => c !== 'ofertas-semanales').map(cat => (
               <option key={cat} value={cat}>
                 {cat.charAt(0).toUpperCase() + cat.slice(1).replace(/-/g, ' ')}
               </option>
@@ -623,11 +625,24 @@ function ProductsContent({
 
       <div className="space-y-12">
         {products && Object.entries(products)
-          .filter(([category]) => categoryFilter === 'all' || category === categoryFilter)
+          .filter(([category, items]) => {
+            if (categoryFilter === 'all') return true;
+            if (categoryFilter === 'promociones') {
+               // Special case: show this category group if ANY item in it has a discount
+               return (items as Product[]).some(p => (p.discount && p.discount > 0) || (p.originalPrice && p.originalPrice > p.price));
+            }
+            return category === categoryFilter;
+          })
           .map(([category, items]: [any, any]) => {
           const filteredItems = items.filter((p: Product) => {
             const matchesSearch = p.name.toLowerCase().includes(searchTerm.toLowerCase()) || p.id.toLowerCase().includes(searchTerm.toLowerCase());
             if (!matchesSearch) return false;
+
+            if (categoryFilter === 'promociones') {
+              const hasDiscount = (p.discount && p.discount > 0) || (p.originalPrice && p.originalPrice > p.price);
+              if (!hasDiscount) return false;
+            }
+
             if (filterType === 'no-image') return !p.image || p.image.includes('placeholder');
             if (filterType === 'low-stock') return p.stock <= 5;
             return true;
