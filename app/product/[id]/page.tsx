@@ -500,8 +500,8 @@ export default function ProductDetailsPage() {
                         {rp.name}
                       </Link>
                       <div className="w-full flex justify-center mb-3">
-                        <span className="bg-[#4caf50] text-white text-[11px] font-bold px-3 py-1 rounded-sm">
-                          Envío rápido
+                        <span className="bg-[#4caf50] text-white text-[11px] font-bold px-3 py-1 rounded-sm uppercase tracking-tight">
+                          En stock
                         </span>
                       </div>
                       <div className="text-[20px] font-bold text-[#333] mb-4 mt-auto">
