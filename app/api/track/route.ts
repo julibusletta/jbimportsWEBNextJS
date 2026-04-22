@@ -31,7 +31,6 @@ export async function POST(request: Request) {
         'Y': 'Jujuy (Prov)',
         'F': 'La Rioja (Prov)',
         'L': 'La Pampa (Prov)',
-        'M': 'Mendoza (Prov)',
         'Q': 'Neuquén (Prov)',
         'R': 'Río Negro (Prov)',
         'A': 'Salta (Prov)',
