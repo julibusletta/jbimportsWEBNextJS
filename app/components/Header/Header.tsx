@@ -53,7 +53,7 @@ export default function Header() {
     },
     {
       label: 'JBL',
-      href: '/category/parlantes',
+      href: '/category/jbl',
       id: 'jbl',
       submenu: [
         { label: 'AURICULARES', href: '/category/auriculares' },

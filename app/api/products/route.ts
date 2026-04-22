@@ -19,7 +19,8 @@ export async function GET(request: Request) {
       'smart-home': ['smart-home', 'amazon', 'google', 'xiaomi-home', 'aspiradoras-robot', 'camaras-seguridad'],
       'smart-watches': ['smart-watches', 'xiaomi-watches', 'watch'],
       'notebooks': ['notebooks', 'macbook'],
-      'notebooks-y-tablets': ['notebooks', 'macbook', 'tablets']
+      'notebooks-y-tablets': ['notebooks', 'macbook', 'tablets'],
+      'starlink': ['starlink', 'accesorios-starlink']
     };
 
     const cleanCategory = category?.toLowerCase().trim();

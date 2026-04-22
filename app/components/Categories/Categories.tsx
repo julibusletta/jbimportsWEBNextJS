@@ -58,7 +58,7 @@ export default function Categories() {
     {
       id: 'cat-jbl',
       name: 'JBL',
-      slug: 'jbl',
+      slug: 'jbl', // This is mapped to all JBL products in the API
       image: '/images/categories/jbl.png',
       isMain: false,
       description: 'Auriculares y Parlantes JBL'
@@ -74,7 +74,7 @@ export default function Categories() {
     {
       id: 'cat-starlink',
       name: 'Starlink',
-      slug: 'starlink',
+      slug: 'accesorios-starlink',
       image: '/images/categories/starlink.png',
       isMain: false,
       description: 'Accesorios para Starlink'
