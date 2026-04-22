@@ -148,18 +148,65 @@ export default function ProductsPage() {
               }
             }
             finalPrice = finalPrice > 100000 ? Math.round(finalPrice / 100) * 100 : Math.round(finalPrice / 10) * 10;
-            newP.price = finalPrice;
+            
+            // If there's a discount, originalPrice is the base price
+            if (newP.discount && newP.discount > 0) {
+              newP.originalPrice = finalPrice;
+              newP.price = Math.round(finalPrice * (1 - newP.discount / 100));
+            } else {
+              newP.price = finalPrice;
+            }
+
             setTimeout(() => {
                setProducts(prevProducts => {
                  const updated = { ...prevProducts };
                  if (updated[category]) {
-                   updated[category] = updated[category].map(item => item.id === id ? { ...item, price: finalPrice } : item);
+                   updated[category] = updated[category].map(item => item.id === id ? { ...item, price: newP.price, originalPrice: newP.originalPrice } : item);
                  }
                  return updated;
                });
             }, 0);
           }
         }
+
+        if (field === 'discount') {
+          const disc = Number(value);
+          const base = newP.originalPrice || newP.price;
+          if (disc > 0) {
+            newP.originalPrice = base;
+            newP.price = Math.round(base * (1 - disc / 100));
+          } else {
+            newP.price = newP.originalPrice || newP.price;
+            newP.originalPrice = undefined;
+          }
+          
+          setTimeout(() => {
+            setProducts(prevProducts => {
+              const updated = { ...prevProducts };
+              if (updated[category]) {
+                updated[category] = updated[category].map(item => item.id === id ? { ...item, price: newP.price, originalPrice: newP.originalPrice } : item);
+              }
+              return updated;
+            });
+          }, 0);
+        }
+
+        if (field === 'originalPrice') {
+          const orig = Number(value);
+          if (newP.discount && newP.discount > 0) {
+            newP.price = Math.round(orig * (1 - newP.discount / 100));
+          }
+           setTimeout(() => {
+            setProducts(prevProducts => {
+              const updated = { ...prevProducts };
+              if (updated[category]) {
+                updated[category] = updated[category].map(item => item.id === id ? { ...item, price: newP.price, originalPrice: newP.originalPrice } : item);
+              }
+              return updated;
+            });
+          }, 0);
+        }
+
         return newP;
       }
       return prev;
@@ -774,7 +821,38 @@ function ProductsContent({
                                  ))}
                                </select>
                             </div>
-                            <div className="flex items-center justify-between p-4 bg-gray-50 border border-[#e1e3e5] rounded">
+                             <div className="col-span-2 bg-orange-50/30 p-8 border border-orange-100 rounded-2xl flex items-center justify-between">
+                               <div>
+                                  <label className="block text-[10px] font-black text-orange-600 uppercase tracking-widest mb-2">Descuento (%)</label>
+                                  <div className="flex items-center gap-2">
+                                    <input
+                                      type="number"
+                                      value={p.discount || 0}
+                                      onChange={(e) => handleProductChange(p.id, p.category, 'discount', Number(e.target.value))}
+                                      className="bg-transparent text-2xl font-black text-gray-900 outline-none w-20 border-b-2 border-transparent focus:border-orange-500 transition-all"
+                                    />
+                                    <FaPercentage className="text-orange-400" />
+                                  </div>
+                               </div>
+                                <div className="text-right">
+                                  <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Precio de Lista (Original)</label>
+                                  <div className="flex items-center justify-end gap-2 text-gray-400">
+                                    <span className="text-2xl font-black">$</span>
+                                    <input
+                                      type="number"
+                                      value={p.originalPrice || 0}
+                                      onChange={(e) => handleProductChange(p.id, p.category, 'originalPrice', Number(e.target.value))}
+                                      className="bg-transparent text-2xl font-black text-right outline-none w-48 border-b-2 border-transparent focus:border-gray-300 transition-all line-through"
+                                      placeholder="-"
+                                    />
+                                  </div>
+                                  <p className="text-[10px] text-orange-500 font-bold mt-1 italic uppercase tracking-tighter">
+                                    {p.discount && p.discount > 0 ? `Este producto aparecerá en sección Ofertas` : 'Sin descuento activo'}
+                                  </p>
+                               </div>
+                             </div>
+
+                             <div className="flex items-center justify-between p-4 bg-gray-50 border border-[#e1e3e5] rounded">
                                <div>
                                  <label className="block text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1">Visibilidad</label>
                                  <p className="text-[10px] text-gray-400 font-medium">{p.published !== false ? 'Público en el catálogo' : 'Oculto (Borrador)'}</p>

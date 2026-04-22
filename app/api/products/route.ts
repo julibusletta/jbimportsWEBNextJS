@@ -25,10 +25,11 @@ export async function GET(request: Request) {
     const cleanCategory = category?.toLowerCase().trim();
 
     if (cleanCategory === 'ofertas') {
-      // Special "Ofertas" category: all products with a discount + featured IDs
+      // Special "Ofertas" category: all products with a discount OR original price > current price
       query = { 
         $or: [
           { discount: { $gt: 0 } },
+          { originalPrice: { $gt: 0 } },
           { id: { $in: ['378', '1339'] } }
         ]
       };
