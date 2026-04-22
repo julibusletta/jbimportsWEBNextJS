@@ -188,11 +188,11 @@ export default function OrdersPage() {
     <div className="animate-fadeIn relative">
       {/* Detail Modal */}
       {selectedOrder && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
-           <div className="bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col scale-in-center">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+           <div className="bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
               <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
                  <div>
-                    <h3 className="text-sm font-black uppercase tracking-widest text-gray-900">Orden #{selectedOrder.id.slice(-8).toUpperCase()}</h3>
+                    <h3 className="text-sm font-black uppercase tracking-widest text-gray-900">Orden #{selectedOrder.id?.slice(-8).toUpperCase() || '---'}</h3>
                     <p className="text-[10px] font-bold text-gray-400 uppercase mt-1">Detalle Completo de Operación</p>
                  </div>
                  <button 
@@ -217,7 +217,7 @@ export default function OrdersPage() {
                              </div>
                              <div className="flex justify-between border-b border-gray-50 pb-2">
                                 <span className="text-xs text-gray-400 font-bold uppercase">Email:</span>
-                                <span className="text-xs font-black text-[#058c8c]">{selectedOrder.userEmail}</span>
+                                <span className="text-xs font-black text-[#058c8c]">{selectedOrder.userEmail || '---'}</span>
                              </div>
                              <div className="flex justify-between border-b border-gray-50 pb-2">
                                 <span className="text-xs text-gray-400 font-bold uppercase">Pago:</span>
@@ -240,16 +240,16 @@ export default function OrdersPage() {
                                   <div className="flex flex-col">
                                      <span className="text-[9px] text-amber-600 font-black uppercase tracking-widest mb-1">Dirección Completa</span>
                                      <span className="text-xs font-black text-gray-800 uppercase">
-                                       {selectedOrder.shippingAddress.street}
+                                       {selectedOrder.shippingAddress.street || 'Falta Calle'}
                                      </span>
                                      <span className="text-[11px] font-bold text-gray-500 uppercase">
-                                       {selectedOrder.shippingAddress.city}, {selectedOrder.shippingAddress.state} ({selectedOrder.shippingAddress.zip})
+                                       {selectedOrder.shippingAddress.city || '---'}, {selectedOrder.shippingAddress.state || '---'} ({selectedOrder.shippingAddress.zip || '---'})
                                      </span>
                                   </div>
                                   <div className="flex justify-between items-center pt-2 border-t border-amber-100 mt-2">
                                      <span className="text-[9px] text-amber-600 font-black uppercase tracking-widest">{selectedOrder.shippingAddress.shippingMethod || 'Envío Estándar'}</span>
                                      <span className="text-xs font-black text-gray-800">
-                                       {selectedOrder.shippingAddress.shippingCost === 0 ? 'GRATIS' : `$${selectedOrder.shippingAddress.shippingCost?.toLocaleString()}`}
+                                       {typeof selectedOrder.shippingAddress.shippingCost === 'number' ? (selectedOrder.shippingAddress.shippingCost === 0 ? 'GRATIS' : `$${selectedOrder.shippingAddress.shippingCost.toLocaleString()}`) : '---'}
                                      </span>
                                   </div>
                                </>
@@ -265,8 +265,8 @@ export default function OrdersPage() {
                              {selectedOrder.items?.map((item: any, idx: number) => (
                                 <div key={idx} className="flex justify-between items-center bg-gray-50 p-4 rounded border border-gray-100/50">
                                    <div className="flex-1 pr-4">
-                                      <p className="text-[11px] font-black text-gray-900 uppercase leading-tight">{item.name}</p>
-                                      <p className="text-[10px] text-gray-400 font-bold mt-2 tracking-widest">CANTIDAD: {item.quantity}</p>
+                                      <p className="text-[11px] font-black text-gray-900 uppercase leading-tight">{item.name || 'Producto'}</p>
+                                      <p className="text-[10px] text-gray-400 font-bold mt-2 tracking-widest">CANTIDAD: {item.quantity || 1}</p>
                                    </div>
                                    <span className="text-xs font-black text-gray-900 whitespace-nowrap">${((item.price || 0) * (item.quantity || 1)).toLocaleString()}</span>
                                 </div>
@@ -274,7 +274,7 @@ export default function OrdersPage() {
                           </div>
                           <div className="mt-6 flex justify-between items-end bg-[#058c8c] p-6 text-white rounded-lg shadow-lg shadow-[#058c8c]/10">
                              <span className="text-[10px] font-bold uppercase tracking-widest opacity-70">Total Liquidado</span>
-                             <span className="text-2xl font-black tracking-tighter">${selectedOrder.total.toLocaleString()}</span>
+                             <span className="text-2xl font-black tracking-tighter">${(selectedOrder.total || 0).toLocaleString()}</span>
                           </div>
                        </section>
                     </div>
