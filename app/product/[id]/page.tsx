@@ -259,8 +259,8 @@ export default function ProductDetailsPage() {
                   <div className="flex items-center gap-1">
                     Mejor precio en 1 pago <FaInfoCircle className="text-gray-400" />
                   </div>
-                  <div className="font-bold text-[#28a745]">
-                    10%OFF abonando por transferencia
+                  <div className="font-bold text-[#28a745] uppercase">
+                    10%OFF ABONANDO POR TRANSFERENCIA
                   </div>
                 </div>
               </div>
