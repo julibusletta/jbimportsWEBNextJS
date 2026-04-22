@@ -8,12 +8,9 @@ export async function POST(request: Request) {
   try {
     const session = await getServerSession(authOptions);
 
-    if (!session) {
-      // allow specific admin emails if role is not properly set
-      const adminEmails = ['contacto@jbimports.com.ar', 'ventas@jbimports.com.ar', 'julian.busletta@gmail.com'];
-      if (!adminEmails.includes(session?.user?.email || '')) {
-        return NextResponse.json({ success: false, message: 'No autorizado' }, { status: 403 });
-      }
+    const adminEmails = ['contacto@jbimports.com.ar', 'ventas@jbimports.com.ar', 'julian.busletta@gmail.com'];
+    if (!session || !adminEmails.includes(session.user?.email || '')) {
+      return NextResponse.json({ success: false, message: 'No autorizado' }, { status: 403 });
     }
 
     const { orderId } = await request.json();
