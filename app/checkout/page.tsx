@@ -72,7 +72,7 @@ function CheckoutContent() {
     phone: ''
   });
 
-  const [paymentMethod, setPaymentMethod] = useState<'nave' | 'transfer' | 'nave_cuotas'>('nave');
+  const [paymentMethod, setPaymentMethod] = useState<'nave' | 'transfer'>('nave');
   const [error, setError] = useState<string | null>(null);
 
   const [couponCode, setCouponCode] = useState('');
@@ -190,8 +190,6 @@ function CheckoutContent() {
     let finalTotal = subtotalWithShipping;
     if (paymentMethod === 'transfer') {
       finalTotal = subtotalWithShipping * 0.9;
-    } else if (paymentMethod === 'nave_cuotas') {
-      finalTotal = subtotalWithShipping * 1.2;
     }
 
     const endpoint = paymentMethod.startsWith('nave') ? '/api/checkout/nave' : '/api/checkout/transfer';
@@ -208,7 +206,7 @@ function CheckoutContent() {
           firstName: formData.firstName,
           lastName: formData.lastName,
           dni: formData.dni,
-          paymentMode: paymentMethod === 'nave_cuotas' ? 'CUOTAS' : 'NORMAL',
+          paymentMode: 'NORMAL',
           shipping: {
             method: selectedRate?.name,
             cost: 0, // Siempre sin cargo según pedido
@@ -355,7 +353,7 @@ function CheckoutContent() {
                     <div className="payment-radio" />
                     <FaCreditCard className="payment-icon text-xl" />
                     <div className="payment-info">
-                      <span className="payment-name">Tarjeta Crédito / Débito (1 Pago)</span>
+                      <span className="payment-name uppercase">Tarjeta Crédito / Débito</span>
                     </div>
                     <span className="payment-price-tag">${(subtotalAfterCoupon).toLocaleString('es-AR')}</span>
                   </div>
@@ -374,17 +372,7 @@ function CheckoutContent() {
                     <span className="payment-price-tag">${(subtotalAfterCoupon * 0.9).toLocaleString('es-AR')}</span>
                   </div>
 
-                  <div 
-                    className={`payment-card ${paymentMethod === 'nave_cuotas' ? 'selected' : ''}`}
-                    onClick={() => setPaymentMethod('nave_cuotas')}
-                  >
-                    <div className="payment-radio" />
-                    <FaCheckCircle className="payment-icon text-xl" />
-                    <div className="payment-info">
-                      <span className="payment-name">6 Cuotas Sin Interés</span>
-                    </div>
-                    <span className="payment-price-tag">${(subtotalAfterCoupon * 1.2).toLocaleString('es-AR')}</span>
-                  </div>
+
 
                 </div>
                 <button 
@@ -420,7 +408,7 @@ function CheckoutContent() {
                   <div>
                     <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-2">Método de Pago</label>
                     <p className="font-bold text-slate-900 uppercase">
-                      {paymentMethod === 'nave' ? 'Tarjeta (1 Pago)' : paymentMethod === 'transfer' ? 'Transferencia Bancaria' : '6 Cuotas Sin Interés'}
+                      {paymentMethod === 'nave' ? 'Tarjeta Crédito / Débito' : 'Transferencia Bancaria'}
                     </p>
                   </div>
                 </div>
@@ -524,7 +512,7 @@ function CheckoutContent() {
               <div className="final-total-row">
                 <span className="final-total-label">Total Final</span>
                 <span className="final-total-value">
-                  ${(paymentMethod === 'transfer' ? subtotalAfterCoupon * 0.9 : (paymentMethod === 'nave_cuotas' ? subtotalAfterCoupon * 1.2 : subtotalAfterCoupon)).toLocaleString('es-AR')}
+                  ${(paymentMethod === 'transfer' ? subtotalAfterCoupon * 0.9 : subtotalAfterCoupon).toLocaleString('es-AR')}
                 </span>
               </div>
             </div>
