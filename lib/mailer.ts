@@ -341,6 +341,84 @@ export const mailer = {
     } catch (e: any) {
       logToFile(`ERROR sending admin favorite notification`, e.message);
     }
+  },
+
+  async sendAbandonedCartRecovery(to: string, userName: string, orderDetails: any) {
+    const html = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <style>
+          body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #2d3748; margin: 0; padding: 0; background-color: #f7fafc; }
+          .container { max-width: 600px; margin: 20px auto; background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); border: 1px solid #e2e8f0; }
+          .header { background-color: #ffffff; padding: 30px; text-align: center; border-bottom: 1px solid #edf2f7; }
+          .content { padding: 40px; }
+          .footer { background-color: #f8fafc; padding: 25px; text-align: center; color: #718096; font-size: 12px; border-top: 1px solid #edf2f7; }
+          .button { display: inline-block; padding: 16px 32px; background-color: #058c8c; color: #ffffff !important; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 14px; margin: 30px 0; text-transform: uppercase; letter-spacing: 1px; }
+          .highlight { color: #058c8c; font-weight: bold; }
+          .product-box { background: #f8fafc; border-radius: 8px; padding: 15px; margin: 20px 0; border: 1px solid #edf2f7; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+             <img src="cid:logo" alt="JB Imports" style="max-height: 70px; width: auto; display: block; margin: 0 auto;" />
+          </div>
+          <div class="content">
+            <h1 style="margin-top: 0; color: #1a202c; font-size: 22px; text-align: center; font-weight: 800;">¿TE AYUDAMOS CON TU PEDIDO?</h1>
+            <p style="font-size: 16px; color: #4a5568; text-align: center;">¡Hola <strong>${userName}</strong>! 👋</p>
+            
+            <p style="font-size: 15px; color: #4a5568;">Te escribimos de <strong>JB Imports</strong> porque notamos que estuviste a punto de llevarte tu nuevo equipo el día de hoy, pero la compra no llegó a completarse.</p>
+            
+            <p style="font-size: 15px; color: #4a5568;">A veces surgen dudas de último momento o fallas técnicas, y no queremos que te quedes con las ganas. Te comentamos que el stock de tu selección es <span class="highlight">limitado y se agota rápido</span>, por lo que te reservamos tu unidad por un tiempo breve:</p>
+
+            <div class="product-box">
+               <p style="margin: 0 0 10px 0; font-size: 11px; font-weight: bold; color: #a0aec0; text-transform: uppercase; letter-spacing: 1px;">Tu selección:</p>
+               ${orderDetails.items.map((item: any) => `
+                 <div style="font-size: 14px; color: #2d3748; font-weight: 600; margin-bottom: 5px;">• ${item.name} (x${item.quantity})</div>
+               `).join('')}
+            </div>
+
+            <div style="text-align: center;">
+              <a href="${BASE_URL}/mi-cuenta/compras" class="button">Retomar mi compra ahora</a>
+            </div>
+
+            <p style="font-size: 14px; color: #4a5568; margin-top: 30px; border-top: 1px solid #edf2f7; padding-top: 20px;">
+              <strong>¿Tuviste algún problema con el pago o necesitás asesoramiento técnico?</strong><br/>
+              No dudes en responder a este mail o escribirnos por <strong>WhatsApp</strong>. Estamos en línea para darte una mano al instante y asegurar que elijas lo mejor para vos.
+            </p>
+
+            <p style="font-size: 14px; text-align: center; color: #4a5568; font-weight: 700; margin-top: 30px;">¡Esperamos que puedas disfrutar de tu nuevo producto pronto!</p>
+          </div>
+          <div class="footer">
+            <p style="margin-bottom: 5px;"><strong>JB Imports - Tecnología a un solo clic</strong></p>
+            <p>Este es un recordatorio de cortesía sobre tu pedido pendiente #${orderDetails.id.slice(-8).toUpperCase()}.</p>
+            <p style="margin-top: 15px;">&copy; ${new Date().getFullYear()} JB Imports. Todos los derechos reservados.</p>
+          </div>
+        </div>
+      </body>
+      </html>
+    `;
+
+    try {
+      await transporter.sendMail({
+        from: `"JB Imports" <${process.env.EMAIL_USER}>`,
+        to,
+        subject: `¿Te ayudamos con tu pedido? El stock de tu selección es limitado 👋⚡`,
+        html,
+        attachments: [{
+          filename: 'logo.png',
+          path: path.join(process.cwd(), 'public', 'images', 'logotest9.png'),
+          cid: 'logo'
+        }]
+      });
+      logToFile(`Abandoned cart recovery email sent to ${to} for #${orderDetails.id}`);
+      return { success: true };
+    } catch (e: any) {
+      logToFile(`ERROR sending recovery email to ${to}`, e.message);
+      return { success: false, error: e.message };
+    }
   }
 };
 

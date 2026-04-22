@@ -12,7 +12,8 @@ import {
   FaTruck,
   FaTimesCircle,
   FaFileInvoiceDollar,
-  FaTrash
+  FaTrash,
+  FaPaperPlane
 } from 'react-icons/fa';
 
 interface Order {
@@ -45,6 +46,7 @@ export default function OrdersPage() {
   const [filterStatus, setFilterStatus] = useState('todos');
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [isUploadingInvoice, setIsUploadingInvoice] = useState(false);
+  const [isRecoveringEmail, setIsRecoveringEmail] = useState(false);
 
   useEffect(() => {
     fetchOrders();
@@ -80,6 +82,31 @@ export default function OrdersPage() {
       }
     } catch (err) {
       console.error('Error updating order status:', err);
+    }
+  };
+
+  const handleSendRecoveryEmail = async (orderId: string) => {
+    if (!confirm('¿Deseas enviar el mail de recuperación a este cliente?')) return;
+    
+    try {
+      setIsRecoveringEmail(true);
+      const res = await fetch('/api/admin/orders/recover', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ orderId }),
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        alert('Mail de recuperación enviado con éxito.');
+      } else {
+        alert('Error: ' + data.message);
+      }
+    } catch (error) {
+      console.error('Error sending recovery email:', error);
+      alert('Error técnico al intentar enviar el mail.');
+    } finally {
+      setIsRecoveringEmail(false);
     }
   };
 
@@ -323,6 +350,16 @@ export default function OrdersPage() {
                     >
                       Aprobar Pago
                     </button>
+                    {(selectedOrder.status === 'pending' || selectedOrder.status === 'pending_review') && (
+                      <button 
+                        onClick={() => handleSendRecoveryEmail(selectedOrder.id)}
+                        disabled={isRecoveringEmail}
+                        className="px-6 py-3 bg-[#405D99] text-white rounded font-black text-[10px] uppercase tracking-[0.2em] shadow-lg shadow-blue-100 hover:bg-[#344e82] transition flex items-center gap-2 disabled:opacity-50"
+                      >
+                        <FaPaperPlane size={12} />
+                        {isRecoveringEmail ? 'Enviando...' : 'Enviar Mail Recordatorio'}
+                      </button>
+                    )}
                     <button 
                       onClick={() => updateStatus(selectedOrder.id, 'CANCELLED')}
                       className="px-6 py-3 bg-white border border-red-100 text-red-500 rounded font-black text-[10px] uppercase tracking-[0.2em] hover:bg-red-50 transition"
