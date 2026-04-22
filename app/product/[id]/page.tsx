@@ -216,10 +216,16 @@ export default function ProductDetailsPage() {
           {/* Left Column: Image Gallery (Approx 55%) */}
           <div className="w-full lg:w-[55%] flex flex-col">
             <div className="flex-1 bg-white flex items-center justify-center p-4 min-h-[400px] border border-transparent hover:border-gray-100 transition-all rounded-md overflow-hidden relative group">
-              {(product.discount && product.discount > 0) && (
+              {((product.discount && product.discount > 0) || product.category === 'ofertas-semanales') && (
                 <div className="absolute top-6 left-6 bg-[#e60000] text-white text-[14px] font-black w-16 h-16 rounded-full z-20 flex flex-col items-center justify-center shadow-2xl border-4 border-white animate-bounce leading-none p-1">
-                  <span>{Math.round(product.discount)}%</span>
-                  <span className="text-[9px] font-bold">OFF</span>
+                  {product.discount && product.discount > 0 ? (
+                    <>
+                      <span>{Math.round(product.discount)}%</span>
+                      <span className="text-[9px] font-bold">OFF</span>
+                    </>
+                  ) : (
+                    <span className="text-[12px] font-bold uppercase">Oferta</span>
+                  )}
                 </div>
               )}
               <img 
@@ -246,12 +252,23 @@ export default function ProductDetailsPage() {
           {/* Right Column: Info and Buying Box (Approx 45%) */}
           <div className="w-full lg:w-[45%] flex flex-col pt-2">
             
+            {product.category === 'ofertas-semanales' && (
+              <div className="inline-block bg-[#0066cc] text-white text-[11px] font-black px-3 py-1 rounded-sm mb-3 tracking-wider uppercase animate-pulse">
+                Oferta Destacada Semanal
+              </div>
+            )}
+
             <h1 className="text-[28px] font-bold text-[#333] leading-[1.2] mb-4">
               {product.name}
             </h1>
 
             <div className="flex items-center justify-between mb-4">
               <div className="flex flex-col">
+                {product.originalPrice && product.originalPrice > product.price && (
+                  <span className="text-[18px] text-gray-400 line-through font-medium mb-0">
+                    ${product.originalPrice.toLocaleString()}
+                  </span>
+                )}
                 <span className="text-[42px] font-bold text-[#0066cc] leading-none mb-1">
                   ${product.price.toLocaleString()}
                 </span>
