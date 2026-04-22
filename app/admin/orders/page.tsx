@@ -203,167 +203,115 @@ export default function OrdersPage() {
                  </button>
               </div>
 
-              <div className="flex-1 overflow-y-auto p-8 lg:p-12 min-h-[500px] bg-white">
-                 {/* RESCUE UI: Si el diseño de abajo falla por CSS, esto se verá sí o sí */}
-                 <div className="mb-10 p-6 bg-slate-900 text-slate-100 rounded-lg font-mono text-[11px] leading-relaxed border-l-4 border-emerald-500">
-                    <p className="font-black text-emerald-400 mb-2 uppercase tracking-widest">--- MODO RESCUE ACTIVADO ---</p>
-                    <p><b className="text-slate-400">CLIENTE:</b> {selectedOrder.userName || '---'} ({selectedOrder.userEmail})</p>
-                    <p><b className="text-slate-400">PAGO:</b> {selectedOrder.paymentMethod || 'NAVE'} | ID: {selectedOrder.navePaymentId || 'PENDIENTE'}</p>
-                    <p><b className="text-slate-400">ENVÍO:</b> {selectedOrder.shippingAddress?.street}, {selectedOrder.shippingAddress?.city} ({selectedOrder.shippingAddress?.shippingMethod})</p>
-                    <div className="mt-2 pt-2 border-t border-slate-800">
-                       <b className="text-slate-400 uppercase">PRODUCTOS:</b>
-                       {selectedOrder.items?.map((it: any, i: number) => (
-                         <div key={i}>• {it.name} (x{it.quantity}) - ${it.price?.toLocaleString()}</div>
-                       ))}
-                    </div>
-                    <p className="mt-2 text-lg font-black text-emerald-400">TOTAL: ${selectedOrder.total?.toLocaleString()}</p>
-                 </div>
-
-                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+              <div className="flex-1 overflow-y-auto p-8 lg:p-12 bg-white">
+                 <div className="flex flex-col gap-10">
                     
-                    {/* Customer & Info Side */}
-                    <div className="space-y-10">
-                       <section>
-                          <h4 className="text-[10px] font-black text-[#058c8c] uppercase tracking-[0.3em] mb-4">Información del Cliente</h4>
-                          <div className="space-y-3">
-                             <div className="flex justify-between border-b border-gray-50 pb-2">
-                                <span className="text-xs text-gray-400 font-bold uppercase">Nombre:</span>
-                                <span className="text-xs font-black text-gray-800">{selectedOrder.userName || 'No especificado'}</span>
-                             </div>
-                             <div className="flex justify-between border-b border-gray-50 pb-2">
-                                <span className="text-xs text-gray-400 font-bold uppercase">Email:</span>
-                                <span className="text-xs font-black text-[#058c8c]">{selectedOrder.userEmail || '---'}</span>
-                             </div>
-                             <div className="flex justify-between border-b border-gray-50 pb-2">
-                                <span className="text-xs text-gray-400 font-bold uppercase">Pago:</span>
-                                <span className="text-xs font-black text-gray-800 uppercase tracking-widest">{selectedOrder.paymentMethod || 'NAVE'}</span>
-                             </div>
-                             {selectedOrder.navePaymentId && (
-                               <div className="flex justify-between">
-                                  <span className="text-xs text-gray-400 font-bold uppercase">ID NAVE:</span>
-                                  <span className="text-[10px] font-black text-gray-400 select-all tracking-tight">{selectedOrder.navePaymentId}</span>
+                    {/* Main Info Grid */}
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                       
+                       <div className="space-y-10">
+                          {/* Cliente */}
+                          <section>
+                             <h4 className="text-[10px] font-black text-[#058c8c] uppercase tracking-[0.3em] mb-4">Información del Cliente</h4>
+                             <div className="space-y-3 bg-gray-50/50 p-4 rounded-lg border border-gray-100">
+                                <div className="flex justify-between border-b border-gray-100 pb-2">
+                                   <span className="text-[10px] text-gray-400 font-bold uppercase">Nombre:</span>
+                                   <span className="text-[11px] font-black text-gray-800">{selectedOrder.userName || 'No especificado'}</span>
                                 </div>
-                             )}
-                          </div>
-                       </section>
-
-                       <section>
-                          <h4 className="text-[10px] font-black text-[#058c8c] uppercase tracking-[0.3em] mb-4">Información de Envío</h4>
-                          <div className="bg-amber-50/50 p-4 rounded-lg border border-amber-100/50 space-y-3">
-                             {selectedOrder.shippingAddress ? (
-                               <>
-                                  <div className="flex flex-col">
-                                     <span className="text-[9px] text-amber-600 font-black uppercase tracking-widest mb-1">Dirección Completa</span>
-                                     <span className="text-xs font-black text-gray-800 uppercase">
-                                       {selectedOrder.shippingAddress?.street || 'Sin calle'}
-                                     </span>
-                                     <span className="text-[11px] font-bold text-gray-500 uppercase">
-                                       {selectedOrder.shippingAddress?.city || '---'}, {selectedOrder.shippingAddress?.state || '---'} ({selectedOrder.shippingAddress?.zip || '---'})
-                                     </span>
+                                <div className="flex justify-between border-b border-gray-100 pb-2">
+                                   <span className="text-[10px] text-gray-400 font-bold uppercase">Email:</span>
+                                   <span className="text-[11px] font-black text-[#058c8c]">{selectedOrder.userEmail || '---'}</span>
+                                </div>
+                                <div className="flex justify-between">
+                                   <span className="text-[10px] text-gray-400 font-bold uppercase">Medio de Pago:</span>
+                                   <span className="text-[11px] font-black text-gray-800 uppercase">{selectedOrder.paymentMethod || 'NAVE'}</span>
+                                </div>
+                                {selectedOrder.navePaymentId && (
+                                  <div className="mt-2 pt-2 border-t border-gray-100">
+                                     <p className="text-[9px] text-gray-400 font-bold uppercase mb-1">ID Transacción</p>
+                                     <p className="text-[10px] font-mono font-bold text-gray-500 break-all bg-white p-2 rounded border border-gray-100 select-all">{selectedOrder.navePaymentId}</p>
                                   </div>
-                                  <div className="flex justify-between items-center pt-2 border-t border-amber-100 mt-2">
-                                     <span className="text-[9px] text-amber-600 font-black uppercase tracking-widest">{selectedOrder.shippingAddress?.shippingMethod || 'Envío Estándar'}</span>
-                                     <span className="text-xs font-black text-gray-800">
-                                       {typeof selectedOrder.shippingAddress?.shippingCost === 'number' ? (selectedOrder.shippingAddress.shippingCost === 0 ? 'GRATIS' : `$${selectedOrder.shippingAddress.shippingCost.toLocaleString()}`) : '---'}
-                                     </span>
-                                  </div>
-                               </>
-                             ) : (
-                               <p className="text-[10px] text-gray-400 font-bold italic uppercase">No se especificó información de envío.</p>
-                             )}
-                          </div>
-                       </section>
+                                )}
+                             </div>
+                          </section>
 
-                       <section>
-                          <h4 className="text-[10px] font-black text-[#058c8c] uppercase tracking-[0.3em] mb-4">Detalle de Productos</h4>
-                          <div className="space-y-4 max-h-60 overflow-y-auto pr-4 custom-scrollbar">
-                             {selectedOrder.items?.map((item: any, idx: number) => (
-                                <div key={idx} className="flex justify-between items-center bg-gray-50 p-4 rounded border border-gray-100/50">
-                                   <div className="flex-1 pr-4">
-                                      <p className="text-[11px] font-black text-gray-900 uppercase leading-tight">{item?.name || 'Producto'}</p>
-                                      <p className="text-[10px] text-gray-400 font-bold mt-2 tracking-widest">CANTIDAD: {item?.quantity || 1}</p>
+                          {/* Envío */}
+                          <section>
+                             <h4 className="text-[10px] font-black text-[#058c8c] uppercase tracking-[0.3em] mb-4">Información de Envío</h4>
+                             <div className="bg-amber-50/50 p-5 rounded-lg border border-amber-100 space-y-4">
+                                {selectedOrder.shippingAddress ? (
+                                  <>
+                                     <div className="flex flex-col">
+                                        <span className="text-[9px] text-amber-600 font-black uppercase tracking-widest mb-1">Dirección de Entrega</span>
+                                        <span className="text-xs font-black text-gray-800 uppercase leading-tight">
+                                          {selectedOrder.shippingAddress?.street || 'Sin calle'}
+                                        </span>
+                                        <span className="text-[11px] font-bold text-gray-500 uppercase mt-1">
+                                          {selectedOrder.shippingAddress?.city || '---'}, {selectedOrder.shippingAddress?.state || '---'} ({selectedOrder.shippingAddress?.zip || '---'})
+                                        </span>
+                                     </div>
+                                     <div className="flex justify-between items-center pt-3 border-t border-amber-200/40">
+                                        <span className="text-[9px] text-amber-600 font-black uppercase tracking-widest">{selectedOrder.shippingAddress?.shippingMethod || 'Envío'}</span>
+                                        <span className="text-xs font-black text-gray-800">
+                                          {typeof selectedOrder.shippingAddress?.shippingCost === 'number' ? 
+                                            (selectedOrder.shippingAddress.shippingCost === 0 ? 'BONIFICADO' : `$${selectedOrder.shippingAddress.shippingCost.toLocaleString()}`) 
+                                            : '---'}
+                                        </span>
+                                     </div>
+                                  </>
+                                ) : (
+                                  <p className="text-[10px] text-gray-400 font-bold italic uppercase">Retiro en local / No especificado</p>
+                                )}
+                             </div>
+                          </section>
+                       </div>
+
+                       <div className="space-y-10">
+                          {/* Productos */}
+                          <section>
+                             <h4 className="text-[10px] font-black text-[#058c8c] uppercase tracking-[0.3em] mb-4">Detalle de Productos</h4>
+                             <div className="space-y-3 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+                                {selectedOrder.items?.map((item: any, idx: number) => (
+                                   <div key={idx} className="flex justify-between items-center bg-gray-50 p-4 rounded border border-gray-100 transition-colors hover:bg-gray-100/50">
+                                      <div className="flex-1 pr-4">
+                                         <p className="text-[11px] font-black text-gray-900 uppercase leading-tight">{item?.name || 'Producto'}</p>
+                                         <p className="text-[10px] text-gray-400 font-bold mt-2 tracking-widest">CANTIDAD: {item?.quantity || 1}</p>
+                                      </div>
+                                      <span className="text-xs font-black text-gray-900 whitespace-nowrap">${((item?.price || 0) * (item?.quantity || 1)).toLocaleString()}</span>
                                    </div>
-                                   <span className="text-xs font-black text-gray-900 whitespace-nowrap">${((item?.price || 0) * (item?.quantity || 1)).toLocaleString()}</span>
-                                </div>
-                             ))}
-                          </div>
-                          <div className="mt-6 flex justify-between items-end bg-[#058c8c] p-6 text-white rounded-lg shadow-lg shadow-[#058c8c]/10">
-                             <span className="text-[10px] font-bold uppercase tracking-widest opacity-70">Total Liquidado</span>
-                             <span className="text-2xl font-black tracking-tighter">${(selectedOrder.total || 0).toLocaleString()}</span>
-                          </div>
-                       </section>
+                                ))}
+                             </div>
+                             <div className="mt-6 flex justify-between items-center bg-[#058c8c] p-6 text-white rounded-lg shadow-xl shadow-[#058c8c]/10">
+                                <span className="text-[10px] font-bold uppercase tracking-widest opacity-80">Total a Cobrar</span>
+                                <span className="text-2xl font-black tracking-tighter">${(selectedOrder.total || 0).toLocaleString()}</span>
+                             </div>
+                          </section>
+
+                          {/* Comprobante */}
+                          <section>
+                             <h4 className="text-[10px] font-black text-[#058c8c] uppercase tracking-[0.3em] mb-4">Comprobante de Pago</h4>
+                             <div className="h-48 bg-gray-50 rounded-lg border-2 border-dashed border-gray-200 flex items-center justify-center overflow-hidden relative group">
+                                {selectedOrder.proofUrl ? (
+                                   <>
+                                      <img src={selectedOrder.proofUrl} className="w-full h-full object-contain" alt="Comprobante" />
+                                      <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                         <a href={selectedOrder.proofUrl} target="_blank" className="px-4 py-2 bg-white text-gray-900 font-black text-[9px] uppercase tracking-widest rounded">Ver Original</a>
+                                      </div>
+                                   </>
+                                ) : (
+                                   <div className="text-center p-6">
+                                      <FaFileInvoiceDollar className="mx-auto text-gray-200 mb-2" size={32} />
+                                      <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">Sin adjuntos</p>
+                                   </div>
+                                )}
+                             </div>
+                             {selectedOrder.proofUploadedAt && (
+                               <p className="text-[9px] text-gray-400 font-bold uppercase text-right mt-2">Recibido: {new Date(selectedOrder.proofUploadedAt).toLocaleString('es-AR')}</p>
+                             )}
+                          </section>
+                       </div>
+
                     </div>
-
-                     <div className="flex flex-col gap-8">
-                        <section>
-                           <h4 className="text-[10px] font-black text-[#058c8c] uppercase tracking-[0.3em] mb-4">Comprobante de Pago</h4>
-                           <div className="h-64 bg-gray-100 rounded-lg border-2 border-dashed border-gray-200 flex items-center justify-center overflow-hidden relative group">
-                              {selectedOrder.proofUrl ? (
-                                 <>
-                                    <img 
-                                      src={selectedOrder.proofUrl} 
-                                      className="w-full h-full object-contain" 
-                                      alt="Comprobante" 
-                                    />
-                                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                       <a href={selectedOrder.proofUrl} target="_blank" className="px-6 py-3 bg-white text-gray-900 font-black text-[10px] uppercase tracking-widest rounded shadow-xl">Ver Tamaño Real</a>
-                                    </div>
-                                 </>
-                              ) : (
-                                 <div className="text-center p-10">
-                                    <FaFileInvoiceDollar className="mx-auto text-gray-300 mb-4" size={48} />
-                                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest leading-relaxed">Sin comprobante adjunto hasta el momento.</p>
-                                 </div>
-                              )}
-                           </div>
-                           {selectedOrder.proofUploadedAt && (
-                             <p className="text-[9px] text-gray-400 font-bold uppercase text-right mt-3 tracking-widest">Recibido: {new Date(selectedOrder.proofUploadedAt).toLocaleString('es-AR')}</p>
-                           )}
-                        </section>
-
-                        <section className="bg-[#058c8c]/5 p-6 rounded-xl border border-[#058c8c]/10">
-                           <h4 className="text-[10px] font-black text-[#058c8c] uppercase tracking-[0.3em] mb-4">Facturación Oficial</h4>
-                           {selectedOrder.invoiceUrl ? (
-                              <div className="flex flex-col gap-4">
-                                 <div className="flex items-center gap-4 bg-white p-4 rounded border border-[#058c8c]/20">
-                                    <div className="w-10 h-10 bg-[#058c8c] text-white rounded flex items-center justify-center">
-                                       <FaFileInvoiceDollar size={20} />
-                                    </div>
-                                    <div className="flex-1">
-                                       <p className="text-[11px] font-black text-gray-900 uppercase">Factura Adjunta</p>
-                                       <a href={selectedOrder.invoiceUrl} target="_blank" className="text-[10px] text-[#058c8c] font-bold uppercase underline">Ver / Descargar PDF</a>
-                                    </div>
-                                 </div>
-                                 <label className="text-[9px] font-bold text-gray-400 uppercase cursor-pointer hover:text-[#058c8c] flex items-center gap-2">
-                                    <input 
-                                      type="file" 
-                                      accept=".pdf" 
-                                      className="hidden" 
-                                      onChange={(e) => handleInvoiceUpload(e, selectedOrder.id)}
-                                      disabled={isUploadingInvoice}
-                                    />
-                                    {isUploadingInvoice ? 'Subiendo...' : 'Actualizar Factura (PDF)'}
-                                 </label>
-                              </div>
-                           ) : (
-                              <div className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-[#058c8c]/20 rounded-lg group hover:border-[#058c8c]/50 transition-colors">
-                                 <FaFileInvoiceDollar className="text-[#058c8c]/30 mb-4" size={32} />
-                                 <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest text-center mb-4">No se ha subido factura aún para este pedido.</p>
-                                 <label className="px-6 py-2.5 bg-[#058c8c] text-white rounded font-black text-[9px] uppercase tracking-widest cursor-pointer hover:bg-[#067474] shadow-lg shadow-[#058c8c]/20 transition">
-                                    <input 
-                                      type="file" 
-                                      accept=".pdf" 
-                                      className="hidden" 
-                                      onChange={(e) => handleInvoiceUpload(e, selectedOrder.id)}
-                                      disabled={isUploadingInvoice}
-                                    />
-                                    {isUploadingInvoice ? 'Subiendo...' : 'Subir Factura PDF'}
-                                 </label>
-                              </div>
-                           )}
-                        </section>
-                     </div>
-
                  </div>
               </div>
 
