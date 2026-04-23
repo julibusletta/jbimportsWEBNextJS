@@ -27,6 +27,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       label: 'Resumen',
       items: [
         { label: 'Dashboard', href: '/admin', icon: <FaHome /> },
+        { label: 'Analíticas', href: '/admin/analytics', icon: <FaChartLine /> },
       ]
     },
     {

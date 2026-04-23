@@ -10,6 +10,8 @@ import { FaRegCommentDots, FaTruck, FaShieldAlt, FaCreditCard, FaRegHeart, FaInf
 import ShippingCalculator from '@/app/components/Shipping/ShippingCalculator';
 import { useSession } from 'next-auth/react';
 
+import { trackProductView } from '@/lib/track';
+
 export default function ProductDetailsPage() {
   const params = useParams();
   const router = useRouter();
@@ -36,6 +38,9 @@ export default function ProductDetailsPage() {
         
         if (foundProduct) {
           setMainImage(foundProduct.image);
+          // Track view
+          trackProductView(foundProduct);
+
           // Get specs
           const foundSpecs = getSpecsByProductId(id);
           setSpecs(foundSpecs);

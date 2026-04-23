@@ -12,8 +12,22 @@ const VisitSchema = new mongoose.Schema({
   },
   cities: [{
     name: String,
-    count: Number
-  }]
+    count: { type: Number, default: 0 }
+  }],
+  products: [{
+    productId: String,
+    name: String,
+    count: { type: Number, default: 0 }
+  }],
+  referrers: [{
+    domain: String,
+    count: { type: Number, default: 0 }
+  }],
+  devices: {
+    mobile: { type: Number, default: 0 },
+    desktop: { type: Number, default: 0 },
+    tablet: { type: Number, default: 0 }
+  }
 });
 
 const VisitModel = mongoose.models.Visit || mongoose.model('Visit', VisitSchema);

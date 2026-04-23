@@ -3,9 +3,22 @@ import { db } from '@/lib/db';
 
 export async function POST(request: Request) {
   try {
+    const body = await request.json().catch(() => ({}));
+    const { productId, productName } = body;
+    
     const city = request.headers.get('x-vercel-ip-city');
     const regionCode = request.headers.get('x-vercel-ip-country-region');
     const countryCode = request.headers.get('x-vercel-ip-country');
+    const referrer = request.headers.get('referer');
+    const userAgent = request.headers.get('user-agent') || '';
+
+    // Simple device detection
+    let deviceType: 'mobile' | 'desktop' | 'tablet' = 'desktop';
+    if (/tablet|ipad|playbook|silk/i.test(userAgent)) {
+      deviceType = 'tablet';
+    } else if (/Mobile|Android|iP(hone|od)|IEMobile|BlackBerry|Kindle|Opera Mini/i.test(userAgent)) {
+      deviceType = 'mobile';
+    }
 
     let location = 'Ubicación oculta';
 
@@ -43,9 +56,17 @@ export async function POST(request: Request) {
       location = countryCode === 'AR' ? 'Argentina (País)' : `País: ${countryCode}`;
     }
     
-    await db.incrementVisit(location);
+    await db.incrementVisit({
+      city: location,
+      productId,
+      productName,
+      referrer,
+      deviceType
+    });
+
     return NextResponse.json({ success: true });
   } catch (error) {
+    console.error('Track API Error:', error);
     return NextResponse.json({ success: false }, { status: 500 });
   }
 }

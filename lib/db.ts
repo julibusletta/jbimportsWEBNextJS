@@ -33,20 +33,34 @@ export const db = {
   },
 
   // Analytics logic
-  async incrementVisit(city?: string): Promise<void> {
+  async incrementVisit(options: { 
+    city?: string, 
+    productId?: string, 
+    productName?: string, 
+    referrer?: string,
+    deviceType?: 'mobile' | 'desktop' | 'tablet'
+  }): Promise<void> {
     try {
+      const { city, productId, productName, referrer, deviceType } = options;
       await dbConnect();
       const Visit = await this.getVisitModel();
-      // Get today's date in YYYY-MM-DD
       const dateStr = new Date().toISOString().split('T')[0];
       
       let visitRecord = await Visit.findOne({ dateStr });
       if (!visitRecord) {
-        visitRecord = new Visit({ dateStr, count: 0, cities: [] });
+        visitRecord = new Visit({ 
+          dateStr, 
+          count: 0, 
+          cities: [], 
+          products: [], 
+          referrers: [],
+          devices: { mobile: 0, desktop: 0, tablet: 0 }
+        });
       }
 
       visitRecord.count += 1;
 
+      // Update City
       if (city) {
         const cityIndex = visitRecord.cities.findIndex((c: any) => c.name === city);
         if (cityIndex > -1) {
@@ -54,6 +68,47 @@ export const db = {
         } else {
            visitRecord.cities.push({ name: city, count: 1 });
         }
+      }
+
+      // Update Product
+      if (productId && productName) {
+        if (!visitRecord.products) visitRecord.products = [];
+        const prodIndex = visitRecord.products.findIndex((p: any) => p.productId === productId);
+        if (prodIndex > -1) {
+          visitRecord.products[prodIndex].count += 1;
+        } else {
+          visitRecord.products.push({ productId, name: productName, count: 1 });
+        }
+      }
+
+      // Update Referrer
+      if (referrer) {
+        if (!visitRecord.referrers) visitRecord.referrers = [];
+        let domain = 'Directo';
+        try {
+          const url = new URL(referrer);
+          domain = url.hostname.replace('www.', '');
+          // Identify common social referrers
+          if (domain.includes('instagram.com')) domain = 'Instagram';
+          if (domain.includes('facebook.com')) domain = 'Facebook';
+          if (domain.includes('google.com')) domain = 'Google';
+          if (domain.includes('t.co') || domain.includes('twitter.com')) domain = 'Twitter/X';
+        } catch (e) {
+          // If not a valid URL, it might be 'direct' or similar
+          domain = referrer;
+        }
+
+        const refIndex = visitRecord.referrers.findIndex((r: any) => r.domain === domain);
+        if (refIndex > -1) {
+          visitRecord.referrers[refIndex].count += 1;
+        } else {
+          visitRecord.referrers.push({ domain, count: 1 });
+        }
+      }
+
+      // Update Device
+      if (deviceType && visitRecord.devices) {
+        visitRecord.devices[deviceType] = (visitRecord.devices[deviceType] || 0) + 1;
       }
 
       await visitRecord.save();
