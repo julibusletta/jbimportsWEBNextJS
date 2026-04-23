@@ -126,7 +126,9 @@ export async function POST(request: Request) {
 }
 
 // If a user hits this via GET (Nave redirecting browser here), redirect to store
+import { getBaseUrl } from '@/lib/getBaseUrl';
+
 export async function GET() {
-  const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000';
+  const baseUrl = getBaseUrl();
   return Response.redirect(`${baseUrl}/mi-cuenta/compras`);
 }

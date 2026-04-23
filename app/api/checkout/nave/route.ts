@@ -25,6 +25,8 @@ const NAVE_AUDIENCE = 'https://naranja.com/ranty/merchants/api';
 
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "../../auth/[...nextauth]/route";
+import { getBaseUrl } from '@/lib/getBaseUrl';
+
 export async function POST(request: Request) {
   const { db } = await import('@/lib/db');
   let currentOrderId = 'unknown';
@@ -38,11 +40,7 @@ export async function POST(request: Request) {
     await db.logWebhook('NAVE_CHECKOUT_START', 'POST', { orderId: currentOrderId, env: NAVE_ENV, total });
 
     // 2. Base URL Calculation for callbacks
-    const host = request.headers.get('host') || '';
-    let baseUrl = `https://${host}`;
-    if (host.includes('localhost')) baseUrl = 'http://localhost:3000';
-    if (process.env.NEXTAUTH_URL && !host) baseUrl = process.env.NEXTAUTH_URL;
-    if (baseUrl.endsWith('/')) baseUrl = baseUrl.slice(0, -1);
+    const baseUrl = getBaseUrl();
 
     // 3. Authenticate with Nave (M2M)
     const authBody = {
