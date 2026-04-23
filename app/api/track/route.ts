@@ -58,9 +58,9 @@ export async function POST(request: Request) {
     
     await db.incrementVisit({
       city: location,
-      productId,
-      productName,
-      referrer,
+      productId: productId || undefined,
+      productName: productName || undefined,
+      referrer: referrer || undefined,
       deviceType
     });
 
