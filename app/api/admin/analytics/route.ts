@@ -1,16 +1,20 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
-import { getServerSession } from "next-auth";
+import dbConnect from '@/lib/mongodb';
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 export async function GET() {
   try {
-    const session = await getServerSession();
+    const session = await getServerSession(authOptions);
+    const userRole = (session?.user as any)?.role?.toUpperCase();
     
     // Auth check
-    if (!session || (session.user as any).role !== "ADMIN") {
+    if (!session || userRole !== "ADMIN") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    await dbConnect();
     // Get analytics for the last 30 days
     const visits = await db.getRecentVisits(30);
     
