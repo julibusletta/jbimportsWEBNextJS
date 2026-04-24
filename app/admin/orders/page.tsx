@@ -178,6 +178,9 @@ export default function OrdersPage() {
                  <div>
                     <h3 className="text-sm font-black uppercase tracking-widest text-gray-900 leading-none">Orden #{selectedOrder.id?.slice(-8).toUpperCase() || '---'}</h3>
                     <p className="text-[10px] font-bold text-gray-400 uppercase mt-2 tracking-widest">Detalle Operativo del Pedido</p>
+                    <p className="text-[9px] font-bold text-[#058c8c] uppercase mt-1.5 tracking-[0.15em]">
+                       Realizado el: {selectedOrder.createdAt ? new Date(selectedOrder.createdAt).toLocaleString('es-AR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '---'} HS
+                    </p>
                  </div>
                  <button 
                    onClick={() => setSelectedOrder(null)}
