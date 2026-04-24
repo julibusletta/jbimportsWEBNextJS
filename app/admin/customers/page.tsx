@@ -10,6 +10,7 @@ interface Customer {
   lastName: string;
   phone?: string;
   dni?: string;
+  type: 'REGISTRADO' | 'INVITADO';
   orderCount: number;
   createdAt: string;
 }
@@ -105,7 +106,12 @@ export default function CustomersPage() {
                           {customer.firstName[0]}{customer.lastName[0]}
                         </div>
                         <div className="flex flex-col">
-                          <span className="text-[11px] font-black text-gray-900 uppercase tracking-tight">{customer.firstName} {customer.lastName}</span>
+                          <div className="flex items-center gap-2">
+                             <span className="text-[11px] font-black text-gray-900 uppercase tracking-tight">{customer.firstName} {customer.lastName}</span>
+                             <span className={`text-[7px] px-1.5 py-0.5 rounded-full font-black ${customer.type === 'REGISTRADO' ? 'bg-blue-50 text-blue-500' : 'bg-gray-100 text-gray-400'}`}>
+                                {customer.type}
+                             </span>
+                          </div>
                           <span className="text-[10px] font-medium text-gray-400">{customer.email}</span>
                         </div>
                       </div>

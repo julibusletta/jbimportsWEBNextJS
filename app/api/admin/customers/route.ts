@@ -6,7 +6,9 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 export async function GET() {
   try {
     const session = await getServerSession(authOptions);
-    if (!session || (session.user as any).role !== 'ADMIN') {
+    const userRole = (session?.user as any)?.role?.toUpperCase();
+    
+    if (!session || userRole !== 'ADMIN') {
       return NextResponse.json({ success: false, message: 'No autorizado' }, { status: 401 });
     }
 
@@ -14,19 +16,58 @@ export async function GET() {
     const User = await (db as any).getUserModel();
     const Order = await (db as any).getOrderModel();
     
-    // Get all users who are not admins (or all users)
-    const users = await User.find({ role: { $ne: 'ADMIN' } }).sort({ createdAt: -1 }).lean();
+    // 1. Get all registered users
+    const registeredUsers = await User.find({ role: { $ne: 'ADMIN' } }).sort({ createdAt: -1 }).lean();
+    
+    // 2. Get all unique emails from orders to find "Guests"
+    const orderEmails = await Order.distinct('userEmail');
+    
+    // 3. Merge and deduplicate
+    const allCustomersMap = new Map();
+    
+    // Add registered users first
+    registeredUsers.forEach((u: any) => {
+      allCustomersMap.set(u.email.toLowerCase(), {
+        email: u.email,
+        firstName: u.firstName,
+        lastName: u.lastName,
+        phone: u.phone,
+        dni: u.dni,
+        type: 'REGISTRADO',
+        createdAt: u.createdAt
+      });
+    });
+    
+    // Add missing guest emails from orders
+    const orders = await Order.find({ userEmail: { $in: orderEmails } }).sort({ createdAt: -1 }).lean();
+    
+    orders.forEach((o: any) => {
+      const email = o.userEmail.toLowerCase();
+      if (!allCustomersMap.has(email)) {
+        allCustomersMap.set(email, {
+          email: o.userEmail,
+          firstName: o.userName?.split(' ')[0] || 'Cliente',
+          lastName: o.userName?.split(' ').slice(1).join(' ') || 'Invitado',
+          phone: o.userPhone || '',
+          dni: o.dni || '',
+          type: 'INVITADO',
+          createdAt: o.createdAt
+        });
+      }
+    });
+
+    const finalCustomers = Array.from(allCustomersMap.values());
     
     // Enrich with order count
-    const enrichedUsers = await Promise.all(users.map(async (user: any) => {
-      const orderCount = await Order.countDocuments({ userEmail: user.email.toLowerCase() });
+    const enrichedCustomers = await Promise.all(finalCustomers.map(async (customer: any) => {
+      const orderCount = await Order.countDocuments({ userEmail: new RegExp(`^${customer.email}$`, 'i') });
       return {
-        ...user,
+        ...customer,
         orderCount
       };
     }));
     
-    return NextResponse.json({ success: true, customers: enrichedUsers });
+    return NextResponse.json({ success: true, customers: enrichedCustomers });
   } catch (error: any) {
     console.error('API Error [customers]:', error);
     return NextResponse.json({ success: false, message: error.message }, { status: 500 });
