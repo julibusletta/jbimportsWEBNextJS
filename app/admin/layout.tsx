@@ -23,6 +23,11 @@ import '../styles/AdminV2.css';
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
+  React.useEffect(() => {
+    // Marcar este navegador como "Admin" para no contar sus visitas en las estadísticas de la tienda
+    localStorage.setItem('jb_no_track', 'true');
+  }, []);
+
   const navGroups = [
     {
       label: 'Resumen',
