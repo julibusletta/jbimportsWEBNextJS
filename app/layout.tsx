@@ -63,11 +63,11 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} ${orbitron.variable} antialiased`}
       >
         <TrackingScripts />
-        <AnalyticsTracker />
         <ViewportHandler />
         <AnimationInitializer />
         <CartProvider>
           <AuthProvider>
+            <AnalyticsTracker />
             <AuthModalProvider>
               <ConditionalLayout>
                 {children}
