@@ -11,6 +11,7 @@ const OrderSchema = new Schema({
   userId: { type: Schema.Types.ObjectId, ref: 'User' },
   userEmail: { type: String, required: true },
   userName: { type: String, required: true },
+  userPhone: String,
   items: [OrderItemSchema],
   total: { type: Number, required: true },
   status: { 

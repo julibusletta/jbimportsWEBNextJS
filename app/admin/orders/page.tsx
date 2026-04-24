@@ -14,13 +14,15 @@ import {
   FaFileInvoiceDollar,
   FaTrash,
   FaPaperPlane,
-  FaEnvelope
+  FaEnvelope,
+  FaWhatsapp
 } from 'react-icons/fa';
 
 interface Order {
   id: string;
   userEmail: string;
   userName?: string;
+  userPhone?: string;
   total: number;
   status: string;
   createdAt: string;
@@ -201,7 +203,22 @@ export default function OrdersPage() {
                           <div className="flex flex-col">
                              <span className="text-[8px] text-gray-500 font-bold uppercase mb-0.5">Cliente:</span>
                              <span className="text-sm font-black text-gray-800">{selectedOrder.userName || 'No especificado'}</span>
-                             <span className="text-[11px] font-medium text-[#058c8c]">{selectedOrder.userEmail || 'Sin email'}</span>
+                             <div className="flex items-center gap-2">
+                                <span className="text-[11px] font-medium text-[#058c8c]">{selectedOrder.userEmail || 'Sin email'}</span>
+                                {selectedOrder.userPhone && (
+                                   <a 
+                                      href={`https://wa.me/${selectedOrder.userPhone.replace(/\D/g, '')}`} 
+                                      target="_blank" 
+                                      className="flex items-center gap-1.5 bg-emerald-100 text-emerald-600 px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-tighter hover:bg-emerald-200 transition-colors no-underline"
+                                   >
+                                      <FaWhatsapp size={10} />
+                                      WhatsApp
+                                   </a>
+                                )}
+                             </div>
+                             {selectedOrder.userPhone && (
+                                <span className="text-[10px] font-bold text-gray-400 mt-1 uppercase">Tel: {selectedOrder.userPhone}</span>
+                             )}
                           </div>
                           <div className="flex flex-col">
                              <span className="text-[8px] text-gray-500 font-bold uppercase mb-0.5">Medio de Pago:</span>

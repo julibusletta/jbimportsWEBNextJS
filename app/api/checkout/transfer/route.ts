@@ -4,7 +4,7 @@ import { authOptions } from "../../auth/[...nextauth]/route";
 
 export async function POST(request: Request) {
   try {
-    const { items, total, orderId, shipping, email, firstName, lastName } = await request.json();
+    const { items, total, orderId, shipping, email, phone, firstName, lastName } = await request.json();
     const { db } = await import('@/lib/db');
     const session = await getServerSession(authOptions);
 
@@ -28,6 +28,7 @@ export async function POST(request: Request) {
         quantity: item.quantity,
         price: item.price
       })),
+      userPhone: phone,
       total,
       status: 'PENDING',
       paymentMethod: 'TRANSFERENCIA',

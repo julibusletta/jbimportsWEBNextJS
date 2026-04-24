@@ -33,7 +33,7 @@ export async function POST(request: Request) {
   
   try {
     const body = await request.json();
-    const { items, total, orderId, shipping, email, firstName, lastName, dni, paymentMode } = body;
+    const { items, total, orderId, shipping, email, phone, firstName, lastName, dni, paymentMode } = body;
     currentOrderId = orderId || `JB-${Date.now()}`;
 
     // 1. Log Entry
@@ -128,6 +128,7 @@ export async function POST(request: Request) {
       id: currentOrderId,
       userEmail,
       userName,
+      userPhone: phone,
       items: items.map((item: any) => ({ name: item.name?.trim() || 'Producto sin nombre', quantity: item.quantity, price: item.price })),
       total,
       status: 'PENDING',

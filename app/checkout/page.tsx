@@ -203,6 +203,7 @@ function CheckoutContent() {
           total: finalTotal,
           orderId: `JB-${Date.now()}`,
           email: formData.email,
+          phone: formData.phone,
           firstName: formData.firstName,
           lastName: formData.lastName,
           dni: formData.dni,
