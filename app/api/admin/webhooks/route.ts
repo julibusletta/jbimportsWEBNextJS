@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
+import dbConnect from '@/lib/mongodb';
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
@@ -10,7 +11,7 @@ export async function GET() {
       return NextResponse.json({ success: false, message: 'No autorizado' }, { status: 401 });
     }
 
-    await (db as any).dbConnect();
+    await dbConnect();
     const WebhookLog = await (db as any).getWebhookLogModel();
     
     // Get latest 100 logs

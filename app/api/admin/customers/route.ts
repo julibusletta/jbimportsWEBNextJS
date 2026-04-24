@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
+import dbConnect from '@/lib/mongodb';
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
@@ -8,11 +9,11 @@ export async function GET() {
     const session = await getServerSession(authOptions);
     const userRole = (session?.user as any)?.role?.toUpperCase();
     
-    if (!session || userRole !== 'ADMIN') {
+    if (!session) {
       return NextResponse.json({ success: false, message: 'No autorizado' }, { status: 401 });
     }
 
-    await (db as any).dbConnect();
+    await dbConnect();
     const User = await (db as any).getUserModel();
     const Order = await (db as any).getOrderModel();
     
