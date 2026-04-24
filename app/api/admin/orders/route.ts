@@ -4,7 +4,20 @@ import { db } from '@/lib/db';
 export async function GET() {
   try {
     const orders = await db.getOrders();
-    return NextResponse.json({ success: true, orders });
+    const User = await (db as any).getUserModel();
+    
+    // Enrich orders with user phone numbers if missing
+    const enrichedOrders = await Promise.all(orders.map(async (order: any) => {
+      if (!order.userPhone && order.userEmail) {
+        const user = await User.findOne({ email: order.userEmail.toLowerCase() }).select('phone').lean();
+        if (user && user.phone) {
+          return { ...order, userPhone: user.phone };
+        }
+      }
+      return order;
+    }));
+
+    return NextResponse.json({ success: true, orders: enrichedOrders });
   } catch (error: any) {
     console.error('API Error [Orders GET]:', error);
     return NextResponse.json({ success: false, message: error.message }, { status: 500 });
