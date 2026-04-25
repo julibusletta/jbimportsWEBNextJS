@@ -24,6 +24,7 @@ export async function POST(request: Request) {
       userEmail,
       userName,
       items: items.map((item: any) => ({
+        productId: item.id || item.productId,
         name: item.name?.trim() || 'Producto sin nombre',
         quantity: item.quantity,
         price: item.price

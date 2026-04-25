@@ -1,6 +1,7 @@
 import mongoose, { Schema } from 'mongoose';
 
 const OrderItemSchema = new Schema({
+  productId: { type: String }, // Added to easily track stock
   name: { type: String, required: true },
   quantity: { type: Number, required: true },
   price: { type: Number, required: true },
@@ -33,6 +34,7 @@ const OrderSchema = new Schema({
   },
   trackingCode: String,
   invoiceUrl: String,
+  stockDecremented: { type: Boolean, default: false }, // Flag to avoid double discounting
 }, { timestamps: true });
 
 export default mongoose.models.Order || mongoose.model('Order', OrderSchema);

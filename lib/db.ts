@@ -202,8 +202,47 @@ export const db = {
       }
 
       await Order.updateOne(query, updateData);
+
+      // AUTOMATIC STOCK DECREMENT Logic
+      if (status === 'APPROVED' || status === 'SHIPPED') {
+        const order = await Order.findOne(query);
+        if (order && !order.stockDecremented) {
+          await this.decrementOrderStock(order.id);
+        }
+      }
     } catch (error) {
       console.error('DB Error [updateOrderStatus]:', error);
+      throw error;
+    }
+  },
+
+  async decrementOrderStock(orderId: string): Promise<void> {
+    try {
+      await dbConnect();
+      const Order = await this.getOrderModel();
+      const Product = await this.getProductModel();
+      
+      const order = await Order.findOne({ id: orderId });
+      if (!order || order.stockDecremented) return;
+
+      console.log(`Decreasing stock for order ${orderId}...`);
+      
+      for (const item of order.items) {
+        if (!item.productId) {
+          console.warn(`Item ${item.name} missing productId, trying to find by name...`);
+          const prod = await Product.findOne({ name: item.name });
+          if (prod) {
+            await Product.updateOne({ id: prod.id }, { $inc: { stock: -(item.quantity || 1) } });
+          }
+        } else {
+          await Product.updateOne({ id: item.productId }, { $inc: { stock: -(item.quantity || 1) } });
+        }
+      }
+
+      await Order.updateOne({ id: orderId }, { stockDecremented: true });
+      console.log(`Stock decreased for order ${orderId}`);
+    } catch (error) {
+      console.error('DB Error [decrementOrderStock]:', error);
       throw error;
     }
   },
