@@ -40,6 +40,7 @@ interface Order {
     shippingCost?: number;
     shippingMethod?: string;
   };
+  trackingCode?: string;
 }
 
 export default function OrdersPage() {
