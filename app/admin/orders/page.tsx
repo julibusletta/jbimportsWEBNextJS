@@ -88,6 +88,24 @@ export default function OrdersPage() {
     }
   };
 
+  const updateTrackingCode = async (orderId: string, trackingCode: string) => {
+    try {
+      const resp = await fetch('/api/admin/orders', {
+        method: 'POST',
+        body: JSON.stringify({ action: 'update_tracking', orderId, trackingCode }),
+        headers: { 'Content-Type': 'application/json' }
+      });
+      if (resp.ok) {
+        alert('Código de seguimiento actualizado');
+        fetchOrders(); // Refresh table to keep data in sync
+      } else {
+        alert('Error al actualizar el seguimiento');
+      }
+    } catch (err) {
+      console.error('Error updating tracking code:', err);
+    }
+  };
+
   const handleSendRecoveryEmail = async (orderId: string) => {
     if (!confirm('¿Deseas enviar el mail de recuperación a este cliente?')) return;
     
@@ -295,6 +313,32 @@ export default function OrdersPage() {
                           </div>
                        </div>
                     )}
+
+                    {/* Bloque 5: Envío y Seguimiento */}
+                    <div className="bg-blue-50/40 rounded-xl p-5 border border-blue-100 mt-4">
+                       <h4 className="text-[9px] font-black text-blue-600/80 uppercase tracking-[0.2em] mb-4 border-b border-blue-200/40 pb-2 flex items-center gap-2">
+                          <FaTruck /> Código de Seguimiento
+                       </h4>
+                       <div className="flex gap-3">
+                          <input 
+                             type="text"
+                             placeholder="Ej: AR123456789"
+                             className="flex-1 px-4 py-2 bg-white border border-gray-200 rounded text-xs font-bold uppercase tracking-widest outline-none focus:border-blue-500 transition-all"
+                             value={selectedOrder.trackingCode || ''}
+                             onChange={(e) => {
+                                const val = e.target.value;
+                                setSelectedOrder({ ...selectedOrder, trackingCode: val });
+                             }}
+                          />
+                          <button 
+                             onClick={() => updateTrackingCode(selectedOrder.id, selectedOrder.trackingCode || '')}
+                             className="px-4 py-2 bg-blue-600 text-white rounded text-[9px] font-black uppercase tracking-widest hover:bg-blue-700 transition active:scale-95 shadow-lg shadow-blue-100"
+                          >
+                             Guardar
+                          </button>
+                       </div>
+                       <p className="text-[8px] text-gray-400 font-bold uppercase mt-2 italic">* Este código se mostrará al cliente en su sección "Mis Compras".</p>
+                    </div>
                  </div>
               </div>
 

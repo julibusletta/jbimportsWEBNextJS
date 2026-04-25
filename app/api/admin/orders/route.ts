@@ -26,7 +26,8 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    const { action, orderId, status } = await request.json();
+    const body = await request.json();
+    const { action, orderId, status, trackingCode } = body;
 
     if (action === 'update_status') {
       await db.updateOrderStatus(orderId, status);
@@ -45,6 +46,11 @@ export async function POST(request: Request) {
       }
 
       return NextResponse.json({ success: true, message: 'Estado del pedido actualizado' });
+    }
+
+    if (action === 'update_tracking') {
+      await db.updateOrderTracking(orderId, trackingCode);
+      return NextResponse.json({ success: true, message: 'Seguimiento actualizado' });
     }
 
     if (action === 'delete_order') {

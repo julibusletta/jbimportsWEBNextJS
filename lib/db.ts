@@ -208,6 +208,17 @@ export const db = {
     }
   },
 
+  async updateOrderTracking(id: string, trackingCode: string): Promise<void> {
+    try {
+      await dbConnect();
+      const Order = await this.getOrderModel();
+      await Order.updateOne({ id }, { trackingCode });
+    } catch (error) {
+      console.error('DB Error [updateOrderTracking]:', error);
+      throw error;
+    }
+  },
+
   async deleteOrder(id: string): Promise<void> {
     try {
       await dbConnect();
