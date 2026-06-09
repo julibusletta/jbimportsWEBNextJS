@@ -68,9 +68,9 @@ export default function FiguritasPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#0a0a0a] text-white overflow-hidden pb-20">
+    <main className="min-h-screen bg-[#0a0a0a] text-white overflow-hidden pb-32">
       {/* Hero Section */}
-      <section className="relative pt-32 pb-32 px-4 md:px-10 flex flex-col items-center justify-center text-center overflow-hidden">
+      <section className="relative pt-32 pb-16 px-4 md:px-10 flex flex-col items-center justify-center text-center overflow-hidden">
         {/* Background Effects */}
         <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#001489]/30 via-[#0a0a0a] to-[#0a0a0a] z-0"></div>
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#ffed00]/10 blur-[120px] rounded-full z-0 pointer-events-none"></div>
@@ -88,7 +88,7 @@ export default function FiguritasPage() {
             Asegurá tu pasión. Comprá tus figuritas del mundial directo por transferencia bancaria y obtené el mejor precio garantizado.
           </p>
           
-          <div className="flex gap-4 md:gap-8 justify-center text-sm font-bold tracking-widest uppercase text-gray-400">
+          <div className="flex gap-4 md:gap-8 justify-center text-sm font-bold tracking-widest uppercase text-gray-400 mb-16">
             <div className="flex items-center gap-2">
               <FaShieldAlt className="text-[#001489]" size={20} />
               <span>Cajas Selladas</span>
