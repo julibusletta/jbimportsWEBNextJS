@@ -77,7 +77,7 @@ export default function FiguritasPage() {
 
         <div className="relative z-10 max-w-4xl mx-auto flex flex-col items-center">
           <img 
-            src="/images/panini-logo-png_seeklogo-322629.png" 
+            src="/images/panini-logo.png" 
             alt="Panini" 
             className="h-16 md:h-24 w-auto mb-8 filter drop-shadow-lg"
           />
@@ -107,7 +107,7 @@ export default function FiguritasPage() {
           {PACKS.map((pack) => (
             <div 
               key={pack.id} 
-              className={`relative bg-[#111111] border ${pack.popular ? 'border-[#ffed00] scale-105 shadow-[0_0_30px_rgba(255,237,0,0.15)] z-20' : 'border-gray-800'} rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:border-gray-600 flex flex-col`}
+              className={`relative bg-[#111111] border ${pack.popular ? 'border-[#ffed00] scale-105 shadow-[0_0_30px_rgba(255,237,0,0.15)] z-20' : 'border-gray-800'} rounded-none overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:border-gray-600 flex flex-col`}
             >
               {pack.popular && (
                 <div className="absolute top-0 left-0 w-full bg-[#ffed00] text-black text-[10px] font-black uppercase tracking-[0.2em] text-center py-1.5 z-10">
@@ -115,12 +115,12 @@ export default function FiguritasPage() {
                 </div>
               )}
               
-              <div className="h-48 relative overflow-hidden bg-gray-900 group">
-                <div className="absolute inset-0 bg-gradient-to-t from-[#111111] to-transparent z-10"></div>
+              <div className="h-48 relative overflow-hidden bg-gray-900 group flex items-center justify-center p-4">
+                <div className="absolute inset-0 bg-gradient-to-t from-[#111111] to-transparent z-10 pointer-events-none"></div>
                 <img 
                   src={pack.image} 
                   alt={pack.title}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-70"
+                  className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-110 opacity-90 relative z-0"
                 />
               </div>
 
@@ -136,7 +136,7 @@ export default function FiguritasPage() {
                 <button 
                   onClick={() => handleBuy(pack)}
                   disabled={loadingId !== null}
-                  className={`w-full py-4 rounded-xl font-bold uppercase tracking-widest text-sm flex items-center justify-center gap-3 transition-all ${
+                  className={`w-full py-4 rounded-none font-bold uppercase tracking-widest text-sm flex items-center justify-center gap-3 transition-all ${
                     pack.popular 
                       ? 'bg-[#ffed00] text-black hover:bg-white hover:shadow-[0_0_20px_rgba(255,255,255,0.4)]' 
                       : 'bg-[#001489] text-white hover:bg-[#0022cc] border border-[#0022cc]'
