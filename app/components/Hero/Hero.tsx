@@ -8,6 +8,16 @@ import '../../styles/Hero.css';
 export default function Hero() {
   const [heroSlides, setHeroSlides] = useState<any[]>([
     {
+      image: 'https://images.unsplash.com/photo-1518605368461-1eb49c118671?q=80&w=1470&auto=format&fit=crop',
+      alt: 'Figuritas Mundial 2026',
+      isCustom: true,
+      title1: 'FIGURITAS',
+      title2: 'MUNDIAL 2026',
+      subtitle: '¡COMPRÁ AHORA TU PACK O BULTO CERRADO!',
+      showShippingIcon: false,
+      link: '/figuritas',
+    },
+    {
       image: '/images/bannerof1.png',
       alt: 'iPhone Premium',
     },

@@ -16,7 +16,8 @@ import {
   FaTrophy,
   FaSearch,
   FaImage,
-  FaHistory
+  FaHistory,
+  FaFileInvoice
 } from 'react-icons/fa';
 import '../styles/AdminV2.css';
 
@@ -49,6 +50,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       items: [
         { label: 'Pedidos', href: '/admin/orders', icon: <FaShoppingCart /> },
         { label: 'Auditoría de Pagos', href: '/admin/webhooks', icon: <FaHistory /> },
+        { label: 'Cotizador', href: '/admin/quotes', icon: <FaFileInvoice /> },
         { label: 'Descuentos', href: '/admin/promotions', icon: <FaTrophy /> },
         { label: 'Cupones', href: '/admin/coupons', icon: <FaTags /> },
       ]

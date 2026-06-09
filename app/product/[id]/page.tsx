@@ -467,12 +467,14 @@ export default function ProductDetailsPage() {
             )}
           </div>
 
-          <div className="mt-8 text-[14px] text-[#444] leading-relaxed max-w-[900px]">
-            <strong className="text-[#333] block mb-2">Descripción General:</strong>
-            <p className="whitespace-pre-line">
-              {product.description || `Este excelente ${product.category.replace('-', ' ')} está pensado para brindar el máximo rendimiento en su gama. Diseño premium, excelente durabilidad y prestaciones de última generación.`}
-            </p>
-          </div>
+          {['smart-home', 'aspiradoras-robot', 'camaras-seguridad', 'amazon'].includes(product.category) && (
+            <div className="mt-8 text-[14px] text-[#444] leading-relaxed max-w-[900px]">
+              <strong className="text-[#333] block mb-2">Descripción General:</strong>
+              <p className="whitespace-pre-line">
+                {product.description || `Este excelente ${product.category.replace('-', ' ')} está pensado para brindar el máximo rendimiento en su gama. Diseño premium, excelente durabilidad y prestaciones de última generación.`}
+              </p>
+            </div>
+          )}
         </div>
 
         {/* Espaciador garantizado */}
