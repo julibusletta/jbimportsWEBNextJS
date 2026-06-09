@@ -102,7 +102,7 @@ export default function FiguritasPage() {
       </section>
 
       {/* Pricing Cards */}
-      <section className="relative z-10 px-4 md:px-10 w-full mx-auto -mt-10 pb-20 flex justify-center">
+      <section className="relative z-10 px-4 md:px-10 w-full mx-auto mt-16 mb-32 pb-10 flex justify-center">
         <div className="flex flex-col md:flex-row justify-center items-stretch gap-8 w-full max-w-6xl">
           {PACKS.map((pack) => (
             <div 
