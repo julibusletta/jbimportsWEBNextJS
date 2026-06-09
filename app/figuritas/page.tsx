@@ -102,12 +102,12 @@ export default function FiguritasPage() {
       </section>
 
       {/* Pricing Cards */}
-      <section className="relative z-10 px-4 md:px-10 max-w-5xl mx-auto -mt-10 pb-20">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 justify-center items-stretch">
+      <section className="relative z-10 px-4 md:px-10 w-full mx-auto -mt-10 pb-20 flex justify-center">
+        <div className="flex flex-col md:flex-row justify-center items-stretch gap-8 w-full max-w-6xl">
           {PACKS.map((pack) => (
             <div 
               key={pack.id} 
-              className={`relative bg-[#111111] border ${pack.popular ? 'border-[#ffed00] scale-105 shadow-[0_0_30px_rgba(255,237,0,0.15)] z-20' : 'border-gray-800'} rounded-none overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:border-gray-600 flex flex-col`}
+              className={`relative w-full md:w-1/3 max-w-[400px] bg-[#111111] border ${pack.popular ? 'border-[#ffed00] scale-105 shadow-[0_0_30px_rgba(255,237,0,0.15)] z-20' : 'border-gray-800'} rounded-none overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:border-gray-600 flex flex-col mx-auto`}
             >
               {pack.popular && (
                 <div className="absolute top-0 left-0 w-full bg-[#ffed00] text-black text-[10px] font-black uppercase tracking-[0.2em] text-center py-1.5 z-10">
