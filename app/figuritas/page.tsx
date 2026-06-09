@@ -11,7 +11,7 @@ const PACKS = [
     title: 'Pack 100 Sobres',
     description: 'Ideal para empezar tu colección. 500 figuritas en total.',
     price: 150000,
-    image: 'https://images.unsplash.com/photo-1579548122080-c35fd6820ceb?q=80&w=800&auto=format&fit=crop', // Placeholder
+    image: '/images/figuritas.webp',
     popular: false,
   },
   {
@@ -19,7 +19,7 @@ const PACKS = [
     title: 'Pack 500 Sobres',
     description: 'Llevate la mitad de la caja. 2500 figuritas en total para llenarlo rápido.',
     price: 700000,
-    image: 'https://images.unsplash.com/photo-1557683316-973673baf926?q=80&w=800&auto=format&fit=crop', // Placeholder
+    image: '/images/figuritas.webp',
     popular: true,
   },
   {
@@ -27,7 +27,7 @@ const PACKS = [
     title: 'Bulto Cerrado x 1000',
     description: 'La experiencia completa. Caja sellada de fábrica con 5000 figuritas.',
     price: 1350000,
-    image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop', // Placeholder
+    image: '/images/figuritasbulto.jpg',
     popular: false,
   }
 ];
@@ -77,7 +77,7 @@ export default function FiguritasPage() {
 
         <div className="relative z-10 max-w-4xl mx-auto flex flex-col items-center">
           <img 
-            src="https://upload.wikimedia.org/wikipedia/commons/1/1d/Panini_logo.svg" 
+            src="/images/panini-logo-png_seeklogo-322629.png" 
             alt="Panini" 
             className="h-16 md:h-24 w-auto mb-8 filter drop-shadow-lg"
           />

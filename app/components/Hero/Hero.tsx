@@ -8,7 +8,7 @@ import '../../styles/Hero.css';
 export default function Hero() {
   const [heroSlides, setHeroSlides] = useState<any[]>([
     {
-      image: 'https://images.unsplash.com/photo-1518605368461-1eb49c118671?q=80&w=1470&auto=format&fit=crop',
+      image: '/images/mundial2026.jpg',
       alt: 'Figuritas Mundial 2026',
       isCustom: true,
       title1: 'FIGURITAS',

@@ -261,7 +261,7 @@ export default function Header() {
           ))}
           <div className="flex items-center gap-2">
             <Link href="/figuritas" className="flex items-center gap-2 px-3 py-1 bg-[#001489] rounded-lg border-2 border-[#ffed00] hover:scale-105 transition-transform shadow-md">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/1/1d/Panini_logo.svg" alt="Panini" className="h-4 w-auto" />
+              <img src="/images/panini-logo-png_seeklogo-322629.png" alt="Panini" className="h-4 w-auto" />
               <span className="text-white text-[12px] font-bold uppercase tracking-wide">Mundial 2026</span>
             </Link>
             <Link href="/category/ofertas">
@@ -373,7 +373,7 @@ export default function Header() {
           <div className="p-5 bg-gray-50 flex flex-col gap-3">
             <Link href="/figuritas" onClick={() => setIsMenuOpen(false)}>
               <button className="w-full py-3 px-4 flex items-center justify-center gap-3 bg-[#001489] border-2 border-[#ffed00] rounded-lg shadow-[4px_4px_0px_0px_rgba(255,237,0,1)] active:shadow-none active:translate-x-1 active:translate-y-1 transition-all">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/1/1d/Panini_logo.svg" alt="Panini" className="h-5 w-auto" />
+                <img src="/images/panini-logo-png_seeklogo-322629.png" alt="Panini" className="h-5 w-auto" />
                 <span className="text-white text-sm font-bold uppercase tracking-wide">Mundial 2026</span>
               </button>
             </Link>
