@@ -70,7 +70,7 @@ export default function FiguritasPage() {
   return (
     <main className="min-h-screen bg-[#0a0a0a] text-white overflow-hidden pb-20">
       {/* Hero Section */}
-      <section className="relative pt-32 pb-20 px-4 md:px-10 flex flex-col items-center justify-center text-center overflow-hidden">
+      <section className="relative pt-32 pb-32 px-4 md:px-10 flex flex-col items-center justify-center text-center overflow-hidden">
         {/* Background Effects */}
         <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#001489]/30 via-[#0a0a0a] to-[#0a0a0a] z-0"></div>
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#ffed00]/10 blur-[120px] rounded-full z-0 pointer-events-none"></div>
@@ -79,7 +79,7 @@ export default function FiguritasPage() {
           <img 
             src="/images/panini-logo.png" 
             alt="Panini" 
-            className="h-16 md:h-24 w-auto mb-8 filter drop-shadow-lg"
+            className="w-48 md:w-64 h-auto mb-10 filter drop-shadow-lg"
           />
           <h1 className="text-5xl md:text-7xl font-black mb-6 tracking-tight" style={{ fontFamily: 'var(--font-orbitron)' }}>
             MUNDIAL <span className="text-[#ffed00] drop-shadow-[0_0_15px_rgba(255,237,0,0.3)]">2026</span>
@@ -102,8 +102,8 @@ export default function FiguritasPage() {
       </section>
 
       {/* Pricing Cards */}
-      <section className="relative z-10 px-4 md:px-10 max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <section className="relative z-10 px-4 md:px-10 max-w-5xl mx-auto -mt-10 pb-20">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 justify-center items-stretch">
           {PACKS.map((pack) => (
             <div 
               key={pack.id} 
