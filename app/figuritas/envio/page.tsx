@@ -2,11 +2,10 @@ import { PACKS } from '../data';
 import EnvioForm from './EnvioForm';
 import { redirect } from 'next/navigation';
 
-export default function EnvioPage({
-  searchParams,
-}: {
-  searchParams: { [key: string]: string | string[] | undefined };
+export default async function EnvioPage(props: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
+  const searchParams = await props.searchParams;
   const packId = searchParams.pack;
   
   if (!packId || typeof packId !== 'string') {
