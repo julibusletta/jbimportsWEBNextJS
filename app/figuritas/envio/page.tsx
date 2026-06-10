@@ -19,8 +19,8 @@ export default async function EnvioPage(props: {
   }
 
   return (
-    <main className="min-h-screen bg-[#0a0a0a] text-white pt-32 pb-16 px-4">
-      <div className="max-w-4xl mx-auto">
+    <main className="min-h-screen bg-white text-gray-900 pt-24 pb-16 px-4 md:px-8">
+      <div className="max-w-5xl mx-auto w-full">
         <EnvioForm pack={pack} />
       </div>
     </main>
