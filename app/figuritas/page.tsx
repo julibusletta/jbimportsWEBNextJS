@@ -7,12 +7,22 @@ import Image from 'next/image';
 
 const PACKS = [
   {
+    id: 'album-25',
+    title: 'Pack 25 Álbumes',
+    description: 'Pack de álbumes oficiales del Mundial 2026. 25 unidades.',
+    price: 325000,
+    image: '/images/album.jpg',
+    popular: false,
+    badge: 'x25',
+  },
+  {
     id: 'pack-100',
     title: 'Pack 100 Sobres',
     description: 'Ideal para empezar tu colección. 700 figuritas en total.',
     price: 240000,
     image: '/images/figuritas.webp',
     popular: false,
+    badge: 'x100',
   },
   {
     id: 'pack-500',
@@ -21,6 +31,7 @@ const PACKS = [
     price: 1050000,
     image: '/images/figuritas.webp',
     popular: true,
+    badge: 'x500',
   },
   {
     id: 'bulto-1000',
@@ -29,6 +40,7 @@ const PACKS = [
     price: 2000000,
     image: '/images/figuritasbulto.jpg',
     popular: false,
+    badge: 'x1000',
   }
 ];
 
@@ -103,11 +115,14 @@ export default function FiguritasPage() {
 
       {/* Pricing Cards */}
       <section className="relative z-10 px-4 md:px-10 w-full mx-auto flex justify-center" style={{ marginTop: '1rem', marginBottom: '6rem', paddingBottom: '2rem' }}>
-        <div className="flex flex-col md:flex-row justify-center items-stretch gap-8 w-full max-w-6xl">
+        <div className="flex flex-col md:flex-row flex-wrap justify-center items-stretch gap-4 md:gap-8 w-full max-w-7xl">
           {PACKS.map((pack) => (
             <div 
               key={pack.id} 
-              className={`relative w-full md:w-1/3 max-w-[400px] bg-[#111111] border ${pack.popular ? 'border-[#ffed00] scale-105 shadow-[0_0_30px_rgba(255,237,0,0.15)] z-20' : 'border-gray-800'} rounded-none overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:border-gray-600 flex flex-col mx-auto`}
+              onClick={() => {
+                if (loadingId === null) handleBuy(pack);
+              }}
+              className={`relative w-full md:w-[calc(50%-1rem)] lg:w-[calc(25%-1.5rem)] max-w-[400px] bg-[#111111] border ${pack.popular ? 'border-[#ffed00] scale-105 shadow-[0_0_30px_rgba(255,237,0,0.15)] z-20' : 'border-gray-800'} rounded-none overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:border-gray-600 flex flex-col mx-auto cursor-pointer`}
             >
               {pack.popular && (
                 <div className="absolute top-0 left-0 w-full bg-[#ffed00] text-black text-[10px] font-black uppercase tracking-[0.2em] text-center py-1.5 z-10">
@@ -121,6 +136,11 @@ export default function FiguritasPage() {
                   alt={pack.title}
                   className="w-full h-auto block transition-transform duration-700 group-hover:scale-105 relative z-0"
                 />
+                {pack.badge && (
+                  <div className="absolute bottom-2 right-2 md:bottom-4 md:right-4 bg-black text-white w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center font-black text-xl z-20 shadow-[0_4px_15px_rgba(0,0,0,0.5)]">
+                    {pack.badge}
+                  </div>
+                )}
               </div>
 
               <div className="p-8 flex flex-col flex-1 relative z-20" style={{ paddingBottom: '1rem' }}>
@@ -133,7 +153,10 @@ export default function FiguritasPage() {
                 </div>
 
                 <button 
-                  onClick={() => handleBuy(pack)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (loadingId === null) handleBuy(pack);
+                  }}
                   disabled={loadingId !== null}
                   className={`w-full py-4 rounded-none font-bold uppercase tracking-widest text-sm flex items-center justify-center gap-3 transition-all ${
                     pack.popular 
