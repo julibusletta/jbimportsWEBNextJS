@@ -10,12 +10,12 @@ import { PACKS } from './data';
 export default function FiguritasPage() {
   const router = useRouter();
   const { data: session, status } = useSession();
-  const { openModal } = useAuthModal();
+  const { openLogin } = useAuthModal();
   const [loadingId, setLoadingId] = useState<string | null>(null);
 
   const handleBuy = async (pack: typeof PACKS[0]) => {
     if (status === 'unauthenticated') {
-      openModal();
+      openLogin('/figuritas');
       return;
     }
     setLoadingId(pack.id);
