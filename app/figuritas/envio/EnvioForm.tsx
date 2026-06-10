@@ -78,14 +78,14 @@ export default function EnvioForm({ pack }: { pack: PackType }) {
   };
 
   return (
-    <div className="w-full text-gray-800 font-sans">
-      <div className="mb-8">
-        <span className="inline-block bg-[#eaf2ff] text-[#001489] text-xs font-bold px-3 py-1 rounded-full mb-4">Paso 1</span>
-        <h2 className="text-3xl md:text-4xl font-bold text-[#001489] mb-2 tracking-tight">Elegí cómo querés recibir tu pedido</h2>
-        <p className="text-gray-500 text-sm md:text-base">Seleccioná una de las opciones disponibles:</p>
+    <div className="w-full text-gray-800 font-sans mx-auto flex flex-col items-center">
+      <div className="mb-10 text-center w-full">
+        <span className="inline-block bg-[#eaf2ff] text-[#001489] text-sm md:text-base font-bold px-4 py-1.5 rounded-full mb-4">Paso 1</span>
+        <h2 className="text-3xl md:text-5xl font-black text-[#001489] mb-4 tracking-tight">Elegí cómo querés recibir tu pedido</h2>
+        <p className="text-gray-500 text-base md:text-lg">Seleccioná una de las opciones disponibles:</p>
       </div>
       
-      <form onSubmit={handleSubmit} className="space-y-8">
+      <form onSubmit={handleSubmit} className="space-y-10 w-full max-w-4xl">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           
           {/* Opción Domicilio */}
@@ -148,68 +148,68 @@ export default function EnvioForm({ pack }: { pack: PackType }) {
 
         {/* Detalles de Envío dinámicos */}
         {shippingMethod === 'via_cargo_domicilio' && (
-          <div className="bg-white p-6 md:p-8 rounded-xl border border-[#c4dbf6] animate-fadeInUp">
-            <h3 className="text-xl font-bold text-gray-800 mb-4">Información importante de la Entrega a domicilio</h3>
-            <div className="text-sm text-gray-600 space-y-4 mb-6 leading-relaxed">
-              <p>Al elegir esta opción, <strong className="text-[#001489]">autorizás el envío de tu pedido a través de Vía Cargo</strong>. El costo del envío es a cargo del comprador.</p>
+          <div className="bg-white p-6 md:p-10 rounded-xl border-2 border-[#c4dbf6] animate-fadeInUp shadow-sm text-center md:text-left">
+            <h3 className="text-2xl font-black text-gray-800 mb-6">Información importante de la Entrega a domicilio</h3>
+            <div className="text-base text-gray-600 space-y-5 mb-10 leading-relaxed">
+              <p>Al elegir esta opción, <strong className="text-[#001489] font-bold">autorizás el envío de tu pedido a través de Vía Cargo</strong>. El costo del envío es a cargo del comprador.</p>
               <p>Nosotros realizamos la entrega de nuestros productos en la Provincia de Buenos Aires, en la sucursal de Vicente López. Desde ese punto, Vía Cargo se encarga del traslado hasta tu domicilio.</p>
-              <p><strong className="text-[#001489]">Muy Importante:</strong> Durante el Mundial la gestión del pedido puede demorarse, una vez procesada toda la gestión y entregado en Vía Cargo la ⏱ Entrega estimada: 3 a 5 días hábiles (según destino definido por Vía Cargo) No es un compromiso de tiempo.</p>
+              <p><strong className="text-[#001489] font-bold">Muy Importante:</strong> Durante el Mundial la gestión del pedido puede demorarse, una vez procesada toda la gestión y entregado en Vía Cargo la ⏱ Entrega estimada: 3 a 5 días hábiles (según destino definido por Vía Cargo) No es un compromiso de tiempo.</p>
               
-              <ul className="list-none space-y-2 pt-2">
-                <li className="flex items-start gap-2"><span className="text-xl leading-none">📌</span> <strong className="text-[#001489]">Muy Importante:</strong></li>
-                <li className="pl-6">• Durante el Mundial pueden generarse Demoras lógicas por la Altísima Demanda.</li>
-                <li className="pl-6">• Nosotros operamos y entregamos en y desde la Provincia de Buenos Aires.</li>
-                <li className="pl-6">• El Envío a Sucursal es más rápido.</li>
-                <li className="pl-6">• Nosotros Entregamos los productos con un estricto control, verificación y control de los productos, cualquier faltante o rotura de las fajas de seguridad no es nuestra responsabilidad.</li>
-                <li className="pl-6">• Cualquier manipulación de las cajas o productos, o faltante deberán realizarse a la empresa del envío.</li>
-                <li className="pl-6">• Vía Cargo solo realiza el envío, SOLO se puede retirar en la Sucursal de Destino.</li>
-                <li className="pl-6">• No se pueden hacer consultas de compras en Vía Cargo.</li>
+              <ul className="list-none space-y-3 pt-4 text-left inline-block">
+                <li className="flex items-start gap-3"><span className="text-2xl leading-none">📌</span> <strong className="text-[#001489] font-bold text-lg">Muy Importante:</strong></li>
+                <li className="pl-9">• Durante el Mundial pueden generarse Demoras lógicas por la Altísima Demanda.</li>
+                <li className="pl-9">• Nosotros operamos y entregamos en y desde la Provincia de Buenos Aires.</li>
+                <li className="pl-9">• El Envío a Sucursal es más rápido.</li>
+                <li className="pl-9">• Nosotros Entregamos los productos con un estricto control, verificación y control de los productos, cualquier faltante o rotura de las fajas de seguridad no es nuestra responsabilidad.</li>
+                <li className="pl-9">• Cualquier manipulación de las cajas o productos, o faltante deberán realizarse a la empresa del envío.</li>
+                <li className="pl-9">• Vía Cargo solo realiza el envío, SOLO se puede retirar en la Sucursal de Destino.</li>
+                <li className="pl-9">• No se pueden hacer consultas de compras en Vía Cargo.</li>
               </ul>
             </div>
             
-            <div className="flex flex-col space-y-3 mt-8">
-              <label htmlFor="direccion_domicilio" className="font-bold text-gray-800 text-sm">Escribí correctamente la dirección completa de entrega</label>
+            <div className="flex flex-col space-y-4 mt-12 pt-8 border-t border-gray-200">
+              <label htmlFor="direccion_domicilio" className="font-bold text-gray-800 text-lg md:text-xl">Escribí correctamente la dirección completa de entrega</label>
               <input 
                 type="text" 
                 id="direccion_domicilio" 
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
                 placeholder="Calle, número, piso/depto, localidad y provincia" 
-                className="w-full md:w-2/3 border border-gray-300 rounded-lg p-4 text-sm focus:ring-2 focus:ring-[#001489] focus:border-transparent outline-none transition-all bg-gray-50"
+                className="w-full border-2 border-gray-300 rounded-xl p-5 text-base md:text-lg focus:ring-4 focus:ring-blue-100 focus:border-[#001489] outline-none transition-all bg-gray-50"
               />
             </div>
           </div>
         )}
 
         {shippingMethod === 'via_cargo_sucursal' && (
-          <div className="bg-white p-6 md:p-8 rounded-xl border border-[#c4dbf6] animate-fadeInUp">
-            <h3 className="text-xl font-bold text-gray-800 mb-4">Información importante de la Entrega a Sucursal</h3>
-            <div className="text-sm text-gray-600 space-y-4 mb-6 leading-relaxed">
-              <p>Al elegir esta opción, <strong className="text-[#001489]">autorizás el envío de tu pedido a través de Vía Cargo</strong>. El costo del envío es a cargo del comprador.</p>
+          <div className="bg-white p-6 md:p-10 rounded-xl border-2 border-[#c4dbf6] animate-fadeInUp shadow-sm text-center md:text-left">
+            <h3 className="text-2xl font-black text-gray-800 mb-6">Información importante de la Entrega a Sucursal</h3>
+            <div className="text-base text-gray-600 space-y-5 mb-10 leading-relaxed">
+              <p>Al elegir esta opción, <strong className="text-[#001489] font-bold">autorizás el envío de tu pedido a través de Vía Cargo</strong>. El costo del envío es a cargo del comprador.</p>
               <p>Nosotros realizamos la entrega de nuestros productos en la Provincia de Buenos Aires, en la sucursal de Vicente López. Desde ese punto, Vía Cargo se encarga del traslado hasta la sucursal de destino.</p>
-              <p><strong className="text-[#001489]">Muy Importante:</strong> Durante el Mundial la gestión del pedido puede demorarse, una vez procesada toda la gestión y entregado en Vía Cargo la ⏱ Entrega estimada: 2 a 4 días hábiles (según destino definido por Vía Cargo) No es un compromiso de tiempo.</p>
+              <p><strong className="text-[#001489] font-bold">Muy Importante:</strong> Durante el Mundial la gestión del pedido puede demorarse, una vez procesada toda la gestión y entregado en Vía Cargo la ⏱ Entrega estimada: 2 a 4 días hábiles (según destino definido por Vía Cargo) No es un compromiso de tiempo.</p>
               
-              <ul className="list-none space-y-2 pt-2">
-                <li className="flex items-start gap-2"><span className="text-xl leading-none">📌</span> <strong className="text-[#001489]">Muy Importante:</strong></li>
-                <li className="pl-6">• Durante el Mundial pueden generarse Demoras lógicas por la Altísima Demanda.</li>
-                <li className="pl-6">• Nosotros operamos y entregamos en y desde la Provincia de Buenos Aires.</li>
-                <li className="pl-6">• El Envío a Sucursal es más rápido.</li>
-                <li className="pl-6">• Nosotros Entregamos los productos con un estricto control, verificación y control de los productos, cualquier faltante o rotura de las fajas de seguridad no es nuestra responsabilidad.</li>
-                <li className="pl-6">• Cualquier manipulación de las cajas o productos, o faltante deberán realizarse a la empresa del envío.</li>
-                <li className="pl-6">• Vía Cargo solo realiza el envío, SOLO se puede retirar en la Sucursal de Destino.</li>
-                <li className="pl-6">• No se pueden hacer consultas de compras en Vía Cargo.</li>
+              <ul className="list-none space-y-3 pt-4 text-left inline-block">
+                <li className="flex items-start gap-3"><span className="text-2xl leading-none">📌</span> <strong className="text-[#001489] font-bold text-lg">Muy Importante:</strong></li>
+                <li className="pl-9">• Durante el Mundial pueden generarse Demoras lógicas por la Altísima Demanda.</li>
+                <li className="pl-9">• Nosotros operamos y entregamos en y desde la Provincia de Buenos Aires.</li>
+                <li className="pl-9">• El Envío a Sucursal es más rápido.</li>
+                <li className="pl-9">• Nosotros Entregamos los productos con un estricto control, verificación y control de los productos, cualquier faltante o rotura de las fajas de seguridad no es nuestra responsabilidad.</li>
+                <li className="pl-9">• Cualquier manipulación de las cajas o productos, o faltante deberán realizarse a la empresa del envío.</li>
+                <li className="pl-9">• Vía Cargo solo realiza el envío, SOLO se puede retirar en la Sucursal de Destino.</li>
+                <li className="pl-9">• No se pueden hacer consultas de compras en Vía Cargo.</li>
               </ul>
             </div>
             
-            <div className="flex flex-col space-y-3 mt-8">
-              <label htmlFor="sucursal_destino" className="font-bold text-gray-800 text-sm">Escribí la sucursal o localidad de destino</label>
+            <div className="flex flex-col space-y-4 mt-12 pt-8 border-t border-gray-200">
+              <label htmlFor="sucursal_destino" className="font-bold text-gray-800 text-lg md:text-xl">Escribí la sucursal o localidad de destino</label>
               <input 
                 type="text" 
                 id="sucursal_destino" 
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
                 placeholder="Sucursal, localidad y provincia" 
-                className="w-full md:w-2/3 border border-gray-300 rounded-lg p-4 text-sm focus:ring-2 focus:ring-[#001489] focus:border-transparent outline-none transition-all bg-gray-50"
+                className="w-full border-2 border-gray-300 rounded-xl p-5 text-base md:text-lg focus:ring-4 focus:ring-blue-100 focus:border-[#001489] outline-none transition-all bg-gray-50"
               />
             </div>
           </div>
@@ -217,18 +217,18 @@ export default function EnvioForm({ pack }: { pack: PackType }) {
 
         {/* Términos y Condiciones */}
         {shippingMethod && (
-          <div className="bg-[#fffdf0] border border-[#f9e285] p-5 rounded-xl animate-fadeInUp">
-            <strong className="block text-[#856404] mb-3 text-sm">Al avanzar acepto los Términos y Condiciones de la Compra y autorizo el envio de mi pedido</strong>
-            <label className="flex items-start gap-3 cursor-pointer group">
-              <div className="relative flex items-center mt-0.5">
+          <div className="bg-[#fffdf0] border-2 border-[#f9e285] p-6 rounded-xl animate-fadeInUp shadow-sm">
+            <strong className="block text-[#856404] mb-4 text-base md:text-lg">Al avanzar acepto los Términos y Condiciones de la Compra y autorizo el envio de mi pedido</strong>
+            <label className="flex items-start gap-4 cursor-pointer group">
+              <div className="relative flex items-center mt-1">
                 <input 
                   type="checkbox" 
                   checked={termsAccepted}
                   onChange={(e) => setTermsAccepted(e.target.checked)}
-                  className="w-5 h-5 rounded border-gray-300 text-[#001489] focus:ring-[#001489] cursor-pointer"
+                  className="w-6 h-6 rounded border-gray-300 text-[#001489] focus:ring-[#001489] cursor-pointer"
                 />
               </div>
-              <span className="text-[#856404] text-sm group-hover:text-black transition-colors">Confirmo que leí y acepto los términos y condiciones de compras en mi pedido*</span>
+              <span className="text-[#856404] text-base md:text-lg group-hover:text-black transition-colors font-medium">Confirmo que leí y acepto los términos y condiciones de compras en mi pedido*</span>
             </label>
           </div>
         )}
@@ -241,11 +241,11 @@ export default function EnvioForm({ pack }: { pack: PackType }) {
 
         {/* Botón de Submit */}
         {shippingMethod && (
-          <div className="pt-4 flex justify-end animate-fadeInUp">
+          <div className="pt-6 flex justify-end animate-fadeInUp w-full">
             <button 
               type="submit" 
               disabled={loading}
-              className="w-full md:w-auto md:px-12 bg-[#001489] text-white font-bold text-lg py-4 rounded-xl hover:bg-[#0022cc] transition-all flex items-center justify-center gap-3 shadow-lg hover:shadow-xl disabled:opacity-70 disabled:cursor-not-allowed"
+              className="w-full md:w-auto md:px-16 bg-[#001489] text-white font-black text-xl py-5 rounded-xl hover:bg-[#0022cc] transition-all flex items-center justify-center gap-3 shadow-lg hover:shadow-xl disabled:opacity-70 disabled:cursor-not-allowed"
             >
               {loading ? (
                 <><FaSpinner className="animate-spin" /> Procesando...</>
