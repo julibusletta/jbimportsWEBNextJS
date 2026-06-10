@@ -148,7 +148,7 @@ export default function EnvioForm({ pack }: { pack: PackType }) {
 
         {/* Detalles de Envío dinámicos */}
         {shippingMethod === 'via_cargo_domicilio' && (
-          <div className="bg-white p-6 md:p-10 rounded-xl border-2 border-[#c4dbf6] animate-fadeInUp shadow-sm text-center">
+          <div className="bg-white p-6 md:p-10 rounded-xl border-2 border-[#c4dbf6] animate-fadeInUp shadow-sm text-center mt-8">
             <h3 className="text-2xl font-black text-gray-800 mb-6">Información importante de la Entrega a domicilio</h3>
             <div className="text-base text-gray-600 space-y-5 mb-10 leading-relaxed">
               <p>Al elegir esta opción, <strong className="text-[#001489] font-bold">autorizás el envío de tu pedido a través de Vía Cargo</strong>. El costo del envío es a cargo del comprador.</p>
@@ -182,7 +182,7 @@ export default function EnvioForm({ pack }: { pack: PackType }) {
         )}
 
         {shippingMethod === 'via_cargo_sucursal' && (
-          <div className="bg-white p-6 md:p-10 rounded-xl border-2 border-[#c4dbf6] animate-fadeInUp shadow-sm text-center">
+          <div className="bg-white p-6 md:p-10 rounded-xl border-2 border-[#c4dbf6] animate-fadeInUp shadow-sm text-center mt-8">
             <h3 className="text-2xl font-black text-gray-800 mb-6">Información importante de la Entrega a Sucursal</h3>
             <div className="text-base text-gray-600 space-y-5 mb-10 leading-relaxed">
               <p>Al elegir esta opción, <strong className="text-[#001489] font-bold">autorizás el envío de tu pedido a través de Vía Cargo</strong>. El costo del envío es a cargo del comprador.</p>
