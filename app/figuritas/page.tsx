@@ -84,11 +84,11 @@ export default function FiguritasPage() {
           <h1 className="text-5xl md:text-7xl font-black mb-6 tracking-tight" style={{ fontFamily: 'var(--font-orbitron)' }}>
             MUNDIAL <span className="text-[#ffed00] drop-shadow-[0_0_15px_rgba(255,237,0,0.3)]">2026</span>
           </h1>
-          <p className="text-xl md:text-2xl text-gray-300 font-light mb-12 max-w-2xl leading-relaxed">
+          <p className="text-xl md:text-2xl text-gray-300 font-light mb-16 md:mb-20 max-w-2xl leading-relaxed">
             Asegurá tu pasión. Comprá tus figuritas del mundial directo por transferencia bancaria y obtené el mejor precio garantizado.
           </p>
           
-          <div className="flex gap-4 md:gap-8 justify-center text-sm font-bold tracking-widest uppercase text-gray-400 mb-16">
+          <div className="flex gap-4 md:gap-8 justify-center text-sm font-bold tracking-widest uppercase text-gray-400 mb-20 md:mb-28">
             <div className="flex items-center gap-2">
               <FaShieldAlt className="text-[#001489]" size={20} />
               <span>Cajas Selladas</span>
@@ -102,7 +102,7 @@ export default function FiguritasPage() {
       </section>
 
       {/* Pricing Cards */}
-      <section className="relative z-10 px-4 md:px-10 w-full mx-auto mt-16 mb-32 pb-10 flex justify-center">
+      <section className="relative z-10 px-4 md:px-10 w-full mx-auto mt-24 md:mt-32 mb-32 pb-10 flex justify-center">
         <div className="flex flex-col md:flex-row justify-center items-stretch gap-8 w-full max-w-6xl">
           {PACKS.map((pack) => (
             <div 
@@ -124,7 +124,7 @@ export default function FiguritasPage() {
                 />
               </div>
 
-              <div className="p-8 flex flex-col flex-1 relative z-20 -mt-10">
+              <div className="p-8 pb-12 flex flex-col flex-1 relative z-20 -mt-10">
                 <h3 className="text-2xl font-black uppercase tracking-tight mb-2 text-white">{pack.title}</h3>
                 <p className="text-gray-400 text-sm mb-8 flex-1">{pack.description}</p>
                 
@@ -152,7 +152,7 @@ export default function FiguritasPage() {
                     </>
                   )}
                 </button>
-                <p className="text-[10px] text-gray-500 text-center mt-4 uppercase tracking-widest">
+                <p className="text-[10px] text-gray-500 text-center mt-6 uppercase tracking-widest">
                   * Pago exclusivo por transferencia
                 </p>
               </div>
