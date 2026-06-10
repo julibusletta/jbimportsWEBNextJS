@@ -78,14 +78,14 @@ export default function EnvioForm({ pack }: { pack: PackType }) {
   };
 
   return (
-    <div className="w-full text-gray-800 font-sans mx-auto flex flex-col items-center">
+    <div className="w-full max-w-4xl text-gray-800 font-sans mx-auto flex flex-col items-center justify-center">
       <div className="mb-10 text-center w-full">
         <span className="inline-block bg-[#eaf2ff] text-[#001489] text-sm md:text-base font-bold px-4 py-1.5 rounded-full mb-4">Paso 1</span>
         <h2 className="text-3xl md:text-5xl font-black text-[#001489] mb-4 tracking-tight">Elegí cómo querés recibir tu pedido</h2>
         <p className="text-gray-500 text-base md:text-lg">Seleccioná una de las opciones disponibles:</p>
       </div>
       
-      <form onSubmit={handleSubmit} className="space-y-10 w-full max-w-4xl">
+      <form onSubmit={handleSubmit} className="space-y-10 w-full">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           
           {/* Opción Domicilio */}
