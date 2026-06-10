@@ -3,46 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { FaShoppingCart, FaShieldAlt, FaTruck, FaSpinner } from 'react-icons/fa';
-import Image from 'next/image';
-
-const PACKS = [
-  {
-    id: 'album-25',
-    title: 'Pack 25 Álbumes',
-    description: 'Pack de álbumes oficiales del Mundial 2026. 25 unidades.',
-    price: 325000,
-    image: '/images/album.jpg',
-    popular: false,
-    badge: 'x25',
-  },
-  {
-    id: 'pack-100',
-    title: 'Pack 100 Sobres',
-    description: 'Ideal para empezar tu colección. 700 figuritas en total.',
-    price: 240000,
-    image: '/images/figuritas.webp',
-    popular: false,
-    badge: 'x100',
-  },
-  {
-    id: 'pack-500',
-    title: 'Pack 500 Sobres',
-    description: 'Llevate la mitad de la caja. 3500 figuritas en total para llenarlo rápido.',
-    price: 1050000,
-    image: '/images/figuritas.webp',
-    popular: true,
-    badge: 'x500',
-  },
-  {
-    id: 'bulto-1000',
-    title: 'Bulto Cerrado x 1000',
-    description: 'La experiencia completa. Caja sellada de fábrica con 7000 figuritas.',
-    price: 2000000,
-    image: '/images/figuritasbulto.jpg',
-    popular: false,
-    badge: 'x1000',
-  }
-];
+import { PACKS } from './data';
 
 export default function FiguritasPage() {
   const router = useRouter();
@@ -50,33 +11,7 @@ export default function FiguritasPage() {
 
   const handleBuy = async (pack: typeof PACKS[0]) => {
     setLoadingId(pack.id);
-    try {
-      const response = await fetch('/api/checkout/figuritas', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          packId: pack.id,
-          title: pack.title,
-          price: pack.price,
-        }),
-      });
-
-      const data = await response.json();
-      
-      if (data.success && data.orderId) {
-        // Redirigir directamente al checkout de transferencia
-        router.push(`/checkout/transfer/${data.orderId}`);
-      } else {
-        alert('Hubo un error al procesar la solicitud. Por favor intenta de nuevo.');
-      }
-    } catch (error) {
-      console.error('Error al comprar figuritas:', error);
-      alert('Error de conexión.');
-    } finally {
-      setLoadingId(null);
-    }
+    router.push(`/figuritas/envio?pack=${pack.id}`);
   };
 
   return (

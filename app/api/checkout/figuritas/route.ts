@@ -4,7 +4,7 @@ import { authOptions } from "../../auth/[...nextauth]/route";
 
 export async function POST(request: Request) {
   try {
-    const { packId, title, price } = await request.json();
+    const { packId, title, price, shippingMethod, shippingAddress } = await request.json();
     const { db } = await import('@/lib/db');
     const session = await getServerSession(authOptions);
 
@@ -35,7 +35,14 @@ export async function POST(request: Request) {
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       // Envío a acordar para figuritas
-      shippingAddress: {
+      shippingAddress: shippingAddress ? {
+        street: shippingAddress.street || 'A coordinar',
+        city: shippingAddress.city || 'A coordinar',
+        state: shippingAddress.state || 'A coordinar',
+        zip: shippingAddress.zip || '0000',
+        shippingCost: 0,
+        shippingMethod: shippingMethod || 'via_cargo'
+      } : {
         street: 'A coordinar',
         city: 'A coordinar',
         state: 'A coordinar',
