@@ -65,7 +65,7 @@ export default function EnvioForm({ pack }: { pack: PackType }) {
       const data = await response.json();
       
       if (data.success && data.orderId) {
-        router.push(`/checkout/transfer/${data.orderId}`);
+        router.push(`/figuritas/transfer/${data.orderId}`);
       } else {
         setError('Hubo un error al procesar la solicitud. Por favor intenta de nuevo.');
         setLoading(false);

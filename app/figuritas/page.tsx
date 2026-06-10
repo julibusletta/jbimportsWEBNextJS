@@ -2,14 +2,22 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { FaShoppingCart, FaShieldAlt, FaTruck, FaSpinner } from 'react-icons/fa';
+import { FaShoppingCart, FaShieldAlt, FaTruck, FaSpinner, FaUserLock } from 'react-icons/fa';
+import { useSession } from 'next-auth/react';
+import { useAuthModal } from '../context/AuthModalContext';
 import { PACKS } from './data';
 
 export default function FiguritasPage() {
   const router = useRouter();
+  const { data: session, status } = useSession();
+  const { openModal } = useAuthModal();
   const [loadingId, setLoadingId] = useState<string | null>(null);
 
   const handleBuy = async (pack: typeof PACKS[0]) => {
+    if (status === 'unauthenticated') {
+      openModal();
+      return;
+    }
     setLoadingId(pack.id);
     router.push(`/figuritas/envio?pack=${pack.id}`);
   };
@@ -102,6 +110,10 @@ export default function FiguritasPage() {
                   {loadingId === pack.id ? (
                     <>
                       <FaSpinner className="animate-spin" /> Procesando...
+                    </>
+                  ) : status === 'unauthenticated' ? (
+                    <>
+                      <FaUserLock /> Iniciar sesión
                     </>
                   ) : (
                     <>
