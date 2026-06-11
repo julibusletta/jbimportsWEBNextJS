@@ -182,13 +182,13 @@ export default function FiguritasTransferPage() {
               <h3 className="text-3xl md:text-4xl font-black text-gray-900 text-center">Revisá bien la cuenta antes de transferir</h3>
             </div>
 
-            <div className="w-full max-w-lg mx-auto">
+            <div className="w-full max-w-sm mx-auto">
               {/* Card MP */}
               <div className="border-[3px] border-red-500 rounded-none bg-white relative overflow-hidden flex flex-col shadow-2xl w-full">
                 <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-5 border-b-2 border-gray-100 text-center sm:text-left" style={{ padding: '2rem' }}>
                   <img src="https://logospng.org/download/mercado-pago/logo-mercado-pago-icono-1024.png" alt="Mercado Pago" className="w-20 h-20 object-contain shrink-0" />
                   <div className="flex-col flex" style={{ gap: '0.25rem' }}>
-                    <strong className="text-2xl font-black text-gray-900">JB Imports / MP</strong>
+                    <strong className="text-xl font-black text-gray-900">JB Imports / MP</strong>
                     <span className="text-base text-gray-500 font-medium">Solo figuritas del Mundial</span>
                   </div>
                   <span className="bg-red-500 text-white text-[11px] font-black px-3 py-1.5 rounded-full absolute top-4 right-4 sm:top-6 sm:right-6 uppercase tracking-widest shadow-md">ACTIVA</span>
@@ -196,7 +196,7 @@ export default function FiguritasTransferPage() {
                 
                 <div className="flex-1 flex flex-col items-center text-center" style={{ padding: '3rem 2rem', gap: '1.5rem' }}>
                   <span className="text-sm font-black text-gray-400 uppercase tracking-[0.2em]">Total a pagar</span>
-                  <div className="text-5xl md:text-6xl font-black text-gray-900 tracking-tighter" style={{ marginBottom: '1rem' }}>
+                  <div className="text-4xl md:text-5xl font-black text-gray-900 tracking-tighter" style={{ marginBottom: '1rem' }}>
                     ${order.total?.toLocaleString('es-AR')}
                   </div>
                   
@@ -204,7 +204,7 @@ export default function FiguritasTransferPage() {
                     <div className="bg-gray-50 rounded-none flex flex-col sm:flex-row items-center justify-between border-2 border-gray-200 gap-5 shadow-sm w-full" style={{ padding: '1.5rem' }}>
                       <div className="flex flex-col items-center sm:items-start" style={{ gap: '0.5rem' }}>
                         <span className="text-xs text-gray-500 font-black uppercase tracking-widest">Alias / cuenta</span>
-                        <strong className="text-2xl font-black text-gray-900">{ALIAS_MP}</strong>
+                        <strong className="text-xl font-black text-gray-900">{ALIAS_MP}</strong>
                       </div>
                       <button 
                         onClick={() => copyToClipboard(ALIAS_MP, 'alias')}

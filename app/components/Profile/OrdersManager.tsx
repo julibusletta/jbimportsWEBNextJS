@@ -100,7 +100,8 @@ export default function OrdersManager({ orders }: OrdersManagerProps) {
   const getStatusLabel = (status: string) => {
     switch (status) {
       case 'APPROVED': return 'Pago realizado';
-      case 'SHIPPED': return 'Pedido enviado';
+      case 'SHIPPED': return 'Pedido despachado.';
+      case 'PENDING_REVIEW': return 'Tu Pedido esta en Proceso de Preparacion y Envio!';
       case 'CANCELLED': return 'Pedido cancelado';
       case 'REJECTED': return 'Pago rechazado';
       default: return 'Pagar compra';
