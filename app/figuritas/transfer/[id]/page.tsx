@@ -185,7 +185,7 @@ export default function FiguritasTransferPage() {
             <div className="w-full max-w-lg mx-auto">
               {/* Card MP */}
               <div className="border-[3px] border-red-500 rounded-none bg-white relative overflow-hidden flex flex-col shadow-2xl w-full">
-                <div className="p-8 flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-5 border-b-2 border-gray-100 text-center sm:text-left">
+                <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-5 border-b-2 border-gray-100 text-center sm:text-left" style={{ padding: '2rem' }}>
                   <img src="https://logospng.org/download/mercado-pago/logo-mercado-pago-icono-1024.png" alt="Mercado Pago" className="w-20 h-20 object-contain shrink-0" />
                   <div className="flex-col flex" style={{ gap: '0.25rem' }}>
                     <strong className="text-2xl font-black text-gray-900">JB Imports / MP</strong>
@@ -194,14 +194,14 @@ export default function FiguritasTransferPage() {
                   <span className="bg-red-500 text-white text-[11px] font-black px-3 py-1.5 rounded-full absolute top-4 right-4 sm:top-6 sm:right-6 uppercase tracking-widest shadow-md">ACTIVA</span>
                 </div>
                 
-                <div className="p-8 md:p-12 flex-1 flex flex-col items-center text-center" style={{ gap: '1.5rem' }}>
+                <div className="flex-1 flex flex-col items-center text-center" style={{ padding: '3rem 2rem', gap: '1.5rem' }}>
                   <span className="text-sm font-black text-gray-400 uppercase tracking-[0.2em]">Total a pagar</span>
                   <div className="text-5xl md:text-6xl font-black text-gray-900 tracking-tighter" style={{ marginBottom: '1rem' }}>
                     ${order.total?.toLocaleString('es-AR')}
                   </div>
                   
                   <div className="w-full flex flex-col" style={{ gap: '1rem' }}>
-                    <div className="bg-gray-50 rounded-none p-6 flex flex-col sm:flex-row items-center justify-between border-2 border-gray-200 gap-5 shadow-sm w-full">
+                    <div className="bg-gray-50 rounded-none flex flex-col sm:flex-row items-center justify-between border-2 border-gray-200 gap-5 shadow-sm w-full" style={{ padding: '1.5rem' }}>
                       <div className="flex flex-col items-center sm:items-start" style={{ gap: '0.5rem' }}>
                         <span className="text-xs text-gray-500 font-black uppercase tracking-widest">Alias / cuenta</span>
                         <strong className="text-2xl font-black text-gray-900">{ALIAS_MP}</strong>
