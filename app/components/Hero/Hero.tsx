@@ -100,14 +100,17 @@ export default function Hero() {
 
   // Auto-rotate slides - Only start when typing is finished
   useEffect(() => {
-    if (isTyping) return;
+    if (isTyping || heroSlides.length === 0) return;
 
-    const timer = setInterval(() => {
+    // First slide lasts 7000ms (5000ms + 2000ms), others 5000ms
+    const delay = currentSlide === 0 ? 7000 : 5000;
+
+    const timer = setTimeout(() => {
       setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
-    }, 5000);
+    }, delay);
 
-    return () => clearInterval(timer);
-  }, [isTyping]);
+    return () => clearTimeout(timer);
+  }, [isTyping, currentSlide, heroSlides.length]);
 
   const goToSlide = (index: number) => {
     setCurrentSlide(index);
