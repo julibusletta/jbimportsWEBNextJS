@@ -58,8 +58,6 @@ export default function Hero() {
               image: '/images/mundial2026.jpg',
               alt: 'Figuritas Mundial 2026',
               isCustom: true,
-              title1: 'FIGURITAS',
-              title2: 'MUNDIAL 2026',
               subtitle: '¡COMPRÁ AHORA TU PACK O BULTO CERRADO!',
               showShippingIcon: false,
               link: '/figuritas',
@@ -153,15 +151,18 @@ export default function Hero() {
                   <img
                     src={slide.image}
                     alt={slide.alt}
+                    style={slide.image.includes('mundial') ? { objectFit: 'contain', backgroundColor: '#213a8b' } : {}}
                   />
                   {slide.isCustom && (
-                    <div className="slide-custom-overlay">
-                      <div className="promo-text-container">
-                        <div className="promo-badge">
-                          <span className="promo-title-1">{slide.title1}</span>
-                          <span className="promo-title-2">{slide.title2}</span>
-                        </div>
-                        <div className="promo-shipping">
+                    <div className="slide-custom-overlay" style={!slide.title1 ? { alignItems: 'flex-end', paddingBottom: '10%' } : {}}>
+                      <div className={slide.title1 ? "promo-text-container" : ""}>
+                        {slide.title1 && (
+                          <div className="promo-badge">
+                            <span className="promo-title-1">{slide.title1}</span>
+                            <span className="promo-title-2">{slide.title2}</span>
+                          </div>
+                        )}
+                        <div className="promo-shipping" style={!slide.title1 ? { background: '#111827', border: '2px solid #fc4500', padding: '16px 32px', borderRadius: '50px', boxShadow: '0 10px 25px rgba(0,0,0,0.5)', cursor: 'pointer', transition: 'all 0.3s ease' } : {}}>
                           {slide.showShippingIcon !== false && (
                             <img src="/images/andreani.png" alt="Envío" className="shipping-icon" />
                           )}
