@@ -54,6 +54,15 @@ export async function POST(request: Request) {
 
     await db.saveOrder(orderData);
 
+    try {
+      const dbConnect = (await import('@/lib/mongodb')).default;
+      const FiguritasStock = (await import('@/models/FiguritasStock')).default;
+      await dbConnect();
+      await FiguritasStock.updateOne({ packId: packId }, { $inc: { stock: -1 } });
+    } catch (stockError) {
+      console.error('Error descontando stock:', stockError);
+    }
+
     // Intentamos enviar el email si existe el mailer, pero si falla no bloqueamos.
     try {
       const { mailer } = await import('@/lib/mailer');

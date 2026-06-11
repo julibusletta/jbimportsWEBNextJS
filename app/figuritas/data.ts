@@ -23,7 +23,7 @@ export const PACKS = [
     description: 'Llevate la mitad de la caja. 3500 figuritas en total para llenarlo rápido.',
     price: 1050000,
     image: '/images/figuritas.webp',
-    popular: true,
+    popular: false,
     badge: 'x500',
   },
   {

@@ -1,8 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { FaShoppingCart, FaShieldAlt, FaTruck, FaSpinner, FaUserLock } from 'react-icons/fa';
+import { FaShoppingCart, FaShieldAlt, FaTruck, FaSpinner, FaUserLock, FaBoxOpen } from 'react-icons/fa';
 import { useSession } from 'next-auth/react';
 import { useAuthModal } from '../context/AuthModalContext';
 import { PACKS } from './data';
@@ -12,6 +12,22 @@ export default function FiguritasPage() {
   const { data: session, status } = useSession();
   const { openLogin } = useAuthModal();
   const [loadingId, setLoadingId] = useState<string | null>(null);
+  const [stockMap, setStockMap] = useState<Record<string, number>>({});
+
+  useEffect(() => {
+    const fetchStock = async () => {
+      try {
+        const res = await fetch('/api/figuritas/stock');
+        const data = await res.json();
+        if (data.success) {
+          setStockMap(data.stockMap);
+        }
+      } catch (err) {
+        console.error('Error fetching stock:', err);
+      }
+    };
+    fetchStock();
+  }, []);
 
   const handleBuy = async (pack: typeof PACKS[0]) => {
     if (status === 'unauthenticated') {
@@ -59,74 +75,96 @@ export default function FiguritasPage() {
       {/* Pricing Cards */}
       <section className="relative z-10 px-4 md:px-10 w-full mx-auto flex justify-center" style={{ marginTop: '1rem', marginBottom: '6rem', paddingBottom: '2rem' }}>
         <div className="flex flex-col md:flex-row flex-wrap justify-center items-center md:items-stretch gap-4 md:gap-8 w-full max-w-7xl mx-auto">
-          {PACKS.map((pack) => (
-            <div 
-              key={pack.id} 
-              onClick={() => {
-                if (loadingId === null) handleBuy(pack);
-              }}
-              className={`relative w-full md:w-[calc(50%-1rem)] lg:w-[calc(25%-1.5rem)] max-w-[400px] bg-[#111111] border ${pack.popular ? 'border-[#ffed00] scale-105 shadow-[0_0_30px_rgba(255,237,0,0.15)] z-20' : 'border-gray-800'} rounded-none overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:border-gray-600 flex flex-col mx-auto cursor-pointer`}
-            >
-              {pack.popular && (
-                <div className="absolute top-0 left-0 w-full bg-[#ffed00] text-black text-[10px] font-black uppercase tracking-[0.2em] text-center py-1.5 z-10">
-                  Más Elegido
-                </div>
-              )}
-              
-              <div className="relative overflow-hidden group flex items-center justify-center">
-                <img 
-                  src={pack.image} 
-                  alt={pack.title}
-                  className="w-full h-auto block transition-transform duration-700 group-hover:scale-105 relative z-0"
-                />
-                {pack.badge && (
-                  <div className="absolute bottom-2 right-2 md:bottom-4 md:right-4 bg-black text-white w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center font-black text-xl z-20 shadow-[0_4px_15px_rgba(0,0,0,0.5)]">
-                    {pack.badge}
+          {PACKS.map((pack) => {
+            const stock = stockMap[pack.id];
+            const isOutOfStock = stock !== undefined && stock <= 0;
+            return (
+              <div 
+                key={pack.id} 
+                onClick={() => {
+                  if (loadingId === null && !isOutOfStock) handleBuy(pack);
+                }}
+                className={`relative w-full md:w-[calc(50%-1rem)] lg:w-[calc(25%-1.5rem)] max-w-[400px] bg-[#111111] border ${pack.popular ? 'border-[#ffed00] scale-105 shadow-[0_0_30px_rgba(255,237,0,0.15)] z-20' : 'border-gray-800'} rounded-none overflow-hidden transition-all duration-300 ${!isOutOfStock ? 'hover:-translate-y-2 hover:shadow-2xl hover:border-gray-600 cursor-pointer' : 'opacity-75 cursor-not-allowed'} flex flex-col mx-auto`}
+              >
+                {pack.popular && (
+                  <div className="absolute top-0 left-0 w-full bg-[#ffed00] text-black text-[10px] font-black uppercase tracking-[0.2em] text-center py-1.5 z-10">
+                    Más Elegido
                   </div>
                 )}
-              </div>
-
-              <div className="p-8 flex flex-col flex-1 relative z-20" style={{ paddingBottom: '1rem' }}>
-                <h3 className="text-2xl font-black uppercase tracking-tight mb-2 text-white">{pack.title}</h3>
-                <p className="text-gray-400 text-sm mb-8 flex-1">{pack.description}</p>
                 
-                <div className="mb-8">
-                  <span className="text-4xl font-black text-white tracking-tighter">${pack.price.toLocaleString('es-AR')}</span>
-                  <span className="text-gray-500 text-sm ml-2 font-medium">ARS</span>
+                <div className="relative overflow-hidden group flex items-center justify-center">
+                  <img 
+                    src={pack.image} 
+                    alt={pack.title}
+                    className={`w-full h-auto block transition-transform duration-700 relative z-0 ${!isOutOfStock ? 'group-hover:scale-105' : 'grayscale'}`}
+                  />
+                  {pack.badge && (
+                    <div className="absolute bottom-2 right-2 md:bottom-4 md:right-4 bg-black text-white w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center font-black text-xl z-20 shadow-[0_4px_15px_rgba(0,0,0,0.5)]">
+                      {pack.badge}
+                    </div>
+                  )}
                 </div>
 
-                <button 
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    if (loadingId === null) handleBuy(pack);
-                  }}
-                  disabled={loadingId !== null}
-                  className={`w-full py-4 rounded-none font-bold uppercase tracking-widest text-sm flex items-center justify-center gap-3 transition-all ${
-                    pack.popular 
-                      ? 'bg-[#ffed00] text-black hover:bg-white hover:shadow-[0_0_20px_rgba(255,255,255,0.4)]' 
-                      : 'bg-[#001489] text-white hover:bg-[#0022cc] border border-[#0022cc]'
-                  }`}
-                >
-                  {loadingId === pack.id ? (
-                    <>
-                      <FaSpinner className="animate-spin" /> Procesando...
-                    </>
-                  ) : status === 'unauthenticated' ? (
-                    <>
-                      <FaUserLock /> Iniciar sesión
-                    </>
-                  ) : (
-                    <>
-                      <FaShoppingCart /> Comprar Ahora
-                    </>
-                  )}
-                </button>
-                <p className="text-[10px] text-gray-500 text-center uppercase tracking-widest" style={{ marginTop: '0.5rem' }}>
-                  * Pago exclusivo por transferencia
-                </p>
+                <div className="p-8 flex flex-col flex-1 relative z-20" style={{ paddingBottom: '1rem' }}>
+                  <h3 className="text-2xl font-black uppercase tracking-tight mb-2 text-white">{pack.title}</h3>
+                  <p className="text-gray-400 text-sm mb-8 flex-1">{pack.description}</p>
+                  
+                  <div className="mb-6">
+                    <span className="text-4xl font-black text-white tracking-tighter">${pack.price.toLocaleString('es-AR')}</span>
+                    <span className="text-gray-500 text-sm ml-2 font-medium">ARS</span>
+                  </div>
+
+                  <button 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (loadingId === null && !isOutOfStock) handleBuy(pack);
+                    }}
+                    disabled={loadingId !== null || isOutOfStock}
+                    className={`w-full py-4 rounded-none font-bold uppercase tracking-widest text-sm flex items-center justify-center gap-3 transition-all ${
+                      isOutOfStock
+                        ? 'bg-gray-800 text-gray-500'
+                        : pack.popular 
+                          ? 'bg-[#ffed00] text-black hover:bg-white hover:shadow-[0_0_20px_rgba(255,255,255,0.4)]' 
+                          : 'bg-[#001489] text-white hover:bg-[#0022cc] border border-[#0022cc]'
+                    }`}
+                  >
+                    {loadingId === pack.id ? (
+                      <>
+                        <FaSpinner className="animate-spin" /> Procesando...
+                      </>
+                    ) : isOutOfStock ? (
+                      <>
+                        <FaBoxOpen /> Agotado
+                      </>
+                    ) : status === 'unauthenticated' ? (
+                      <>
+                        <FaUserLock /> Iniciar sesión
+                      </>
+                    ) : (
+                      <>
+                        <FaShoppingCart /> Comprar Ahora
+                      </>
+                    )}
+                  </button>
+
+                  <div className="mt-4 flex flex-col items-center justify-center">
+                    {stock !== undefined ? (
+                      <span className={`text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider flex items-center gap-1.5 ${stock > 10 ? 'bg-emerald-900/40 text-emerald-400 border border-emerald-800' : stock > 0 ? 'bg-orange-900/40 text-orange-400 border border-orange-800' : 'bg-red-900/40 text-red-400 border border-red-800'}`}>
+                        <FaBoxOpen size={10} />
+                        {stock > 0 ? `Stock Disponible: ${stock}` : 'Sin Stock'}
+                      </span>
+                    ) : (
+                      <span className="text-xs font-bold px-3 py-1 text-gray-600">Cargando stock...</span>
+                    )}
+                  </div>
+
+                  <p className="text-[10px] text-gray-500 text-center uppercase tracking-widest mt-3">
+                    * Pago exclusivo por transferencia
+                  </p>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </section>
     </main>
