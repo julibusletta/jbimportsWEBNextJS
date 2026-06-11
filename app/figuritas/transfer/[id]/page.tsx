@@ -186,7 +186,7 @@ export default function FiguritasTransferPage() {
               {/* Card MP */}
               <div className="border-[3px] border-red-500 rounded-none bg-white relative overflow-hidden flex flex-col shadow-2xl w-full">
                 <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-5 border-b-2 border-gray-100 text-center sm:text-left" style={{ padding: '2rem' }}>
-                  <img src="https://logospng.org/download/mercado-pago/logo-mercado-pago-icono-1024.png" alt="Mercado Pago" className="w-20 h-20 object-contain shrink-0" />
+                  <img src="/images/mercado-pago-logo-png.png" alt="Mercado Pago" className="w-20 h-20 object-contain shrink-0" />
                   <div className="flex-col flex" style={{ gap: '0.25rem' }}>
                     <strong className="text-xl font-black text-gray-900">JB Imports / MP</strong>
                     <span className="text-base text-gray-500 font-medium">Solo figuritas del Mundial</span>
@@ -256,7 +256,7 @@ export default function FiguritasTransferPage() {
             {/* Upload Area */}
             <div className="border-4 border-gray-200 rounded-[2rem] p-10 md:p-14 flex flex-col md:flex-row items-center justify-center bg-white shadow-xl w-full max-w-5xl mx-auto" style={{ gap: '4rem' }}>
               <div className="flex flex-col items-center text-center flex-1" style={{ gap: '1.5rem' }}>
-                <img src="https://logospng.org/download/mercado-pago/logo-mercado-pago-icono-1024.png" alt="MP" className="w-24 h-24 rounded-3xl bg-white shadow-md object-contain p-4 border border-gray-100" />
+                <img src="/images/mercado-pago-logo-png.png" alt="MP" className="w-24 h-24 rounded-3xl bg-white shadow-md object-contain p-4 border border-gray-100" />
                 <div className="flex flex-col items-center w-full" style={{ gap: '0.75rem' }}>
                   <strong className="block text-2xl text-gray-900 font-black">Comprobante Mercado Pago</strong>
                   <span className="block text-lg text-gray-600">Monto a transferir: <strong className="text-gray-900 font-black">${order.total?.toLocaleString('es-AR')}</strong></span>
