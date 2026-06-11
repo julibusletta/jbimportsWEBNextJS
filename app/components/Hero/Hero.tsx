@@ -165,7 +165,7 @@ export default function Hero() {
                             <span className="promo-title-2">{slide.title2}</span>
                           </div>
                         )}
-                        <div className="promo-shipping" style={!slide.title1 ? { background: '#111827', border: '2px solid #fc4500', padding: '16px 32px', borderRadius: '50px', boxShadow: '0 10px 25px rgba(0,0,0,0.5)', cursor: 'pointer', transition: 'all 0.3s ease' } : {}}>
+                        <div className={`promo-shipping ${!slide.title1 ? 'slide-btn-inner' : ''}`} style={!slide.title1 ? { background: '#111827', border: '2px solid #fc4500', borderRadius: '50px', boxShadow: '0 10px 25px rgba(0,0,0,0.5)', cursor: 'pointer', transition: 'all 0.3s ease' } : {}}>
                           {slide.showShippingIcon !== false && (
                             <img src="/images/andreani.png" alt="Envío" className="shipping-icon" />
                           )}

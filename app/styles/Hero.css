@@ -437,6 +437,20 @@
     padding-left: 5% !important;
     padding-bottom: 5% !important;
   }
+  
+  .slide-btn-only .promo-shipping {
+    max-width: 55%;
+    margin: 0 !important;
+  }
+  
+  .slide-btn-only .shipping-text {
+    line-height: 1.3;
+    font-size: 0.75rem; /* Ajuste para que entre mejor */
+  }
+  
+  .slide-btn-inner {
+    padding: 10px 15px !important; /* Padding menor en mobile */
+  }
 }
 
 @media (min-width: 769px) {
@@ -444,6 +458,10 @@
     align-items: flex-end !important;
     justify-content: center !important;
     padding-bottom: 5% !important;
+  }
+  
+  .slide-btn-inner {
+    padding: 16px 32px !important; /* Padding original en desktop */
   }
 }
 
