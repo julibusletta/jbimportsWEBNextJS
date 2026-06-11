@@ -430,4 +430,20 @@
   }
   .shipping-icon { width: 22px !important; filter: brightness(0) invert(1); opacity: 0.9; }
   .shipping-text { font-size: 0.85rem; font-weight: 600; color: #ffffff; text-transform: uppercase; }
+
+  .slide-btn-only {
+    justify-content: flex-start !important;
+    align-items: flex-end !important;
+    padding-left: 5% !important;
+    padding-bottom: 5% !important;
+  }
 }
+
+@media (min-width: 769px) {
+  .slide-btn-only {
+    align-items: flex-end !important;
+    justify-content: center !important;
+    padding-bottom: 5% !important;
+  }
+}
+

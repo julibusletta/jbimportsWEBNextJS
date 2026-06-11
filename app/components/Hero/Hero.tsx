@@ -157,7 +157,7 @@ export default function Hero() {
                     style={slide.image.includes('mundial') ? { objectFit: 'contain', backgroundColor: '#213a8b' } : {}}
                   />
                   {slide.isCustom && (
-                    <div className="slide-custom-overlay" style={!slide.title1 ? { alignItems: 'flex-end', paddingBottom: '10%' } : {}}>
+                    <div className={`slide-custom-overlay ${!slide.title1 ? 'slide-btn-only' : ''}`}>
                       <div className={slide.title1 ? "promo-text-container" : ""}>
                         {slide.title1 && (
                           <div className="promo-badge">
