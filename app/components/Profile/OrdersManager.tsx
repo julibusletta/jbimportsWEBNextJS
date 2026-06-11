@@ -26,6 +26,7 @@ interface Order {
   };
   paymentMethod?: 'NAVE' | 'TRANSFERENCIA';
   trackingCode?: string;
+  proofUrl?: string;
 }
 
 interface OrdersManagerProps {
@@ -229,6 +230,22 @@ export default function OrdersManager({ orders }: OrdersManagerProps) {
                 <p className="text-lg font-bold text-gray-800 mb-1">Total Precio Especial: ${selectedOrder.total.toLocaleString('es-AR')}</p>
                 <p className="text-[11px] text-gray-400 italic m-0">*Precios vigentes al día de la fecha.</p>
               </div>
+
+              {/* Proof of Payment */}
+              {selectedOrder.proofUrl && (
+                <div className="mt-8 pt-6 border-t border-gray-100 flex flex-col items-center">
+                  <h3 className="text-base font-bold text-gray-800 mb-4 font-sans uppercase tracking-widest text-center">Comprobante de Pago</h3>
+                  <div className="border border-gray-200 rounded-lg p-2 bg-gray-50 max-w-full overflow-hidden">
+                    {selectedOrder.proofUrl.startsWith('data:image') ? (
+                      <img src={selectedOrder.proofUrl} alt="Comprobante" className="max-w-full h-auto max-h-[400px] object-contain rounded" />
+                    ) : selectedOrder.proofUrl.startsWith('data:application/pdf') ? (
+                      <iframe src={selectedOrder.proofUrl} className="w-full h-[400px] border-0" title="Comprobante PDF" />
+                    ) : (
+                      <a href={selectedOrder.proofUrl} download="comprobante" className="text-blue-500 hover:underline text-sm">Descargar Comprobante</a>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Modal Footer */}

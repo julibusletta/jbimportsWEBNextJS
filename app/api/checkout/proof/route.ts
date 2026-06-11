@@ -21,6 +21,9 @@ export async function POST(request: Request) {
 
     // 2. Update Order
     const { db } = await import('@/lib/db');
+    const dbConnect = (await import('@/lib/mongodb')).default;
+    await dbConnect(); // Ensure connection is established before querying!
+    
     const Order = await db.getOrderModel();
     
     const updatedOrder = await Order.findOneAndUpdate(
