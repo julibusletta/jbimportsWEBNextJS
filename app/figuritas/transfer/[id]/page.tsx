@@ -184,7 +184,7 @@ export default function FiguritasTransferPage() {
 
             <div className="w-full max-w-lg mx-auto">
               {/* Card MP */}
-              <div className="border-[3px] border-red-500 rounded-3xl bg-white relative overflow-hidden flex flex-col shadow-2xl w-full">
+              <div className="border-[3px] border-red-500 rounded-none bg-white relative overflow-hidden flex flex-col shadow-2xl w-full">
                 <div className="p-8 flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-5 border-b-2 border-gray-100 text-center sm:text-left">
                   <img src="https://logospng.org/download/mercado-pago/logo-mercado-pago-icono-1024.png" alt="Mercado Pago" className="w-20 h-20 object-contain shrink-0" />
                   <div className="flex-col flex" style={{ gap: '0.25rem' }}>
@@ -201,7 +201,7 @@ export default function FiguritasTransferPage() {
                   </div>
                   
                   <div className="w-full flex flex-col" style={{ gap: '1rem' }}>
-                    <div className="bg-gray-50 rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between border-2 border-gray-200 gap-5 shadow-sm w-full">
+                    <div className="bg-gray-50 rounded-none p-6 flex flex-col sm:flex-row items-center justify-between border-2 border-gray-200 gap-5 shadow-sm w-full">
                       <div className="flex flex-col items-center sm:items-start" style={{ gap: '0.5rem' }}>
                         <span className="text-xs text-gray-500 font-black uppercase tracking-widest">Alias / cuenta</span>
                         <strong className="text-2xl font-black text-gray-900">{ALIAS_MP}</strong>
