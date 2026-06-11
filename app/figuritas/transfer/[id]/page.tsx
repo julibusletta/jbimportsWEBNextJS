@@ -93,7 +93,7 @@ export default function FiguritasTransferPage() {
   );
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] text-gray-900 px-4 md:px-8 font-sans w-full flex flex-col items-center" style={{ paddingTop: '8rem', paddingBottom: '6rem' }}>
+    <div className="min-h-screen bg-[#f8fafc] text-gray-900 px-4 md:px-8 font-sans w-full flex flex-col items-center" style={{ paddingTop: '4rem', paddingBottom: '6rem' }}>
       <div className="w-full max-w-[1400px] flex flex-col items-center justify-center mx-auto">
         {/* Main Card Container */}
         <div className="bg-white rounded-[2rem] shadow-xl border border-gray-100 p-8 md:p-16 lg:p-20 mb-10 w-full flex flex-col items-center justify-center" style={{ gap: '4rem' }}>
