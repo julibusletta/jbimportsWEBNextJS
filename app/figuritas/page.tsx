@@ -76,7 +76,10 @@ export default function FiguritasPage() {
       <section className="relative z-10 px-4 md:px-10 w-full mx-auto flex justify-center" style={{ marginTop: '1rem', marginBottom: '6rem', paddingBottom: '2rem' }}>
         <div className="flex flex-col md:flex-row flex-wrap justify-center items-center md:items-stretch gap-4 md:gap-8 w-full max-w-7xl mx-auto">
           {PACKS.map((pack) => {
-            const stock = stockMap[pack.id];
+            let stock = stockMap[pack.id];
+            if (pack.id === 'pack-100' || pack.id === 'pack-500') {
+              stock = 0;
+            }
             const isOutOfStock = stock !== undefined && stock <= 0;
             return (
               <div 
@@ -92,11 +95,11 @@ export default function FiguritasPage() {
                   </div>
                 )}
                 
-                <div className="relative overflow-hidden group flex items-center justify-center">
+                <div className="relative overflow-hidden group flex items-center justify-center bg-black">
                   <img 
                     src={pack.image} 
                     alt={pack.title}
-                    className={`w-full h-auto block transition-transform duration-700 relative z-0 ${!isOutOfStock ? 'group-hover:scale-105' : 'grayscale'}`}
+                    className={`w-full h-auto block transition-transform duration-700 relative z-0 ${!isOutOfStock ? 'group-hover:scale-105' : 'grayscale opacity-60 brightness-50'}`}
                   />
                   {pack.badge && (
                     <div className="absolute bottom-2 right-2 md:bottom-4 md:right-4 bg-black text-white w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center font-black text-xl z-20 shadow-[0_4px_15px_rgba(0,0,0,0.5)]">
