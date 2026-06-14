@@ -99,8 +99,15 @@ export default function FiguritasPage() {
                   <img 
                     src={pack.image} 
                     alt={pack.title}
-                    className={`w-full h-auto block transition-transform duration-700 relative z-0 ${!isOutOfStock ? 'group-hover:scale-105' : 'grayscale opacity-60 brightness-50'}`}
+                    className={`w-full h-auto block transition-transform duration-700 relative z-0 ${!isOutOfStock ? 'group-hover:scale-105' : 'grayscale opacity-40 brightness-50'}`}
                   />
+                  {isOutOfStock && (
+                    <div className="absolute inset-0 flex items-center justify-center z-10 bg-black/40">
+                      <span className="bg-red-600 text-white font-black px-6 py-2 rounded-lg text-xl md:text-2xl tracking-widest transform -rotate-12 border-4 border-red-800 shadow-[0_0_20px_rgba(255,0,0,0.5)] uppercase">
+                        Sin Stock
+                      </span>
+                    </div>
+                  )}
                   {pack.badge && (
                     <div className="absolute bottom-2 right-2 md:bottom-4 md:right-4 bg-black text-white w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center font-black text-xl z-20 shadow-[0_4px_15px_rgba(0,0,0,0.5)]">
                       {pack.badge}
