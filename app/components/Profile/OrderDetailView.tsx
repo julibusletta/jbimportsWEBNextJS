@@ -23,7 +23,7 @@ interface Order {
     shippingCost?: number;
     shippingMethod?: string;
   };
-  paymentMethod?: 'NAVE' | 'TRANSFERENCIA';
+  paymentMethod?: 'NAVE' | 'MERCADOPAGO' | 'TRANSFERENCIA';
 }
 
 interface OrderDetailViewProps {

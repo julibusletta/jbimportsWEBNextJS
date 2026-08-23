@@ -4,6 +4,18 @@ import type { NextRequest } from "next/server";
 
 export default withAuth(
   function middleware(req: NextRequest) {
+    const { pathname } = req.nextUrl;
+    
+    const isApi = pathname.startsWith('/api');
+    const isAdmin = pathname.startsWith('/admin');
+    const isMaintenance = pathname === '/maintenance';
+    const isNextStatic = pathname.startsWith('/_next') || pathname.startsWith('/images') || pathname === '/favicon.ico';
+    
+    // REDIRECT TO MAINTENANCE for normal users
+    if (!isApi && !isAdmin && !isMaintenance && !isNextStatic) {
+      return NextResponse.redirect(new URL('/maintenance', req.url));
+    }
+    
     return NextResponse.next();
   },
   {
@@ -15,6 +27,9 @@ export default withAuth(
         return true;
       },
     },
+    pages: {
+      signIn: '/login',
+    }
   }
 );
 

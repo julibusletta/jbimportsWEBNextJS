@@ -72,7 +72,7 @@ function CheckoutContent() {
     phone: ''
   });
 
-  const [paymentMethod, setPaymentMethod] = useState<'nave' | 'transfer'>('nave');
+  const [paymentMethod, setPaymentMethod] = useState<'mercadopago' | 'transfer'>('mercadopago');
   const [error, setError] = useState<string | null>(null);
 
   const [couponCode, setCouponCode] = useState('');
@@ -187,12 +187,9 @@ function CheckoutContent() {
     setError(null);
 
     const subtotalWithShipping = subtotalAfterCoupon + (selectedRate?.price || 0);
-    let finalTotal = subtotalWithShipping;
-    if (paymentMethod === 'transfer') {
-      finalTotal = subtotalWithShipping * 0.9;
-    }
+    const finalTotal = subtotalWithShipping;
 
-    const endpoint = paymentMethod.startsWith('nave') ? '/api/checkout/nave' : '/api/checkout/transfer';
+    const endpoint = paymentMethod === 'mercadopago' ? '/api/checkout/mercadopago' : '/api/checkout/transfer';
 
     try {
       const response = await fetch(endpoint, {
@@ -224,8 +221,8 @@ function CheckoutContent() {
 
       const data = await response.json();
       if (data.success) {
-        if (paymentMethod.startsWith('nave') && data.url) {
-          window.location.href = data.url;
+        if (paymentMethod === 'mercadopago' && data.init_point) {
+          window.location.href = data.init_point;
         } else if (paymentMethod === 'transfer') {
           router.push(`/checkout/transfer/${data.orderId}`);
         } else {
@@ -348,13 +345,13 @@ function CheckoutContent() {
                   
                   {/* Tarjeta 1 Pago */}
                   <div 
-                    className={`payment-card ${paymentMethod === 'nave' ? 'selected' : ''}`}
-                    onClick={() => setPaymentMethod('nave')}
+                    className={`payment-card ${paymentMethod === 'mercadopago' ? 'selected' : ''}`}
+                    onClick={() => setPaymentMethod('mercadopago')}
                   >
                     <div className="payment-radio" />
-                    <FaCreditCard className="payment-icon text-xl" />
+                    <FaCreditCard className="payment-icon text-xl text-blue-500" />
                     <div className="payment-info">
-                      <span className="payment-name uppercase">Tarjeta Crédito / Débito</span>
+                      <span className="payment-name uppercase">Mercado Pago</span>
                     </div>
                     <span className="payment-price-tag">${(subtotalAfterCoupon).toLocaleString('es-AR')}</span>
                   </div>
@@ -368,9 +365,8 @@ function CheckoutContent() {
                     <FaMoneyBillWave className="payment-icon text-xl" />
                     <div className="payment-info">
                       <span className="payment-name">Transferencia Bancaria</span>
-                      <span className="payment-badge">10% OFF</span>
                     </div>
-                    <span className="payment-price-tag">${(subtotalAfterCoupon * 0.9).toLocaleString('es-AR')}</span>
+                    <span className="payment-price-tag">${(subtotalAfterCoupon).toLocaleString('es-AR')}</span>
                   </div>
 
 
@@ -409,7 +405,7 @@ function CheckoutContent() {
                   <div>
                     <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-2">Método de Pago</label>
                     <p className="font-bold text-slate-900 uppercase">
-                      {paymentMethod === 'nave' ? 'Tarjeta Crédito / Débito' : 'Transferencia Bancaria'}
+                      {paymentMethod === 'mercadopago' ? 'Mercado Pago' : 'Transferencia Bancaria'}
                     </p>
                   </div>
                 </div>
@@ -503,17 +499,10 @@ function CheckoutContent() {
                 <span className="total-label">Costo de Envío</span>
                 <span className="total-value text-green-600">SIN CARGO</span>
               </div>
-              {paymentMethod === 'transfer' && (
-                <div className="total-row">
-                  <span className="total-label text-red-600">Descuento Transferencia (10%)</span>
-                  <span className="total-value text-red-600">-${(subtotalAfterCoupon * 0.1).toLocaleString('es-AR')}</span>
-                </div>
-              )}
-              
               <div className="final-total-row">
                 <span className="final-total-label">Total Final</span>
                 <span className="final-total-value">
-                  ${(paymentMethod === 'transfer' ? subtotalAfterCoupon * 0.9 : subtotalAfterCoupon).toLocaleString('es-AR')}
+                  ${subtotalAfterCoupon.toLocaleString('es-AR')}
                 </span>
               </div>
             </div>
@@ -524,7 +513,7 @@ function CheckoutContent() {
                 <FaCreditCard size={24} />
                 <FaLock size={24} />
               </div>
-              <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">Nave Negocios Powered by Banco Galicia</p>
+              <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">Pagos Seguros Powered by Mercado Pago</p>
             </div>
           </div>
 

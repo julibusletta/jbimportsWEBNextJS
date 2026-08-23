@@ -31,11 +31,14 @@ export default function MaintenancePage() {
         {/* Text Section */}
         <div className="space-y-6 w-full flex flex-col items-center">
           <h1 className="text-4xl md:text-7xl font-black text-white tracking-tighter leading-none text-center">
-            MUY <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-blue-400 to-indigo-500">PRONTO</span>
+            YA <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-blue-400 to-indigo-500">VOLVEMOS</span>
           </h1>
           <p className="text-gray-400 text-lg md:text-2xl font-medium max-w-xl leading-relaxed text-center px-4">
-            Estamos renovando <span className="text-white font-bold">JB Imports</span> para ofrecerte la mejor tecnología con una experiencia de compra superior.
+            Estamos <span className="text-white font-bold">actualizándonos</span> y realizando tareas de mantenimiento.
           </p>
+          <div className="mt-4 bg-blue-500/10 border border-blue-500/20 px-6 py-4 rounded-xl text-blue-200 font-medium">
+            ¡No te preocupes por tus pedidos! Ellos siguen su flujo normal.
+          </div>
         </div>
 
         {/* Progress Bar placeholder */}

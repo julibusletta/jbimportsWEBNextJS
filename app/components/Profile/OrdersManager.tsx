@@ -24,7 +24,7 @@ interface Order {
     shippingCost?: number;
     shippingMethod?: string;
   };
-  paymentMethod?: 'NAVE' | 'TRANSFERENCIA';
+  paymentMethod?: 'NAVE' | 'MERCADOPAGO' | 'TRANSFERENCIA';
   trackingCode?: string;
   proofUrl?: string;
 }
@@ -48,7 +48,8 @@ export default function OrdersManager({ orders }: OrdersManagerProps) {
 
     try {
       setIsPaying(true);
-      const response = await fetch('/api/checkout/nave', {
+      const endpoint = order.paymentMethod === 'NAVE' ? '/api/checkout/nave' : '/api/checkout/mercadopago';
+      const response = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -70,8 +71,14 @@ export default function OrdersManager({ orders }: OrdersManagerProps) {
       });
 
       const data = await response.json();
-      if (data.success && data.url) {
-        window.location.href = data.url;
+      if (data.success) {
+        if (data.url) {
+          window.location.href = data.url;
+        } else if (data.init_point) {
+          window.location.href = data.init_point;
+        } else {
+          alert('No se recibió la URL de pago');
+        }
       } else {
         alert('Error al iniciar el pago: ' + data.message);
       }

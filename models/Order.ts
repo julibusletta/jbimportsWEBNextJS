@@ -20,10 +20,11 @@ const OrderSchema = new Schema({
     enum: ['PENDING', 'APPROVED', 'REJECTED', 'SHIPPED', 'CANCELLED', 'PENDING_REVIEW'],
     default: 'PENDING'
   },
-  paymentMethod: { type: String, enum: ['NAVE', 'TRANSFERENCIA'], default: 'NAVE' },
+  paymentMethod: { type: String, enum: ['NAVE', 'TRANSFERENCIA', 'MERCADOPAGO'], default: 'NAVE' },
   proofUrl: String,
   proofUploadedAt: Date,
   navePaymentId: String,
+  mpPaymentId: String,
   shippingAddress: {
     street: String,
     city: String,

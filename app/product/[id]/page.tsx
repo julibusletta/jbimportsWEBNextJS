@@ -277,14 +277,6 @@ export default function ProductDetailsPage() {
                 <span className="text-[42px] font-bold text-[#0066cc] leading-none mb-1">
                   ${product.price.toLocaleString()}
                 </span>
-                <div className="flex flex-col gap-1 text-[11px] text-[#666]">
-                  <div className="flex items-center gap-1">
-                    Mejor precio en 1 pago <FaInfoCircle className="text-gray-400" />
-                  </div>
-                  <div className="font-bold text-[#28a745] uppercase">
-                    10%OFF ABONANDO POR TRANSFERENCIA
-                  </div>
-                </div>
               </div>
               
               {product.stock > 0 && (

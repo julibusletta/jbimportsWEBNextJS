@@ -125,9 +125,8 @@ export default function Cart() {
               <span>Total</span>
               <span className="total-amount">${total.toLocaleString('es-AR')}</span>
             </div>
-
-            <div className="payment-methods">
-              <p>*Precio abonando con depósito o transferencia.</p>
+            <div className="cart-footer">
+              <p>Envío calculado en el próximo paso.</p>
             </div>
 
 

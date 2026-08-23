@@ -56,7 +56,7 @@ export default function FiguritasPage() {
             MUNDIAL <span className="text-[#ffed00] drop-shadow-[0_0_15px_rgba(255,237,0,0.3)]">2026</span>
           </h1>
           <p className="text-xl md:text-2xl text-gray-300 font-light max-w-2xl leading-relaxed" style={{ marginBottom: '1rem' }}>
-            Asegurá tu pasión. Comprá tus figuritas del mundial directo por transferencia bancaria y obtené el mejor precio garantizado.
+            Asegurá tu pasión. Comprá tus figuritas del mundial directo desde nuestro sitio web.
           </p>
           
           <div className="flex gap-4 md:gap-8 justify-center text-sm font-bold tracking-widest uppercase text-gray-400" style={{ marginBottom: '1rem' }}>
@@ -168,9 +168,7 @@ export default function FiguritasPage() {
                     )}
                   </div>
 
-                  <p className="text-[10px] text-gray-500 text-center uppercase tracking-widest mt-3">
-                    * Pago exclusivo por transferencia
-                  </p>
+                  {/* Removed transfer mention */}
                 </div>
               </div>
             );

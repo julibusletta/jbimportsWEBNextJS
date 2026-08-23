@@ -397,7 +397,7 @@ export default function HomeAdminPage() {
                         value={offer.subtitle}
                         onChange={(e) => updateOffer(idx, 'subtitle', e.target.value)}
                         className="w-full px-4 py-2.5 text-xs bg-white border border-gray-200 rounded-xl outline-none"
-                        placeholder="Ej: * 10% de descuento abonando por transferencia"
+                        placeholder="Ej: Oferta especial"
                       />
                     </div>
                     <div>

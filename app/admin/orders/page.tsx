@@ -32,6 +32,7 @@ interface Order {
   proofUploadedAt?: string;
   invoiceUrl?: string;
   navePaymentId?: string;
+  mpPaymentId?: string;
   shippingAddress?: {
     street: string;
     city: string;
@@ -242,8 +243,8 @@ export default function OrdersPage() {
                           <div className="flex flex-col">
                              <span className="text-[8px] text-gray-500 font-bold uppercase mb-0.5">Medio de Pago:</span>
                              <span className="text-sm font-black text-gray-800 uppercase">{selectedOrder.paymentMethod || 'NAVE'}</span>
-                             {selectedOrder.navePaymentId && (
-                                <span className="text-[9px] font-mono text-gray-400 break-all leading-tight mt-1">ID: {selectedOrder.navePaymentId}</span>
+                             {(selectedOrder.navePaymentId || selectedOrder.mpPaymentId) && (
+                                <span className="text-[9px] font-mono text-gray-400 break-all leading-tight mt-1">ID: {selectedOrder.mpPaymentId || selectedOrder.navePaymentId}</span>
                              )}
                           </div>
                        </div>
