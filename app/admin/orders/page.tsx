@@ -305,13 +305,23 @@ export default function OrdersPage() {
                           <h4 className="text-[9px] font-black text-gray-400 uppercase tracking-[0.2em] mb-4 border-b border-gray-100 pb-2">Comprobante de Pago</h4>
                           <div className="relative rounded-xl overflow-hidden border border-gray-200 bg-gray-100 group h-64 border-dashed border-2">
                              <img src={selectedOrder.proofUrl} className="w-full h-full object-contain" alt="Comprobante" />
-                             <a 
-                                href={selectedOrder.proofUrl} 
-                                target="_blank" 
-                                className="absolute bottom-4 right-4 px-5 py-2.5 bg-black text-white font-black text-[9px] uppercase tracking-widest rounded-lg opacity-0 group-hover:opacity-100 transition-all shadow-2xl hover:scale-105"
+                             <button 
+                                onClick={() => {
+                                   if (selectedOrder.proofUrl?.startsWith('data:')) {
+                                      fetch(selectedOrder.proofUrl)
+                                         .then(res => res.blob())
+                                         .then(blob => {
+                                            const url = URL.createObjectURL(blob);
+                                            window.open(url, '_blank');
+                                         });
+                                   } else {
+                                      window.open(selectedOrder.proofUrl, '_blank');
+                                   }
+                                }}
+                                className="absolute bottom-4 right-4 px-5 py-2.5 bg-black text-white font-black text-[9px] uppercase tracking-widest rounded-lg opacity-0 group-hover:opacity-100 transition-all shadow-2xl hover:scale-105 border-0 cursor-pointer"
                              >
                                 Ver Pantalla Completa
-                             </a>
+                             </button>
                           </div>
                        </div>
                     )}
