@@ -7,12 +7,14 @@ export default withAuth(
     const { pathname } = req.nextUrl;
     
     const isApi = pathname.startsWith('/api');
-    const isAdmin = pathname.startsWith('/admin');
+    const isAdminPath = pathname.startsWith('/admin');
     const isMaintenance = pathname === '/maintenance';
+    const isLogin = pathname.startsWith('/login');
     const isNextStatic = pathname.startsWith('/_next') || pathname.startsWith('/images') || pathname === '/favicon.ico';
+    const isAdminUser = (req as any).nextauth?.token?.role === "ADMIN";
     
     // REDIRECT TO MAINTENANCE for normal users
-    if (!isApi && !isAdmin && !isMaintenance && !isNextStatic) {
+    if (!isApi && !isAdminPath && !isMaintenance && !isLogin && !isNextStatic && !isAdminUser) {
       return NextResponse.redirect(new URL('/maintenance', req.url));
     }
     

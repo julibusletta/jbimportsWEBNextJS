@@ -18,17 +18,7 @@ export async function GET() {
       // Retornar configuración por defecto si no existe en la DB
       return NextResponse.json({
         heroSlides: [
-          { 
-            image: '/images/mundial2026.jpg', 
-            alt: 'Figuritas Mundial 2026', 
-            order: 0,
-            isCustom: true,
-            title1: 'FIGURITAS',
-            title2: 'MUNDIAL 2026',
-            subtitle: '¡COMPRÁ AHORA TU PACK O BULTO CERRADO!',
-            showShippingIcon: false,
-            link: '/figuritas'
-          },
+
           { image: '/images/bannerof1.png', alt: 'iPhone Premium', order: 1 },
           { image: '/images/DC_20260306150520_9z1vjiMY.jpg', alt: 'Tecnología', order: 2 }
         ],

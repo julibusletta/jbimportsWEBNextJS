@@ -37,11 +37,6 @@ const initialSlides = [
     order: 0
   },
   {
-    image: '/images/DC_20260306150520_9z1vjiMY.jpg',
-    alt: 'Tecnología',
-    order: 1
-  },
-  {
     image: '/images/slider-user-tech.png',
     alt: 'Promoción 6 Cuotas Sin Interés',
     isCustom: true,
@@ -49,17 +44,17 @@ const initialSlides = [
     title2: 'SIN INTERÉS',
     subtitle: 'LA TECNOLOGÍA QUE NECESITAS EN UN SOLO LUGAR',
     showShippingIcon: false,
-    order: 2
+    order: 1
   },
   {
     image: '/images/slider5.png',
     alt: 'Crecimiento Corporativo',
-    order: 3
+    order: 2
   },
   {
     image: '/images/JBLBoombox3Lifestyle01904x560px-(5014).webp',
     alt: 'Audio Premium',
-    order: 4
+    order: 3
   },
 ];
 

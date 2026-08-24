@@ -21,7 +21,7 @@ export async function POST(request: Request) {
     }
 
     const currentOrderId = orderId || `JB-${Date.now()}`;
-    const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000';
+    const baseUrl = request.headers.get('origin') || process.env.NEXTAUTH_URL || 'http://localhost:3000';
 
     // 1. Guardar la orden inicial en base de datos como PENDING
     const userName = `${firstName || ''} ${lastName || ''}`.trim() || session?.user?.name || 'Cliente Invitado';

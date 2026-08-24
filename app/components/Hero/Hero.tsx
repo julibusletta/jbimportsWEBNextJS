@@ -8,16 +8,6 @@ import '../../styles/Hero.css';
 export default function Hero() {
   const [heroSlides, setHeroSlides] = useState<any[]>([
     {
-      image: '/images/mundial2026.jpg',
-      alt: 'Figuritas Mundial 2026',
-      isCustom: true,
-      title1: 'FIGURITAS',
-      title2: 'MUNDIAL 2026',
-      subtitle: '¡COMPRÁ AHORA TU PACK O BULTO CERRADO!',
-      showShippingIcon: false,
-      link: '/figuritas',
-    },
-    {
       image: '/images/bannerof1.png',
       alt: 'iPhone Premium',
     },
@@ -53,16 +43,6 @@ export default function Hero() {
         const res = await fetch('/api/home-settings');
         const data = await res.json();
         if (data.heroSlides && data.heroSlides.length > 0) {
-          if (data.heroSlides[0].image.includes('bannerof1')) {
-            data.heroSlides[0] = {
-              image: '/images/mundial2026.jpg',
-              alt: 'Figuritas Mundial 2026',
-              isCustom: true,
-              subtitle: '¡COMPRÁ AHORA TU PACK O BULTO CERRADO!',
-              showShippingIcon: false,
-              link: '/figuritas',
-            };
-          }
           setHeroSlides(data.heroSlides);
         }
       } catch (err) {
