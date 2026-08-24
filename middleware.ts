@@ -14,9 +14,9 @@ export default withAuth(
     const isAdminUser = (req as any).nextauth?.token?.role === "ADMIN";
     
     // REDIRECT TO MAINTENANCE for normal users
-    if (!isApi && !isAdminPath && !isMaintenance && !isLogin && !isNextStatic && !isAdminUser) {
-      return NextResponse.redirect(new URL('/maintenance', req.url));
-    }
+    // if (!isApi && !isAdminPath && !isMaintenance && !isLogin && !isNextStatic && !isAdminUser) {
+    //   return NextResponse.redirect(new URL('/maintenance', req.url));
+    // }
     
     return NextResponse.next();
   },
