@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { MercadoPagoConfig, Payment } from 'mercadopago';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '../../../auth/[...nextauth]/route';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 
 const client = new MercadoPagoConfig({ accessToken: process.env.MP_ACCESS_TOKEN || '' });
 
